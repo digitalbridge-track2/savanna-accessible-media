@@ -1,6 +1,6 @@
 var j = Object.defineProperty;
-var z = (n, i, e) => i in n ? j(n, i, { enumerable: !0, configurable: !0, writable: !0, value: e }) : n[i] = e;
-var c = (n, i, e) => z(n, typeof i != "symbol" ? i + "" : i, e);
+var z = (n, a, e) => a in n ? j(n, a, { enumerable: !0, configurable: !0, writable: !0, value: e }) : n[a] = e;
+var d = (n, a, e) => z(n, typeof a != "symbol" ? a + "" : a, e);
 const B = "abugida_media_preferences", w = {
   captionLanguage: "en",
   captionSize: "medium",
@@ -15,8 +15,8 @@ function D() {
   try {
     const n = localStorage.getItem(B);
     if (!n) return { ...w };
-    const i = JSON.parse(n);
-    return { ...w, ...i };
+    const a = JSON.parse(n);
+    return { ...w, ...a };
   } catch {
     return { ...w };
   }
@@ -30,45 +30,45 @@ function f(n) {
   }
 }
 function P(n) {
-  const i = [], e = n.split(/\r?\n/);
+  const a = [], e = n.split(/\r?\n/);
   let t = 0;
   for (; t < e.length && !e[t].includes("-->"); )
     t++;
   for (; t < e.length; ) {
-    const a = e[t].trim();
-    if (a.includes("-->")) {
-      const s = a.split("-->").map((r) => r.trim().split(" ")[0]);
+    const i = e[t].trim();
+    if (i.includes("-->")) {
+      const s = i.split("-->").map((o) => o.trim().split(" ")[0]);
       if (s.length >= 2) {
-        const r = F(s[0]), d = F(s[1]);
+        const o = F(s[0]), l = F(s[1]);
         t++;
-        const l = [];
+        const c = [];
         for (; t < e.length && e[t].trim() !== ""; )
-          l.push(e[t].trim()), t++;
-        l.length > 0 && i.push({
-          start: r,
-          end: d,
-          text: l.join(`
+          c.push(e[t].trim()), t++;
+        c.length > 0 && a.push({
+          start: o,
+          end: l,
+          text: c.join(`
 `)
         });
       }
     }
     t++;
   }
-  return i;
+  return a;
 }
 function F(n) {
-  const i = n.split(":");
-  let e = 0, t = 0, a = 0;
-  return i.length === 3 ? (e = parseFloat(i[0]), t = parseFloat(i[1]), a = parseFloat(i[2].replace(",", "."))) : i.length === 2 && (t = parseFloat(i[0]), a = parseFloat(i[1].replace(",", "."))), e * 3600 + t * 60 + a;
+  const a = n.split(":");
+  let e = 0, t = 0, i = 0;
+  return a.length === 3 ? (e = parseFloat(a[0]), t = parseFloat(a[1]), i = parseFloat(a[2].replace(",", "."))) : a.length === 2 && (t = parseFloat(a[0]), i = parseFloat(a[1].replace(",", "."))), e * 3600 + t * 60 + i;
 }
-function A(n, i) {
+function M(n, a) {
   let e = "18px";
-  i === "small" && (e = "14px"), i === "large" && (e = "24px"), i === "xlarge" && (e = "32px");
-  let t = "#FFFFFF", a = "rgba(0, 0, 0, 0.85)", s = "none";
-  return n === "yellow-black" ? (t = "#FFEB3B", a = "#000000", s = "2px solid #FFEB3B") : n === "white-black" ? (t = "#FFFFFF", a = "#000000", s = "2px solid #FFFFFF") : n === "black-yellow" && (t = "#000000", a = "#FFEB3B", s = "2px solid #000000"), `
+  a === "small" && (e = "14px"), a === "large" && (e = "24px"), a === "xlarge" && (e = "32px");
+  let t = "#FFFFFF", i = "rgba(0, 0, 0, 0.85)", s = "none";
+  return n === "yellow-black" ? (t = "#FFEB3B", i = "#000000", s = "2px solid #FFEB3B") : n === "white-black" ? (t = "#FFFFFF", i = "#000000", s = "2px solid #FFFFFF") : n === "black-yellow" && (t = "#000000", i = "#FFEB3B", s = "2px solid #000000"), `
     font-size: ${e};
     color: ${t};
-    background: ${a};
+    background: ${i};
     border: ${s};
     line-height: 1.4;
     padding: 0.35rem 0.75rem;
@@ -80,17 +80,17 @@ function A(n, i) {
     white-space: pre-line;
   `;
 }
-class M {
-  constructor(i) {
-    c(this, "mainVideo");
-    c(this, "signVideo", null);
-    c(this, "driftThreshold", 0.25);
+class A {
+  constructor(a) {
+    d(this, "mainVideo");
+    d(this, "signVideo", null);
+    d(this, "driftThreshold", 0.25);
     // 250ms tolerance
-    c(this, "isSyncing", !1);
-    this.mainVideo = i, this.setupMainListeners();
+    d(this, "isSyncing", !1);
+    this.mainVideo = a, this.setupMainListeners();
   }
-  setSignVideo(i) {
-    this.signVideo = i, this.signVideo && (this.signVideo.muted = !0, this.signVideo.playbackRate = this.mainVideo.playbackRate, this.signVideo.currentTime = this.mainVideo.currentTime, this.setupSignListeners());
+  setSignVideo(a) {
+    this.signVideo = a, this.signVideo && (this.signVideo.muted = !0, this.signVideo.playbackRate = this.mainVideo.playbackRate, this.signVideo.currentTime = this.mainVideo.currentTime, this.setupSignListeners());
   }
   setupMainListeners() {
     this.mainVideo.addEventListener("play", () => {
@@ -120,59 +120,59 @@ class M {
    * Switches media source (e.g. standard video <-> audio described video)
    * while preserving timestamp, playback rate, and play/pause state.
    */
-  async switchSource(i) {
-    const e = !this.mainVideo.paused, t = this.mainVideo.currentTime, a = this.mainVideo.playbackRate;
-    return this.mainVideo.src = i, this.mainVideo.load(), new Promise((s) => {
-      const r = async () => {
-        if (this.mainVideo.removeEventListener("loadedmetadata", r), this.mainVideo.currentTime = t, this.mainVideo.playbackRate = a, e)
+  async switchSource(a) {
+    const e = !this.mainVideo.paused, t = this.mainVideo.currentTime, i = this.mainVideo.playbackRate;
+    return this.mainVideo.src = a, this.mainVideo.load(), new Promise((s) => {
+      const o = async () => {
+        if (this.mainVideo.removeEventListener("loadedmetadata", o), this.mainVideo.currentTime = t, this.mainVideo.playbackRate = i, e)
           try {
             await this.mainVideo.play();
           } catch {
           }
         s();
       };
-      this.mainVideo.addEventListener("loadedmetadata", r);
+      this.mainVideo.addEventListener("loadedmetadata", o);
     });
   }
 }
 class I {
-  constructor(i, e) {
-    c(this, "segments", []);
-    c(this, "container");
-    c(this, "onSeek");
-    c(this, "currentActiveId", null);
-    c(this, "searchQuery", "");
-    this.container = i, this.onSeek = e;
+  constructor(a, e) {
+    d(this, "segments", []);
+    d(this, "container");
+    d(this, "onSeek");
+    d(this, "currentActiveId", null);
+    d(this, "searchQuery", "");
+    this.container = a, this.onSeek = e;
   }
-  setSegments(i) {
-    this.segments = i, this.render();
+  setSegments(a) {
+    this.segments = a, this.render();
   }
-  setSearchQuery(i) {
-    this.searchQuery = i.toLowerCase().trim(), this.render();
+  setSearchQuery(a) {
+    this.searchQuery = a.toLowerCase().trim(), this.render();
   }
-  updateActiveTime(i) {
-    const e = this.segments.find((t) => i >= t.start && i <= t.end);
+  updateActiveTime(a) {
+    const e = this.segments.find((t) => a >= t.start && a <= t.end);
     e && e.id !== this.currentActiveId && (this.currentActiveId = e.id, this.highlightSegment(e.id));
   }
-  highlightSegment(i) {
+  highlightSegment(a) {
     const e = this.container.querySelector(".transcript-item.active");
     e && e.classList.remove("active");
-    const t = this.container.querySelector(`[data-segment-id="${i}"]`);
+    const t = this.container.querySelector(`[data-segment-id="${a}"]`);
     t && t.classList.add("active");
   }
-  formatTime(i) {
-    const e = Math.floor(i / 60), t = Math.floor(i % 60);
+  formatTime(a) {
+    const e = Math.floor(a / 60), t = Math.floor(a % 60);
     return `${e.toString().padStart(2, "0")}:${t.toString().padStart(2, "0")}`;
   }
   render() {
-    const i = this.searchQuery ? this.segments.filter((e) => e.text.toLowerCase().includes(this.searchQuery)) : this.segments;
-    if (i.length === 0) {
+    const a = this.searchQuery ? this.segments.filter((e) => e.text.toLowerCase().includes(this.searchQuery)) : this.segments;
+    if (a.length === 0) {
       this.container.innerHTML = '<p class="empty-msg">No transcript segments match your search.</p>';
       return;
     }
     this.container.innerHTML = `
       <ul class="transcript-list" role="list">
-        ${i.map((e) => {
+        ${a.map((e) => {
       const t = this.formatTime(e.start);
       return `
             <li class="transcript-item ${e.id === this.currentActiveId ? "active" : ""}" data-segment-id="${e.id}">
@@ -196,33 +196,33 @@ class I {
       </ul>
     `, this.container.querySelectorAll(".btn-seek-time").forEach((e) => {
       e.addEventListener("click", (t) => {
-        const a = parseFloat(t.currentTarget.dataset.time || "0");
-        this.onSeek(a);
+        const i = parseFloat(t.currentTarget.dataset.time || "0");
+        this.onSeek(i);
       });
     });
   }
-  escapeHtml(i) {
-    return i.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+  escapeHtml(a) {
+    return a.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
   }
 }
 class O extends HTMLElement {
   constructor() {
     super();
-    c(this, "shadow");
-    c(this, "manifest", null);
-    c(this, "activeLocale", "en");
-    c(this, "prefs");
+    d(this, "shadow");
+    d(this, "manifest", null);
+    d(this, "activeLocale", "en");
+    d(this, "prefs");
     // Media & sync
-    c(this, "mainVideo");
-    c(this, "signVideo", null);
-    c(this, "syncController");
+    d(this, "mainVideo");
+    d(this, "signVideo", null);
+    d(this, "syncController");
     // Captions
-    c(this, "currentCues", []);
-    c(this, "captionOverlay");
+    d(this, "currentCues", []);
+    d(this, "captionOverlay");
     // Transcript
-    c(this, "transcriptViewer");
+    d(this, "transcriptViewer");
     // UI state
-    c(this, "isPreferencesOpen", !1);
+    d(this, "isPreferencesOpen", !1);
     this.shadow = this.attachShadow({ mode: "open" }), this.prefs = D();
   }
   static get observedAttributes() {
@@ -233,14 +233,44 @@ class O extends HTMLElement {
     const e = this.getAttribute("manifest-src");
     e && this.loadManifest(e);
   }
-  attributeChangedCallback(e, t, a) {
-    t !== a && (e === "locale" ? (this.activeLocale = a || "en", this.updateLocaleStrings()) : e === "manifest-src" && this.loadManifest(a));
+  attributeChangedCallback(e, t, i) {
+    t !== i && (e === "locale" ? (this.activeLocale = i || "en", this.updateLocaleStrings()) : e === "manifest-src" && this.loadManifest(i));
   }
   async loadManifest(e) {
     try {
       const t = await fetch(e);
       if (!t.ok) throw new Error(`HTTP error ${t.status}`);
-      this.manifest = await t.json(), this.render(), await this.initTracksAndTranscript();
+      const i = await t.json();
+      let s;
+      try {
+        s = new URL(e, window.location.href);
+      } catch {
+        s = new URL(window.location.href);
+      }
+      const o = (l) => {
+        if (!l) return l;
+        try {
+          return new URL(l, s).href;
+        } catch {
+          return l;
+        }
+      };
+      this.manifest = {
+        ...i,
+        poster: i.poster ? { ...i.poster, src: o(i.poster.src) } : void 0,
+        sources: (i.sources || []).map((l) => ({
+          ...l,
+          src: o(l.src)
+        })),
+        captionTracks: (i.captionTracks || []).map((l) => ({
+          ...l,
+          src: o(l.src)
+        })),
+        transcript: i.transcript ? {
+          ...i.transcript,
+          src: o(i.transcript.src)
+        } : i.transcript
+      }, this.render(), await this.initTracksAndTranscript();
     } catch (t) {
       this.renderError(t instanceof Error ? t.message : "Failed to load manifest");
     }
@@ -251,13 +281,13 @@ class O extends HTMLElement {
       try {
         const t = await fetch(this.manifest.transcript.src);
         if (t.ok) {
-          const s = ((await t.json()).segments || []).map((r) => ({
-            id: r.id,
-            start: r.start_ms ? r.start_ms / 1e3 : r.start || 0,
-            end: r.end_ms ? r.end_ms / 1e3 : r.end || 0,
-            speaker: r.speaker,
-            text: r.text || r.draft_text || "",
-            visualDescription: r.visual_description || r.visualDescription
+          const s = ((await t.json()).segments || []).map((o) => ({
+            id: o.id,
+            start: o.start_ms ? o.start_ms / 1e3 : o.start || 0,
+            end: o.end_ms ? o.end_ms / 1e3 : o.end || 0,
+            speaker: o.speaker,
+            text: o.text || o.draft_text || "",
+            visualDescription: o.visual_description || o.visualDescription
           }));
           this.transcriptViewer.setSegments(s);
         }
@@ -270,15 +300,15 @@ class O extends HTMLElement {
       this.currentCues = [], this.updateCaptionDisplay();
       return;
     }
-    const t = this.manifest.captionTracks.find((a) => a.language === e);
+    const t = this.manifest.captionTracks.find((i) => i.language === e);
     if (!t) {
       this.currentCues = [], this.updateCaptionDisplay();
       return;
     }
     try {
-      const a = await fetch(t.src);
-      if (a.ok) {
-        const s = await a.text();
+      const i = await fetch(t.src);
+      if (i.ok) {
+        const s = await i.text();
         this.currentCues = P(s);
       }
     } catch {
@@ -292,8 +322,8 @@ class O extends HTMLElement {
       this.captionOverlay.style.display = "none";
       return;
     }
-    const e = this.mainVideo.currentTime, t = this.currentCues.find((a) => e >= a.start && e <= a.end);
-    t ? (this.captionOverlay.style.display = "block", this.captionOverlay.style.cssText = A(this.prefs.captionTheme, this.prefs.captionSize), this.captionOverlay.textContent = t.text) : this.captionOverlay.style.display = "none";
+    const e = this.mainVideo.currentTime, t = this.currentCues.find((i) => e >= i.start && e <= i.end);
+    t ? (this.captionOverlay.style.display = "block", this.captionOverlay.style.cssText = M(this.prefs.captionTheme, this.prefs.captionSize), this.captionOverlay.textContent = t.text) : this.captionOverlay.style.display = "none";
   }
   renderError(e) {
     this.shadow.innerHTML = `
@@ -313,8 +343,8 @@ class O extends HTMLElement {
     `;
   }
   render() {
-    var r, d;
-    const e = this.activeLocale === "am", t = this.manifest ? this.manifest.title[this.activeLocale] : "Media Player", a = (r = this.manifest) == null ? void 0 : r.sources.find((l) => l.kind === "main"), s = (d = this.manifest) == null ? void 0 : d.sources.find((l) => l.kind === "sign");
+    var o, l;
+    const e = this.activeLocale === "am", t = this.manifest ? this.manifest.title[this.activeLocale] : "Media Player", i = (o = this.manifest) == null ? void 0 : o.sources.find((c) => c.kind === "main"), s = (l = this.manifest) == null ? void 0 : l.sources.find((c) => c.kind === "sign");
     this.shadow.innerHTML = `
       <style>
         :host {
@@ -579,7 +609,7 @@ class O extends HTMLElement {
               class="main-video" 
               playsinline 
               preload="metadata"
-              src="${a ? a.src : ""}">
+              src="${i ? i.src : ""}">
             </video>
 
             <!-- Movable & Resizable ESL Window -->
@@ -730,7 +760,7 @@ class O extends HTMLElement {
     `, this.bindDOMElements(), this.attachEventListeners();
   }
   bindDOMElements() {
-    this.mainVideo = this.shadow.getElementById("main-video"), this.signVideo = this.shadow.getElementById("sign-video"), this.captionOverlay = this.shadow.getElementById("caption-overlay"), this.syncController = new M(this.mainVideo), this.signVideo && this.syncController.setSignVideo(this.signVideo);
+    this.mainVideo = this.shadow.getElementById("main-video"), this.signVideo = this.shadow.getElementById("sign-video"), this.captionOverlay = this.shadow.getElementById("caption-overlay"), this.syncController = new A(this.mainVideo), this.signVideo && this.syncController.setSignVideo(this.signVideo);
     const e = this.shadow.getElementById("transcript-target");
     this.transcriptViewer = new I(e, (t) => {
       this.mainVideo.currentTime = t;
@@ -738,35 +768,35 @@ class O extends HTMLElement {
   }
   attachEventListeners() {
     var E, S, $, L, T, V, C;
-    const e = this.shadow.getElementById("btn-play"), t = this.shadow.getElementById("play-icon"), a = this.shadow.getElementById("play-text"), s = this.shadow.getElementById("seek-scrubber"), r = this.shadow.getElementById("time-display"), d = () => {
+    const e = this.shadow.getElementById("btn-play"), t = this.shadow.getElementById("play-icon"), i = this.shadow.getElementById("play-text"), s = this.shadow.getElementById("seek-scrubber"), o = this.shadow.getElementById("time-display"), l = () => {
       this.mainVideo.paused ? this.mainVideo.play() : this.mainVideo.pause();
     };
-    e && e.addEventListener("click", d), this.mainVideo.addEventListener("play", () => {
-      t && a && (t.textContent = "⏸", a.textContent = this.activeLocale === "am" ? "አቁም" : "Pause"), e == null || e.setAttribute("aria-label", this.activeLocale === "am" ? "አቁም (Space)" : "Pause (Space)");
+    e && e.addEventListener("click", l), this.mainVideo.addEventListener("play", () => {
+      t && i && (t.textContent = "⏸", i.textContent = this.activeLocale === "am" ? "አቁም" : "Pause"), e == null || e.setAttribute("aria-label", this.activeLocale === "am" ? "አቁም (Space)" : "Pause (Space)");
     }), this.mainVideo.addEventListener("pause", () => {
-      t && a && (t.textContent = "▶", a.textContent = this.activeLocale === "am" ? "አጫውት" : "Play"), e == null || e.setAttribute("aria-label", this.activeLocale === "am" ? "አጫውት (Space)" : "Play (Space)");
+      t && i && (t.textContent = "▶", i.textContent = this.activeLocale === "am" ? "አጫውት" : "Play"), e == null || e.setAttribute("aria-label", this.activeLocale === "am" ? "አጫውት (Space)" : "Play (Space)");
     }), this.mainVideo.addEventListener("timeupdate", () => {
-      const o = this.mainVideo.currentTime, b = this.mainVideo.duration || 1;
-      s && !s.matches(":active") && (s.value = (o / b * 100).toFixed(1)), r && (r.textContent = `${this.formatTime(o)} / ${this.formatTime(b)}`), this.updateCaptionDisplay(), this.transcriptViewer.updateActiveTime(o);
+      const r = this.mainVideo.currentTime, b = this.mainVideo.duration || 1;
+      s && !s.matches(":active") && (s.value = (r / b * 100).toFixed(1)), o && (o.textContent = `${this.formatTime(r)} / ${this.formatTime(b)}`), this.updateCaptionDisplay(), this.transcriptViewer.updateActiveTime(r);
     }), s.addEventListener("input", () => {
-      const o = this.mainVideo.duration || 1;
-      this.mainVideo.currentTime = parseFloat(s.value) / 100 * o;
+      const r = this.mainVideo.duration || 1;
+      this.mainVideo.currentTime = parseFloat(s.value) / 100 * r;
     }), (E = this.shadow.getElementById("btn-rewind")) == null || E.addEventListener("click", () => {
       this.mainVideo.currentTime = Math.max(0, this.mainVideo.currentTime - 5);
     }), (S = this.shadow.getElementById("btn-forward")) == null || S.addEventListener("click", () => {
       this.mainVideo.currentTime = Math.min(this.mainVideo.duration || 1e3, this.mainVideo.currentTime + 5);
     });
-    const l = this.shadow.getElementById("btn-ad");
-    l == null || l.addEventListener("click", async () => {
+    const c = this.shadow.getElementById("btn-ad");
+    c == null || c.addEventListener("click", async () => {
       if (!this.manifest) return;
-      this.prefs.audioDescriptionEnabled = !this.prefs.audioDescriptionEnabled, f({ audioDescriptionEnabled: this.prefs.audioDescriptionEnabled }), l.setAttribute("aria-pressed", this.prefs.audioDescriptionEnabled ? "true" : "false");
-      const o = this.prefs.audioDescriptionEnabled ? "described" : "main", b = this.manifest.sources.find((k) => k.kind === o) || this.manifest.sources.find((k) => k.kind === "main");
+      this.prefs.audioDescriptionEnabled = !this.prefs.audioDescriptionEnabled, f({ audioDescriptionEnabled: this.prefs.audioDescriptionEnabled }), c.setAttribute("aria-pressed", this.prefs.audioDescriptionEnabled ? "true" : "false");
+      const r = this.prefs.audioDescriptionEnabled ? "described" : "main", b = this.manifest.sources.find((k) => k.kind === r) || this.manifest.sources.find((k) => k.kind === "main");
       b && await this.syncController.switchSource(b.src);
     });
     const p = this.shadow.getElementById("btn-cc");
     p == null || p.addEventListener("click", async () => {
-      const o = ["en", "am", "off"], b = (o.indexOf(this.prefs.captionLanguage) + 1) % o.length;
-      this.prefs.captionLanguage = o[b], f({ captionLanguage: this.prefs.captionLanguage }), p.textContent = `CC (${this.prefs.captionLanguage.toUpperCase()})`, await this.loadCaptionTrack(this.prefs.captionLanguage);
+      const r = ["en", "am", "off"], b = (r.indexOf(this.prefs.captionLanguage) + 1) % r.length;
+      this.prefs.captionLanguage = r[b], f({ captionLanguage: this.prefs.captionLanguage }), p.textContent = `CC (${this.prefs.captionLanguage.toUpperCase()})`, await this.loadCaptionTrack(this.prefs.captionLanguage);
     });
     const h = this.shadow.getElementById("btn-esl"), u = this.shadow.getElementById("esl-window");
     h == null || h.addEventListener("click", () => {
@@ -774,79 +804,79 @@ class O extends HTMLElement {
     });
     const m = this.shadow.getElementById("btn-prefs"), g = this.shadow.getElementById("prefs-dialog"), y = this.shadow.getElementById("btn-close-prefs");
     m == null || m.addEventListener("click", () => {
-      var o;
-      this.isPreferencesOpen = !0, g && (g.style.display = "flex"), (o = this.shadow.getElementById("select-cc-lang")) == null || o.focus();
+      var r;
+      this.isPreferencesOpen = !0, g && (g.style.display = "flex"), (r = this.shadow.getElementById("select-cc-lang")) == null || r.focus();
     }), y == null || y.addEventListener("click", () => {
       this.isPreferencesOpen = !1, g && (g.style.display = "none"), m == null || m.focus();
-    }), ($ = this.shadow.getElementById("select-cc-lang")) == null || $.addEventListener("change", async (o) => {
-      this.prefs.captionLanguage = o.target.value, f({ captionLanguage: this.prefs.captionLanguage }), p && (p.textContent = `CC (${this.prefs.captionLanguage.toUpperCase()})`), await this.loadCaptionTrack(this.prefs.captionLanguage);
-    }), (L = this.shadow.getElementById("select-cc-size")) == null || L.addEventListener("change", (o) => {
-      this.prefs.captionSize = o.target.value, f({ captionSize: this.prefs.captionSize }), this.updateCaptionDisplay();
-    }), (T = this.shadow.getElementById("select-cc-theme")) == null || T.addEventListener("change", (o) => {
-      this.prefs.captionTheme = o.target.value, f({ captionTheme: this.prefs.captionTheme }), this.updateCaptionDisplay();
-    }), (V = this.shadow.getElementById("select-esl-pos")) == null || V.addEventListener("change", (o) => {
-      this.prefs.eslPosition = o.target.value, f({ eslPosition: this.prefs.eslPosition }), u && (u.className = `esl-window pos-${this.prefs.eslPosition} size-${this.prefs.eslSize}`);
-    }), (C = this.shadow.getElementById("select-esl-size")) == null || C.addEventListener("change", (o) => {
-      this.prefs.eslSize = o.target.value, f({ eslSize: this.prefs.eslSize }), u && (u.className = `esl-window pos-${this.prefs.eslPosition} size-${this.prefs.eslSize}`);
+    }), ($ = this.shadow.getElementById("select-cc-lang")) == null || $.addEventListener("change", async (r) => {
+      this.prefs.captionLanguage = r.target.value, f({ captionLanguage: this.prefs.captionLanguage }), p && (p.textContent = `CC (${this.prefs.captionLanguage.toUpperCase()})`), await this.loadCaptionTrack(this.prefs.captionLanguage);
+    }), (L = this.shadow.getElementById("select-cc-size")) == null || L.addEventListener("change", (r) => {
+      this.prefs.captionSize = r.target.value, f({ captionSize: this.prefs.captionSize }), this.updateCaptionDisplay();
+    }), (T = this.shadow.getElementById("select-cc-theme")) == null || T.addEventListener("change", (r) => {
+      this.prefs.captionTheme = r.target.value, f({ captionTheme: this.prefs.captionTheme }), this.updateCaptionDisplay();
+    }), (V = this.shadow.getElementById("select-esl-pos")) == null || V.addEventListener("change", (r) => {
+      this.prefs.eslPosition = r.target.value, f({ eslPosition: this.prefs.eslPosition }), u && (u.className = `esl-window pos-${this.prefs.eslPosition} size-${this.prefs.eslSize}`);
+    }), (C = this.shadow.getElementById("select-esl-size")) == null || C.addEventListener("change", (r) => {
+      this.prefs.eslSize = r.target.value, f({ eslSize: this.prefs.eslSize }), u && (u.className = `esl-window pos-${this.prefs.eslPosition} size-${this.prefs.eslSize}`);
     });
     const v = this.shadow.getElementById("transcript-search");
     v == null || v.addEventListener("input", () => {
       this.transcriptViewer.setSearchQuery(v.value);
     });
     const x = this.shadow.getElementById("player-container");
-    x == null || x.addEventListener("keydown", (o) => {
+    x == null || x.addEventListener("keydown", (r) => {
       if (this.isPreferencesOpen) {
-        o.key === "Escape" && (this.isPreferencesOpen = !1, g && (g.style.display = "none"), m == null || m.focus());
+        r.key === "Escape" && (this.isPreferencesOpen = !1, g && (g.style.display = "none"), m == null || m.focus());
         return;
       }
-      if (!(o.target.tagName === "INPUT" || o.target.tagName === "SELECT"))
-        switch (o.key) {
+      if (!(r.target.tagName === "INPUT" || r.target.tagName === "SELECT"))
+        switch (r.key) {
           case " ":
           case "k":
           case "K":
-            o.preventDefault(), d();
+            r.preventDefault(), l();
             break;
           case "j":
           case "J":
           case "ArrowLeft":
-            o.preventDefault(), this.mainVideo.currentTime = Math.max(0, this.mainVideo.currentTime - 5);
+            r.preventDefault(), this.mainVideo.currentTime = Math.max(0, this.mainVideo.currentTime - 5);
             break;
           case "l":
           case "L":
           case "ArrowRight":
-            o.preventDefault(), this.mainVideo.currentTime = Math.min(this.mainVideo.duration || 1e3, this.mainVideo.currentTime + 5);
+            r.preventDefault(), this.mainVideo.currentTime = Math.min(this.mainVideo.duration || 1e3, this.mainVideo.currentTime + 5);
             break;
           case "m":
           case "M":
-            o.preventDefault(), this.mainVideo.muted = !this.mainVideo.muted;
+            r.preventDefault(), this.mainVideo.muted = !this.mainVideo.muted;
             break;
           case "c":
           case "C":
-            o.preventDefault(), p == null || p.click();
+            r.preventDefault(), p == null || p.click();
             break;
           case "s":
           case "S":
-            o.preventDefault(), h == null || h.click();
+            r.preventDefault(), h == null || h.click();
             break;
           case "d":
           case "D":
-            o.preventDefault(), l == null || l.click();
+            r.preventDefault(), c == null || c.click();
             break;
           case "+":
           case "=":
-            o.preventDefault(), this.cycleESLSize(1);
+            r.preventDefault(), this.cycleESLSize(1);
             break;
           case "-":
           case "_":
-            o.preventDefault(), this.cycleESLSize(-1);
+            r.preventDefault(), this.cycleESLSize(-1);
             break;
         }
     });
   }
   cycleESLSize(e) {
     const t = ["small", "medium", "large"];
-    let a = t.indexOf(this.prefs.eslSize) + e;
-    a < 0 && (a = 0), a >= t.length && (a = t.length - 1), this.prefs.eslSize = t[a], f({ eslSize: this.prefs.eslSize });
+    let i = t.indexOf(this.prefs.eslSize) + e;
+    i < 0 && (i = 0), i >= t.length && (i = t.length - 1), this.prefs.eslSize = t[i], f({ eslSize: this.prefs.eslSize });
     const s = this.shadow.getElementById("esl-window");
     s && (s.className = `esl-window pos-${this.prefs.eslPosition} size-${this.prefs.eslSize}`);
   }
@@ -854,12 +884,12 @@ class O extends HTMLElement {
     this.render(), this.initTracksAndTranscript();
   }
   formatTime(e) {
-    const t = Math.floor(e / 60), a = Math.floor(e % 60);
-    return `${t.toString().padStart(2, "0")}:${a.toString().padStart(2, "0")}`;
+    const t = Math.floor(e / 60), i = Math.floor(e % 60);
+    return `${t.toString().padStart(2, "0")}:${i.toString().padStart(2, "0")}`;
   }
 }
 customElements.get("a11y-media-player") || customElements.define("a11y-media-player", O);
-const N = [
+const R = [
   "መስከረም",
   // Meskerem (1)
   "ጥቅምት",
@@ -887,8 +917,8 @@ const N = [
   "ጳጉሜ"
   // Pagume (13)
 ];
-function R(n) {
-  const i = typeof n == "string" ? new Date(n) : n, e = i.getUTCFullYear(), t = i.getUTCMonth() + 1, a = i.getUTCDate(), s = Math.floor((14 - t) / 12), r = e + 4800 - s, d = t + 12 * s - 3, l = a + Math.floor((153 * d + 2) / 5) + 365 * r + Math.floor(r / 4) - Math.floor(r / 100) + Math.floor(r / 400) - 32045, p = (l - 1723856) % 1461, h = p % 365 + 365 * Math.floor(p / 1460), u = 4 * Math.floor((l - 1723856) / 1461) + Math.floor(p / 365) - Math.floor(p / 1460), m = Math.floor(h / 30) + 1, g = h % 30 + 1, y = N[Math.min(m - 1, 12)];
+function N(n) {
+  const a = typeof n == "string" ? new Date(n) : n, e = a.getUTCFullYear(), t = a.getUTCMonth() + 1, i = a.getUTCDate(), s = Math.floor((14 - t) / 12), o = e + 4800 - s, l = t + 12 * s - 3, c = i + Math.floor((153 * l + 2) / 5) + 365 * o + Math.floor(o / 4) - Math.floor(o / 100) + Math.floor(o / 400) - 32045, p = (c - 1723856) % 1461, h = p % 365 + 365 * Math.floor(p / 1460), u = 4 * Math.floor((c - 1723856) / 1461) + Math.floor(p / 365) - Math.floor(p / 1460), m = Math.floor(h / 30) + 1, g = h % 30 + 1, y = R[Math.min(m - 1, 12)];
   return {
     year: u,
     month: m,
@@ -897,7 +927,7 @@ function R(n) {
   };
 }
 function H(n) {
-  const i = R(n), e = `${i.monthNameAmharic} ${i.day}፣ ${i.year} ዓ.ም`;
+  const a = N(n), e = `${a.monthNameAmharic} ${a.day}፣ ${a.year} ዓ.ም`;
   return {
     iso: n,
     ethiopic: e,
@@ -907,9 +937,9 @@ function H(n) {
 class J extends HTMLElement {
   constructor() {
     super();
-    c(this, "shadow");
-    c(this, "job", null);
-    c(this, "activeLocale", "en");
+    d(this, "shadow");
+    d(this, "job", null);
+    d(this, "activeLocale", "en");
     this.shadow = this.attachShadow({ mode: "open" });
   }
   static get observedAttributes() {
@@ -928,13 +958,13 @@ class J extends HTMLElement {
   setJob(e) {
     this.job = e, this.render();
   }
-  attributeChangedCallback(e, t, a) {
-    if (t !== a) {
+  attributeChangedCallback(e, t, i) {
+    if (t !== i) {
       if (e === "locale")
-        this.activeLocale = a || "en", this.render();
+        this.activeLocale = i || "en", this.render();
       else if (e === "job-data")
         try {
-          this.job = JSON.parse(a), this.render();
+          this.job = JSON.parse(i), this.render();
         } catch {
         }
     }
@@ -944,7 +974,7 @@ class J extends HTMLElement {
       this.shadow.innerHTML = '<div class="job-placeholder">No job data supplied</div>';
       return;
     }
-    const e = this.activeLocale === "am", t = this.job.title[this.activeLocale] || this.job.title.en, a = this.job.location[this.activeLocale] || this.job.location.en, s = this.job.description[this.activeLocale] || this.job.description.en, r = this.job.applicationDeadline ? H(this.job.applicationDeadline) : null, d = {
+    const e = this.activeLocale === "am", t = this.job.title[this.activeLocale] || this.job.title.en, i = this.job.location[this.activeLocale] || this.job.location.en, s = this.job.description[this.activeLocale] || this.job.description.en, o = this.job.applicationDeadline ? H(this.job.applicationDeadline) : null, l = {
       "@context": "https://schema.org/",
       "@type": "JobPosting",
       title: t,
@@ -957,7 +987,7 @@ class J extends HTMLElement {
         "@type": "Place",
         address: {
           "@type": "PostalAddress",
-          addressLocality: a,
+          addressLocality: i,
           addressCountry: "ET"
         }
       },
@@ -1100,7 +1130,7 @@ class J extends HTMLElement {
 
       <!-- schema.org/JobPosting JSON-LD -->
       <script type="application/ld+json">
-        ${JSON.stringify(d)}
+        ${JSON.stringify(l)}
       <\/script>
 
       <article class="card" aria-labelledby="job-title-${this.job.id}">
@@ -1108,9 +1138,9 @@ class J extends HTMLElement {
           <h4 id="job-title-${this.job.id}">${t}</h4>
           <div class="meta-line">
             <span><strong>${this.job.employer}</strong></span> &bull;
-            <span>${a}</span> &bull;
+            <span>${i}</span> &bull;
             <span>${this.job.workMode.toUpperCase()}</span>
-            ${r ? ` &bull; <span class="badge calendar" aria-label="Deadline: ${r.display}">📅 ${e ? "የማመልከቻ ማብቂያ፦" : "Deadline:"} ${r.display}</span>` : ""}
+            ${o ? ` &bull; <span class="badge calendar" aria-label="Deadline: ${o.display}">📅 ${e ? "የማመልከቻ ማብቂያ፦" : "Deadline:"} ${o.display}</span>` : ""}
           </div>
         </header>
 
@@ -1136,11 +1166,11 @@ class J extends HTMLElement {
           <strong id="acc-heading-${this.job.id}">${e ? "የተረጋገጡ ማመቻቸቶች (Accommodations Offered):" : "Employer-Provided Accommodations:"}</strong>
           <ul class="tags-list" aria-labelledby="acc-heading-${this.job.id}">
             ${this.job.accommodations.map(
-      (l) => `
+      (c) => `
               <li class="badge accommodation">
                 <span aria-hidden="true">✓</span>
-                <span>${l.label[this.activeLocale] || l.label.en}</span>
-                <small style="opacity: 0.85;">(${l.source})</small>
+                <span>${c.label[this.activeLocale] || c.label.en}</span>
+                <small style="opacity: 0.85;">(${c.source})</small>
               </li>
             `
     ).join("")}
@@ -1165,21 +1195,21 @@ class J extends HTMLElement {
   attachShareHandler() {
     const e = this.shadow.getElementById("btn-share-cert"), t = this.shadow.getElementById("share-feedback");
     !e || !t || e.addEventListener("click", async () => {
-      const a = `${window.location.origin}/verify.html?certId=CERT-DB-2026-0042`;
+      const i = `${window.location.origin}/verify.html?certId=CERT-DB-2026-0042`;
       if (navigator.share)
         try {
           await navigator.share({
             title: "Demonstrated Certificate — Savanna Platform",
             text: "Verified Certificate for Digital Workplace Skills: Foundations",
-            url: a
+            url: i
           }), t.textContent = this.activeLocale === "am" ? "ተጋርቷል!" : "Link shared!";
           return;
         } catch {
         }
       try {
-        await navigator.clipboard.writeText(a), t.textContent = this.activeLocale === "am" ? "የምስክር ወረቀት አገናኝ ተገልብጧል!" : "Certificate link copied to clipboard!";
+        await navigator.clipboard.writeText(i), t.textContent = this.activeLocale === "am" ? "የምስክር ወረቀት አገናኝ ተገልብጧል!" : "Certificate link copied to clipboard!";
       } catch {
-        t.textContent = a;
+        t.textContent = i;
       }
     });
   }
@@ -1188,71 +1218,71 @@ customElements.get("a11y-job-card") || customElements.define("a11y-job-card", J)
 const _ = "abugida-media", U = 1;
 class q {
   constructor() {
-    c(this, "db", null);
-    c(this, "cacheName", "abugida-offline-v1");
+    d(this, "db", null);
+    d(this, "cacheName", "abugida-offline-v1");
   }
   async init() {
     if (!this.db)
-      return new Promise((i, e) => {
+      return new Promise((a, e) => {
         const t = indexedDB.open(_, U);
-        t.onupgradeneeded = (a) => {
-          const s = a.target.result;
+        t.onupgradeneeded = (i) => {
+          const s = i.target.result;
           s.objectStoreNames.contains("preferences") || s.createObjectStore("preferences"), s.objectStoreNames.contains("progress") || s.createObjectStore("progress", { keyPath: "lessonId" }), s.objectStoreNames.contains("packages") || s.createObjectStore("packages", { keyPath: "packageKey" });
-        }, t.onsuccess = (a) => {
-          this.db = a.target.result, i();
+        }, t.onsuccess = (i) => {
+          this.db = i.target.result, a();
         }, t.onerror = () => {
-          console.warn("IndexedDB unavailable, falling back to memory/localStorage"), i();
+          console.warn("IndexedDB unavailable, falling back to memory/localStorage"), a();
         };
       });
   }
   // --- Progress Tracking (Local-first) ---
-  async saveProgress(i) {
+  async saveProgress(a) {
     if (await this.init(), !this.db) {
       try {
-        localStorage.setItem(`progress_${i.lessonId}`, JSON.stringify(i));
+        localStorage.setItem(`progress_${a.lessonId}`, JSON.stringify(a));
       } catch {
       }
       return;
     }
     return new Promise((e) => {
       const t = this.db.transaction("progress", "readwrite");
-      t.objectStore("progress").put(i), t.oncomplete = () => e(), t.onerror = () => e();
+      t.objectStore("progress").put(a), t.oncomplete = () => e(), t.onerror = () => e();
     });
   }
-  async getProgress(i) {
+  async getProgress(a) {
     if (await this.init(), !this.db)
       try {
-        const e = localStorage.getItem(`progress_${i}`);
+        const e = localStorage.getItem(`progress_${a}`);
         return e ? JSON.parse(e) : null;
       } catch {
         return null;
       }
     return new Promise((e) => {
-      const s = this.db.transaction("progress", "readonly").objectStore("progress").get(i);
+      const s = this.db.transaction("progress", "readonly").objectStore("progress").get(a);
       s.onsuccess = () => e(s.result || null), s.onerror = () => e(null);
     });
   }
   // --- 3G Offline Package Download Engine ---
-  async downloadPackage(i, e, t, a, s) {
+  async downloadPackage(a, e, t, i, s) {
     await this.init();
-    const r = `${i}:${e}`;
+    const o = `${a}:${e}`;
     if (!("caches" in window))
       throw new Error("Cache Storage API is not supported in this browser.");
     try {
-      const d = await caches.open(this.cacheName);
-      let l = 0;
-      const p = a.length;
-      for (const h of a) {
+      const l = await caches.open(this.cacheName);
+      let c = 0;
+      const p = i.length;
+      for (const h of i) {
         const u = await fetch(h);
         if (!u.ok)
           throw new Error(`Failed to fetch asset: ${h} (${u.status})`);
-        await d.put(h, u.clone()), l++;
-        const m = Math.round(l / p * 100);
-        s(m, l, p);
+        await l.put(h, u.clone()), c++;
+        const m = Math.round(c / p * 100);
+        s(m, c, p);
       }
       return await this.savePackageRecord({
-        packageKey: r,
-        lessonId: i,
+        packageKey: o,
+        lessonId: a,
         packageId: e,
         packageName: t,
         status: "ready",
@@ -1260,35 +1290,35 @@ class q {
         downloadedBytes: 32e5,
         timestamp: Date.now()
       }), !0;
-    } catch (d) {
+    } catch (l) {
       throw await this.savePackageRecord({
-        packageKey: r,
-        lessonId: i,
+        packageKey: o,
+        lessonId: a,
         packageId: e,
         packageName: t,
         status: "error",
         totalBytes: 32e5,
         downloadedBytes: 0,
         timestamp: Date.now(),
-        error: d instanceof Error ? d.message : "Download failed"
-      }), d;
+        error: l instanceof Error ? l.message : "Download failed"
+      }), l;
     }
   }
-  async isPackageReady(i, e) {
+  async isPackageReady(a, e) {
     await this.init();
-    const t = `${i}:${e}`, a = await this.getPackageRecord(t);
-    return (a == null ? void 0 : a.status) === "ready";
+    const t = `${a}:${e}`, i = await this.getPackageRecord(t);
+    return (i == null ? void 0 : i.status) === "ready";
   }
-  async savePackageRecord(i) {
+  async savePackageRecord(a) {
     if (this.db)
       return new Promise((e) => {
         const t = this.db.transaction("packages", "readwrite");
-        t.objectStore("packages").put(i), t.oncomplete = () => e(), t.onerror = () => e();
+        t.objectStore("packages").put(a), t.oncomplete = () => e(), t.onerror = () => e();
       });
   }
-  async getPackageRecord(i) {
+  async getPackageRecord(a) {
     return this.db ? new Promise((e) => {
-      const s = this.db.transaction("packages", "readonly").objectStore("packages").get(i);
+      const s = this.db.transaction("packages", "readonly").objectStore("packages").get(a);
       s.onsuccess = () => e(s.result || null), s.onerror = () => e(null);
     }) : null;
   }
@@ -1298,16 +1328,16 @@ export {
   J as A11yJobCard,
   O as A11yMediaPlayer,
   w as DEFAULT_PREFERENCES,
-  N as ETHIOPIC_MONTHS,
-  M as MediaSyncController,
+  R as ETHIOPIC_MONTHS,
+  A as MediaSyncController,
   q as OfflineStorageManager,
   I as TranscriptViewer,
   H as formatDualDate,
-  A as getThemeStyles,
+  M as getThemeStyles,
   D as loadPreferences,
   W as offlineStorage,
   P as parseVTT,
   f as savePreferences,
-  R as toEthiopianDate
+  N as toEthiopianDate
 };
 //# sourceMappingURL=a11y-media-kit.es.js.map

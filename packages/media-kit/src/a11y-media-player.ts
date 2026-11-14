@@ -66,7 +66,46 @@ export class A11yMediaPlayer extends HTMLElement {
     try {
       const res = await fetch(src);
       if (!res.ok) throw new Error(`HTTP error ${res.status}`);
-      this.manifest = await res.json();
+      const rawManifest: LessonManifest = await res.json();
+
+      // Resolve relative URLs in manifest against the manifest URL so embeds from external origins/domains work seamlessly
+      let baseUrl: URL;
+      try {
+        baseUrl = new URL(src, window.location.href);
+      } catch {
+        baseUrl = new URL(window.location.href);
+      }
+
+      const resolveUrl = (relOrAbs: string): string => {
+        if (!relOrAbs) return relOrAbs;
+        try {
+          return new URL(relOrAbs, baseUrl).href;
+        } catch {
+          return relOrAbs;
+        }
+      };
+
+      this.manifest = {
+        ...rawManifest,
+        poster: rawManifest.poster
+          ? { ...rawManifest.poster, src: resolveUrl(rawManifest.poster.src) }
+          : undefined,
+        sources: (rawManifest.sources || []).map((s) => ({
+          ...s,
+          src: resolveUrl(s.src),
+        })),
+        captionTracks: (rawManifest.captionTracks || []).map((c) => ({
+          ...c,
+          src: resolveUrl(c.src),
+        })),
+        transcript: rawManifest.transcript
+          ? {
+              ...rawManifest.transcript,
+              src: resolveUrl(rawManifest.transcript.src),
+            }
+          : rawManifest.transcript,
+      };
+
       this.render();
       await this.initTracksAndTranscript();
     } catch (err) {

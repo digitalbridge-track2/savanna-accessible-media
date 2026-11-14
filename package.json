@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "dev": "npm run --workspace=apps/demo dev",
-    "build": "npm run --workspace=packages/lesson-schema build && npm run --workspace=packages/media-kit build && npm run --workspace=apps/demo build",
+    "build": "npm run --workspace=packages/lesson-schema build && npm run --workspace=packages/media-kit build && node -e \"const fs=require('fs'); fs.cpSync('packages/media-kit/dist-bundle', 'apps/demo/public/dist', {recursive:true});\" && npm run --workspace=apps/demo build",
     "typecheck": "npm run --workspace=packages/lesson-schema typecheck && npm run --workspace=packages/media-kit typecheck && npm run --workspace=apps/demo typecheck",
     "validate:fixtures": "node --test tests/unit/core.test.mjs",
     "test": "npm run test:unit && npm run test:a11y && npm run test:integration",

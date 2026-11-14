@@ -5,11 +5,11 @@ export const EmbedView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
   const isAm = locale === "am";
 
   const codeSnippet = `<!-- Level 1 Drop-in Script Tag (Zero build steps) -->
-<script type="module" src="http://localhost:3000/dist/a11y-media-kit.umd.js"></script>
+<script src="http://localhost:3000/dist/a11y-media-kit.umd.js"></script>
 
 <!-- Accessible Media Player Web Component -->
 <a11y-media-player
-  manifest-src="/lessons/digital-workplace/lesson.json"
+  manifest-src="http://localhost:3000/lessons/digital-workplace/lesson.json"
   locale="${locale}">
 </a11y-media-player>`;
 
