@@ -1,6 +1,6 @@
 var j = Object.defineProperty;
 var z = (n, a, e) => a in n ? j(n, a, { enumerable: !0, configurable: !0, writable: !0, value: e }) : n[a] = e;
-var d = (n, a, e) => z(n, typeof a != "symbol" ? a + "" : a, e);
+var c = (n, a, e) => z(n, typeof a != "symbol" ? a + "" : a, e);
 const B = "abugida_media_preferences", w = {
   captionLanguage: "en",
   captionSize: "medium",
@@ -41,13 +41,13 @@ function P(n) {
       if (s.length >= 2) {
         const o = F(s[0]), l = F(s[1]);
         t++;
-        const c = [];
+        const d = [];
         for (; t < e.length && e[t].trim() !== ""; )
-          c.push(e[t].trim()), t++;
-        c.length > 0 && a.push({
+          d.push(e[t].trim()), t++;
+        d.length > 0 && a.push({
           start: o,
           end: l,
-          text: c.join(`
+          text: d.join(`
 `)
         });
       }
@@ -82,11 +82,11 @@ function M(n, a) {
 }
 class A {
   constructor(a) {
-    d(this, "mainVideo");
-    d(this, "signVideo", null);
-    d(this, "driftThreshold", 0.25);
+    c(this, "mainVideo");
+    c(this, "signVideo", null);
+    c(this, "driftThreshold", 0.25);
     // 250ms tolerance
-    d(this, "isSyncing", !1);
+    c(this, "isSyncing", !1);
     this.mainVideo = a, this.setupMainListeners();
   }
   setSignVideo(a) {
@@ -137,11 +137,11 @@ class A {
 }
 class I {
   constructor(a, e) {
-    d(this, "segments", []);
-    d(this, "container");
-    d(this, "onSeek");
-    d(this, "currentActiveId", null);
-    d(this, "searchQuery", "");
+    c(this, "segments", []);
+    c(this, "container");
+    c(this, "onSeek");
+    c(this, "currentActiveId", null);
+    c(this, "searchQuery", "");
     this.container = a, this.onSeek = e;
   }
   setSegments(a) {
@@ -208,21 +208,21 @@ class I {
 class O extends HTMLElement {
   constructor() {
     super();
-    d(this, "shadow");
-    d(this, "manifest", null);
-    d(this, "activeLocale", "en");
-    d(this, "prefs");
+    c(this, "shadow");
+    c(this, "manifest", null);
+    c(this, "activeLocale", "en");
+    c(this, "prefs");
     // Media & sync
-    d(this, "mainVideo");
-    d(this, "signVideo", null);
-    d(this, "syncController");
+    c(this, "mainVideo");
+    c(this, "signVideo", null);
+    c(this, "syncController");
     // Captions
-    d(this, "currentCues", []);
-    d(this, "captionOverlay");
+    c(this, "currentCues", []);
+    c(this, "captionOverlay");
     // Transcript
-    d(this, "transcriptViewer");
+    c(this, "transcriptViewer");
     // UI state
-    d(this, "isPreferencesOpen", !1);
+    c(this, "isPreferencesOpen", !1);
     this.shadow = this.attachShadow({ mode: "open" }), this.prefs = D();
   }
   static get observedAttributes() {
@@ -343,8 +343,8 @@ class O extends HTMLElement {
     `;
   }
   render() {
-    var o, l;
-    const e = this.activeLocale === "am", t = this.manifest ? this.manifest.title[this.activeLocale] : "Media Player", i = (o = this.manifest) == null ? void 0 : o.sources.find((c) => c.kind === "main"), s = (l = this.manifest) == null ? void 0 : l.sources.find((c) => c.kind === "sign");
+    var o, l, d, p;
+    const e = this.activeLocale === "am", t = this.manifest ? this.manifest.title[this.activeLocale] : "Media Player", i = (o = this.manifest) == null ? void 0 : o.sources.find((h) => h.kind === "main"), s = (l = this.manifest) == null ? void 0 : l.sources.find((h) => h.kind === "sign");
     this.shadow.innerHTML = `
       <style>
         :host {
@@ -609,6 +609,7 @@ class O extends HTMLElement {
               class="main-video" 
               playsinline 
               preload="metadata"
+              poster="${((p = (d = this.manifest) == null ? void 0 : d.poster) == null ? void 0 : p.src) || ""}"
               src="${i ? i.src : ""}">
             </video>
 
@@ -786,10 +787,10 @@ class O extends HTMLElement {
     }), (S = this.shadow.getElementById("btn-forward")) == null || S.addEventListener("click", () => {
       this.mainVideo.currentTime = Math.min(this.mainVideo.duration || 1e3, this.mainVideo.currentTime + 5);
     });
-    const c = this.shadow.getElementById("btn-ad");
-    c == null || c.addEventListener("click", async () => {
+    const d = this.shadow.getElementById("btn-ad");
+    d == null || d.addEventListener("click", async () => {
       if (!this.manifest) return;
-      this.prefs.audioDescriptionEnabled = !this.prefs.audioDescriptionEnabled, f({ audioDescriptionEnabled: this.prefs.audioDescriptionEnabled }), c.setAttribute("aria-pressed", this.prefs.audioDescriptionEnabled ? "true" : "false");
+      this.prefs.audioDescriptionEnabled = !this.prefs.audioDescriptionEnabled, f({ audioDescriptionEnabled: this.prefs.audioDescriptionEnabled }), d.setAttribute("aria-pressed", this.prefs.audioDescriptionEnabled ? "true" : "false");
       const r = this.prefs.audioDescriptionEnabled ? "described" : "main", b = this.manifest.sources.find((k) => k.kind === r) || this.manifest.sources.find((k) => k.kind === "main");
       b && await this.syncController.switchSource(b.src);
     });
@@ -860,7 +861,7 @@ class O extends HTMLElement {
             break;
           case "d":
           case "D":
-            r.preventDefault(), c == null || c.click();
+            r.preventDefault(), d == null || d.click();
             break;
           case "+":
           case "=":
@@ -918,7 +919,7 @@ const R = [
   // Pagume (13)
 ];
 function N(n) {
-  const a = typeof n == "string" ? new Date(n) : n, e = a.getUTCFullYear(), t = a.getUTCMonth() + 1, i = a.getUTCDate(), s = Math.floor((14 - t) / 12), o = e + 4800 - s, l = t + 12 * s - 3, c = i + Math.floor((153 * l + 2) / 5) + 365 * o + Math.floor(o / 4) - Math.floor(o / 100) + Math.floor(o / 400) - 32045, p = (c - 1723856) % 1461, h = p % 365 + 365 * Math.floor(p / 1460), u = 4 * Math.floor((c - 1723856) / 1461) + Math.floor(p / 365) - Math.floor(p / 1460), m = Math.floor(h / 30) + 1, g = h % 30 + 1, y = R[Math.min(m - 1, 12)];
+  const a = typeof n == "string" ? new Date(n) : n, e = a.getUTCFullYear(), t = a.getUTCMonth() + 1, i = a.getUTCDate(), s = Math.floor((14 - t) / 12), o = e + 4800 - s, l = t + 12 * s - 3, d = i + Math.floor((153 * l + 2) / 5) + 365 * o + Math.floor(o / 4) - Math.floor(o / 100) + Math.floor(o / 400) - 32045, p = (d - 1723856) % 1461, h = p % 365 + 365 * Math.floor(p / 1460), u = 4 * Math.floor((d - 1723856) / 1461) + Math.floor(p / 365) - Math.floor(p / 1460), m = Math.floor(h / 30) + 1, g = h % 30 + 1, y = R[Math.min(m - 1, 12)];
   return {
     year: u,
     month: m,
@@ -937,9 +938,9 @@ function H(n) {
 class J extends HTMLElement {
   constructor() {
     super();
-    d(this, "shadow");
-    d(this, "job", null);
-    d(this, "activeLocale", "en");
+    c(this, "shadow");
+    c(this, "job", null);
+    c(this, "activeLocale", "en");
     this.shadow = this.attachShadow({ mode: "open" });
   }
   static get observedAttributes() {
@@ -1166,11 +1167,11 @@ class J extends HTMLElement {
           <strong id="acc-heading-${this.job.id}">${e ? "የተረጋገጡ ማመቻቸቶች (Accommodations Offered):" : "Employer-Provided Accommodations:"}</strong>
           <ul class="tags-list" aria-labelledby="acc-heading-${this.job.id}">
             ${this.job.accommodations.map(
-      (c) => `
+      (d) => `
               <li class="badge accommodation">
                 <span aria-hidden="true">✓</span>
-                <span>${c.label[this.activeLocale] || c.label.en}</span>
-                <small style="opacity: 0.85;">(${c.source})</small>
+                <span>${d.label[this.activeLocale] || d.label.en}</span>
+                <small style="opacity: 0.85;">(${d.source})</small>
               </li>
             `
     ).join("")}
@@ -1218,8 +1219,8 @@ customElements.get("a11y-job-card") || customElements.define("a11y-job-card", J)
 const _ = "abugida-media", U = 1;
 class q {
   constructor() {
-    d(this, "db", null);
-    d(this, "cacheName", "abugida-offline-v1");
+    c(this, "db", null);
+    c(this, "cacheName", "abugida-offline-v1");
   }
   async init() {
     if (!this.db)
@@ -1270,15 +1271,15 @@ class q {
       throw new Error("Cache Storage API is not supported in this browser.");
     try {
       const l = await caches.open(this.cacheName);
-      let c = 0;
+      let d = 0;
       const p = i.length;
       for (const h of i) {
         const u = await fetch(h);
         if (!u.ok)
           throw new Error(`Failed to fetch asset: ${h} (${u.status})`);
-        await l.put(h, u.clone()), c++;
-        const m = Math.round(c / p * 100);
-        s(m, c, p);
+        await l.put(h, u.clone()), d++;
+        const m = Math.round(d / p * 100);
+        s(m, d, p);
       }
       return await this.savePackageRecord({
         packageKey: o,

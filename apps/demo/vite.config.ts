@@ -11,6 +11,7 @@ export default defineConfig({
         lesson: resolve(__dirname, "lesson.html"),
         studio: resolve(__dirname, "studio.html"),
         verify: resolve(__dirname, "verify.html"),
+        standalone: resolve(__dirname, "standalone-embed.html"),
       },
     },
   },

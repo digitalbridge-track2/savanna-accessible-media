@@ -475,6 +475,7 @@ export class A11yMediaPlayer extends HTMLElement {
               class="main-video" 
               playsinline 
               preload="metadata"
+              poster="${this.manifest?.poster?.src || ""}"
               src="${mainSource ? mainSource.src : ""}">
             </video>
 

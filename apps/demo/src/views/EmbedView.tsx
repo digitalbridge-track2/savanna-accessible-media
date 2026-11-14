@@ -14,13 +14,35 @@ export const EmbedView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
 </a11y-media-player>`;
 
   const handleCopy = async () => {
+    let success = false;
     try {
-      await navigator.clipboard.writeText(codeSnippet);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(codeSnippet);
+        success = true;
+      }
     } catch {
-      // fallback
+      // proceed to fallback
     }
+
+    if (!success) {
+      try {
+        const textarea = document.createElement("textarea");
+        textarea.value = codeSnippet;
+        textarea.style.position = "fixed";
+        textarea.style.left = "-9999px";
+        textarea.style.top = "0";
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      } catch (e) {
+        console.warn("Clipboard copy fallback failed:", e);
+      }
+    }
+
+    setCopied(true);
+    setTimeout(() => setCopied(false), 3000);
   };
 
   return (
@@ -39,16 +61,33 @@ export const EmbedView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
           <h3 style={{ margin: 0, color: "var(--color-brand)" }}>
             {isAm ? "የማካተት ኮድ ምሳሌ" : "HTML Integration Snippet"}
           </h3>
-          <button
-            type="button"
-            className="btn btn-outline"
-            onClick={handleCopy}
-            style={{ fontSize: "0.85rem", padding: "0.4rem 0.85rem", minHeight: "36px" }}
-          >
-            {copied
-              ? (isAm ? "ኮዱ ተገልብጧል!" : "Copied to Clipboard!")
-              : (isAm ? "ኮዱን ቅዳ" : "Copy Snippet")}
-          </button>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            {copied && (
+              <span
+                style={{
+                  fontSize: "0.85rem",
+                  color: "#166534",
+                  fontWeight: 600,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.25rem",
+                }}
+                aria-live="polite"
+              >
+                ✓ {isAm ? "ኮዱ ተገልብጧል!" : "Copied to Clipboard!"}
+              </span>
+            )}
+            <button
+              type="button"
+              className="btn btn-outline"
+              onClick={handleCopy}
+              style={{ fontSize: "0.85rem", padding: "0.4rem 0.85rem", minHeight: "36px" }}
+            >
+              {copied
+                ? (isAm ? "ተገልብጧል!" : "Copied!")
+                : (isAm ? "ኮዱን ቅዳ" : "Copy Snippet")}
+            </button>
+          </div>
         </div>
 
         <p style={{ margin: "0 0 1rem 0", color: "var(--color-muted-ink)", fontSize: "0.93rem" }}>
@@ -73,9 +112,20 @@ export const EmbedView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
       </section>
 
       <section className="card" style={{ marginBottom: "2rem" }}>
-        <h3 style={{ margin: "0 0 0.5rem 0", color: "var(--color-brand)" }}>
-          {isAm ? "የቀጥታ ማሳያ" : "Live Embedded Instance"}
-        </h3>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem", flexWrap: "wrap", gap: "0.5rem" }}>
+          <h3 style={{ margin: 0, color: "var(--color-brand)" }}>
+            {isAm ? "የቀጥታ ማሳያ" : "Live Embedded Instance"}
+          </h3>
+          <a
+            href="/standalone-embed.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-outline"
+            style={{ fontSize: "0.85rem", padding: "0.4rem 0.85rem", minHeight: "36px" }}
+          >
+            {isAm ? "ነጻ የ HTML ገጽ ክፈት ↗" : "Open Standalone HTML Page (Zero Framework) ↗"}
+          </a>
+        </div>
         <p style={{ margin: "0 0 1.5rem 0", color: "var(--color-muted-ink)", fontSize: "0.93rem" }}>
           {isAm ? "ከዚህ በታች ያለው ማጫወቻ በድረ-ገጹ ውስጥ በቀጥታ የተቀመጠ ነው፡" : "The component below is instantiated via the standalone web component:"}
         </p>
