@@ -94,6 +94,32 @@ async function run() {
     });
     console.log("Layout check on /embed:", JSON.stringify(layoutEval.result.value, null, 2));
 
+    // Verify all 13 toolbar controls fit without horizontal scrolling
+    const toolbarEval = await send("Runtime.evaluate", {
+      expression: `(() => {
+        const shadow = document.querySelector("a11y-media-player").shadowRoot;
+        const controlsRow = shadow.querySelector(".controls-row");
+        const btnMute = shadow.getElementById("btn-mute");
+        const btnFullscreen = shadow.getElementById("btn-fullscreen");
+        const rowRect = controlsRow ? controlsRow.getBoundingClientRect() : null;
+        const muteRect = btnMute ? btnMute.getBoundingClientRect() : null;
+        const fsRect = btnFullscreen ? btnFullscreen.getBoundingClientRect() : null;
+        const buttons = Array.from(shadow.querySelectorAll(".btn-ctrl"));
+
+        return {
+          buttonCount: buttons.length,
+          rowClientWidth: controlsRow?.clientWidth,
+          rowScrollWidth: controlsRow?.scrollWidth,
+          hasHorizontalScrollbar: controlsRow ? controlsRow.scrollWidth > controlsRow.clientWidth : false,
+          isMuteVisible: muteRect && rowRect ? (muteRect.right <= rowRect.right + 2) : false,
+          isFullscreenVisible: fsRect && rowRect ? (fsRect.right <= rowRect.right + 2) : false,
+          allControlsFullyVisible: controlsRow ? controlsRow.scrollWidth <= controlsRow.clientWidth : false
+        };
+      })()`,
+      returnByValue: true,
+    });
+    console.log("Toolbar controls visibility check:", JSON.stringify(toolbarEval.result.value, null, 2));
+
     // Scroll down to the Live Embedded Instance
     await send("Runtime.evaluate", {
       expression: `document.querySelector("a11y-media-player").scrollIntoView({ behavior: "instant", block: "center" })`,

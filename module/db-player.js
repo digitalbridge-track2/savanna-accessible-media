@@ -283,9 +283,9 @@
 
         /* Center Main Player Panel - Balanced Horizontal Cinema Proportion */
         .main-player-panel {
-          flex: 1 1 360px;
-          min-width: 260px;
-          max-width: 440px;
+          flex: 1 1 540px;
+          min-width: 320px;
+          max-width: 680px;
           width: 100%;
           background: #111417;
           border-radius: 8px;
@@ -456,7 +456,7 @@
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 3px 8px;
+          padding: 3px 6px;
           gap: 2px;
           flex-wrap: nowrap;
           overflow-x: auto;
@@ -472,10 +472,10 @@
           border: 1px solid transparent;
           border-radius: 4px;
           padding: 0;
-          width: 36px;
-          height: 36px;
-          min-width: 36px;
-          min-height: 36px;
+          width: 32px;
+          height: 32px;
+          min-width: 32px;
+          min-height: 32px;
           cursor: pointer;
           display: inline-flex;
           align-items: center;
@@ -497,12 +497,16 @@
           color: #38BDF8;
           border-bottom: 2px solid var(--color-accent, #F2C14E);
         }
+        #btn-esl {
+          width: 36px;
+          min-width: 36px;
+        }
         .ctrl-divider {
           display: inline-block;
           width: 1px;
           height: 18px;
           background: rgba(255, 255, 255, 0.22);
-          margin: 0 4px;
+          margin: 0 3px;
           flex-shrink: 0;
         }
         .status-strip {
@@ -792,7 +796,7 @@
         }
 
         /* Responsive Reflow on Narrow Screens */
-        @media (max-width: 880px) {
+        @media (max-width: 980px) {
           .player-stage {
             flex-wrap: wrap;
             flex-direction: column;
