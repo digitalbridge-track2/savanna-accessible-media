@@ -547,7 +547,7 @@ class ne extends HTMLElement {
     `;
   }
   render() {
-    var p, n, b, B;
+    var p, n, b, D;
     const e = this.activeLocale === "am", i = this.manifest ? this.manifest.title[this.activeLocale] : "Media Player", t = (p = this.manifest) == null ? void 0 : p.sources.find((S) => S.kind === "main"), a = (n = this.manifest) == null ? void 0 : n.sources.find((S) => S.kind === "sign"), o = this.prefs.transcriptWidth || C.transcriptWidth || 280, c = this.prefs.transcriptHeight || C.transcriptHeight || 420, f = this.prefs.eslWidth || C.eslWidth || 260, x = this.prefs.eslHeight || C.eslHeight || 200;
     this.shadow.innerHTML = `
       <style>
@@ -1057,6 +1057,19 @@ class ne extends HTMLElement {
           min-width: 0;
           overflow-y: auto;
         }
+        .transcript-scroll-area::-webkit-scrollbar {
+          width: 6px;
+        }
+        .transcript-scroll-area::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .transcript-scroll-area::-webkit-scrollbar-thumb {
+          background: rgba(0, 0, 0, 0.18);
+          border-radius: 980px;
+        }
+        .transcript-scroll-area::-webkit-scrollbar-thumb:hover {
+          background: rgba(0, 0, 0, 0.32);
+        }
 
         /* RIGHT: Resizable Sign Language Window (Outside of video frame) */
         .esl-window {
@@ -1176,7 +1189,9 @@ class ne extends HTMLElement {
         .dialog-backdrop {
           position: fixed;
           inset: 0;
-          background: rgba(0,0,0,0.7);
+          background: rgba(0, 0, 0, 0.45);
+          backdrop-filter: blur(20px) saturate(180%);
+          -webkit-backdrop-filter: blur(20px) saturate(180%);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -1184,17 +1199,20 @@ class ne extends HTMLElement {
           padding: 1rem;
         }
         .dialog-panel {
-          background: #FFF;
-          color: #14201B;
-          padding: 1.5rem;
-          border-radius: 8px;
+          background: #FFFFFF;
+          color: #1D1D1F;
+          padding: 1.75rem 2rem;
+          border-radius: 16px;
           max-width: 500px;
           width: 100%;
-          box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+          border: 1px solid rgba(255, 255, 255, 0.2);
         }
         .dialog-panel h3 {
           margin-top: 0;
-          color: var(--color-brand, #0B5D4E);
+          color: #1D1D1F;
+          font-size: 21px;
+          letter-spacing: -0.005em;
         }
         .form-row {
           margin-bottom: 1rem;
@@ -1354,7 +1372,7 @@ class ne extends HTMLElement {
                 class="main-video" 
                 playsinline 
                 preload="metadata"
-                poster="${((B = (b = this.manifest) == null ? void 0 : b.poster) == null ? void 0 : B.src) || ""}"
+                poster="${((D = (b = this.manifest) == null ? void 0 : b.poster) == null ? void 0 : D.src) || ""}"
                 src="${t ? t.src : ""}">
               </video>
 
@@ -1600,10 +1618,10 @@ class ne extends HTMLElement {
     const e = this.shadow.getElementById("player-stage");
     if (!e) return;
     const i = (t, a, o, c, f, x, p) => {
-      const n = this.shadow.getElementById(t), b = this.shadow.getElementById(a), B = this.shadow.getElementById(o), S = this.shadow.getElementById(c), H = this.shadow.getElementById(f), K = x ? this.shadow.getElementById(x) : null;
-      if (!n || !b || !B) return;
+      const n = this.shadow.getElementById(t), b = this.shadow.getElementById(a), D = this.shadow.getElementById(o), S = this.shadow.getElementById(c), H = this.shadow.getElementById(f), K = x ? this.shadow.getElementById(x) : null;
+      if (!n || !b || !D) return;
       let m = null, W = !1, I = "corner", q = 0, Y = 0, N = 0, _ = 0, j = null;
-      const D = (l) => {
+      const B = (l) => {
         if (!W) return;
         const d = l.clientX - q, y = l.clientY - Y;
         j !== null && cancelAnimationFrame(j), j = requestAnimationFrame(() => {
@@ -1611,11 +1629,11 @@ class ne extends HTMLElement {
           I === "corner" || I === "right" ? w = Math.min(p.maxWidth, Math.max(p.minWidth, N + d)) : I === "left" && (w = Math.min(p.maxWidth, Math.max(p.minWidth, N - d))), (I === "corner" || I === "bottom") && ($ = Math.min(p.maxHeight, Math.max(p.minHeight, _ + y))), n.style.width = `${w}px`, n.style.height = `${$}px`, n.style.flex = `0 0 ${w}px`, m && (m.style.width = `${w}px`, m.style.height = `${$}px`, m.style.flex = `0 0 ${w}px`);
         });
       }, E = () => {
-        W && (W = !1, n.classList.remove("is-resizing"), window.removeEventListener("pointermove", D), window.removeEventListener("pointerup", E), window.removeEventListener("pointercancel", E), j !== null && (cancelAnimationFrame(j), j = null), p.onSaveSize(n.offsetWidth, n.offsetHeight));
+        W && (W = !1, n.classList.remove("is-resizing"), window.removeEventListener("pointermove", B), window.removeEventListener("pointerup", E), window.removeEventListener("pointercancel", E), j !== null && (cancelAnimationFrame(j), j = null), p.onSaveSize(n.offsetWidth, n.offsetHeight));
       }, V = (l, d) => {
-        W = !0, I = l, q = d.clientX, Y = d.clientY, N = n.offsetWidth, _ = n.offsetHeight, n.classList.add("is-resizing"), window.addEventListener("pointermove", D), window.addEventListener("pointerup", E), window.addEventListener("pointercancel", E), d.preventDefault(), d.stopPropagation();
+        W = !0, I = l, q = d.clientX, Y = d.clientY, N = n.offsetWidth, _ = n.offsetHeight, n.classList.add("is-resizing"), window.addEventListener("pointermove", B), window.addEventListener("pointerup", E), window.addEventListener("pointercancel", E), d.preventDefault(), d.stopPropagation();
       };
-      B.addEventListener("pointerdown", (l) => V("corner", l)), S == null || S.addEventListener("pointerdown", (l) => V("bottom", l)), H == null || H.addEventListener("pointerdown", (l) => V("right", l)), K == null || K.addEventListener("pointerdown", (l) => V("left", l)), B.addEventListener("keydown", (l) => {
+      D.addEventListener("pointerdown", (l) => V("corner", l)), S == null || S.addEventListener("pointerdown", (l) => V("bottom", l)), H == null || H.addEventListener("pointerdown", (l) => V("right", l)), K == null || K.addEventListener("pointerdown", (l) => V("left", l)), D.addEventListener("keydown", (l) => {
         let d = n.offsetWidth, y = n.offsetHeight, w = !1;
         l.key === "ArrowRight" ? (d = Math.min(p.maxWidth, d + 20), w = !0) : l.key === "ArrowLeft" ? (d = Math.max(p.minWidth, d - 20), w = !0) : l.key === "ArrowDown" ? (y = Math.min(p.maxHeight, y + 20), w = !0) : l.key === "ArrowUp" && (y = Math.max(p.minHeight, y - 20), w = !0), w && (l.preventDefault(), n.style.width = `${d}px`, n.style.height = `${y}px`, n.style.flex = `0 0 ${d}px`, m && (m.style.width = `${d}px`, m.style.height = `${y}px`, m.style.flex = `0 0 ${d}px`), p.onSaveSize(d, y));
       });
@@ -1696,7 +1714,7 @@ class ne extends HTMLElement {
   }
   attachEventListeners() {
     var Q, X, ee, te, ie;
-    const e = this.shadow.getElementById("btn-play"), i = this.shadow.getElementById("play-icon"), t = this.shadow.getElementById("big-play-btn"), a = this.shadow.getElementById("btn-restart"), o = this.shadow.getElementById("btn-speed-faster"), c = this.shadow.getElementById("btn-speed-slower"), f = this.shadow.getElementById("speed-display"), x = this.shadow.getElementById("state-display"), p = this.shadow.getElementById("btn-fullscreen"), n = this.shadow.getElementById("fullscreen-icon"), b = this.shadow.getElementById("btn-mute"), B = this.shadow.getElementById("mute-icon"), S = this.shadow.getElementById("player-container"), H = this.shadow.getElementById("seek-scrubber"), K = this.shadow.getElementById("time-display"), m = () => {
+    const e = this.shadow.getElementById("btn-play"), i = this.shadow.getElementById("play-icon"), t = this.shadow.getElementById("big-play-btn"), a = this.shadow.getElementById("btn-restart"), o = this.shadow.getElementById("btn-speed-faster"), c = this.shadow.getElementById("btn-speed-slower"), f = this.shadow.getElementById("speed-display"), x = this.shadow.getElementById("state-display"), p = this.shadow.getElementById("btn-fullscreen"), n = this.shadow.getElementById("fullscreen-icon"), b = this.shadow.getElementById("btn-mute"), D = this.shadow.getElementById("mute-icon"), S = this.shadow.getElementById("player-container"), H = this.shadow.getElementById("seek-scrubber"), K = this.shadow.getElementById("time-display"), m = () => {
       this.mainVideo.paused ? this.mainVideo.play() : this.mainVideo.pause();
     };
     e && e.addEventListener("click", m), t && t.addEventListener("click", m), this.mainVideo.addEventListener("click", m), this.mainVideo.addEventListener("play", () => {
@@ -1756,7 +1774,7 @@ class ne extends HTMLElement {
       ), b == null || b.setAttribute(
         "title",
         r ? this.activeLocale === "am" ? "ድምጽ አብራ (M)" : "Unmute (M)" : this.activeLocale === "am" ? "ድምጽ አጥፋ (M)" : "Mute (M)"
-      ), B && (B.innerHTML = r ? L.volumeMuted : L.volumeUnmuted);
+      ), D && (D.innerHTML = r ? L.volumeMuted : L.volumeUnmuted);
     };
     this.mainVideo.addEventListener("volumechange", j), this.mainVideo.addEventListener("timeupdate", () => {
       const r = this.mainVideo.currentTime, g = this.mainVideo.duration || 1;
@@ -1778,10 +1796,10 @@ class ne extends HTMLElement {
     }), (X = this.shadow.getElementById("btn-forward")) == null || X.addEventListener("click", () => {
       this.mainVideo.currentTime = Math.min(this.mainVideo.duration || 1e3, this.mainVideo.currentTime + 5);
     });
-    const D = this.shadow.getElementById("btn-ad");
-    D == null || D.addEventListener("click", async () => {
+    const B = this.shadow.getElementById("btn-ad");
+    B == null || B.addEventListener("click", async () => {
       if (!this.manifest) return;
-      this.prefs.audioDescriptionEnabled = !this.prefs.audioDescriptionEnabled, A({ audioDescriptionEnabled: this.prefs.audioDescriptionEnabled }), D.setAttribute("aria-pressed", this.prefs.audioDescriptionEnabled ? "true" : "false");
+      this.prefs.audioDescriptionEnabled = !this.prefs.audioDescriptionEnabled, A({ audioDescriptionEnabled: this.prefs.audioDescriptionEnabled }), B.setAttribute("aria-pressed", this.prefs.audioDescriptionEnabled ? "true" : "false");
       const r = this.prefs.audioDescriptionEnabled ? "described" : "main", g = this.manifest.sources.find((F) => F.kind === r) || this.manifest.sources.find((F) => F.kind === "main");
       g && await this.syncController.switchSource(g.src);
     });
@@ -1904,7 +1922,7 @@ class ne extends HTMLElement {
             break;
           case "d":
           case "D":
-            r.preventDefault(), D == null || D.click();
+            r.preventDefault(), B == null || B.click();
             break;
           case "t":
           case "T":
@@ -1922,7 +1940,11 @@ class ne extends HTMLElement {
   }
 }
 customElements.get("a11y-media-player") || customElements.define("a11y-media-player", ne);
-customElements.get("db-player") || customElements.define("db-player", ne);
+if (!customElements.get("db-player")) {
+  class u extends ne {
+  }
+  customElements.define("db-player", u);
+}
 const ue = [
   "መስከረም",
   // Meskerem (1)
@@ -1952,11 +1974,11 @@ const ue = [
   // Pagume (13)
 ];
 function ge(u) {
-  const s = typeof u == "string" ? new Date(u) : u, e = s.getUTCFullYear(), i = s.getUTCMonth() + 1, t = s.getUTCDate(), a = Math.floor((14 - i) / 12), o = e + 4800 - a, c = i + 12 * a - 3, f = t + Math.floor((153 * c + 2) / 5) + 365 * o + Math.floor(o / 4) - Math.floor(o / 100) + Math.floor(o / 400) - 32045, x = (f - 1723856) % 1461, p = x % 365 + 365 * Math.floor(x / 1460), n = 4 * Math.floor((f - 1723856) / 1461) + Math.floor(x / 365) - Math.floor(x / 1460), b = Math.floor(p / 30) + 1, B = p % 30 + 1, S = ue[Math.min(b - 1, 12)];
+  const s = typeof u == "string" ? new Date(u) : u, e = s.getUTCFullYear(), i = s.getUTCMonth() + 1, t = s.getUTCDate(), a = Math.floor((14 - i) / 12), o = e + 4800 - a, c = i + 12 * a - 3, f = t + Math.floor((153 * c + 2) / 5) + 365 * o + Math.floor(o / 4) - Math.floor(o / 100) + Math.floor(o / 400) - 32045, x = (f - 1723856) % 1461, p = x % 365 + 365 * Math.floor(x / 1460), n = 4 * Math.floor((f - 1723856) / 1461) + Math.floor(x / 365) - Math.floor(x / 1460), b = Math.floor(p / 30) + 1, D = p % 30 + 1, S = ue[Math.min(b - 1, 12)];
   return {
     year: n,
     month: b,
-    day: B,
+    day: D,
     monthNameAmharic: S
   };
 }
