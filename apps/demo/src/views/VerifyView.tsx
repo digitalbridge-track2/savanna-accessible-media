@@ -101,7 +101,7 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
       }
     }
 
-    setCopyMsg(isAm ? "የማረጋገጫ ሊንኩ ተገልብጧል!" : "Verification link copied to clipboard!");
+    setCopyMsg(isAm ? "የማረጋገጫ ሊንኩ ተገልብጧል።" : "Verification link copied to clipboard.");
     setTimeout(() => setCopyMsg(""), 3500);
   };
 

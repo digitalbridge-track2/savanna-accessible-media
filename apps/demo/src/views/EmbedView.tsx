@@ -74,7 +74,7 @@ export const EmbedView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                   borderRadius: "var(--radius-pill)",
                 }}
               >
-                ✓ {isAm ? "ኮዱ ተገልብጧል!" : "Snippet copied to clipboard!"}
+                ✓ {isAm ? "ኮዱ ተገልብጧል።" : "Snippet copied to clipboard."}
               </span>
             )}
             <button

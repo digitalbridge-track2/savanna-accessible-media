@@ -91,13 +91,13 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
       vtt += `${formatVTTTime(seg.start)} --> ${formatVTTTime(seg.end)}\n${text}\n\n`;
     }
     downloadFile(vtt, "captions.reviewed.vtt", "text/vtt;charset=utf-8");
-    setStatusMsg(isAm ? "WebVTT ፋይል በተሳካ ሁኔታ ወርዷል!" : "Exported captions.reviewed.vtt successfully!");
+    setStatusMsg(isAm ? "WebVTT ፋይል በተሳካ ሁኔታ ወርዷል።" : "Exported captions.reviewed.vtt successfully.");
   };
 
   const handleExportJSON = () => {
     const jsonStr = JSON.stringify({ segments }, null, 2);
     downloadFile(jsonStr, "transcript.reviewed.json", "application/json");
-    setStatusMsg(isAm ? "የጽሑፍ ግልባጭ JSON በተሳካ ሁኔታ ወርዷል!" : "Exported transcript.reviewed.json successfully!");
+    setStatusMsg(isAm ? "የጽሑፍ ግልባጭ JSON በተሳካ ሁኔታ ወርዷል።" : "Exported transcript.reviewed.json successfully.");
   };
 
   const handleExportBRF = () => {
@@ -109,7 +109,7 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
       brfText += `${clean}\n`;
     }
     downloadFile(brfText, "lesson-transcript.brf", "text/plain");
-    setStatusMsg(isAm ? "የብሬይል ፋይል (.brf) በተሳካ ሁኔታ ወርዷል!" : "Exported lesson-transcript.brf successfully!");
+    setStatusMsg(isAm ? "የብሬይል ፋይል (.brf) በተሳካ ሁኔታ ወርዷል።" : "Exported lesson-transcript.brf successfully.");
   };
 
   return (
