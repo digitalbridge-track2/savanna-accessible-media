@@ -113,20 +113,20 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
 
   return (
     <div style={{ maxWidth: "760px", margin: "0 auto" }}>
-      <h2 style={{ fontSize: "1.8rem", color: "var(--color-brand)", marginBottom: "0.5rem" }}>
+      <h2 style={{ fontSize: "34px", color: "var(--color-ink)", marginBottom: "0.5rem", letterSpacing: "-0.011em" }}>
         {isAm ? "የምስክር ወረቀት ማረጋገጫ" : "Certificate Credential Verification"}
       </h2>
-      <p style={{ margin: "0 0 1.5rem 0", color: "var(--color-muted-ink)", fontSize: "1.05rem" }}>
+      <p style={{ margin: "0 0 1.75rem 0", color: "var(--color-muted-ink)", fontSize: "17px" }}>
         {isAm
           ? "ለቀጣሪዎች እና ለትምህርት ተቋማት ክፍት እና አስተማማኝ የማረጋገጫ መድረክ"
           : "Transparent, verifiable credentials for employers and educational institutions."}
       </p>
 
       <section className="card" style={{ marginBottom: "2rem" }}>
-        <h3 style={{ margin: "0 0 0.5rem 0", color: "var(--color-brand)" }}>
+        <h3 style={{ margin: "0 0 0.5rem 0", color: "var(--color-ink)", fontSize: "21px", letterSpacing: "-0.005em" }}>
           {isAm ? "የምስክር ወረቀት ሁኔታ" : "Credential Status"}
         </h3>
-        <p style={{ margin: "0 0 1.25rem 0", color: "var(--color-muted-ink)", fontSize: "0.95rem" }}>
+        <p style={{ margin: "0 0 1.25rem 0", color: "var(--color-muted-ink)", fontSize: "14px" }}>
           {isAm ? "በተረጋገጠው ማዕከላዊ መዝገብ ውስጥ የተገኘ ውጤት፡" : "Verification lookup in Savanna LMS demonstration registry:"}
         </p>
 
@@ -142,7 +142,7 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
           }}
           aria-label={isAm ? "የምስክር ወረቀት መለያ መፈለጊያ" : "Credential lookup form"}
         >
-          <label htmlFor="cert-id-input" style={{ fontWeight: 600, fontSize: "0.92rem", width: "100%" }}>
+          <label htmlFor="cert-id-input" style={{ fontWeight: 600, fontSize: "14px", width: "100%", color: "var(--color-ink)" }}>
             {isAm ? "የምስክር ወረቀት መለያ ቁጥር (Credential ID):" : "Credential ID:"}
           </label>
           <input
@@ -154,16 +154,19 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
             style={{
               flex: "1 1 240px",
               minHeight: "42px",
-              padding: "0.5rem 0.85rem",
+              padding: "0.5rem 1rem",
               border: "1px solid var(--color-border)",
-              borderRadius: "6px",
-              fontSize: "0.95rem",
+              borderRadius: "var(--radius-pill)",
+              fontSize: "14px",
+              outline: "none",
+              background: "#FFFFFF",
+              color: "var(--color-ink)",
             }}
           />
           <button
             type="submit"
             className="btn btn-primary"
-            style={{ minHeight: "42px", padding: "0.5rem 1.25rem" }}
+            style={{ minHeight: "42px", padding: "0.5rem 1.4rem" }}
           >
             {isAm ? "አረጋግጥ" : "Verify"}
           </button>
@@ -173,19 +176,18 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
         {matchedCert ? (
           <div
             style={{
-              background: "#F0FDF4",
-              border: "1px solid #BBF7D0",
-              borderLeft: "4px solid #166534",
-              padding: "1.25rem",
-              borderRadius: "6px",
+              background: "#E8F8F0",
+              border: "1px solid #B4E8CC",
+              padding: "1.5rem",
+              borderRadius: "var(--radius-card)",
               marginBottom: "1.5rem",
             }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem", flexWrap: "wrap", gap: "0.5rem" }}>
-              <h4 style={{ margin: 0, color: "#166534", fontSize: "1.15rem", fontWeight: 700 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.85rem", flexWrap: "wrap", gap: "0.5rem" }}>
+              <h4 style={{ margin: 0, color: "#128045", fontSize: "1.15rem", fontWeight: 600 }}>
                 ✓ {isAm ? "የተረጋገጠ ትክክለኛ ምስክር ወረቀት" : "Demonstrated Credential Verified"}
               </h4>
-              <span className="badge badge-success">
+              <span className="badge badge-success" style={{ borderRadius: "var(--radius-pill)" }}>
                 {isAm ? "ትክክለኛ" : "Verified"}
               </span>
             </div>
@@ -196,7 +198,7 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                 display: "grid",
                 gridTemplateColumns: "minmax(140px, auto) 1fr",
                 gap: "0.6rem 1rem",
-                fontSize: "0.95rem",
+                fontSize: "14px",
               }}
             >
               <dt><strong>{isAm ? "የመለያ ቁጥር:" : "Credential ID:"}</strong></dt>
@@ -220,39 +222,72 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
         ) : (
           <div
             role="alert"
-            aria-live="assertive"
             style={{
-              background: "#FEF2F2",
-              border: "1px solid #FECACA",
-              borderLeft: "4px solid #DC2626",
-              padding: "1.25rem",
-              borderRadius: "6px",
-              color: "#991B1B",
+              background: "#FFF5F5",
+              border: "1px solid #FFD2D2",
+              padding: "1.25rem 1.5rem",
+              borderRadius: "var(--radius-card)",
+              color: "#D70015",
               marginBottom: "1.5rem",
             }}
           >
-            <strong style={{ display: "block", marginBottom: "0.25rem", fontSize: "1.05rem" }}>
-              {isAm ? "ምስክር ወረቀቱ አልተገኘም" : "Credential Not Found"}
-            </strong>
-            <span>
+            <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "1.05rem", fontWeight: 600 }}>
+              ⚠ {isAm ? "የምስክር ወረቀቱ አልተገኘም" : "Credential not found"}
+            </h4>
+            <p style={{ margin: 0, fontSize: "14px" }}>
               {isAm
-                ? `Credential not found in Savanna LMS demonstration registry (${activeId})።`
-                : `Credential not found in Savanna LMS demonstration registry (${activeId}).`}
-            </span>
+                ? `የመለያ ቁጥር "${activeId}" በሳቫና LMS ማሳያ መዝገብ ውስጥ አልተገኘም። እባክዎ መለያ ቁጥሩን ያረጋግጡ።`
+                : `Credential not found in Savanna LMS demonstration registry for "${activeId}". Please check the ID and try again.`}
+            </p>
           </div>
         )}
 
-        <div style={{ display: "flex", gap: "1rem", alignItems: "center", flexWrap: "wrap" }}>
-          <button type="button" onClick={handleCopy} className="btn btn-outline" style={{ minHeight: "40px" }}>
-            {isAm ? "የማረጋገጫ ሊንኩን ቅዳ" : "Copy Shareable Link"}
-          </button>
-          {copyMsg && (
-            <span style={{ fontSize: "0.92rem", color: "#166534", fontWeight: 600 }} aria-live="polite">
-              ✓ {copyMsg}
-            </span>
-          )}
-        </div>
+        {/* Shareable Link Button */}
+        {matchedCert && (
+          <div style={{ display: "flex", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+            <button
+              type="button"
+              className="btn btn-outline"
+              onClick={handleCopy}
+              style={{ minHeight: "40px" }}
+            >
+              {isAm ? "የማረጋገጫ ሊንኩን ቅዳ" : "Copy Shareable Link"}
+            </button>
+            {copyMsg && (
+              <span
+                role="status"
+                style={{
+                  fontSize: "13px",
+                  fontWeight: 500,
+                  color: "#128045",
+                  background: "#E8F8F0",
+                  padding: "0.35rem 0.85rem",
+                  borderRadius: "var(--radius-pill)",
+                }}
+              >
+                ✓ {copyMsg}
+              </span>
+            )}
+          </div>
+        )}
       </section>
+
+      {/* Demonstration Notice */}
+      <aside
+        style={{
+          background: "var(--color-surface)",
+          border: "1px solid var(--color-border-subtle)",
+          padding: "1.25rem 1.5rem",
+          borderRadius: "var(--radius-card)",
+          fontSize: "13px",
+          color: "var(--color-muted-ink)",
+        }}
+      >
+        <strong>{isAm ? "የክፍት ደረጃዎች ማስታወሻ፡" : "Open Standards Disclosure:"}</strong>{" "}
+        {isAm
+          ? "ይህ መድረክ ከ W3C Verifiable Credentials እና Schema.org ደረጃዎች ጋር ተኳሃኝ በሆነ መልኩ የተቀየሰ ነው። የምስክር ወረቀቱ በኢትዮጵያ ዘመን አቆጣጠር (ህዳር 5፣ 2019 ዓ.ም) እና በጎርጎሪዮሳዊ ቀን የተመዘገበ ነው።"
+          : "Designed in accordance with W3C Verifiable Credentials and Schema.org open standards. Dates are synchronized between the Ethiopian calendar (Hidar 5, 2019 E.C.) and ISO 8601."}
+      </aside>
     </div>
   );
 };

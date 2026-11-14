@@ -32,11 +32,11 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
       <section style={{ marginBottom: "3.5rem" }}>
         <h2
           style={{
-            fontSize: "2.1rem",
-            fontWeight: 700,
-            color: "var(--color-brand)",
+            fontSize: "44px",
+            fontWeight: 600,
+            color: "var(--color-ink)",
             margin: "0 0 1rem 0",
-            lineHeight: 1.25,
+            lineHeight: 1.15,
             letterSpacing: "-0.015em",
           }}
         >
@@ -46,11 +46,11 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
         </h2>
         <p
           style={{
-            fontSize: "1.1rem",
-            maxWidth: "70ch",
-            color: "var(--color-ink)",
-            lineHeight: 1.65,
-            marginBottom: "1.75rem",
+            fontSize: "19px",
+            maxWidth: "68ch",
+            color: "var(--color-muted-ink)",
+            lineHeight: 1.5,
+            marginBottom: "2rem",
           }}
         >
           {isAm
@@ -76,10 +76,11 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
         <h3
           id="heading-adoption"
           style={{
-            fontSize: "1.35rem",
-            fontWeight: 700,
+            fontSize: "24px",
+            fontWeight: 600,
             color: "var(--color-ink)",
-            margin: "0 0 1.25rem 0",
+            margin: "0 0 1.5rem 0",
+            letterSpacing: "-0.008em",
           }}
         >
           {isAm ? "የማካተት እና የማዋሃድ ደረጃዎች" : "Adoption & Integration Levels"}
@@ -95,13 +96,13 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
           {/* Level 1 */}
           <div className="card" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
                 <span className="badge badge-brand">Level 1</span>
               </div>
-              <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "1.15rem", color: "var(--color-brand)" }}>
+              <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "1.15rem", color: "var(--color-ink)", fontWeight: 600 }}>
                 {isAm ? "ደረጃ 1፡ የስክሪፕት ታግ ማካተቻ" : "Level 1: Script Tag Drop-in"}
               </h4>
-              <p style={{ margin: 0, fontSize: "0.93rem", color: "var(--color-muted-ink)", lineHeight: 1.55 }}>
+              <p style={{ margin: 0, fontSize: "14px", color: "var(--color-muted-ink)", lineHeight: 1.55 }}>
                 {isAm
                   ? "በማንኛውም የድር ገጽ ወይም LMS (Savanna, Moodle) ላይ በአንድ መስመር HTML ኮድ በቀላሉ ይጫኑ። ምንም ተጨማሪ የግንባታ ቅድመ ሁኔታ የለውም።"
                   : "Embed the player on any web page or LMS with a single line of HTML. Zero build steps required."}
@@ -111,7 +112,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
               <NavLink
                 to="/embed"
                 className="btn btn-outline"
-                style={{ fontSize: "0.88rem", padding: "0.45rem 0.95rem", minHeight: "38px", width: "100%" }}
+                style={{ fontSize: "14px", padding: "0.5rem 1rem", minHeight: "38px", width: "100%" }}
               >
                 {isAm ? "የማካተቻ ኮዱን ይመልከቱ" : "View Embed Code"}
               </NavLink>
@@ -121,7 +122,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
           {/* Level 2 */}
           <div className="card" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
                 <span className="badge badge-brand">Level 2</span>
                 {apiOnline !== null && (
                   <span className={`badge ${apiOnline ? "badge-success" : "badge-neutral"}`}>
@@ -129,10 +130,10 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
                   </span>
                 )}
               </div>
-              <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "1.15rem", color: "var(--color-brand)" }}>
+              <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "1.15rem", color: "var(--color-ink)", fontWeight: 600 }}>
                 {isAm ? "ደረጃ 2፡ የ REST ኤፒአይ ሰነዶች" : "Level 2: REST API Pipeline"}
               </h4>
-              <p style={{ margin: 0, fontSize: "0.93rem", color: "var(--color-muted-ink)", lineHeight: 1.55 }}>
+              <p style={{ margin: 0, fontSize: "14px", color: "var(--color-muted-ink)", lineHeight: 1.55 }}>
                 {isAm
                   ? "የአካባቢ ፈጣን FastAPI የድምፅ ትርጉም አገልግሎት ከሙሉ OpenAPI 3.0 Swagger ሰነዶች ጋር።"
                   : "Local FastAPI transcription and manifest pipeline with full OpenAPI 3.0 documentation."}
@@ -144,7 +145,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
                 target="_blank"
                 rel="noreferrer"
                 className="btn btn-outline"
-                style={{ fontSize: "0.88rem", padding: "0.45rem 0.95rem", minHeight: "38px", width: "100%" }}
+                style={{ fontSize: "14px", padding: "0.5rem 1rem", minHeight: "38px", width: "100%" }}
               >
                 OpenAPI Swagger (/docs) ↗
               </a>
@@ -154,13 +155,13 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
           {/* Level 3 */}
           <div className="card" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
                 <span className="badge badge-brand">Level 3</span>
               </div>
-              <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "1.15rem", color: "var(--color-brand)" }}>
+              <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "1.15rem", color: "var(--color-ink)", fontWeight: 600 }}>
                 {isAm ? "ደረጃ 3፡ ክፍት ደረጃዎች እና ምስክር ወረቀት" : "Level 3: Open Standards & Credentials"}
               </h4>
-              <p style={{ margin: 0, fontSize: "0.93rem", color: "var(--color-muted-ink)", lineHeight: 1.55 }}>
+              <p style={{ margin: 0, fontSize: "14px", color: "var(--color-muted-ink)", lineHeight: 1.55 }}>
                 {isAm
                   ? "ከ schema.org/JobPosting ማይክሮዳታ፣ መደበኛ WebVTT ንዑስ ርዕሶች እና ከሳቫና LMS ማረጋገጫ ጋር ሙሉ ተኳሃኝ።"
                   : "Compatible with schema.org/JobPosting microdata, standard WebVTT subtitles, and Savanna LMS."}
@@ -170,7 +171,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
               <NavLink
                 to="/verify"
                 className="btn btn-outline"
-                style={{ fontSize: "0.88rem", padding: "0.45rem 0.95rem", minHeight: "38px", width: "100%" }}
+                style={{ fontSize: "14px", padding: "0.5rem 1rem", minHeight: "38px", width: "100%" }}
               >
                 {isAm ? "የምስክር ወረቀት አረጋግጥ" : "Verify Credential"}
               </NavLink>
@@ -188,22 +189,23 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
             alignItems: "baseline",
             flexWrap: "wrap",
             gap: "1rem",
-            marginBottom: "1.25rem",
+            marginBottom: "1.5rem",
           }}
         >
           <div>
             <h3
               id="heading-career-preview"
               style={{
-                fontSize: "1.35rem",
-                fontWeight: 700,
+                fontSize: "24px",
+                fontWeight: 600,
                 margin: "0 0 0.35rem 0",
                 color: "var(--color-ink)",
+                letterSpacing: "-0.008em",
               }}
             >
               {isAm ? "የሥራ መግቢያ በር፡ ክፍት የሥራ ዕድሎች" : "Career Gateway: Accessible Opportunities"}
             </h3>
-            <p style={{ margin: 0, color: "var(--color-muted-ink)", fontSize: "0.95rem" }}>
+            <p style={{ margin: 0, color: "var(--color-muted-ink)", fontSize: "14px" }}>
               {isAm
                 ? "200% ማጉላት እና የድምፅ ማጠቃለያ ያላቸው ክፍት የሥራ መደቦች፡"
                 : "Opportunities with verified accommodation disclosures and 200% zoom reflow guarantee:"}
@@ -224,15 +226,15 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
       {/* Clean Professional Disclaimer */}
       <aside
         style={{
-          background: "#F1F5F9",
-          borderLeft: "4px solid var(--color-brand)",
-          padding: "1rem 1.25rem",
-          borderRadius: "6px",
-          fontSize: "0.88rem",
-          color: "#334155",
+          background: "var(--color-surface)",
+          border: "1px solid var(--color-border-subtle)",
+          padding: "1.25rem 1.5rem",
+          borderRadius: "var(--radius-card)",
+          fontSize: "13px",
+          color: "var(--color-muted-ink)",
         }}
       >
-        <strong>{isAm ? "ማስታወሻ፡" : "Demonstration Notice:"}</strong>{" "}
+        <strong style={{ color: "var(--color-ink)" }}>{isAm ? "ማስታወሻ፡" : "Demonstration Notice:"}</strong>{" "}
         {isAm
           ? "ይህ የማሳያ አካባቢ የአካባቢ ሙከራ ፋይሎችን እና ምሳሌዎችን ይጠቀማል። ሁሉም ምስክር ወረቀቶች እና የሥራ ማስታወቂያዎች ለውድድሩ ማሳያ ብቻ የቀረቡ ናቸው።"
           : "This demonstration environment uses mock fixtures and local test media. All credentials and job postings are strictly demonstration data."}
