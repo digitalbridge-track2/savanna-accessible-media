@@ -256,6 +256,8 @@ export class A11yMediaPlayer extends HTMLElement {
         /* 3-Panel Flexible Stage (Transcript | Main Video | Sign Language) */
         .player-stage {
           display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
           align-items: flex-start;
           justify-content: center;
           gap: 1.25rem;
@@ -275,6 +277,7 @@ export class A11yMediaPlayer extends HTMLElement {
           flex-direction: column;
           overflow: hidden;
           box-sizing: border-box;
+          resize: both;
           transition: box-shadow 0.2s ease;
         }
         .window-panel.floating {
@@ -284,6 +287,14 @@ export class A11yMediaPlayer extends HTMLElement {
         .window-panel.is-resizing {
           user-select: none;
           transition: none !important;
+        }
+        .window-placeholder {
+          border: 2px dashed #94A3B8;
+          background: rgba(148, 163, 184, 0.08);
+          border-radius: 6px;
+          box-sizing: border-box;
+          flex-shrink: 0;
+          transition: none;
         }
 
         /* Window Header / Title Bar */
@@ -299,6 +310,7 @@ export class A11yMediaPlayer extends HTMLElement {
           gap: 0.5rem;
           user-select: none;
           border-bottom: 1px solid rgba(0,0,0,0.3);
+          flex-shrink: 0;
         }
         .btn-window-opt {
           background: transparent;
@@ -363,39 +375,91 @@ export class A11yMediaPlayer extends HTMLElement {
           cursor: pointer;
         }
 
-        /* Bottom-Right Corner Resize Grip */
+        /* Bottom-Right Corner Resize Grip (Both Width & Height) */
         .window-resize-handle {
           position: absolute;
           bottom: 0;
           right: 0;
-          width: 18px;
-          height: 18px;
-          cursor: se-resize;
+          width: 24px;
+          height: 24px;
+          cursor: nwse-resize;
           display: flex;
-          align-items: flex-end;
-          justify-content: flex-end;
-          padding: 2px;
-          font-size: 12px;
-          line-height: 1;
+          align-items: center;
+          justify-content: center;
           color: #64748B;
           user-select: none;
-          z-index: 10;
+          z-index: 20;
+          background: rgba(241, 245, 249, 0.9);
+          border-top-left-radius: 4px;
+          transition: color 0.15s ease, background 0.15s ease;
         }
-        .window-resize-handle:hover {
+        .window-resize-handle:hover,
+        .window-resize-handle:focus-visible {
           color: #0F172A;
+          background: #E2E8F0;
+        }
+        .window-resize-handle:focus-visible {
+          outline: 2px solid var(--color-focus, #005FCC);
+          outline-offset: -2px;
+        }
+
+        /* Bottom Edge Resize Handle (Height Up / Down) */
+        .window-resize-edge-bottom {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 24px;
+          height: 8px;
+          cursor: ns-resize;
+          z-index: 15;
+          background: transparent;
+        }
+        .window-resize-edge-bottom:hover {
+          background: rgba(14, 165, 233, 0.25);
+        }
+
+        /* Right Edge Resize Handle (Width Left / Right) */
+        .window-resize-edge-right {
+          position: absolute;
+          top: 38px;
+          right: 0;
+          bottom: 24px;
+          width: 8px;
+          cursor: ew-resize;
+          z-index: 15;
+          background: transparent;
+        }
+        .window-resize-edge-right:hover {
+          background: rgba(14, 165, 233, 0.25);
+        }
+
+        /* Left Edge Resize Handle (for Sign Window) */
+        .window-resize-edge-left {
+          position: absolute;
+          top: 38px;
+          left: 0;
+          bottom: 24px;
+          width: 8px;
+          cursor: ew-resize;
+          z-index: 15;
+          background: transparent;
+        }
+        .window-resize-edge-left:hover {
+          background: rgba(14, 165, 233, 0.25);
         }
 
         /* Center Main Player Panel */
         .main-player-panel {
-          flex: 1 1 480px;
-          min-width: 360px;
-          max-width: 760px;
+          flex: 1 1 440px;
+          min-width: 320px;
+          max-width: 780px;
           background: #000;
           border-radius: 8px;
           overflow: hidden;
           box-shadow: 0 4px 18px rgba(0,0,0,0.2);
           position: relative;
           outline: none;
+          box-sizing: border-box;
         }
         .main-player-panel:focus-visible {
           outline: 3px solid var(--color-focus, #005FCC);
@@ -499,13 +563,15 @@ export class A11yMediaPlayer extends HTMLElement {
         /* LEFT: Resizable Transcript Window */
         .transcript-window {
           flex: 0 0 auto;
-          min-width: 250px;
-          max-width: 650px;
-          min-height: 250px;
-          max-height: 850px;
+          min-width: 220px;
+          max-width: 750px;
+          min-height: 200px;
+          max-height: 900px;
         }
         .transcript-body {
           flex: 1;
+          min-height: 0;
+          min-width: 0;
           display: flex;
           flex-direction: column;
           padding: 0.85rem 1rem 1rem 1rem;
@@ -519,6 +585,7 @@ export class A11yMediaPlayer extends HTMLElement {
           gap: 0.75rem;
           margin-bottom: 0.75rem;
           flex-wrap: wrap;
+          flex-shrink: 0;
         }
         .transcript-title {
           margin: 0;
@@ -537,21 +604,24 @@ export class A11yMediaPlayer extends HTMLElement {
         }
         .transcript-scroll-area {
           flex: 1;
+          min-height: 0;
+          min-width: 0;
           overflow-y: auto;
-          min-height: 180px;
         }
 
         /* RIGHT: Resizable Sign Language Window (Outside of video frame) */
         .esl-window {
           flex: 0 0 auto;
           min-width: 200px;
-          max-width: 600px;
+          max-width: 700px;
           min-height: 160px;
-          max-height: 600px;
+          max-height: 700px;
           background: #111;
         }
         .esl-video-body {
           flex: 1;
+          min-height: 0;
+          min-width: 0;
           position: relative;
           background: #000;
           display: flex;
@@ -562,6 +632,8 @@ export class A11yMediaPlayer extends HTMLElement {
         video.sign-video {
           width: 100%;
           height: 100%;
+          max-width: 100%;
+          max-height: 100%;
           object-fit: contain;
           display: block;
         }
@@ -693,15 +765,14 @@ export class A11yMediaPlayer extends HTMLElement {
           min-height: 44px;
         }
 
-        /* Responsive Reflow on Narrow Screens / Mobile */
-        @media (max-width: 1080px) {
+        /* Responsive Reflow on Small Mobile Screens */
+        @media (max-width: 680px) {
           .player-stage {
             flex-direction: column;
-            align-items: center;
+            align-items: stretch;
           }
           .main-player-panel, .transcript-window, .esl-window {
-            width: 100% !important;
-            max-width: 720px;
+            max-width: 100%;
           }
           .main-player-panel {
             order: 1;
@@ -771,15 +842,20 @@ export class A11yMediaPlayer extends HTMLElement {
               <div id="transcript-target" class="transcript-scroll-area"></div>
             </div>
 
-            <!-- Corner Resize Grip -->
+            <!-- Resizing Handles (Corner 2D, Bottom Edge, Right Edge) -->
             <div 
               class="window-resize-handle" 
               id="transcript-resize-handle" 
+              tabindex="0"
               role="separator" 
-              aria-label="${isAm ? "የጽሑፍ ግልባጭ መስኮት ማስተካከያ" : "Resize transcript window"}" 
-              title="${isAm ? "መጠኑን ለመቀየር ይጎትቱ" : "Drag to resize"}">
-              ◢
+              aria-label="${isAm ? "የጽሑፍ ግልባጭ መስኮት ማስተካከያ (በቀስት ቁልፎች መጠን ይቀይሩ)" : "Resize transcript window (Use arrow keys or drag)"}" 
+              title="${isAm ? "መጠኑን ለመቀየር ይጎትቱ ወይም የቀስት ቁልፎችን ይጠቀሙ" : "Drag to resize (or use Arrow keys)"}">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                <path d="M13 1L1 13M13 6L6 13M13 11L11 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
             </div>
+            <div class="window-resize-edge-bottom" id="transcript-resize-edge-bottom" aria-hidden="true" title="${isAm ? "ቁመቱን ለመቀየር ይጎትቱ" : "Drag to resize height"}"></div>
+            <div class="window-resize-edge-right" id="transcript-resize-edge-right" aria-hidden="true" title="${isAm ? "ስፋቱን ለመቀየር ይጎትቱ" : "Drag to resize width"}"></div>
           </div>
 
           <!-- CENTER: Main Video Player & Controls -->
@@ -893,15 +969,21 @@ export class A11yMediaPlayer extends HTMLElement {
               </video>
             </div>
 
-            <!-- Corner Resize Grip -->
+            <!-- Resizing Handles (Corner 2D, Bottom Edge, Right Edge, Left Edge) -->
             <div 
               class="window-resize-handle" 
               id="esl-resize-handle" 
+              tabindex="0"
               role="separator" 
-              aria-label="${isAm ? "የምልክት ቋንቋ መስኮት ማስተካከያ" : "Resize sign language window"}" 
-              title="${isAm ? "መጠኑን ለመቀየር ይጎትቱ" : "Drag to resize"}">
-              ◢
+              aria-label="${isAm ? "የምልክት ቋንቋ መስኮት ማስተካከያ (በቀስት ቁልፎች መጠን ይቀይሩ)" : "Resize sign language window (Use arrow keys or drag)"}" 
+              title="${isAm ? "መጠኑን ለመቀየር ይጎትቱ ወይም የቀስት ቁልፎችን ይጠቀሙ" : "Drag to resize (or use Arrow keys)"}">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                <path d="M13 1L1 13M13 6L6 13M13 11L11 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
             </div>
+            <div class="window-resize-edge-bottom" id="esl-resize-edge-bottom" aria-hidden="true" title="${isAm ? "ቁመቱን ለመቀየር ይጎትቱ" : "Drag to resize height"}"></div>
+            <div class="window-resize-edge-right" id="esl-resize-edge-right" aria-hidden="true" title="${isAm ? "ስፋቱን ለመቀየር ይጎትቱ" : "Drag to resize width"}"></div>
+            <div class="window-resize-edge-left" id="esl-resize-edge-left" aria-hidden="true" title="${isAm ? "ስፋቱን ለመቀየር ይጎትቱ" : "Drag to resize width"}"></div>
           </div>
 
         </div>
@@ -1010,11 +1092,14 @@ export class A11yMediaPlayer extends HTMLElement {
     const stage = this.shadow.getElementById("player-stage") as HTMLElement;
     if (!stage) return;
 
-    // Helper for making a window panel smoothly draggable and resizable
+    // Helper for making a window panel smoothly draggable and resizable in 2D
     const initWindow = (
       winId: string,
       dragHandleId: string,
       resizeHandleId: string,
+      edgeBottomId: string,
+      edgeRightId: string,
+      edgeLeftId: string | null,
       opts: {
         minWidth: number;
         maxWidth: number;
@@ -1026,66 +1111,187 @@ export class A11yMediaPlayer extends HTMLElement {
       const winEl = this.shadow.getElementById(winId) as HTMLElement;
       const dragHandle = this.shadow.getElementById(dragHandleId) as HTMLElement;
       const resizeHandle = this.shadow.getElementById(resizeHandleId) as HTMLElement;
+      const edgeBottom = this.shadow.getElementById(edgeBottomId) as HTMLElement | null;
+      const edgeRight = this.shadow.getElementById(edgeRightId) as HTMLElement | null;
+      const edgeLeft = edgeLeftId ? (this.shadow.getElementById(edgeLeftId) as HTMLElement | null) : null;
       if (!winEl || !dragHandle || !resizeHandle) return;
 
-      // --- Resizing Controller ---
+      let placeholderEl: HTMLElement | null = null;
+
+      // --- Bidirectional 2D Resizing Controller (Up/Down & Left/Right) ---
       let isResizing = false;
+      let resizeMode: "corner" | "bottom" | "right" | "left" = "corner";
       let startX = 0;
       let startY = 0;
       let startW = 0;
       let startH = 0;
+      let resizeRaf: number | null = null;
 
-      resizeHandle.addEventListener("pointerdown", (e) => {
+      const onResizePointerMove = (e: PointerEvent) => {
+        if (!isResizing) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+
+        if (resizeRaf !== null) cancelAnimationFrame(resizeRaf);
+        resizeRaf = requestAnimationFrame(() => {
+          let newW = startW;
+          let newH = startH;
+
+          if (resizeMode === "corner" || resizeMode === "right") {
+            newW = Math.min(opts.maxWidth, Math.max(opts.minWidth, startW + dx));
+          } else if (resizeMode === "left") {
+            newW = Math.min(opts.maxWidth, Math.max(opts.minWidth, startW - dx));
+          }
+
+          if (resizeMode === "corner" || resizeMode === "bottom") {
+            newH = Math.min(opts.maxHeight, Math.max(opts.minHeight, startH + dy));
+          }
+
+          winEl.style.width = `${newW}px`;
+          winEl.style.height = `${newH}px`;
+          winEl.style.flex = `0 0 ${newW}px`;
+
+          if (placeholderEl) {
+            placeholderEl.style.width = `${newW}px`;
+            placeholderEl.style.height = `${newH}px`;
+            placeholderEl.style.flex = `0 0 ${newW}px`;
+          }
+        });
+      };
+
+      const onResizePointerUp = () => {
+        if (isResizing) {
+          isResizing = false;
+          winEl.classList.remove("is-resizing");
+          window.removeEventListener("pointermove", onResizePointerMove);
+          window.removeEventListener("pointerup", onResizePointerUp);
+          window.removeEventListener("pointercancel", onResizePointerUp);
+          if (resizeRaf !== null) {
+            cancelAnimationFrame(resizeRaf);
+            resizeRaf = null;
+          }
+          opts.onSaveSize(winEl.offsetWidth, winEl.offsetHeight);
+        }
+      };
+
+      const startResize = (mode: "corner" | "bottom" | "right" | "left", e: PointerEvent) => {
         isResizing = true;
-        resizeHandle.setPointerCapture(e.pointerId);
+        resizeMode = mode;
         startX = e.clientX;
         startY = e.clientY;
         startW = winEl.offsetWidth;
         startH = winEl.offsetHeight;
         winEl.classList.add("is-resizing");
+        window.addEventListener("pointermove", onResizePointerMove);
+        window.addEventListener("pointerup", onResizePointerUp);
+        window.addEventListener("pointercancel", onResizePointerUp);
         e.preventDefault();
         e.stopPropagation();
-      });
-
-      resizeHandle.addEventListener("pointermove", (e) => {
-        if (!isResizing) return;
-        const dx = e.clientX - startX;
-        const dy = e.clientY - startY;
-
-        const newW = Math.min(opts.maxWidth, Math.max(opts.minWidth, startW + dx));
-        const newH = Math.min(opts.maxHeight, Math.max(opts.minHeight, startH + dy));
-
-        winEl.style.width = `${newW}px`;
-        winEl.style.height = `${newH}px`;
-        winEl.style.flex = `0 0 ${newW}px`;
-      });
-
-      const endResize = (e: PointerEvent) => {
-        if (isResizing) {
-          isResizing = false;
-          winEl.classList.remove("is-resizing");
-          try {
-            resizeHandle.releasePointerCapture(e.pointerId);
-          } catch {}
-          opts.onSaveSize(winEl.offsetWidth, winEl.offsetHeight);
-        }
       };
 
-      resizeHandle.addEventListener("pointerup", endResize);
-      resizeHandle.addEventListener("pointercancel", endResize);
+      resizeHandle.addEventListener("pointerdown", (e) => startResize("corner", e));
+      edgeBottom?.addEventListener("pointerdown", (e) => startResize("bottom", e));
+      edgeRight?.addEventListener("pointerdown", (e) => startResize("right", e));
+      edgeLeft?.addEventListener("pointerdown", (e) => startResize("left", e));
 
-      // --- Dragging & Floating Controller ---
+      // Keyboard accessible resizing on the corner grip (Arrow keys)
+      resizeHandle.addEventListener("keydown", (e: KeyboardEvent) => {
+        let curW = winEl.offsetWidth;
+        let curH = winEl.offsetHeight;
+        let changed = false;
+
+        if (e.key === "ArrowRight") {
+          curW = Math.min(opts.maxWidth, curW + 20);
+          changed = true;
+        } else if (e.key === "ArrowLeft") {
+          curW = Math.max(opts.minWidth, curW - 20);
+          changed = true;
+        } else if (e.key === "ArrowDown") {
+          curH = Math.min(opts.maxHeight, curH + 20);
+          changed = true;
+        } else if (e.key === "ArrowUp") {
+          curH = Math.max(opts.minHeight, curH - 20);
+          changed = true;
+        }
+
+        if (changed) {
+          e.preventDefault();
+          winEl.style.width = `${curW}px`;
+          winEl.style.height = `${curH}px`;
+          winEl.style.flex = `0 0 ${curW}px`;
+          if (placeholderEl) {
+            placeholderEl.style.width = `${curW}px`;
+            placeholderEl.style.height = `${curH}px`;
+            placeholderEl.style.flex = `0 0 ${curW}px`;
+          }
+          opts.onSaveSize(curW, curH);
+        }
+      });
+
+      // --- Stable Dragging & Floating Controller (With Ghost Placeholder) ---
       let isDragging = false;
       let dragStartX = 0;
       let dragStartY = 0;
       let initialLeft = 0;
       let initialTop = 0;
+      let dragRaf: number | null = null;
+
+      const onDragPointerMove = (e: PointerEvent) => {
+        const dx = e.clientX - dragStartX;
+        const dy = e.clientY - dragStartY;
+
+        if (!isDragging && Math.hypot(dx, dy) > 5) {
+          isDragging = true;
+          // Create in-flow placeholder so other panels never collapse or jump
+          if (!placeholderEl && winEl.parentNode) {
+            placeholderEl = document.createElement("div");
+            placeholderEl.className = "window-placeholder";
+            placeholderEl.style.width = `${winEl.offsetWidth}px`;
+            placeholderEl.style.height = `${winEl.offsetHeight}px`;
+            placeholderEl.style.flex = winEl.style.flex || `0 0 ${winEl.offsetWidth}px`;
+            winEl.parentNode.insertBefore(placeholderEl, winEl);
+          }
+          winEl.classList.add("floating");
+          winEl.style.position = "absolute";
+          winEl.style.zIndex = "60";
+        }
+
+        if (isDragging) {
+          if (dragRaf !== null) cancelAnimationFrame(dragRaf);
+          dragRaf = requestAnimationFrame(() => {
+            const stageRect = stage.getBoundingClientRect();
+            const winRect = winEl.getBoundingClientRect();
+            const maxLeft = Math.max(0, stageRect.width - winRect.width);
+            const maxTop = Math.max(0, stageRect.height - 40);
+
+            const newLeft = Math.min(maxLeft, Math.max(0, initialLeft + dx));
+            const newTop = Math.min(maxTop, Math.max(0, initialTop + dy));
+
+            winEl.style.left = `${newLeft}px`;
+            winEl.style.top = `${newTop}px`;
+            winEl.style.right = "auto";
+            winEl.style.bottom = "auto";
+          });
+        }
+      };
+
+      const onDragPointerUp = () => {
+        if (isDragging) {
+          isDragging = false;
+        }
+        window.removeEventListener("pointermove", onDragPointerMove);
+        window.removeEventListener("pointerup", onDragPointerUp);
+        window.removeEventListener("pointercancel", onDragPointerUp);
+        if (dragRaf !== null) {
+          cancelAnimationFrame(dragRaf);
+          dragRaf = null;
+        }
+      };
 
       dragHandle.addEventListener("pointerdown", (e) => {
         if ((e.target as HTMLElement).tagName === "INPUT" || (e.target as HTMLElement).tagName === "SELECT") {
           return;
         }
-        dragHandle.setPointerCapture(e.pointerId);
         dragStartX = e.clientX;
         dragStartY = e.clientY;
 
@@ -1094,49 +1300,14 @@ export class A11yMediaPlayer extends HTMLElement {
         initialLeft = winRect.left - stageRect.left;
         initialTop = winRect.top - stageRect.top;
         isDragging = false;
+
+        window.addEventListener("pointermove", onDragPointerMove);
+        window.addEventListener("pointerup", onDragPointerUp);
+        window.addEventListener("pointercancel", onDragPointerUp);
       });
 
-      dragHandle.addEventListener("pointermove", (e) => {
-        const dx = e.clientX - dragStartX;
-        const dy = e.clientY - dragStartY;
-
-        if (!isDragging && Math.hypot(dx, dy) > 4) {
-          isDragging = true;
-          winEl.classList.add("floating");
-          winEl.style.position = "absolute";
-          winEl.style.zIndex = "60";
-        }
-
-        if (isDragging) {
-          const stageRect = stage.getBoundingClientRect();
-          const winRect = winEl.getBoundingClientRect();
-          const maxLeft = Math.max(0, stageRect.width - winRect.width);
-          const maxTop = Math.max(0, stageRect.height - 40);
-
-          const newLeft = Math.min(maxLeft, Math.max(0, initialLeft + dx));
-          const newTop = Math.min(maxTop, Math.max(0, initialTop + dy));
-
-          winEl.style.left = `${newLeft}px`;
-          winEl.style.top = `${newTop}px`;
-          winEl.style.right = "auto";
-          winEl.style.bottom = "auto";
-        }
-      });
-
-      const endDrag = (e: PointerEvent) => {
-        if (isDragging) {
-          isDragging = false;
-        }
-        try {
-          dragHandle.releasePointerCapture(e.pointerId);
-        } catch {}
-      };
-
-      dragHandle.addEventListener("pointerup", endDrag);
-      dragHandle.addEventListener("pointercancel", endDrag);
-
-      // Double-click on drag handle re-docks window to side-by-side layout
-      dragHandle.addEventListener("dblclick", () => {
+      // Double-click on drag handle re-docks window cleanly to original stage slot
+      const reDock = () => {
         winEl.classList.remove("floating");
         winEl.style.position = "";
         winEl.style.left = "";
@@ -1144,34 +1315,58 @@ export class A11yMediaPlayer extends HTMLElement {
         winEl.style.right = "";
         winEl.style.bottom = "";
         winEl.style.zIndex = "";
-      });
+        if (placeholderEl) {
+          placeholderEl.remove();
+          placeholderEl = null;
+        }
+      };
+      dragHandle.addEventListener("dblclick", reDock);
+
+      // Store re-dock hook on element for Reset Layout button
+      (winEl as any).__reDock = reDock;
     };
 
-    // Initialize Transcript Window
-    initWindow("transcript-window", "transcript-drag-handle", "transcript-resize-handle", {
-      minWidth: 250,
-      maxWidth: 650,
-      minHeight: 250,
-      maxHeight: 850,
-      onSaveSize: (w, h) => {
-        this.prefs.transcriptWidth = w;
-        this.prefs.transcriptHeight = h;
-        savePreferences({ transcriptWidth: w, transcriptHeight: h });
-      },
-    });
+    // Initialize Transcript Window (220-750px width, 200-900px height)
+    initWindow(
+      "transcript-window",
+      "transcript-drag-handle",
+      "transcript-resize-handle",
+      "transcript-resize-edge-bottom",
+      "transcript-resize-edge-right",
+      null,
+      {
+        minWidth: 220,
+        maxWidth: 750,
+        minHeight: 200,
+        maxHeight: 900,
+        onSaveSize: (w, h) => {
+          this.prefs.transcriptWidth = w;
+          this.prefs.transcriptHeight = h;
+          savePreferences({ transcriptWidth: w, transcriptHeight: h });
+        },
+      }
+    );
 
-    // Initialize Sign Language Window
-    initWindow("esl-window", "esl-drag-handle", "esl-resize-handle", {
-      minWidth: 200,
-      maxWidth: 600,
-      minHeight: 160,
-      maxHeight: 600,
-      onSaveSize: (w, h) => {
-        this.prefs.eslWidth = w;
-        this.prefs.eslHeight = h;
-        savePreferences({ eslWidth: w, eslHeight: h });
-      },
-    });
+    // Initialize Sign Language Window (200-700px width, 160-700px height)
+    initWindow(
+      "esl-window",
+      "esl-drag-handle",
+      "esl-resize-handle",
+      "esl-resize-edge-bottom",
+      "esl-resize-edge-right",
+      "esl-resize-edge-left",
+      {
+        minWidth: 200,
+        maxWidth: 700,
+        minHeight: 160,
+        maxHeight: 700,
+        onSaveSize: (w, h) => {
+          this.prefs.eslWidth = w;
+          this.prefs.eslHeight = h;
+          savePreferences({ eslWidth: w, eslHeight: h });
+        },
+      }
+    );
   }
 
   private attachEventListeners() {
@@ -1330,6 +1525,7 @@ export class A11yMediaPlayer extends HTMLElement {
 
       // Reset Transcript Window
       if (transcriptWindow) {
+        (transcriptWindow as any).__reDock?.();
         transcriptWindow.classList.remove("floating");
         transcriptWindow.style.position = "";
         transcriptWindow.style.left = "";
@@ -1345,6 +1541,7 @@ export class A11yMediaPlayer extends HTMLElement {
 
       // Reset Sign Language Window
       if (eslWindow) {
+        (eslWindow as any).__reDock?.();
         eslWindow.classList.remove("floating");
         eslWindow.style.position = "";
         eslWindow.style.left = "";

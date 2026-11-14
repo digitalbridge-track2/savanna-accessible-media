@@ -1,7 +1,7 @@
-var H = Object.defineProperty;
-var R = (d, s, e) => s in d ? H(d, s, { enumerable: !0, configurable: !0, writable: !0, value: e }) : d[s] = e;
-var l = (d, s, e) => R(d, typeof s != "symbol" ? s + "" : s, e);
-const I = "abugida_media_preferences", y = {
+var G = Object.defineProperty;
+var Z = (d, s, e) => s in d ? G(d, s, { enumerable: !0, configurable: !0, writable: !0, value: e }) : d[s] = e;
+var l = (d, s, e) => Z(d, typeof s != "symbol" ? s + "" : s, e);
+const U = "abugida_media_preferences", k = {
   captionLanguage: "en",
   captionSize: "medium",
   captionTheme: "default",
@@ -16,32 +16,32 @@ const I = "abugida_media_preferences", y = {
   eslWidth: 340,
   eslHeight: 240
 };
-function P() {
+function O() {
   try {
-    const d = localStorage.getItem(I);
-    if (!d) return { ...y };
+    const d = localStorage.getItem(U);
+    if (!d) return { ...k };
     const s = JSON.parse(d);
-    return { ...y, ...s };
+    return { ...k, ...s };
   } catch {
-    return { ...y };
+    return { ...k };
   }
 }
-function L(d) {
+function C(d) {
   try {
-    const e = { ...P(), ...d };
-    return localStorage.setItem(I, JSON.stringify(e)), e;
+    const e = { ...O(), ...d };
+    return localStorage.setItem(U, JSON.stringify(e)), e;
   } catch {
-    return { ...y, ...d };
+    return { ...k, ...d };
   }
 }
-function W() {
+function ee() {
   try {
-    localStorage.removeItem(I);
+    localStorage.removeItem(U);
   } catch {
   }
-  return { ...y };
+  return { ...k };
 }
-function O(d) {
+function te(d) {
   const s = [], e = d.split(/\r?\n/);
   let i = 0;
   for (; i < e.length && !e[i].includes("-->"); )
@@ -51,15 +51,15 @@ function O(d) {
     if (t.includes("-->")) {
       const a = t.split("-->").map((r) => r.trim().split(" ")[0]);
       if (a.length >= 2) {
-        const r = M(a[0]), c = M(a[1]);
+        const r = q(a[0]), h = q(a[1]);
         i++;
-        const n = [];
+        const u = [];
         for (; i < e.length && e[i].trim() !== ""; )
-          n.push(e[i].trim()), i++;
-        n.length > 0 && s.push({
+          u.push(e[i].trim()), i++;
+        u.length > 0 && s.push({
           start: r,
-          end: c,
-          text: n.join(`
+          end: h,
+          text: u.join(`
 `)
         });
       }
@@ -68,12 +68,12 @@ function O(d) {
   }
   return s;
 }
-function M(d) {
+function q(d) {
   const s = d.split(":");
   let e = 0, i = 0, t = 0;
   return s.length === 3 ? (e = parseFloat(s[0]), i = parseFloat(s[1]), t = parseFloat(s[2].replace(",", "."))) : s.length === 2 && (i = parseFloat(s[0]), t = parseFloat(s[1].replace(",", "."))), e * 3600 + i * 60 + t;
 }
-function N(d, s) {
+function ie(d, s) {
   let e = "18px";
   s === "small" && (e = "14px"), s === "large" && (e = "24px"), s === "xlarge" && (e = "32px");
   let i = "#FFFFFF", t = "rgba(0, 0, 0, 0.85)", a = "none";
@@ -92,7 +92,7 @@ function N(d, s) {
     white-space: pre-line;
   `;
 }
-class U {
+class se {
   constructor(s, e) {
     l(this, "mainVideo");
     l(this, "signVideo", null);
@@ -205,7 +205,7 @@ class U {
     this.mainListeners = {}, this.cleanupSignListeners(), this.signVideo = null;
   }
 }
-class J {
+class ae {
   constructor(s, e) {
     l(this, "segments", []);
     l(this, "container");
@@ -304,14 +304,14 @@ class J {
             </p>` : `
           <ul class="transcript-list" role="list" id="transcript-list-box" tabindex="0" aria-label="${s ? "የጽሑፍ ግልባጭ ዝርዝር" : "Transcript cues"}">
             ${e.map((t) => {
-      const a = this.formatTime(t.start), r = t.id === this.currentActiveId, c = s ? `ከ ${a} ጀምሮ አጫውት` : `Play from ${a}`;
+      const a = this.formatTime(t.start), r = t.id === this.currentActiveId, h = s ? `ከ ${a} ጀምሮ አጫውት` : `Play from ${a}`;
       return `
                 <li class="transcript-item ${r ? "active" : ""}" data-segment-id="${t.id}">
                   <button 
                     type="button" 
                     class="btn-seek-time" 
                     data-time="${t.start}" 
-                    aria-label="${c}">
+                    aria-label="${h}">
                     ${a}
                   </button>
                   <div class="segment-content">
@@ -347,7 +347,7 @@ class J {
     return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
   }
 }
-class _ extends HTMLElement {
+class ne extends HTMLElement {
   constructor() {
     super();
     l(this, "shadow");
@@ -366,7 +366,7 @@ class _ extends HTMLElement {
     l(this, "transcriptViewer");
     // UI state
     l(this, "isPreferencesOpen", !1);
-    this.shadow = this.attachShadow({ mode: "open" }), this.prefs = P();
+    this.shadow = this.attachShadow({ mode: "open" }), this.prefs = O();
   }
   static get observedAttributes() {
     return ["manifest-src", "locale"];
@@ -393,24 +393,24 @@ class _ extends HTMLElement {
       } catch {
         a = new URL(window.location.href);
       }
-      const r = (c) => {
-        if (!c) return c;
+      const r = (h) => {
+        if (!h) return h;
         try {
-          return new URL(c, a).href;
+          return new URL(h, a).href;
         } catch {
-          return c;
+          return h;
         }
       };
       this.manifest = {
         ...t,
         poster: t.poster ? { ...t.poster, src: r(t.poster.src) } : void 0,
-        sources: (t.sources || []).map((c) => ({
-          ...c,
-          src: r(c.src)
+        sources: (t.sources || []).map((h) => ({
+          ...h,
+          src: r(h.src)
         })),
-        captionTracks: (t.captionTracks || []).map((c) => ({
-          ...c,
-          src: r(c.src)
+        captionTracks: (t.captionTracks || []).map((h) => ({
+          ...h,
+          src: r(h.src)
         })),
         transcript: t.transcript ? {
           ...t.transcript,
@@ -455,7 +455,7 @@ class _ extends HTMLElement {
       const t = await fetch(i.src);
       if (t.ok) {
         const a = await t.text();
-        this.currentCues = O(a);
+        this.currentCues = te(a);
       }
     } catch {
       this.currentCues = [];
@@ -469,7 +469,7 @@ class _ extends HTMLElement {
       return;
     }
     const e = this.mainVideo.currentTime, i = this.currentCues.find((t) => e >= t.start && e <= t.end);
-    i ? (this.captionOverlay.style.display = "block", this.captionOverlay.style.cssText = N(this.prefs.captionTheme, this.prefs.captionSize), this.captionOverlay.textContent = i.text) : this.captionOverlay.style.display = "none";
+    i ? (this.captionOverlay.style.display = "block", this.captionOverlay.style.cssText = ie(this.prefs.captionTheme, this.prefs.captionSize), this.captionOverlay.textContent = i.text) : this.captionOverlay.style.display = "none";
   }
   seekAndPlay(e) {
     if (isNaN(this.mainVideo.duration) || this.mainVideo.readyState < 1) {
@@ -503,8 +503,8 @@ class _ extends HTMLElement {
     `;
   }
   render() {
-    var u, p, f, m;
-    const e = this.activeLocale === "am", i = this.manifest ? this.manifest.title[this.activeLocale] : "Media Player", t = (u = this.manifest) == null ? void 0 : u.sources.find((v) => v.kind === "main"), a = (p = this.manifest) == null ? void 0 : p.sources.find((v) => v.kind === "sign"), r = this.prefs.transcriptWidth || y.transcriptWidth || 350, c = this.prefs.transcriptHeight || y.transcriptHeight || 480, n = this.prefs.eslWidth || y.eslWidth || 340, h = this.prefs.eslHeight || y.eslHeight || 250;
+    var c, n, w, p;
+    const e = this.activeLocale === "am", i = this.manifest ? this.manifest.title[this.activeLocale] : "Media Player", t = (c = this.manifest) == null ? void 0 : c.sources.find((E) => E.kind === "main"), a = (n = this.manifest) == null ? void 0 : n.sources.find((E) => E.kind === "sign"), r = this.prefs.transcriptWidth || k.transcriptWidth || 350, h = this.prefs.transcriptHeight || k.transcriptHeight || 480, u = this.prefs.eslWidth || k.eslWidth || 340, b = this.prefs.eslHeight || k.eslHeight || 250;
     this.shadow.innerHTML = `
       <style>
         :host {
@@ -517,6 +517,8 @@ class _ extends HTMLElement {
         /* 3-Panel Flexible Stage (Transcript | Main Video | Sign Language) */
         .player-stage {
           display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
           align-items: flex-start;
           justify-content: center;
           gap: 1.25rem;
@@ -536,6 +538,7 @@ class _ extends HTMLElement {
           flex-direction: column;
           overflow: hidden;
           box-sizing: border-box;
+          resize: both;
           transition: box-shadow 0.2s ease;
         }
         .window-panel.floating {
@@ -545,6 +548,14 @@ class _ extends HTMLElement {
         .window-panel.is-resizing {
           user-select: none;
           transition: none !important;
+        }
+        .window-placeholder {
+          border: 2px dashed #94A3B8;
+          background: rgba(148, 163, 184, 0.08);
+          border-radius: 6px;
+          box-sizing: border-box;
+          flex-shrink: 0;
+          transition: none;
         }
 
         /* Window Header / Title Bar */
@@ -560,6 +571,7 @@ class _ extends HTMLElement {
           gap: 0.5rem;
           user-select: none;
           border-bottom: 1px solid rgba(0,0,0,0.3);
+          flex-shrink: 0;
         }
         .btn-window-opt {
           background: transparent;
@@ -624,39 +636,91 @@ class _ extends HTMLElement {
           cursor: pointer;
         }
 
-        /* Bottom-Right Corner Resize Grip */
+        /* Bottom-Right Corner Resize Grip (Both Width & Height) */
         .window-resize-handle {
           position: absolute;
           bottom: 0;
           right: 0;
-          width: 18px;
-          height: 18px;
-          cursor: se-resize;
+          width: 24px;
+          height: 24px;
+          cursor: nwse-resize;
           display: flex;
-          align-items: flex-end;
-          justify-content: flex-end;
-          padding: 2px;
-          font-size: 12px;
-          line-height: 1;
+          align-items: center;
+          justify-content: center;
           color: #64748B;
           user-select: none;
-          z-index: 10;
+          z-index: 20;
+          background: rgba(241, 245, 249, 0.9);
+          border-top-left-radius: 4px;
+          transition: color 0.15s ease, background 0.15s ease;
         }
-        .window-resize-handle:hover {
+        .window-resize-handle:hover,
+        .window-resize-handle:focus-visible {
           color: #0F172A;
+          background: #E2E8F0;
+        }
+        .window-resize-handle:focus-visible {
+          outline: 2px solid var(--color-focus, #005FCC);
+          outline-offset: -2px;
+        }
+
+        /* Bottom Edge Resize Handle (Height Up / Down) */
+        .window-resize-edge-bottom {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 24px;
+          height: 8px;
+          cursor: ns-resize;
+          z-index: 15;
+          background: transparent;
+        }
+        .window-resize-edge-bottom:hover {
+          background: rgba(14, 165, 233, 0.25);
+        }
+
+        /* Right Edge Resize Handle (Width Left / Right) */
+        .window-resize-edge-right {
+          position: absolute;
+          top: 38px;
+          right: 0;
+          bottom: 24px;
+          width: 8px;
+          cursor: ew-resize;
+          z-index: 15;
+          background: transparent;
+        }
+        .window-resize-edge-right:hover {
+          background: rgba(14, 165, 233, 0.25);
+        }
+
+        /* Left Edge Resize Handle (for Sign Window) */
+        .window-resize-edge-left {
+          position: absolute;
+          top: 38px;
+          left: 0;
+          bottom: 24px;
+          width: 8px;
+          cursor: ew-resize;
+          z-index: 15;
+          background: transparent;
+        }
+        .window-resize-edge-left:hover {
+          background: rgba(14, 165, 233, 0.25);
         }
 
         /* Center Main Player Panel */
         .main-player-panel {
-          flex: 1 1 480px;
-          min-width: 360px;
-          max-width: 760px;
+          flex: 1 1 440px;
+          min-width: 320px;
+          max-width: 780px;
           background: #000;
           border-radius: 8px;
           overflow: hidden;
           box-shadow: 0 4px 18px rgba(0,0,0,0.2);
           position: relative;
           outline: none;
+          box-sizing: border-box;
         }
         .main-player-panel:focus-visible {
           outline: 3px solid var(--color-focus, #005FCC);
@@ -760,13 +824,15 @@ class _ extends HTMLElement {
         /* LEFT: Resizable Transcript Window */
         .transcript-window {
           flex: 0 0 auto;
-          min-width: 250px;
-          max-width: 650px;
-          min-height: 250px;
-          max-height: 850px;
+          min-width: 220px;
+          max-width: 750px;
+          min-height: 200px;
+          max-height: 900px;
         }
         .transcript-body {
           flex: 1;
+          min-height: 0;
+          min-width: 0;
           display: flex;
           flex-direction: column;
           padding: 0.85rem 1rem 1rem 1rem;
@@ -780,6 +846,7 @@ class _ extends HTMLElement {
           gap: 0.75rem;
           margin-bottom: 0.75rem;
           flex-wrap: wrap;
+          flex-shrink: 0;
         }
         .transcript-title {
           margin: 0;
@@ -798,21 +865,24 @@ class _ extends HTMLElement {
         }
         .transcript-scroll-area {
           flex: 1;
+          min-height: 0;
+          min-width: 0;
           overflow-y: auto;
-          min-height: 180px;
         }
 
         /* RIGHT: Resizable Sign Language Window (Outside of video frame) */
         .esl-window {
           flex: 0 0 auto;
           min-width: 200px;
-          max-width: 600px;
+          max-width: 700px;
           min-height: 160px;
-          max-height: 600px;
+          max-height: 700px;
           background: #111;
         }
         .esl-video-body {
           flex: 1;
+          min-height: 0;
+          min-width: 0;
           position: relative;
           background: #000;
           display: flex;
@@ -823,6 +893,8 @@ class _ extends HTMLElement {
         video.sign-video {
           width: 100%;
           height: 100%;
+          max-width: 100%;
+          max-height: 100%;
           object-fit: contain;
           display: block;
         }
@@ -954,15 +1026,14 @@ class _ extends HTMLElement {
           min-height: 44px;
         }
 
-        /* Responsive Reflow on Narrow Screens / Mobile */
-        @media (max-width: 1080px) {
+        /* Responsive Reflow on Small Mobile Screens */
+        @media (max-width: 680px) {
           .player-stage {
             flex-direction: column;
-            align-items: center;
+            align-items: stretch;
           }
           .main-player-panel, .transcript-window, .esl-window {
-            width: 100% !important;
-            max-width: 720px;
+            max-width: 100%;
           }
           .main-player-panel {
             order: 1;
@@ -983,7 +1054,7 @@ class _ extends HTMLElement {
           <div 
             class="window-panel transcript-window" 
             id="transcript-window"
-            style="width: ${r}px; height: ${c}px; flex: 0 0 ${r}px; display: ${this.prefs.transcriptVisible !== !1 ? "flex" : "none"};"
+            style="width: ${r}px; height: ${h}px; flex: 0 0 ${r}px; display: ${this.prefs.transcriptVisible !== !1 ? "flex" : "none"};"
             aria-label="${e ? "የትምህርቱ የጽሑፍ ግልባጭ መስኮት" : "Lesson Transcript Window"}">
             
             <!-- Transcript Titlebar -->
@@ -1032,15 +1103,20 @@ class _ extends HTMLElement {
               <div id="transcript-target" class="transcript-scroll-area"></div>
             </div>
 
-            <!-- Corner Resize Grip -->
+            <!-- Resizing Handles (Corner 2D, Bottom Edge, Right Edge) -->
             <div 
               class="window-resize-handle" 
               id="transcript-resize-handle" 
+              tabindex="0"
               role="separator" 
-              aria-label="${e ? "የጽሑፍ ግልባጭ መስኮት ማስተካከያ" : "Resize transcript window"}" 
-              title="${e ? "መጠኑን ለመቀየር ይጎትቱ" : "Drag to resize"}">
-              ◢
+              aria-label="${e ? "የጽሑፍ ግልባጭ መስኮት ማስተካከያ (በቀስት ቁልፎች መጠን ይቀይሩ)" : "Resize transcript window (Use arrow keys or drag)"}" 
+              title="${e ? "መጠኑን ለመቀየር ይጎትቱ ወይም የቀስት ቁልፎችን ይጠቀሙ" : "Drag to resize (or use Arrow keys)"}">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                <path d="M13 1L1 13M13 6L6 13M13 11L11 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
             </div>
+            <div class="window-resize-edge-bottom" id="transcript-resize-edge-bottom" aria-hidden="true" title="${e ? "ቁመቱን ለመቀየር ይጎትቱ" : "Drag to resize height"}"></div>
+            <div class="window-resize-edge-right" id="transcript-resize-edge-right" aria-hidden="true" title="${e ? "ስፋቱን ለመቀየር ይጎትቱ" : "Drag to resize width"}"></div>
           </div>
 
           <!-- CENTER: Main Video Player & Controls -->
@@ -1051,7 +1127,7 @@ class _ extends HTMLElement {
                 class="main-video" 
                 playsinline 
                 preload="metadata"
-                poster="${((m = (f = this.manifest) == null ? void 0 : f.poster) == null ? void 0 : m.src) || ""}"
+                poster="${((p = (w = this.manifest) == null ? void 0 : w.poster) == null ? void 0 : p.src) || ""}"
                 src="${t ? t.src : ""}">
               </video>
 
@@ -1115,7 +1191,7 @@ class _ extends HTMLElement {
           <div 
             class="window-panel esl-window" 
             id="esl-window" 
-            style="width: ${n}px; height: ${h}px; flex: 0 0 ${n}px; display: ${this.prefs.eslVisible && a ? "flex" : "none"};"
+            style="width: ${u}px; height: ${b}px; flex: 0 0 ${u}px; display: ${this.prefs.eslVisible && a ? "flex" : "none"};"
             aria-label="${e ? "የኢትዮጵያ የምልክት ቋንቋ መስኮት" : "Ethiopian Sign Language Window"}">
             
             <!-- Sign Titlebar -->
@@ -1154,15 +1230,21 @@ class _ extends HTMLElement {
               </video>
             </div>
 
-            <!-- Corner Resize Grip -->
+            <!-- Resizing Handles (Corner 2D, Bottom Edge, Right Edge, Left Edge) -->
             <div 
               class="window-resize-handle" 
               id="esl-resize-handle" 
+              tabindex="0"
               role="separator" 
-              aria-label="${e ? "የምልክት ቋንቋ መስኮት ማስተካከያ" : "Resize sign language window"}" 
-              title="${e ? "መጠኑን ለመቀየር ይጎትቱ" : "Drag to resize"}">
-              ◢
+              aria-label="${e ? "የምልክት ቋንቋ መስኮት ማስተካከያ (በቀስት ቁልፎች መጠን ይቀይሩ)" : "Resize sign language window (Use arrow keys or drag)"}" 
+              title="${e ? "መጠኑን ለመቀየር ይጎትቱ ወይም የቀስት ቁልፎችን ይጠቀሙ" : "Drag to resize (or use Arrow keys)"}">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                <path d="M13 1L1 13M13 6L6 13M13 11L11 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
             </div>
+            <div class="window-resize-edge-bottom" id="esl-resize-edge-bottom" aria-hidden="true" title="${e ? "ቁመቱን ለመቀየር ይጎትቱ" : "Drag to resize height"}"></div>
+            <div class="window-resize-edge-right" id="esl-resize-edge-right" aria-hidden="true" title="${e ? "ስፋቱን ለመቀየር ይጎትቱ" : "Drag to resize width"}"></div>
+            <div class="window-resize-edge-left" id="esl-resize-edge-left" aria-hidden="true" title="${e ? "ስፋቱን ለመቀየር ይጎትቱ" : "Drag to resize width"}"></div>
           </div>
 
         </div>
@@ -1215,7 +1297,7 @@ class _ extends HTMLElement {
     `, this.bindDOMElements(), this.attachEventListeners(), this.setupWindowInteractions();
   }
   bindDOMElements() {
-    this.mainVideo = this.shadow.getElementById("main-video"), this.signVideo = this.shadow.getElementById("sign-video"), this.captionOverlay = this.shadow.getElementById("caption-overlay"), this.syncController = new U(this.mainVideo, {
+    this.mainVideo = this.shadow.getElementById("main-video"), this.signVideo = this.shadow.getElementById("sign-video"), this.captionOverlay = this.shadow.getElementById("caption-overlay"), this.syncController = new se(this.mainVideo, {
       driftThreshold: 0.25,
       onSignStatusChange: (t) => {
         const a = this.shadow.getElementById("sign-status-indicator");
@@ -1223,7 +1305,7 @@ class _ extends HTMLElement {
       }
     }), this.signVideo && this.syncController.setSignVideo(this.signVideo);
     const e = this.shadow.getElementById("transcript-target"), i = this.shadow.getElementById("cb-auto-scroll");
-    this.transcriptViewer = new J(e, {
+    this.transcriptViewer = new ae(e, {
       locale: this.activeLocale,
       onSeekAndPlay: (t) => {
         this.seekAndPlay(t);
@@ -1236,144 +1318,156 @@ class _ extends HTMLElement {
   setupWindowInteractions() {
     const e = this.shadow.getElementById("player-stage");
     if (!e) return;
-    const i = (t, a, r, c) => {
-      const n = this.shadow.getElementById(t), h = this.shadow.getElementById(a), u = this.shadow.getElementById(r);
-      if (!n || !h || !u) return;
-      let p = !1, f = 0, m = 0, v = 0, F = 0;
-      u.addEventListener("pointerdown", (g) => {
-        p = !0, u.setPointerCapture(g.pointerId), f = g.clientX, m = g.clientY, v = n.offsetWidth, F = n.offsetHeight, n.classList.add("is-resizing"), g.preventDefault(), g.stopPropagation();
-      }), u.addEventListener("pointermove", (g) => {
-        if (!p) return;
-        const x = g.clientX - f, k = g.clientY - m, S = Math.min(c.maxWidth, Math.max(c.minWidth, v + x)), D = Math.min(c.maxHeight, Math.max(c.minHeight, F + k));
-        n.style.width = `${S}px`, n.style.height = `${D}px`, n.style.flex = `0 0 ${S}px`;
-      });
-      const $ = (g) => {
-        if (p) {
-          p = !1, n.classList.remove("is-resizing");
-          try {
-            u.releasePointerCapture(g.pointerId);
-          } catch {
-          }
-          c.onSaveSize(n.offsetWidth, n.offsetHeight);
-        }
+    const i = (t, a, r, h, u, b, c) => {
+      const n = this.shadow.getElementById(t), w = this.shadow.getElementById(a), p = this.shadow.getElementById(r), E = this.shadow.getElementById(h), V = this.shadow.getElementById(u), D = b ? this.shadow.getElementById(b) : null;
+      if (!n || !w || !p) return;
+      let g = null, T = !1, L = "corner", S = 0, j = 0, B = 0, z = 0, $ = null;
+      const H = (m) => {
+        if (!T) return;
+        const f = m.clientX - S, v = m.clientY - j;
+        $ !== null && cancelAnimationFrame($), $ = requestAnimationFrame(() => {
+          let x = B, W = z;
+          L === "corner" || L === "right" ? x = Math.min(c.maxWidth, Math.max(c.minWidth, B + f)) : L === "left" && (x = Math.min(c.maxWidth, Math.max(c.minWidth, B - f))), (L === "corner" || L === "bottom") && (W = Math.min(c.maxHeight, Math.max(c.minHeight, z + v))), n.style.width = `${x}px`, n.style.height = `${W}px`, n.style.flex = `0 0 ${x}px`, g && (g.style.width = `${x}px`, g.style.height = `${W}px`, g.style.flex = `0 0 ${x}px`);
+        });
+      }, A = () => {
+        T && (T = !1, n.classList.remove("is-resizing"), window.removeEventListener("pointermove", H), window.removeEventListener("pointerup", A), window.removeEventListener("pointercancel", A), $ !== null && (cancelAnimationFrame($), $ = null), c.onSaveSize(n.offsetWidth, n.offsetHeight));
+      }, M = (m, f) => {
+        T = !0, L = m, S = f.clientX, j = f.clientY, B = n.offsetWidth, z = n.offsetHeight, n.classList.add("is-resizing"), window.addEventListener("pointermove", H), window.addEventListener("pointerup", A), window.addEventListener("pointercancel", A), f.preventDefault(), f.stopPropagation();
       };
-      u.addEventListener("pointerup", $), u.addEventListener("pointercancel", $);
-      let b = !1, C = 0, V = 0, E = 0, T = 0;
-      h.addEventListener("pointerdown", (g) => {
-        if (g.target.tagName === "INPUT" || g.target.tagName === "SELECT")
+      p.addEventListener("pointerdown", (m) => M("corner", m)), E == null || E.addEventListener("pointerdown", (m) => M("bottom", m)), V == null || V.addEventListener("pointerdown", (m) => M("right", m)), D == null || D.addEventListener("pointerdown", (m) => M("left", m)), p.addEventListener("keydown", (m) => {
+        let f = n.offsetWidth, v = n.offsetHeight, x = !1;
+        m.key === "ArrowRight" ? (f = Math.min(c.maxWidth, f + 20), x = !0) : m.key === "ArrowLeft" ? (f = Math.max(c.minWidth, f - 20), x = !0) : m.key === "ArrowDown" ? (v = Math.min(c.maxHeight, v + 20), x = !0) : m.key === "ArrowUp" && (v = Math.max(c.minHeight, v - 20), x = !0), x && (m.preventDefault(), n.style.width = `${f}px`, n.style.height = `${v}px`, n.style.flex = `0 0 ${f}px`, g && (g.style.width = `${f}px`, g.style.height = `${v}px`, g.style.flex = `0 0 ${f}px`), c.onSaveSize(f, v));
+      });
+      let F = !1, R = 0, o = 0, y = 0, P = 0, I = null;
+      const _ = (m) => {
+        const f = m.clientX - R, v = m.clientY - o;
+        !F && Math.hypot(f, v) > 5 && (F = !0, !g && n.parentNode && (g = document.createElement("div"), g.className = "window-placeholder", g.style.width = `${n.offsetWidth}px`, g.style.height = `${n.offsetHeight}px`, g.style.flex = n.style.flex || `0 0 ${n.offsetWidth}px`, n.parentNode.insertBefore(g, n)), n.classList.add("floating"), n.style.position = "absolute", n.style.zIndex = "60"), F && (I !== null && cancelAnimationFrame(I), I = requestAnimationFrame(() => {
+          const x = e.getBoundingClientRect(), W = n.getBoundingClientRect(), Y = Math.max(0, x.width - W.width), K = Math.max(0, x.height - 40), Q = Math.min(Y, Math.max(0, y + f)), X = Math.min(K, Math.max(0, P + v));
+          n.style.left = `${Q}px`, n.style.top = `${X}px`, n.style.right = "auto", n.style.bottom = "auto";
+        }));
+      }, N = () => {
+        F && (F = !1), window.removeEventListener("pointermove", _), window.removeEventListener("pointerup", N), window.removeEventListener("pointercancel", N), I !== null && (cancelAnimationFrame(I), I = null);
+      };
+      w.addEventListener("pointerdown", (m) => {
+        if (m.target.tagName === "INPUT" || m.target.tagName === "SELECT")
           return;
-        h.setPointerCapture(g.pointerId), C = g.clientX, V = g.clientY;
-        const x = e.getBoundingClientRect(), k = n.getBoundingClientRect();
-        E = k.left - x.left, T = k.top - x.top, b = !1;
-      }), h.addEventListener("pointermove", (g) => {
-        const x = g.clientX - C, k = g.clientY - V;
-        if (!b && Math.hypot(x, k) > 4 && (b = !0, n.classList.add("floating"), n.style.position = "absolute", n.style.zIndex = "60"), b) {
-          const S = e.getBoundingClientRect(), D = n.getBoundingClientRect(), A = Math.max(0, S.width - D.width), j = Math.max(0, S.height - 40), o = Math.min(A, Math.max(0, E + x)), w = Math.min(j, Math.max(0, T + k));
-          n.style.left = `${o}px`, n.style.top = `${w}px`, n.style.right = "auto", n.style.bottom = "auto";
-        }
+        R = m.clientX, o = m.clientY;
+        const f = e.getBoundingClientRect(), v = n.getBoundingClientRect();
+        y = v.left - f.left, P = v.top - f.top, F = !1, window.addEventListener("pointermove", _), window.addEventListener("pointerup", N), window.addEventListener("pointercancel", N);
       });
-      const B = (g) => {
-        b && (b = !1);
-        try {
-          h.releasePointerCapture(g.pointerId);
-        } catch {
-        }
+      const J = () => {
+        n.classList.remove("floating"), n.style.position = "", n.style.left = "", n.style.top = "", n.style.right = "", n.style.bottom = "", n.style.zIndex = "", g && (g.remove(), g = null);
       };
-      h.addEventListener("pointerup", B), h.addEventListener("pointercancel", B), h.addEventListener("dblclick", () => {
-        n.classList.remove("floating"), n.style.position = "", n.style.left = "", n.style.top = "", n.style.right = "", n.style.bottom = "", n.style.zIndex = "";
-      });
+      w.addEventListener("dblclick", J), n.__reDock = J;
     };
-    i("transcript-window", "transcript-drag-handle", "transcript-resize-handle", {
-      minWidth: 250,
-      maxWidth: 650,
-      minHeight: 250,
-      maxHeight: 850,
-      onSaveSize: (t, a) => {
-        this.prefs.transcriptWidth = t, this.prefs.transcriptHeight = a, L({ transcriptWidth: t, transcriptHeight: a });
+    i(
+      "transcript-window",
+      "transcript-drag-handle",
+      "transcript-resize-handle",
+      "transcript-resize-edge-bottom",
+      "transcript-resize-edge-right",
+      null,
+      {
+        minWidth: 220,
+        maxWidth: 750,
+        minHeight: 200,
+        maxHeight: 900,
+        onSaveSize: (t, a) => {
+          this.prefs.transcriptWidth = t, this.prefs.transcriptHeight = a, C({ transcriptWidth: t, transcriptHeight: a });
+        }
       }
-    }), i("esl-window", "esl-drag-handle", "esl-resize-handle", {
-      minWidth: 200,
-      maxWidth: 600,
-      minHeight: 160,
-      maxHeight: 600,
-      onSaveSize: (t, a) => {
-        this.prefs.eslWidth = t, this.prefs.eslHeight = a, L({ eslWidth: t, eslHeight: a });
+    ), i(
+      "esl-window",
+      "esl-drag-handle",
+      "esl-resize-handle",
+      "esl-resize-edge-bottom",
+      "esl-resize-edge-right",
+      "esl-resize-edge-left",
+      {
+        minWidth: 200,
+        maxWidth: 700,
+        minHeight: 160,
+        maxHeight: 700,
+        onSaveSize: (t, a) => {
+          this.prefs.eslWidth = t, this.prefs.eslHeight = a, C({ eslWidth: t, eslHeight: a });
+        }
       }
-    });
+    );
   }
   attachEventListeners() {
-    var k, S, D, A, j;
-    const e = this.shadow.getElementById("btn-play"), i = this.shadow.getElementById("play-icon"), t = this.shadow.getElementById("play-text"), a = this.shadow.getElementById("seek-scrubber"), r = this.shadow.getElementById("time-display"), c = () => {
+    var H, A, M, F, R;
+    const e = this.shadow.getElementById("btn-play"), i = this.shadow.getElementById("play-icon"), t = this.shadow.getElementById("play-text"), a = this.shadow.getElementById("seek-scrubber"), r = this.shadow.getElementById("time-display"), h = () => {
       this.mainVideo.paused ? this.mainVideo.play() : this.mainVideo.pause();
     };
-    e && e.addEventListener("click", c), this.mainVideo.addEventListener("play", () => {
+    e && e.addEventListener("click", h), this.mainVideo.addEventListener("play", () => {
       i && t && (i.textContent = "⏸", t.textContent = this.activeLocale === "am" ? "አቁም" : "Pause"), e == null || e.setAttribute("aria-label", this.activeLocale === "am" ? "አቁም (Space)" : "Pause (Space)");
     }), this.mainVideo.addEventListener("pause", () => {
       i && t && (i.textContent = "▶", t.textContent = this.activeLocale === "am" ? "አጫውት" : "Play"), e == null || e.setAttribute("aria-label", this.activeLocale === "am" ? "አጫውት (Space)" : "Play (Space)");
     }), this.mainVideo.addEventListener("timeupdate", () => {
-      const o = this.mainVideo.currentTime, w = this.mainVideo.duration || 1;
-      a && !a.matches(":active") && (a.value = (o / w * 100).toFixed(1)), r && (r.textContent = `${this.formatTime(o)} / ${this.formatTime(w)}`), this.updateCaptionDisplay(), this.transcriptViewer.updateActiveTime(o);
+      const o = this.mainVideo.currentTime, y = this.mainVideo.duration || 1;
+      a && !a.matches(":active") && (a.value = (o / y * 100).toFixed(1)), r && (r.textContent = `${this.formatTime(o)} / ${this.formatTime(y)}`), this.updateCaptionDisplay(), this.transcriptViewer.updateActiveTime(o);
     }), a.addEventListener("input", () => {
       const o = this.mainVideo.duration || 1;
       this.mainVideo.currentTime = parseFloat(a.value) / 100 * o;
-    }), (k = this.shadow.getElementById("btn-rewind")) == null || k.addEventListener("click", () => {
+    }), (H = this.shadow.getElementById("btn-rewind")) == null || H.addEventListener("click", () => {
       this.mainVideo.currentTime = Math.max(0, this.mainVideo.currentTime - 5);
-    }), (S = this.shadow.getElementById("btn-forward")) == null || S.addEventListener("click", () => {
+    }), (A = this.shadow.getElementById("btn-forward")) == null || A.addEventListener("click", () => {
       this.mainVideo.currentTime = Math.min(this.mainVideo.duration || 1e3, this.mainVideo.currentTime + 5);
     });
-    const n = this.shadow.getElementById("btn-ad");
-    n == null || n.addEventListener("click", async () => {
+    const u = this.shadow.getElementById("btn-ad");
+    u == null || u.addEventListener("click", async () => {
       if (!this.manifest) return;
-      this.prefs.audioDescriptionEnabled = !this.prefs.audioDescriptionEnabled, L({ audioDescriptionEnabled: this.prefs.audioDescriptionEnabled }), n.setAttribute("aria-pressed", this.prefs.audioDescriptionEnabled ? "true" : "false");
-      const o = this.prefs.audioDescriptionEnabled ? "described" : "main", w = this.manifest.sources.find((z) => z.kind === o) || this.manifest.sources.find((z) => z.kind === "main");
-      w && await this.syncController.switchSource(w.src);
+      this.prefs.audioDescriptionEnabled = !this.prefs.audioDescriptionEnabled, C({ audioDescriptionEnabled: this.prefs.audioDescriptionEnabled }), u.setAttribute("aria-pressed", this.prefs.audioDescriptionEnabled ? "true" : "false");
+      const o = this.prefs.audioDescriptionEnabled ? "described" : "main", y = this.manifest.sources.find((P) => P.kind === o) || this.manifest.sources.find((P) => P.kind === "main");
+      y && await this.syncController.switchSource(y.src);
     });
-    const h = this.shadow.getElementById("btn-cc");
-    h == null || h.addEventListener("click", async () => {
-      const o = ["en", "am", "off"], w = (o.indexOf(this.prefs.captionLanguage) + 1) % o.length;
-      this.prefs.captionLanguage = o[w], L({ captionLanguage: this.prefs.captionLanguage }), h.textContent = `CC (${this.prefs.captionLanguage.toUpperCase()})`, await this.loadCaptionTrack(this.prefs.captionLanguage);
+    const b = this.shadow.getElementById("btn-cc");
+    b == null || b.addEventListener("click", async () => {
+      const o = ["en", "am", "off"], y = (o.indexOf(this.prefs.captionLanguage) + 1) % o.length;
+      this.prefs.captionLanguage = o[y], C({ captionLanguage: this.prefs.captionLanguage }), b.textContent = `CC (${this.prefs.captionLanguage.toUpperCase()})`, await this.loadCaptionTrack(this.prefs.captionLanguage);
     });
-    const u = this.shadow.getElementById("btn-esl"), p = this.shadow.getElementById("esl-window");
-    u == null || u.addEventListener("click", () => {
-      this.prefs.eslVisible = !this.prefs.eslVisible, L({ eslVisible: this.prefs.eslVisible }), u.setAttribute("aria-pressed", this.prefs.eslVisible ? "true" : "false"), p && (p.style.display = this.prefs.eslVisible ? "flex" : "none");
+    const c = this.shadow.getElementById("btn-esl"), n = this.shadow.getElementById("esl-window");
+    c == null || c.addEventListener("click", () => {
+      this.prefs.eslVisible = !this.prefs.eslVisible, C({ eslVisible: this.prefs.eslVisible }), c.setAttribute("aria-pressed", this.prefs.eslVisible ? "true" : "false"), n && (n.style.display = this.prefs.eslVisible ? "flex" : "none");
     });
-    const f = this.shadow.getElementById("btn-transcript-toggle"), m = this.shadow.getElementById("transcript-window");
-    f == null || f.addEventListener("click", () => {
-      const w = !((m == null ? void 0 : m.style.display) !== "none");
-      this.prefs.transcriptVisible = w, L({ transcriptVisible: w }), f.setAttribute("aria-pressed", w ? "true" : "false"), m && (m.style.display = w ? "flex" : "none");
+    const w = this.shadow.getElementById("btn-transcript-toggle"), p = this.shadow.getElementById("transcript-window");
+    w == null || w.addEventListener("click", () => {
+      const y = !((p == null ? void 0 : p.style.display) !== "none");
+      this.prefs.transcriptVisible = y, C({ transcriptVisible: y }), w.setAttribute("aria-pressed", y ? "true" : "false"), p && (p.style.display = y ? "flex" : "none");
     });
-    const v = this.shadow.getElementById("cb-auto-scroll");
-    v == null || v.addEventListener("change", () => {
-      this.transcriptViewer.setFollowing(v.checked);
+    const E = this.shadow.getElementById("cb-auto-scroll");
+    E == null || E.addEventListener("change", () => {
+      this.transcriptViewer.setFollowing(E.checked);
     });
-    const F = this.shadow.getElementById("select-transcript-lang");
-    F == null || F.addEventListener("change", () => {
-      const o = F.value;
+    const V = this.shadow.getElementById("select-transcript-lang");
+    V == null || V.addEventListener("change", () => {
+      const o = V.value;
       this.setAttribute("locale", o);
     });
-    const $ = () => {
+    const D = () => {
       var o;
-      this.isPreferencesOpen = !0, E && (E.style.display = "flex"), (o = this.shadow.getElementById("select-cc-lang")) == null || o.focus();
-    }, b = this.shadow.getElementById("btn-prefs"), C = this.shadow.getElementById("btn-transcript-prefs"), V = this.shadow.getElementById("btn-esl-prefs"), E = this.shadow.getElementById("prefs-dialog"), T = this.shadow.getElementById("btn-close-prefs"), B = this.shadow.getElementById("btn-reset-layout");
-    b == null || b.addEventListener("click", $), C == null || C.addEventListener("click", $), V == null || V.addEventListener("click", $), T == null || T.addEventListener("click", () => {
-      this.isPreferencesOpen = !1, E && (E.style.display = "none"), b == null || b.focus();
+      this.isPreferencesOpen = !0, S && (S.style.display = "flex"), (o = this.shadow.getElementById("select-cc-lang")) == null || o.focus();
+    }, g = this.shadow.getElementById("btn-prefs"), T = this.shadow.getElementById("btn-transcript-prefs"), L = this.shadow.getElementById("btn-esl-prefs"), S = this.shadow.getElementById("prefs-dialog"), j = this.shadow.getElementById("btn-close-prefs"), B = this.shadow.getElementById("btn-reset-layout");
+    g == null || g.addEventListener("click", D), T == null || T.addEventListener("click", D), L == null || L.addEventListener("click", D), j == null || j.addEventListener("click", () => {
+      this.isPreferencesOpen = !1, S && (S.style.display = "none"), g == null || g.focus();
     }), B == null || B.addEventListener("click", () => {
-      W(), this.prefs = P(), m && (m.classList.remove("floating"), m.style.position = "", m.style.left = "", m.style.top = "", m.style.right = "", m.style.bottom = "", m.style.zIndex = "", m.style.width = `${y.transcriptWidth}px`, m.style.height = `${y.transcriptHeight}px`, m.style.flex = `0 0 ${y.transcriptWidth}px`, m.style.display = "flex"), p && (p.classList.remove("floating"), p.style.position = "", p.style.left = "", p.style.top = "", p.style.right = "", p.style.bottom = "", p.style.zIndex = "", p.style.width = `${y.eslWidth}px`, p.style.height = `${y.eslHeight}px`, p.style.flex = `0 0 ${y.eslWidth}px`, p.style.display = "flex"), u && u.setAttribute("aria-pressed", "true"), f && f.setAttribute("aria-pressed", "true");
-    }), (D = this.shadow.getElementById("select-cc-lang")) == null || D.addEventListener("change", async (o) => {
-      this.prefs.captionLanguage = o.target.value, L({ captionLanguage: this.prefs.captionLanguage }), h && (h.textContent = `CC (${this.prefs.captionLanguage.toUpperCase()})`), await this.loadCaptionTrack(this.prefs.captionLanguage);
-    }), (A = this.shadow.getElementById("select-cc-size")) == null || A.addEventListener("change", (o) => {
-      this.prefs.captionSize = o.target.value, L({ captionSize: this.prefs.captionSize }), this.updateCaptionDisplay();
-    }), (j = this.shadow.getElementById("select-cc-theme")) == null || j.addEventListener("change", (o) => {
-      this.prefs.captionTheme = o.target.value, L({ captionTheme: this.prefs.captionTheme }), this.updateCaptionDisplay();
+      var o, y;
+      ee(), this.prefs = O(), p && ((o = p.__reDock) == null || o.call(p), p.classList.remove("floating"), p.style.position = "", p.style.left = "", p.style.top = "", p.style.right = "", p.style.bottom = "", p.style.zIndex = "", p.style.width = `${k.transcriptWidth}px`, p.style.height = `${k.transcriptHeight}px`, p.style.flex = `0 0 ${k.transcriptWidth}px`, p.style.display = "flex"), n && ((y = n.__reDock) == null || y.call(n), n.classList.remove("floating"), n.style.position = "", n.style.left = "", n.style.top = "", n.style.right = "", n.style.bottom = "", n.style.zIndex = "", n.style.width = `${k.eslWidth}px`, n.style.height = `${k.eslHeight}px`, n.style.flex = `0 0 ${k.eslWidth}px`, n.style.display = "flex"), c && c.setAttribute("aria-pressed", "true"), w && w.setAttribute("aria-pressed", "true");
+    }), (M = this.shadow.getElementById("select-cc-lang")) == null || M.addEventListener("change", async (o) => {
+      this.prefs.captionLanguage = o.target.value, C({ captionLanguage: this.prefs.captionLanguage }), b && (b.textContent = `CC (${this.prefs.captionLanguage.toUpperCase()})`), await this.loadCaptionTrack(this.prefs.captionLanguage);
+    }), (F = this.shadow.getElementById("select-cc-size")) == null || F.addEventListener("change", (o) => {
+      this.prefs.captionSize = o.target.value, C({ captionSize: this.prefs.captionSize }), this.updateCaptionDisplay();
+    }), (R = this.shadow.getElementById("select-cc-theme")) == null || R.addEventListener("change", (o) => {
+      this.prefs.captionTheme = o.target.value, C({ captionTheme: this.prefs.captionTheme }), this.updateCaptionDisplay();
     });
-    const g = this.shadow.getElementById("transcript-search");
-    g == null || g.addEventListener("input", () => {
-      this.transcriptViewer.setSearchQuery(g.value);
+    const z = this.shadow.getElementById("transcript-search");
+    z == null || z.addEventListener("input", () => {
+      this.transcriptViewer.setSearchQuery(z.value);
     });
-    const x = this.shadow.getElementById("player-container");
-    x == null || x.addEventListener("keydown", (o) => {
+    const $ = this.shadow.getElementById("player-container");
+    $ == null || $.addEventListener("keydown", (o) => {
       if (this.isPreferencesOpen) {
-        o.key === "Escape" && (this.isPreferencesOpen = !1, E && (E.style.display = "none"), b == null || b.focus());
+        o.key === "Escape" && (this.isPreferencesOpen = !1, S && (S.style.display = "none"), g == null || g.focus());
         return;
       }
       if (!(o.target.tagName === "INPUT" || o.target.tagName === "SELECT"))
@@ -1381,7 +1475,7 @@ class _ extends HTMLElement {
           case " ":
           case "k":
           case "K":
-            o.preventDefault(), c();
+            o.preventDefault(), h();
             break;
           case "j":
           case "J":
@@ -1399,19 +1493,19 @@ class _ extends HTMLElement {
             break;
           case "c":
           case "C":
-            o.preventDefault(), h == null || h.click();
+            o.preventDefault(), b == null || b.click();
             break;
           case "s":
           case "S":
-            o.preventDefault(), u == null || u.click();
+            o.preventDefault(), c == null || c.click();
             break;
           case "d":
           case "D":
-            o.preventDefault(), n == null || n.click();
+            o.preventDefault(), u == null || u.click();
             break;
           case "t":
           case "T":
-            o.preventDefault(), f == null || f.click();
+            o.preventDefault(), w == null || w.click();
             break;
         }
     });
@@ -1424,8 +1518,8 @@ class _ extends HTMLElement {
     return `${i.toString().padStart(2, "0")}:${t.toString().padStart(2, "0")}`;
   }
 }
-customElements.get("a11y-media-player") || customElements.define("a11y-media-player", _);
-const q = [
+customElements.get("a11y-media-player") || customElements.define("a11y-media-player", ne);
+const re = [
   "መስከረም",
   // Meskerem (1)
   "ጥቅምት",
@@ -1453,24 +1547,24 @@ const q = [
   "ጳጉሜ"
   // Pagume (13)
 ];
-function Y(d) {
-  const s = typeof d == "string" ? new Date(d) : d, e = s.getUTCFullYear(), i = s.getUTCMonth() + 1, t = s.getUTCDate(), a = Math.floor((14 - i) / 12), r = e + 4800 - a, c = i + 12 * a - 3, n = t + Math.floor((153 * c + 2) / 5) + 365 * r + Math.floor(r / 4) - Math.floor(r / 100) + Math.floor(r / 400) - 32045, h = (n - 1723856) % 1461, u = h % 365 + 365 * Math.floor(h / 1460), p = 4 * Math.floor((n - 1723856) / 1461) + Math.floor(h / 365) - Math.floor(h / 1460), f = Math.floor(u / 30) + 1, m = u % 30 + 1, v = q[Math.min(f - 1, 12)];
+function oe(d) {
+  const s = typeof d == "string" ? new Date(d) : d, e = s.getUTCFullYear(), i = s.getUTCMonth() + 1, t = s.getUTCDate(), a = Math.floor((14 - i) / 12), r = e + 4800 - a, h = i + 12 * a - 3, u = t + Math.floor((153 * h + 2) / 5) + 365 * r + Math.floor(r / 4) - Math.floor(r / 100) + Math.floor(r / 400) - 32045, b = (u - 1723856) % 1461, c = b % 365 + 365 * Math.floor(b / 1460), n = 4 * Math.floor((u - 1723856) / 1461) + Math.floor(b / 365) - Math.floor(b / 1460), w = Math.floor(c / 30) + 1, p = c % 30 + 1, E = re[Math.min(w - 1, 12)];
   return {
-    year: p,
-    month: f,
-    day: m,
-    monthNameAmharic: v
+    year: n,
+    month: w,
+    day: p,
+    monthNameAmharic: E
   };
 }
-function K(d) {
-  const s = Y(d), e = `${s.monthNameAmharic} ${s.day}፣ ${s.year} ዓ.ም`;
+function le(d) {
+  const s = oe(d), e = `${s.monthNameAmharic} ${s.day}፣ ${s.year} ዓ.ም`;
   return {
     iso: d,
     ethiopic: e,
     display: `${d} (${e})`
   };
 }
-class Q extends HTMLElement {
+class de extends HTMLElement {
   constructor() {
     super();
     l(this, "shadow");
@@ -1510,7 +1604,7 @@ class Q extends HTMLElement {
       this.shadow.innerHTML = '<div class="job-placeholder">No job data supplied</div>';
       return;
     }
-    const e = this.activeLocale === "am", i = this.job.title[this.activeLocale] || this.job.title.en, t = this.job.location[this.activeLocale] || this.job.location.en, a = this.job.description[this.activeLocale] || this.job.description.en, r = this.job.applicationDeadline ? K(this.job.applicationDeadline) : null, c = {
+    const e = this.activeLocale === "am", i = this.job.title[this.activeLocale] || this.job.title.en, t = this.job.location[this.activeLocale] || this.job.location.en, a = this.job.description[this.activeLocale] || this.job.description.en, r = this.job.applicationDeadline ? le(this.job.applicationDeadline) : null, h = {
       "@context": "https://schema.org/",
       "@type": "JobPosting",
       title: i,
@@ -1666,7 +1760,7 @@ class Q extends HTMLElement {
 
       <!-- schema.org/JobPosting JSON-LD -->
       <script type="application/ld+json">
-        ${JSON.stringify(c)}
+        ${JSON.stringify(h)}
       <\/script>
 
       <article class="card" aria-labelledby="job-title-${this.job.id}">
@@ -1702,11 +1796,11 @@ class Q extends HTMLElement {
           <strong id="acc-heading-${this.job.id}">${e ? "የተረጋገጡ ማመቻቸቶች (Accommodations Offered):" : "Employer-Provided Accommodations:"}</strong>
           <ul class="tags-list" aria-labelledby="acc-heading-${this.job.id}">
             ${this.job.accommodations.map(
-      (n) => `
+      (u) => `
               <li class="badge accommodation">
                 <span aria-hidden="true">✓</span>
-                <span>${n.label[this.activeLocale] || n.label.en}</span>
-                <small style="opacity: 0.85;">(${n.source})</small>
+                <span>${u.label[this.activeLocale] || u.label.en}</span>
+                <small style="opacity: 0.85;">(${u.source})</small>
               </li>
             `
     ).join("")}
@@ -1750,9 +1844,9 @@ class Q extends HTMLElement {
     });
   }
 }
-customElements.get("a11y-job-card") || customElements.define("a11y-job-card", Q);
-const G = "abugida-media", X = 1;
-class Z {
+customElements.get("a11y-job-card") || customElements.define("a11y-job-card", de);
+const ce = "abugida-media", he = 1;
+class pe {
   constructor() {
     l(this, "db", null);
     l(this, "cacheName", "abugida-offline-v1");
@@ -1760,7 +1854,7 @@ class Z {
   async init() {
     if (!this.db)
       return new Promise((s, e) => {
-        const i = indexedDB.open(G, X);
+        const i = indexedDB.open(ce, he);
         i.onupgradeneeded = (t) => {
           const a = t.target.result;
           a.objectStoreNames.contains("preferences") || a.createObjectStore("preferences"), a.objectStoreNames.contains("progress") || a.createObjectStore("progress", { keyPath: "lessonId" }), a.objectStoreNames.contains("packages") || a.createObjectStore("packages", { keyPath: "packageKey" });
@@ -1805,16 +1899,16 @@ class Z {
     if (!("caches" in window))
       throw new Error("Cache Storage API is not supported in this browser.");
     try {
-      const c = await caches.open(this.cacheName);
-      let n = 0;
-      const h = t.length;
-      for (const u of t) {
-        const p = await fetch(u);
-        if (!p.ok)
-          throw new Error(`Failed to fetch asset: ${u} (${p.status})`);
-        await c.put(u, p.clone()), n++;
-        const f = Math.round(n / h * 100);
-        a(f, n, h);
+      const h = await caches.open(this.cacheName);
+      let u = 0;
+      const b = t.length;
+      for (const c of t) {
+        const n = await fetch(c);
+        if (!n.ok)
+          throw new Error(`Failed to fetch asset: ${c} (${n.status})`);
+        await h.put(c, n.clone()), u++;
+        const w = Math.round(u / b * 100);
+        a(w, u, b);
       }
       return await this.savePackageRecord({
         packageKey: r,
@@ -1826,7 +1920,7 @@ class Z {
         downloadedBytes: 32e5,
         timestamp: Date.now()
       }), !0;
-    } catch (c) {
+    } catch (h) {
       throw await this.savePackageRecord({
         packageKey: r,
         lessonId: s,
@@ -1836,8 +1930,8 @@ class Z {
         totalBytes: 32e5,
         downloadedBytes: 0,
         timestamp: Date.now(),
-        error: c instanceof Error ? c.message : "Download failed"
-      }), c;
+        error: h instanceof Error ? h.message : "Download failed"
+      }), h;
     }
   }
   async isPackageReady(s, e) {
@@ -1859,22 +1953,22 @@ class Z {
     }) : null;
   }
 }
-const te = new Z();
+const ue = new pe();
 export {
-  Q as A11yJobCard,
-  _ as A11yMediaPlayer,
-  y as DEFAULT_PREFERENCES,
-  q as ETHIOPIC_MONTHS,
-  U as MediaSyncController,
-  Z as OfflineStorageManager,
-  J as TranscriptViewer,
-  K as formatDualDate,
-  N as getThemeStyles,
-  P as loadPreferences,
-  te as offlineStorage,
-  O as parseVTT,
-  W as resetPreferences,
-  L as savePreferences,
-  Y as toEthiopianDate
+  de as A11yJobCard,
+  ne as A11yMediaPlayer,
+  k as DEFAULT_PREFERENCES,
+  re as ETHIOPIC_MONTHS,
+  se as MediaSyncController,
+  pe as OfflineStorageManager,
+  ae as TranscriptViewer,
+  le as formatDualDate,
+  ie as getThemeStyles,
+  O as loadPreferences,
+  ue as offlineStorage,
+  te as parseVTT,
+  ee as resetPreferences,
+  C as savePreferences,
+  oe as toEthiopianDate
 };
 //# sourceMappingURL=a11y-media-kit.es.js.map

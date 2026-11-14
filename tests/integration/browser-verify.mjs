@@ -119,6 +119,44 @@ async function runBrowserVerification() {
           searchInput.dispatchEvent(new Event("input", { bubbles: true }));
         }
 
+        // Test bidirectional 2D resizing on transcript window
+        const initW = transcriptWindow.offsetWidth;
+        const initH = transcriptWindow.offsetHeight;
+
+        transcriptResizeHandle.dispatchEvent(new PointerEvent("pointerdown", {
+          clientX: 500,
+          clientY: 500,
+          bubbles: true,
+          composed: true,
+          pointerId: 10
+        }));
+
+        window.dispatchEvent(new PointerEvent("pointermove", {
+          clientX: 560,
+          clientY: 580,
+          bubbles: true,
+          composed: true,
+          pointerId: 10
+        }));
+
+        // Allow microtask / style commit
+        window.dispatchEvent(new PointerEvent("pointerup", {
+          clientX: 560,
+          clientY: 580,
+          bubbles: true,
+          composed: true,
+          pointerId: 10
+        }));
+
+        // Test keyboard accessibility for resizing
+        transcriptResizeHandle.focus();
+        transcriptResizeHandle.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+        transcriptResizeHandle.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true }));
+
+        const finalW = transcriptWindow.offsetWidth;
+        const finalH = transcriptWindow.offsetHeight;
+        const bidirectionalResizeSuccess = finalW > initW && finalH > initH;
+
         return {
           playerMounted: true,
           mainVideoPresent: !!mainVideo,
@@ -130,6 +168,7 @@ async function runBrowserVerification() {
           eslDragHandlePresent: !!eslDragHandle,
           transcriptResizeHandlePresent: !!transcriptResizeHandle,
           eslResizeHandlePresent: !!eslResizeHandle,
+          bidirectionalResizeSuccess,
           signVideoMuted: signVideo ? signVideo.muted : false,
           segmentCount: segmentButtons.length,
           firstSegmentLabel: segmentButtons[0] ? segmentButtons[0].getAttribute("aria-label") : null,
