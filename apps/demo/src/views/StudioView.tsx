@@ -360,67 +360,105 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
     );
   };
 
-  // Basic editing tools for text manipulation
+  // Basic editing tools for text manipulation with cursor placement & selection support
   const handleInsertTag = (id: number, tag: string) => {
+    const textarea = document.getElementById(`reviewed-text-${id}`) as HTMLTextAreaElement | null;
     setSegments((prev) =>
       prev.map((seg) => {
         if (seg.id !== id) return seg;
-        const trimmed = seg.reviewedText.trim();
-        const next = trimmed ? `${trimmed} ${tag}` : tag;
-        return { ...seg, reviewedText: next };
+        let current = seg.reviewedText;
+        if (textarea && typeof textarea.selectionStart === "number" && typeof textarea.selectionEnd === "number") {
+          const start = textarea.selectionStart;
+          const end = textarea.selectionEnd;
+          const before = current.substring(0, start);
+          const after = current.substring(end);
+          const needsSpaceBefore = before.length > 0 && !before.endsWith(" ");
+          const needsSpaceAfter = after.length > 0 && !after.startsWith(" ");
+          const next = `${before}${needsSpaceBefore ? " " : ""}${tag}${needsSpaceAfter ? " " : ""}${after}`;
+          setTimeout(() => {
+            textarea.focus();
+            const newPos = start + tag.length + (needsSpaceBefore ? 1 : 0);
+            textarea.setSelectionRange(newPos, newPos);
+          }, 10);
+          return { ...seg, reviewedText: next, status: "reviewed" };
+        } else {
+          const trimmed = current.trim();
+          const next = trimmed ? `${trimmed} ${tag}` : tag;
+          return { ...seg, reviewedText: next, status: "reviewed" };
+        }
       })
     );
+    setStatusMsg(isAm ? `${tag} ተካቷል።` : `Inserted ${tag}`);
   };
 
   const handleInsertSpeaker = (id: number, speaker: string) => {
+    const prefix = `(${speaker}) `;
     setSegments((prev) =>
       prev.map((seg) => {
         if (seg.id !== id) return seg;
-        const prefix = `(${speaker}) `;
-        if (seg.reviewedText.startsWith(prefix)) return seg;
-        return { ...seg, reviewedText: `${prefix}${seg.reviewedText}` };
+        // Clean any existing leading speaker prefix like (Instructor) or (Narrator)
+        const cleaned = seg.reviewedText.replace(/^\([^)]+\)\s*/, "");
+        return { ...seg, reviewedText: `${prefix}${cleaned}`, status: "reviewed" };
       })
     );
+    setStatusMsg(isAm ? `የተናጋሪ ስም (${speaker}) ተካቷል።` : `Set speaker prefix (${speaker})`);
   };
 
   const handleCleanText = (id: number) => {
     setSegments((prev) =>
       prev.map((seg) => {
         if (seg.id !== id) return seg;
-        // Sentence case & clean double spaces
-        let cleaned = seg.reviewedText.replace(/\s+/g, " ").trim();
-        if (cleaned.length > 0) {
-          cleaned = cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
-          if (!/[.!?፣።]$/.test(cleaned)) {
-            cleaned += isAm ? "።" : ".";
-          }
+        let text = seg.reviewedText;
+        // 1. Collapse multiple whitespace and trim ends
+        text = text.replace(/[ \t]+/g, " ").trim();
+        // 2. Remove duplicate punctuation (e.g. ".." or ",,")
+        text = text.replace(/([.,!?፣፤።])\1+/g, "$1");
+        // 3. Fix spaces before punctuation (e.g. "word ." -> "word.")
+        text = text.replace(/\s+([.,!?;:፣፤።])/g, "$1");
+        // 4. Ensure space after punctuation if followed by a letter or word
+        text = text.replace(/([.,!?;:፣፤።])([A-Za-z\u1200-\u137F])/g, "$1 $2");
+        // 5. Capitalize first letter of sentence
+        if (text.length > 0) {
+          text = text.charAt(0).toUpperCase() + text.slice(1);
         }
-        return { ...seg, reviewedText: cleaned };
+        return { ...seg, reviewedText: text, status: "reviewed" };
       })
     );
+    setStatusMsg(isAm ? `መስመር #${id} ተስተካክሎ ጸድቷል።` : `Cleaned formatting for cue #${id}.`);
   };
 
   const handleCopyDraft = (id: number) => {
     setSegments((prev) =>
-      prev.map((seg) => (seg.id === id ? { ...seg, reviewedText: seg.draftText } : seg))
+      prev.map((seg) => (seg.id === id ? { ...seg, reviewedText: seg.draftText, status: "draft" } : seg))
     );
+    setStatusMsg(isAm ? `መስመር #${id} ወደ ቀድሞ ረቂቅ ተመልሷል።` : `Reverted cue #${id} to original draft.`);
   };
 
   const handleAddCue = () => {
     const lastSeg = segments[segments.length - 1];
-    const newStart = lastSeg ? lastSeg.end : 0;
-    const newEnd = newStart + 4.5;
+    const newStart = lastSeg ? parseFloat(lastSeg.end.toFixed(1)) : 0;
+    const newEnd = parseFloat((newStart + 4.0).toFixed(1));
+    const newId = (segments.length > 0 ? Math.max(...segments.map((s) => s.id)) : 0) + 1;
     const newCue: StudioSegment = {
-      id: (lastSeg ? lastSeg.id : 0) + 1,
-      start: parseFloat(newStart.toFixed(1)),
-      end: parseFloat(newEnd.toFixed(1)),
+      id: newId,
+      start: newStart,
+      end: newEnd,
       speaker: selectedSpeaker,
       draftText: isAm ? "አዲስ የተጨመረ ረቂቅ ጽሑፍ" : "New audio segment draft text",
       reviewedText: isAm ? "አዲስ የተጨመረ የተገመገመ ጽሑፍ" : "New audio segment reviewed text",
       status: "draft",
     };
-    setSegments([...segments, newCue]);
-    setStatusMsg(isAm ? "አዲስ የትርጉም መስመር ተጨምሯል።" : "New cue added to studio.");
+    setSegments((prev) => [...prev, newCue]);
+    setStatusMsg(isAm ? `አዲስ የትርጉም መስመር #${newId} ተጨምሯል።` : `New cue #${newId} added.`);
+
+    // Smooth scroll to the newly added cue and focus its textarea
+    setTimeout(() => {
+      const el = document.getElementById(`reviewed-text-${newId}`);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        el.focus();
+      }
+    }, 100);
   };
 
   const handleDeleteCue = (id: number) => {
@@ -908,8 +946,16 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                       const newSpeaker = e.target.value;
                       setSelectedSpeaker(newSpeaker);
                       setSegments((prev) =>
-                        prev.map((s) => (s.id === seg.id ? { ...s, speaker: newSpeaker } : s))
+                        prev.map((s) => {
+                          if (s.id !== seg.id) return s;
+                          let updatedText = s.reviewedText;
+                          if (/^\([^)]+\)\s*/.test(updatedText)) {
+                            updatedText = updatedText.replace(/^\([^)]+\)\s*/, `(${newSpeaker}) `);
+                          }
+                          return { ...s, speaker: newSpeaker, reviewedText: updatedText };
+                        })
                       );
+                      setStatusMsg(isAm ? `ተናጋሪ ወደ ${newSpeaker} ተቀይሯል።` : `Speaker changed to ${newSpeaker}.`);
                     }}
                     style={{
                       padding: "0.35rem 0.65rem",
@@ -918,13 +964,17 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                       fontSize: "12px",
                       background: "#FFFFFF",
                       color: "var(--color-ink)",
+                      cursor: "pointer",
                     }}
                     aria-label={`Speaker for cue ${idx + 1}`}
                   >
-                    <option value="Instructor">Instructor</option>
-                    <option value="Narrator">Narrator</option>
-                    <option value="Presenter">Presenter</option>
-                    <option value="Student">Student</option>
+                    <option value="Instructor">{isAm ? "አስተማሪ (Instructor)" : "Instructor"}</option>
+                    <option value="Narrator">{isAm ? "ተራኪ (Narrator)" : "Narrator"}</option>
+                    <option value="Presenter">{isAm ? "አቅራቢ (Presenter)" : "Presenter"}</option>
+                    <option value="Student">{isAm ? "ተማሪ (Student)" : "Student"}</option>
+                    {!["Instructor", "Narrator", "Presenter", "Student"].includes(seg.speaker) && (
+                      <option value={seg.speaker}>{seg.speaker}</option>
+                    )}
                   </select>
 
                   <button

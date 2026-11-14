@@ -21,12 +21,12 @@ const ICONS = {
   rewind: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg>`,
   forward: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg>`,
   cc: `<svg viewBox="0 0 24 24" width="22" height="20" fill="currentColor" aria-hidden="true"><path d="M19 4H5a2 2 0 00-2 2v12a2 2 0 002 2h14a2 2 0 002-2V6a2 2 0 00-2-2zm-8 7H9.5v-.5h-2v3h2V13H11v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-4a1 1 0 011-1h3a1 1 0 011 1v1zm7 0h-1.5v-.5h-2v3h2V13H18v1a1 1 0 01-1 1h-3a1 1 0 01-1-1v-4a1 1 0 011-1h3a1 1 0 011 1v1z"/></svg>`,
-  sign: `<svg viewBox="0 0 30 20" width="26" height="20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="1.5" y="1.5" width="27" height="17" rx="3.5"/><text x="15" y="14" text-anchor="middle" fill="currentColor" stroke="none" font-size="10" font-weight="bold" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" letter-spacing="0.5">ESL</text></svg>`,
-  esl: `<svg viewBox="0 0 30 20" width="26" height="20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="1.5" y="1.5" width="27" height="17" rx="3.5"/><text x="15" y="14" text-anchor="middle" fill="currentColor" stroke="none" font-size="10" font-weight="bold" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" letter-spacing="0.5">ESL</text></svg>`,
-  ad: `<svg viewBox="0 0 24 20" width="24" height="20" fill="currentColor" aria-hidden="true"><path d="M2.5 3h6.5c3.6 0 6.5 2.9 6.5 7s-2.9 7-6.5 7H2.5V3zm3.5 11h3c2 0 3.5-1.6 3.5-4s-1.5-4-3.5-4H6v8z"/><path d="M17.5 7.2c1 1.6 1 4 0 5.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/><path d="M20.2 5.2c2 2.8 2 6.8 0 9.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg>`,
+  sign: `<svg viewBox="0 0 32 20" width="28" height="20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="1.5" y="1.5" width="29" height="17" rx="3.5" fill="rgba(255,255,255,0.06)"/><text x="16" y="14" text-anchor="middle" fill="currentColor" stroke="none" font-size="11" font-weight="bold" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" letter-spacing="0.5">ESL</text></svg>`,
+  esl: `<svg viewBox="0 0 32 20" width="28" height="20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="1.5" y="1.5" width="29" height="17" rx="3.5" fill="rgba(255,255,255,0.06)"/><text x="16" y="14" text-anchor="middle" fill="currentColor" stroke="none" font-size="11" font-weight="bold" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" letter-spacing="0.5">ESL</text></svg>`,
+  ad: `<svg viewBox="0 0 26 20" width="26" height="20" fill="currentColor" aria-hidden="true"><path d="M2 3.5h5.5c3.3 0 5.8 2.5 5.8 6.5s-2.5 6.5-5.8 6.5H2V3.5zm3 10.2h2.2c1.8 0 3.3-1.4 3.3-3.7s-1.5-3.7-3.3-3.7H5v7.4z"/><path d="M15 7.5c1 1.5 1 3.5 0 5M18 5.5c1.8 2.5 1.8 6.5 0 9M21 3.5c2.6 3.8 2.6 9.2 0 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
   transcript: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>`,
-  faster: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>`,
-  slower: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11H7v-2h10v2z"/></svg>`,
+  faster: `<svg viewBox="0 0 24 24" width="22" height="20" fill="currentColor" aria-hidden="true"><path d="M22 10.5c-.3-.2-.7-.1-.9.2l-1.5 2.1c-.5-.4-1.2-.7-2-.8l1.4-2.8c.2-.4.1-.9-.3-1.1s-.9-.1-1.1.3L15.9 11c-.7-.1-1.4 0-2 .3l-1.3-1.8c-.3-.4-.8-.5-1.2-.2-.4.3-.5.8-.2 1.2l1.2 1.7c-.8.6-1.3 1.5-1.5 2.5L7 13c-.6 0-1 .4-1 1s.4 1 1 1l3.5 1.5c.2.8.7 1.5 1.4 2l-2.4 2.4c-.4.4-.4 1 0 1.4.2.2.5.3.7.3s.5-.1.7-.3l2.8-2.8c1.3.5 2.8.4 4-.4l2.3 1.5c.4.3 1 .1 1.2-.3.3-.4.1-1-.3-1.2L19 18.2c.7-.9 1.1-2 1-3.2l1.8-1.5c.4-.3.5-.8.2-1.2zM2 13h3c.6 0 1-.4 1-1s-.4-1-1-1H2c-.6 0-1 .4-1 1s.4 1 1 1zm1 3h2c.6 0 1-.4 1-1s-.4-1-1-1H3c-.6 0-1 .4-1 1s.4 1 1 1z"/></svg>`,
+  slower: `<svg viewBox="0 0 24 24" width="22" height="20" fill="currentColor" aria-hidden="true"><path d="M19 12c-.2-3.3-2.7-6-6-6-2.6 0-4.8 1.7-5.6 4-.8-.1-1.6.3-2 1-.5.7-.5 1.6 0 2.3.4.6 1.1 1 1.9 1 .2 1.8 1.4 3.3 3 4l-.8 1.6c-.2.5 0 1 .5 1.2.5.2 1 0 1.2-.5l.9-1.8c.6.1 1.2.2 1.9.2s1.3-.1 1.9-.2l.9 1.8c.2.5.7.7 1.2.5.5-.2.7-.7.5-1.2l-.8-1.6c1.6-.7 2.8-2.2 3-4 .8 0 1.5-.4 1.9-1 .5-.7.5-1.6 0-2.3-.4-.7-1.2-1.1-2-1.1zm-6-4c2.2 0 4.1 1.6 4.5 3.8-.7.4-1.7.7-2.8.9-.7-1-1.9-1.7-3.2-1.7s-2.5.7-3.2 1.7c-1.1-.2-2.1-.5-2.8-.9.4-2.2 2.3-3.8 4.5-3.8zm-1.5 5.5c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5-1.5-.7-1.5-1.5.7-1.5 1.5-1.5z"/></svg>`,
   prefs: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.488.488 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>`,
   fullscreenEnter: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>`,
   fullscreenExit: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>`,
@@ -331,10 +331,10 @@ export class A11yMediaPlayer extends HTMLElement {
     const mainSource = this.manifest?.sources.find((s) => s.kind === "main");
     const signSource = this.manifest?.sources.find((s) => s.kind === "sign");
 
-    const transWidth = this.prefs.transcriptWidth || DEFAULT_PREFERENCES.transcriptWidth || 280;
-    const transHeight = this.prefs.transcriptHeight || DEFAULT_PREFERENCES.transcriptHeight || 420;
-    const eslWidth = this.prefs.eslWidth || DEFAULT_PREFERENCES.eslWidth || 260;
-    const eslHeight = this.prefs.eslHeight || DEFAULT_PREFERENCES.eslHeight || 200;
+    const transWidth = this.prefs.transcriptWidth || DEFAULT_PREFERENCES.transcriptWidth || 260;
+    const transHeight = this.prefs.transcriptHeight || DEFAULT_PREFERENCES.transcriptHeight || 400;
+    const eslWidth = this.prefs.eslWidth || DEFAULT_PREFERENCES.eslWidth || 240;
+    const eslHeight = this.prefs.eslHeight || DEFAULT_PREFERENCES.eslHeight || 180;
 
     this.shadow.innerHTML = `
       <style>
@@ -555,11 +555,11 @@ export class A11yMediaPlayer extends HTMLElement {
           background: rgba(14, 165, 233, 0.25);
         }
 
-        /* Center Main Player Panel - Horizontal Rectangular Cinema Proportion */
+        /* Center Main Player Panel - Balanced Horizontal Cinema Proportion */
         .main-player-panel {
-          flex: 1 1 500px;
-          min-width: 320px;
-          max-width: 580px;
+          flex: 1 1 420px;
+          min-width: 280px;
+          max-width: 500px;
           width: 100%;
           background: #111417;
           border-radius: 8px;
@@ -575,8 +575,12 @@ export class A11yMediaPlayer extends HTMLElement {
           outline: 3px solid var(--color-focus, #005FCC);
           outline-offset: 3px;
         }
+        #player-container:fullscreen,
+        #player-container:-webkit-full-screen,
         .main-player-panel:fullscreen,
-        .main-player-panel:-webkit-full-screen {
+        .main-player-panel:-webkit-full-screen,
+        .main-player-panel.is-fullscreen,
+        :host([data-fullscreen="true"]) #player-container {
           width: 100vw !important;
           height: 100vh !important;
           max-width: 100vw !important;
@@ -602,8 +606,12 @@ export class A11yMediaPlayer extends HTMLElement {
           justify-content: center;
           overflow: hidden;
         }
+        #player-container:fullscreen .video-viewport,
+        #player-container:-webkit-full-screen .video-viewport,
         .main-player-panel:fullscreen .video-viewport,
-        .main-player-panel:-webkit-full-screen .video-viewport {
+        .main-player-panel:-webkit-full-screen .video-viewport,
+        .main-player-panel.is-fullscreen .video-viewport,
+        :host([data-fullscreen="true"]) .video-viewport {
           flex: 1 1 auto !important;
           height: auto !important;
           max-height: calc(100vh - 84px) !important;
@@ -1338,7 +1346,7 @@ export class A11yMediaPlayer extends HTMLElement {
         <!-- Preferences Modal Dialog -->
         <div class="dialog-backdrop" id="prefs-dialog" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="prefs-title">
           <div class="dialog-panel">
-            <h3 id="prefs-title">${isAm ? "የተደራሽነት ምርጫዎች" : "Accessibility & Layout Settings"}</h3>
+            <h3 id="prefs-title">${isAm ? "የተደራሽነት እና አቀማመጥ ምርጫዎች" : "Accessibility & Layout Settings"}</h3>
             
             <div class="form-row">
               <label for="select-cc-lang">${isAm ? "የትርጉም ጽሑፍ ቋንቋ:" : "Caption Language:"}</label>
@@ -1369,9 +1377,36 @@ export class A11yMediaPlayer extends HTMLElement {
               </select>
             </div>
 
+            <!-- Ethiopian Sign Language (ESL) Toggle -->
+            <div class="form-row">
+              <label for="toggle-esl-visibility">${isAm ? "የምልክት ቋንቋ (ESL) ማሳያ:" : "Sign Language (ESL):"}</label>
+              <select id="toggle-esl-visibility">
+                <option value="show" ${this.prefs.eslVisible ? "selected" : ""}>${isAm ? "በጎን አሳይ (Visible)" : "Show on side"}</option>
+                <option value="hide" ${!this.prefs.eslVisible ? "selected" : ""}>${isAm ? "ደብቅ (Hidden)" : "Hide"}</option>
+              </select>
+            </div>
+
+            <!-- Interactive Transcript Toggle -->
+            <div class="form-row">
+              <label for="toggle-transcript-visibility">${isAm ? "የትምህርቱ የጽሑፍ ግልባጭ:" : "Interactive Transcript:"}</label>
+              <select id="toggle-transcript-visibility">
+                <option value="show" ${this.prefs.transcriptVisible !== false ? "selected" : ""}>${isAm ? "በጎን አሳይ (Visible)" : "Show on side"}</option>
+                <option value="hide" ${this.prefs.transcriptVisible === false ? "selected" : ""}>${isAm ? "ደብቅ (Hidden)" : "Hide"}</option>
+              </select>
+            </div>
+
+            <!-- Audio Description Toggle -->
+            <div class="form-row">
+              <label for="toggle-ad-enabled">${isAm ? "የድምጽ ማብራሪያ (AD):" : "Audio Description (AD):"}</label>
+              <select id="toggle-ad-enabled">
+                <option value="on" ${this.prefs.audioDescriptionEnabled ? "selected" : ""}>${isAm ? "አብራ (Enabled)" : "Enabled"}</option>
+                <option value="off" ${!this.prefs.audioDescriptionEnabled ? "selected" : ""}>${isAm ? "አጥፋ (Disabled)" : "Disabled"}</option>
+              </select>
+            </div>
+
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; flex-wrap: wrap; gap: 0.75rem;">
               <button type="button" class="btn-dialog-action btn-dialog-reset" id="btn-reset-layout">
-                ↺ ${isAm ? "አቀማመጥን ዳግም አስጀምር" : "Reset Layout"}
+                ↺ ${isAm ? "አቀማመጥን ዳግም አስጀምር" : "Reset Layout & Settings"}
               </button>
               <button type="button" class="btn-dialog-action btn-dialog-save" id="btn-close-prefs">
                 ${isAm ? "ተግብር እና ዝጋ" : "Save & Close"}
@@ -1876,12 +1911,13 @@ export class A11yMediaPlayer extends HTMLElement {
       updateSpeedDisplay();
     });
 
-    // Fullscreen Toggle (Bi-directional enter & exit)
+    // Fullscreen Toggle (Bi-directional enter & exit with robust fallback)
     const isFullscreen = () => {
       return Boolean(
         document.fullscreenElement ||
         (document as any).webkitFullscreenElement ||
-        (this.shadow as any).fullscreenElement
+        (this.shadow as any).fullscreenElement ||
+        playerContainer?.classList.contains("is-fullscreen")
       );
     };
 
@@ -1892,16 +1928,35 @@ export class A11yMediaPlayer extends HTMLElement {
             await playerContainer.requestFullscreen();
           } else if ((playerContainer as any)?.webkitRequestFullscreen) {
             await (playerContainer as any).webkitRequestFullscreen();
+          } else {
+            // CSS Fullscreen fallback
+            playerContainer?.classList.add("is-fullscreen");
+            this.setAttribute("data-fullscreen", "true");
+            updateFullscreenState();
           }
         } else {
-          if (document.exitFullscreen) {
-            await document.exitFullscreen();
-          } else if ((document as any).webkitExitFullscreen) {
-            await (document as any).webkitExitFullscreen();
+          if (document.fullscreenElement || (document as any).webkitFullscreenElement || (this.shadow as any).fullscreenElement) {
+            if (document.exitFullscreen) {
+              await document.exitFullscreen();
+            } else if ((document as any).webkitExitFullscreen) {
+              await (document as any).webkitExitFullscreen();
+            }
           }
+          playerContainer?.classList.remove("is-fullscreen");
+          this.removeAttribute("data-fullscreen");
+          updateFullscreenState();
         }
       } catch (err) {
-        console.warn("Fullscreen toggle failed:", err);
+        console.warn("Fullscreen native request fell back to CSS:", err);
+        const wasFallback = playerContainer?.classList.contains("is-fullscreen");
+        if (!wasFallback) {
+          playerContainer?.classList.add("is-fullscreen");
+          this.setAttribute("data-fullscreen", "true");
+        } else {
+          playerContainer?.classList.remove("is-fullscreen");
+          this.removeAttribute("data-fullscreen");
+        }
+        updateFullscreenState();
       }
     };
 
@@ -2076,9 +2131,17 @@ export class A11yMediaPlayer extends HTMLElement {
       const ccLangSelect = this.shadow.getElementById("select-cc-lang") as HTMLSelectElement | null;
       const ccSizeSelect = this.shadow.getElementById("select-cc-size") as HTMLSelectElement | null;
       const ccThemeSelect = this.shadow.getElementById("select-cc-theme") as HTMLSelectElement | null;
+      const toggleEslSelect = this.shadow.getElementById("toggle-esl-visibility") as HTMLSelectElement | null;
+      const toggleTransSelect = this.shadow.getElementById("toggle-transcript-visibility") as HTMLSelectElement | null;
+      const toggleAdSelect = this.shadow.getElementById("toggle-ad-enabled") as HTMLSelectElement | null;
+
       if (ccLangSelect) ccLangSelect.value = this.prefs.captionLanguage;
       if (ccSizeSelect) ccSizeSelect.value = this.prefs.captionSize;
       if (ccThemeSelect) ccThemeSelect.value = this.prefs.captionTheme;
+      if (toggleEslSelect) toggleEslSelect.value = this.prefs.eslVisible ? "show" : "hide";
+      if (toggleTransSelect) toggleTransSelect.value = this.prefs.transcriptVisible !== false ? "show" : "hide";
+      if (toggleAdSelect) toggleAdSelect.value = this.prefs.audioDescriptionEnabled ? "on" : "off";
+
       if (prefsDialog) prefsDialog.style.display = "flex";
       ccLangSelect?.focus();
     };
@@ -2098,6 +2161,9 @@ export class A11yMediaPlayer extends HTMLElement {
       const ccLangSelect = this.shadow.getElementById("select-cc-lang") as HTMLSelectElement | null;
       const ccSizeSelect = this.shadow.getElementById("select-cc-size") as HTMLSelectElement | null;
       const ccThemeSelect = this.shadow.getElementById("select-cc-theme") as HTMLSelectElement | null;
+      const toggleEslSelect = this.shadow.getElementById("toggle-esl-visibility") as HTMLSelectElement | null;
+      const toggleTransSelect = this.shadow.getElementById("toggle-transcript-visibility") as HTMLSelectElement | null;
+      const toggleAdSelect = this.shadow.getElementById("toggle-ad-enabled") as HTMLSelectElement | null;
 
       if (ccLangSelect && ccLangSelect.value !== this.prefs.captionLanguage) {
         this.prefs.captionLanguage = ccLangSelect.value;
@@ -2118,6 +2184,27 @@ export class A11yMediaPlayer extends HTMLElement {
         savePreferences({ captionTheme: this.prefs.captionTheme });
         this.updateCaptionDisplay();
       }
+      const hasSign = Boolean(this.signVideo || this.manifest?.sources.some((s) => s.kind === "sign"));
+      if (toggleEslSelect) {
+        const isVisible = toggleEslSelect.value === "show";
+        this.prefs.eslVisible = isVisible;
+        savePreferences({ eslVisible: isVisible });
+        if (btnESL) btnESL.setAttribute("aria-pressed", isVisible ? "true" : "false");
+        if (eslWindow) eslWindow.style.display = isVisible && hasSign ? "flex" : "none";
+      }
+      if (toggleTransSelect) {
+        const isVisible = toggleTransSelect.value === "show";
+        this.prefs.transcriptVisible = isVisible;
+        savePreferences({ transcriptVisible: isVisible });
+        if (btnTranscript) btnTranscript.setAttribute("aria-pressed", isVisible ? "true" : "false");
+        if (transcriptWindow) transcriptWindow.style.display = isVisible ? "flex" : "none";
+      }
+      if (toggleAdSelect) {
+        const isAd = toggleAdSelect.value === "on";
+        this.prefs.audioDescriptionEnabled = isAd;
+        savePreferences({ audioDescriptionEnabled: isAd });
+        if (btnAD) btnAD.setAttribute("aria-pressed", isAd ? "true" : "false");
+      }
 
       this.isPreferencesOpen = false;
       if (prefsDialog) prefsDialog.style.display = "none";
@@ -2133,14 +2220,21 @@ export class A11yMediaPlayer extends HTMLElement {
       const ccLangSelect = this.shadow.getElementById("select-cc-lang") as HTMLSelectElement | null;
       const ccSizeSelect = this.shadow.getElementById("select-cc-size") as HTMLSelectElement | null;
       const ccThemeSelect = this.shadow.getElementById("select-cc-theme") as HTMLSelectElement | null;
+      const toggleEslSelect = this.shadow.getElementById("toggle-esl-visibility") as HTMLSelectElement | null;
+      const toggleTransSelect = this.shadow.getElementById("toggle-transcript-visibility") as HTMLSelectElement | null;
+      const toggleAdSelect = this.shadow.getElementById("toggle-ad-enabled") as HTMLSelectElement | null;
+
       if (ccLangSelect) ccLangSelect.value = this.prefs.captionLanguage;
       if (ccSizeSelect) ccSizeSelect.value = this.prefs.captionSize;
       if (ccThemeSelect) ccThemeSelect.value = this.prefs.captionTheme;
+      if (toggleEslSelect) toggleEslSelect.value = "show";
+      if (toggleTransSelect) toggleTransSelect.value = "show";
+      if (toggleAdSelect) toggleAdSelect.value = "off";
 
       this.updateCaptionDisplay();
       this.loadCaptionTrack(this.prefs.captionLanguage);
 
-      // Reset Transcript Window
+      // Reset Transcript Window to Left Side
       if (transcriptWindow) {
         (transcriptWindow as any).__reDock?.();
         transcriptWindow.classList.remove("floating");
@@ -2156,7 +2250,7 @@ export class A11yMediaPlayer extends HTMLElement {
         transcriptWindow.style.display = "flex";
       }
 
-      // Reset Sign Language Window
+      // Reset Sign Language Window to Right Side
       if (eslWindow) {
         (eslWindow as any).__reDock?.();
         eslWindow.classList.remove("floating");
@@ -2169,14 +2263,15 @@ export class A11yMediaPlayer extends HTMLElement {
         eslWindow.style.width = `${DEFAULT_PREFERENCES.eslWidth}px`;
         eslWindow.style.height = `${DEFAULT_PREFERENCES.eslHeight}px`;
         eslWindow.style.flex = `0 0 ${DEFAULT_PREFERENCES.eslWidth}px`;
-        eslWindow.style.display = "flex";
+        eslWindow.style.display = Boolean(this.signVideo || this.manifest?.sources.some((s) => s.kind === "sign")) ? "flex" : "none";
       }
 
       if (btnESL) btnESL.setAttribute("aria-pressed", "true");
       if (btnTranscript) btnTranscript.setAttribute("aria-pressed", "true");
+      if (btnAD) btnAD.setAttribute("aria-pressed", "false");
     });
 
-    // Preference Form Inputs
+    // Preference Form Live Inputs
     this.shadow.getElementById("select-cc-lang")?.addEventListener("change", async (e) => {
       this.prefs.captionLanguage = (e.target as HTMLSelectElement).value;
       savePreferences({ captionLanguage: this.prefs.captionLanguage });
@@ -2204,6 +2299,30 @@ export class A11yMediaPlayer extends HTMLElement {
       this.prefs.captionTheme = (e.target as HTMLSelectElement).value as CaptionTheme;
       savePreferences({ captionTheme: this.prefs.captionTheme });
       this.updateCaptionDisplay();
+    });
+
+    this.shadow.getElementById("toggle-esl-visibility")?.addEventListener("change", (e) => {
+      const isVisible = (e.target as HTMLSelectElement).value === "show";
+      const hasSign = Boolean(this.signVideo || this.manifest?.sources.some((s) => s.kind === "sign"));
+      this.prefs.eslVisible = isVisible;
+      savePreferences({ eslVisible: isVisible });
+      if (btnESL) btnESL.setAttribute("aria-pressed", isVisible ? "true" : "false");
+      if (eslWindow) eslWindow.style.display = isVisible && hasSign ? "flex" : "none";
+    });
+
+    this.shadow.getElementById("toggle-transcript-visibility")?.addEventListener("change", (e) => {
+      const isVisible = (e.target as HTMLSelectElement).value === "show";
+      this.prefs.transcriptVisible = isVisible;
+      savePreferences({ transcriptVisible: isVisible });
+      if (btnTranscript) btnTranscript.setAttribute("aria-pressed", isVisible ? "true" : "false");
+      if (transcriptWindow) transcriptWindow.style.display = isVisible ? "flex" : "none";
+    });
+
+    this.shadow.getElementById("toggle-ad-enabled")?.addEventListener("change", (e) => {
+      const isAd = (e.target as HTMLSelectElement).value === "on";
+      this.prefs.audioDescriptionEnabled = isAd;
+      savePreferences({ audioDescriptionEnabled: isAd });
+      if (btnAD) btnAD.setAttribute("aria-pressed", isAd ? "true" : "false");
     });
 
     // Transcript Search
@@ -2293,6 +2412,12 @@ export class A11yMediaPlayer extends HTMLElement {
         case "T":
           e.preventDefault();
           btnTranscript?.click();
+          break;
+        case "Escape":
+          if (isFullscreen()) {
+            e.preventDefault();
+            toggleFullscreen();
+          }
           break;
       }
     });

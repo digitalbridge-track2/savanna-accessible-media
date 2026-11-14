@@ -217,6 +217,65 @@ async function run() {
     fs.writeFileSync("evidence/lesson-side-by-side.png", Buffer.from(snap3.data, "base64"));
     console.log("Saved evidence/lesson-side-by-side.png");
 
+    // Navigate to /studio to verify Transcript Studio features
+    console.log("Navigating to http://localhost:3000/studio...");
+    await send("Page.navigate", { url: "http://localhost:3000/studio" });
+    await new Promise((r) => setTimeout(r, 2000));
+
+    // Test Transcript Studio toolbar buttons, speaker dropdown, and Add Cue
+    const studioEval = await send("Runtime.evaluate", {
+      expression: `(async () => {
+        // Test + [music] button on first cue
+        const btnMusic = document.querySelector('button[aria-label*="Insert music tag"]');
+        if (btnMusic) btnMusic.click();
+
+        // Test + [visual] button on first cue
+        const btnVisual = document.querySelector('button[aria-label*="Insert visual description tag"]');
+        if (btnVisual) btnVisual.click();
+
+        // Test Speaker select change
+        const speakerSelect = document.querySelector('select[aria-label*="Speaker for cue 1"]');
+        if (speakerSelect) {
+          speakerSelect.value = "Narrator";
+          speakerSelect.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+
+        // Test + (Narrator) button
+        const btnSpeaker = document.querySelector('button[aria-label*="Insert speaker prefix"]');
+        if (btnSpeaker) btnSpeaker.click();
+
+        // Test + Add New Cue button
+        const addCueBtn = Array.from(document.querySelectorAll("button")).find(b => b.textContent.includes("Add New Cue"));
+        const initialCards = document.querySelectorAll("article.card").length;
+        if (addCueBtn) addCueBtn.click();
+        await new Promise(r => setTimeout(r, 400));
+        const afterAddCards = document.querySelectorAll("article.card").length;
+
+        // Test Publish to API button
+        const pubBtn = Array.from(document.querySelectorAll("button")).find(b => b.textContent.includes("Publish to Lesson (API)"));
+        if (pubBtn) pubBtn.click();
+
+        return {
+          musicClicked: Boolean(btnMusic),
+          visualClicked: Boolean(btnVisual),
+          speakerChanged: speakerSelect ? speakerSelect.value : null,
+          initialCards,
+          afterAddCards,
+          addCueWorked: afterAddCards === initialCards + 1,
+          publishClicked: Boolean(pubBtn)
+        };
+      })()`,
+      awaitPromise: true,
+      returnByValue: true,
+    });
+    console.log("Transcript Studio Features Evaluation:", JSON.stringify(studioEval.result.value, null, 2));
+
+    await new Promise((r) => setTimeout(r, 1200));
+
+    const snapStudio = await send("Page.captureScreenshot", { format: "png" });
+    fs.writeFileSync("evidence/studio-verified.png", Buffer.from(snapStudio.data, "base64"));
+    console.log("Saved evidence/studio-verified.png");
+
     console.log("All automated UI verifications completed successfully!");
     ws.close();
   } finally {

@@ -31,10 +31,10 @@ export const DEFAULT_PREFERENCES: PlayerPreferences = {
   eslSize: "medium",
   playbackRate: 1.0,
   transcriptVisible: true,
-  transcriptWidth: 280,
-  transcriptHeight: 420,
-  eslWidth: 260,
-  eslHeight: 200,
+  transcriptWidth: 260,
+  transcriptHeight: 400,
+  eslWidth: 240,
+  eslHeight: 180,
 };
 
 export function loadPreferences(): PlayerPreferences {
