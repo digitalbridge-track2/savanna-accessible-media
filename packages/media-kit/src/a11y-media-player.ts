@@ -14,6 +14,25 @@ import { parseVTT, VTTCueItem, getThemeStyles } from "./captions/caption-manager
 import { MediaSyncController, SignStatus } from "./media/sync-controller.js";
 import { TranscriptViewer, TranscriptSegmentData } from "./transcript/transcript-viewer.js";
 
+const ICONS = {
+  play: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>`,
+  pause: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`,
+  restart: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>`,
+  rewind: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg>`,
+  forward: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg>`,
+  cc: `<svg viewBox="0 0 24 24" width="22" height="20" fill="currentColor" aria-hidden="true"><path d="M19 4H5a2 2 0 00-2 2v12a2 2 0 002 2h14a2 2 0 002-2V6a2 2 0 00-2-2zm-8 7H9.5v-.5h-2v3h2V13H11v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-4a1 1 0 011-1h3a1 1 0 011 1v1zm7 0h-1.5v-.5h-2v3h2V13H18v1a1 1 0 01-1 1h-3a1 1 0 01-1-1v-4a1 1 0 011-1h3a1 1 0 011 1v1z"/></svg>`,
+  sign: `<svg viewBox="0 0 24 24" width="22" height="20" fill="currentColor" aria-hidden="true"><path d="M21 9h-4.2l-1.3-3.9C15.2 4.4 14.5 4 13.7 4c-.7 0-1.4.3-1.8.9L10 8H6c-1.1 0-2 .9-2 2v7c0 1.1.9 2 2 2h6.8l5.8-2.5c.9-.4 1.4-1.3 1.4-2.3V11c0-1.1-.9-2-2-2zm-9 9H6v-7h4.5l2.1-3.2c.2-.3.6-.4.9-.4.3 0 .6.2.8.5l1.3 3.9v.2H12v6zm7-3.7l-5 2.1V11h6v3.3z"/></svg>`,
+  ad: `<svg viewBox="0 0 24 24" width="22" height="20" fill="currentColor" aria-hidden="true"><path d="M4 4h5c4.42 0 8 3.58 8 8s-3.58 8-8 8H4V4zm5 13c2.76 0 5-2.24 5-5s-2.24-5-5-5H7v10h2zm10-9.8a7.96 7.96 0 010 9.6l1.5 1.5c3.5-3.5 3.5-9.1 0-12.6l-1.5 1.5zm-2.5 2.5a4.46 4.46 0 010 4.6l1.5 1.5c1.9-2.1 1.9-5.1 0-7.2l-1.5 1.1z"/></svg>`,
+  transcript: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>`,
+  faster: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M21.5 14.5c0-.83-.67-1.5-1.5-1.5h-1.18c.43-.88.68-1.87.68-2.92 0-3.35-2.45-6.08-5.5-6.08-1.3 0-2.5.5-3.41 1.34L8.7 3.45a1.5 1.5 0 00-2.12 2.12l1.6 1.6C7.45 8.1 7 9.25 7 10.5c0 1.05.43 2.01 1.12 2.72L5.4 14.94A2 2 0 004 16.5C4 18.43 5.57 20 7.5 20h11c1.66 0 3-1.34 3-3 0-.91-.41-1.72-1.05-2.27.64-.32 1.05-.98 1.05-1.73zM14 6c1.93 0 3.5 1.79 3.5 4 0 .72-.18 1.4-.49 1.98l-3.92-3.92C13.36 6.8 13.67 6 14 6z"/></svg>`,
+  slower: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M19 13c-.55 0-1 .45-1 1 0 1.65-1.35 3-3 3H9c-1.65 0-3-1.35-3-3 0-.55-.45-1-1-1s-1 .45-1 1c0 2.42 1.72 4.44 4 4.9V20c0 .55.45 1 1 1s1-.45 1-1v-1.05c.32.03.66.05 1 .05s.68-.02 1-.05V20c0 .55.45 1 1 1s1-.45 1-1v-1.1c2.28-.46 4-2.48 4-4.9 0-.55-.45-1-1-1zm1.5-4c-.83 0-1.5.67-1.5 1.5 0 .28.08.53.21.75C17.7 10.5 15.98 10 14 10H10c-1.98 0-3.7.5-5.21 1.25.13-.22.21-.47.21-.75 0-.83-.67-1.5-1.5-1.5S2 9.67 2 10.5c0 .76.57 1.38 1.3 1.48C3.1 12.5 3 13 3 13.5c0 .35.03.69.08 1.03C2.45 14.89 2 15.64 2 16.5 2 17.6 2.9 18.5 4 18.5h.2c.4 1.2 1.44 2.1 2.7 2.38V21.5c0 .55.45 1 1 1s1-.45 1-1V21h6v.5c0 .55.45 1 1 1s1-.45 1-1v-.62c1.26-.28 2.3-1.18 2.7-2.38h.2c1.1 0 2-.9 2-2 0-.86-.45-1.61-1.08-1.97.05-.34.08-.68.08-1.03 0-.53-.1-1.04-.3-1.52.73-.1 1.3-.72 1.3-1.48 0-.83-.67-1.5-1.5-1.5zM12 7c3.86 0 7 3.14 7 6H5c0-2.86 3.14-6 7-6z"/></svg>`,
+  prefs: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.488.488 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>`,
+  fullscreenEnter: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>`,
+  fullscreenExit: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>`,
+  volumeUnmuted: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>`,
+  volumeMuted: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>`
+};
+
 export class A11yMediaPlayer extends HTMLElement {
   static get observedAttributes() {
     return ["manifest-src", "locale"];
@@ -253,6 +272,18 @@ export class A11yMediaPlayer extends HTMLElement {
           color: var(--color-ink, #14201B);
         }
 
+        .sr-only {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          border: 0;
+        }
+
         /* 3-Panel Flexible Stage (Transcript | Main Video | Sign Language) */
         .player-stage {
           display: flex;
@@ -451,37 +482,106 @@ export class A11yMediaPlayer extends HTMLElement {
           background: rgba(14, 165, 233, 0.25);
         }
 
-        /* Center Main Player Panel */
+        /* Center Main Player Panel - Horizontal Rectangular Cinema Proportion */
         .main-player-panel {
-          flex: 1 1 440px;
-          min-width: 320px;
-          max-width: 780px;
-          background: #000;
+          flex: 2 1 680px;
+          min-width: 480px;
+          max-width: 880px;
+          width: 100%;
+          background: #111417;
           border-radius: 8px;
           overflow: hidden;
-          box-shadow: 0 4px 18px rgba(0,0,0,0.2);
+          box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
           position: relative;
           outline: none;
           box-sizing: border-box;
+          display: flex;
+          flex-direction: column;
         }
         .main-player-panel:focus-visible {
           outline: 3px solid var(--color-focus, #005FCC);
           outline-offset: 3px;
         }
+        .main-player-panel:fullscreen,
+        .main-player-panel:-webkit-full-screen {
+          width: 100vw !important;
+          height: 100vh !important;
+          max-width: 100vw !important;
+          max-height: 100vh !important;
+          border-radius: 0 !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          display: flex !important;
+          flex-direction: column !important;
+          background: #000 !important;
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          z-index: 999999 !important;
+        }
         .video-viewport {
           position: relative;
           width: 100%;
-          aspect-ratio: 16/9;
+          aspect-ratio: 16 / 9;
           background: #050505;
           display: flex;
           align-items: center;
           justify-content: center;
+          overflow: hidden;
+        }
+        .main-player-panel:fullscreen .video-viewport,
+        .main-player-panel:-webkit-full-screen .video-viewport {
+          flex: 1 1 auto !important;
+          height: auto !important;
+          max-height: calc(100vh - 84px) !important;
+          width: 100% !important;
         }
         video.main-video {
           width: 100%;
           height: 100%;
           object-fit: contain;
           display: block;
+          cursor: pointer;
+        }
+
+        /* Big Play Button Overlay */
+        .big-play-btn {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 76px;
+          height: 56px;
+          background: rgba(0, 0, 0, 0.78);
+          border: 2.5px solid #84CC16;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          z-index: 12;
+          transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.65);
+          padding: 0;
+          outline: none;
+        }
+        .big-play-btn:hover {
+          transform: translate(-50%, -50%) scale(1.08);
+          background: rgba(0, 0, 0, 0.92);
+          border-color: #A3E635;
+          box-shadow: 0 6px 26px rgba(132, 204, 22, 0.4);
+        }
+        .big-play-btn:focus-visible {
+          outline: 3px solid var(--color-accent, #F2C14E);
+          outline-offset: 3px;
+        }
+        .big-play-btn.is-hidden {
+          display: none !important;
+        }
+        .big-play-svg {
+          width: 30px;
+          height: 30px;
+          margin-left: 3px;
         }
 
         /* Custom Captions Overlay */
@@ -500,67 +600,127 @@ export class A11yMediaPlayer extends HTMLElement {
           pointer-events: auto;
         }
 
-        /* Controls Toolbar */
+        /* Controls Toolbar (Able Player Inspired Modern Clean Layout) */
         .controls-toolbar {
           display: flex;
-          flex-wrap: wrap;
-          align-items: center;
-          gap: 0.5rem;
-          padding: 0.75rem 1rem;
-          background: #14201B;
+          flex-direction: column;
+          background: #1F2428;
           color: #FFF;
-          border-top: 1px solid #2A3B32;
+          border-top: 1px solid #30363D;
+          user-select: none;
+          flex-shrink: 0;
         }
-        .btn-ctrl {
-          background: #2A3B32;
-          color: #FFF;
-          border: 1px solid #52615A;
-          border-radius: 4px;
-          padding: 0.5rem 0.8rem;
-          font-size: 0.875rem;
-          font-weight: 600;
-          cursor: pointer;
-          min-height: 44px;
-          min-width: 44px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.35rem;
-        }
-        .btn-ctrl:focus-visible {
-          outline: 3px solid var(--color-accent, #F2C14E);
-          outline-offset: 2px;
-        }
-        .btn-ctrl:hover {
-          background: var(--color-brand, #0B5D4E);
-        }
-        .btn-ctrl[aria-pressed="true"] {
-          background: var(--color-brand, #0B5D4E);
-          border-color: var(--color-accent, #F2C14E);
-        }
-        .time-readout {
-          font-size: 0.875rem;
-          font-variant-numeric: tabular-nums;
-          padding: 0 0.5rem;
-          white-space: nowrap;
+        .main-player-panel:fullscreen .controls-toolbar,
+        .main-player-panel:-webkit-full-screen .controls-toolbar {
+          flex-shrink: 0 !important;
+          width: 100% !important;
         }
         .scrubber-container {
           width: 100%;
           display: flex;
           align-items: center;
-          gap: 0.5rem;
-          margin-bottom: 0.5rem;
+          padding: 6px 12px 2px 12px;
+          box-sizing: border-box;
         }
         input[type="range"].scrubber {
           flex: 1;
-          height: 8px;
-          accent-color: var(--color-accent, #F2C14E);
+          width: 100%;
+          height: 6px;
+          accent-color: #FFFFFF;
           cursor: pointer;
-          min-height: 44px;
+          background: #4B5563;
+          border-radius: 3px;
+          outline: none;
+          margin: 0;
+          padding: 0;
+          min-height: 20px;
+          transition: height 0.1s ease;
+        }
+        input[type="range"].scrubber:hover {
+          height: 8px;
         }
         input[type="range"].scrubber:focus-visible {
-          outline: 3px solid var(--color-accent, #F2C14E);
+          outline: 2px solid var(--color-accent, #F2C14E);
           outline-offset: 2px;
+        }
+        .controls-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 3px 8px;
+          gap: 2px;
+          flex-wrap: nowrap;
+          overflow-x: auto;
+        }
+        .controls-cluster {
+          display: flex;
+          align-items: center;
+          gap: 2px;
+        }
+        .btn-ctrl {
+          background: transparent;
+          color: #F8F9FA;
+          border: 1px solid transparent;
+          border-radius: 4px;
+          padding: 0;
+          width: 36px;
+          height: 36px;
+          min-width: 36px;
+          min-height: 36px;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+          flex-shrink: 0;
+          position: relative;
+        }
+        .btn-ctrl:hover {
+          background: rgba(255, 255, 255, 0.18);
+          color: #FFF;
+        }
+        .btn-ctrl:focus-visible {
+          outline: 2px solid var(--color-accent, #F2C14E);
+          outline-offset: 2px;
+        }
+        .btn-ctrl[aria-pressed="true"] {
+          background: rgba(14, 165, 233, 0.25);
+          color: #38BDF8;
+          border-bottom: 2px solid var(--color-accent, #F2C14E);
+        }
+        .ctrl-divider {
+          display: inline-block;
+          width: 1px;
+          height: 18px;
+          background: rgba(255, 255, 255, 0.22);
+          margin: 0 4px;
+          flex-shrink: 0;
+        }
+        .status-strip {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          background: #111417;
+          color: #E2E8F0;
+          font-size: 0.76rem;
+          font-family: monospace, system-ui, sans-serif;
+          padding: 3px 12px 5px 12px;
+          border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .status-item {
+          white-space: nowrap;
+        }
+        .status-time {
+          font-variant-numeric: tabular-nums;
+          font-weight: 500;
+          color: #F8FAFC;
+        }
+        .status-speed {
+          color: #CBD5E1;
+        }
+        .status-state {
+          font-style: italic;
+          color: #94A3B8;
         }
 
         /* LEFT: Resizable Transcript Window */
@@ -873,14 +1033,27 @@ export class A11yMediaPlayer extends HTMLElement {
                 src="${mainSource ? mainSource.src : ""}">
               </video>
 
+              <!-- Big Play Button Overlay -->
+              <button 
+                type="button" 
+                class="big-play-btn" 
+                id="big-play-btn" 
+                aria-label="${isAm ? "ቪዲዮውን አጫውት (Space / K)" : "Play video (Space / K)"}"
+                title="${isAm ? "ቪዲዮውን አጫውት" : "Play video"}">
+                <svg viewBox="0 0 48 48" class="big-play-svg" aria-hidden="true">
+                  <polygon points="18,12 36,24 18,36" fill="#FFFFFF"/>
+                </svg>
+              </button>
+
               <!-- Captions Overlay -->
               <div class="captions-container" aria-hidden="true">
                 <div class="captions-text" id="caption-overlay" style="display: none;"></div>
               </div>
             </div>
 
-            <!-- Controls Toolbar -->
+            <!-- Controls Toolbar (Able Player Inspired Modern Clean Layout) -->
             <div class="controls-toolbar" role="toolbar" aria-label="${isAm ? "የቪዲዮ መቆጣጠሪያዎች" : "Video player controls"}">
+              <!-- Scrubber -->
               <div class="scrubber-container">
                 <label for="seek-scrubber" class="sr-only">${isAm ? "የቪዲዮ መገኛ አሞሌ" : "Seek video position"}</label>
                 <input 
@@ -891,41 +1064,82 @@ export class A11yMediaPlayer extends HTMLElement {
                   max="100" 
                   value="0" 
                   aria-label="${isAm ? "የቪዲዮ መገኛ አሞሌ" : "Video timeline position"}">
-                <span class="time-readout" id="time-display">00:00 / 00:00</span>
               </div>
 
-              <button class="btn-ctrl" id="btn-play" aria-label="${isAm ? "አጫውት (Space / K)" : "Play (Space / K)"}">
-                <span id="play-icon" aria-hidden="true">▶</span>
-                <span id="play-text">${isAm ? "አጫውት" : "Play"}</span>
-              </button>
+              <!-- Controls Row -->
+              <div class="controls-row">
+                <!-- Left: Playback & Navigation -->
+                <div class="controls-cluster">
+                  <button class="btn-ctrl" id="btn-play" aria-label="${isAm ? "አጫውት (Space / K)" : "Play (Space / K)"}" title="${isAm ? "አጫውት (Space / K)" : "Play (Space / K)"}">
+                    <span id="play-icon" aria-hidden="true">${ICONS.play}</span>
+                  </button>
 
-              <button class="btn-ctrl" id="btn-rewind" aria-label="${isAm ? "ወደኋላ 5 ሰከንድ (J)" : "Rewind 5 seconds (J)"}">
-                ↺ 5s
-              </button>
+                  <button class="btn-ctrl" id="btn-restart" aria-label="${isAm ? "እንደገና ጀምር (0 / Home)" : "Restart (0 / Home)"}" title="${isAm ? "እንደገና ጀምር (0 / Home)" : "Restart (0 / Home)"}">
+                    <span aria-hidden="true">${ICONS.restart}</span>
+                  </button>
 
-              <button class="btn-ctrl" id="btn-forward" aria-label="${isAm ? "ወደፊት 5 ሰከንድ (L)" : "Forward 5 seconds (L)"}">
-                ↻ 5s
-              </button>
+                  <button class="btn-ctrl" id="btn-rewind" aria-label="${isAm ? "ወደኋላ 5 ሰከንድ (J / ←)" : "Rewind 5 seconds (J / ←)"}" title="${isAm ? "ወደኋላ 5 ሰከንድ (J / ←)" : "Rewind 5 seconds (J / ←)"}">
+                    <span aria-hidden="true">${ICONS.rewind}</span>
+                  </button>
 
-              <button class="btn-ctrl" id="btn-ad" aria-pressed="${this.prefs.audioDescriptionEnabled ? "true" : "false"}" aria-label="${isAm ? "የድምጽ ማብራሪያ (D)" : "Audio Description (D)"}">
-                AD
-              </button>
+                  <button class="btn-ctrl" id="btn-forward" aria-label="${isAm ? "ወደፊት 5 ሰከንድ (L / →)" : "Forward 5 seconds (L / →)"}" title="${isAm ? "ወደፊት 5 ሰከንድ (L / →)" : "Forward 5 seconds (L / →)"}">
+                    <span aria-hidden="true">${ICONS.forward}</span>
+                  </button>
+                </div>
 
-              <button class="btn-ctrl" id="btn-cc" aria-expanded="false" aria-label="${isAm ? "የትርጉም ጽሑፍ (C)" : "Captions (C)"}">
-                CC (${this.prefs.captionLanguage.toUpperCase()})
-              </button>
+                <!-- Center: Accessibility & Speed -->
+                <div class="controls-cluster">
+                  <button class="btn-ctrl" id="btn-cc" aria-pressed="${this.prefs.captionLanguage !== "off" ? "true" : "false"}" aria-label="${isAm ? "የትርጉም ጽሑፍ (C)" : "Captions (C)"}" title="${isAm ? "የትርጉም ጽሑፍ (C)" : "Captions (C)"}">
+                    <span aria-hidden="true">${ICONS.cc}</span>
+                  </button>
 
-              <button class="btn-ctrl" id="btn-esl" aria-pressed="${this.prefs.eslVisible ? "true" : "false"}" aria-label="${isAm ? "የኢትዮጵያ የምልክት ቋንቋ (S)" : "Ethiopian Sign Language (S)"}">
-                EthSL
-              </button>
+                  <button class="btn-ctrl" id="btn-esl" aria-pressed="${this.prefs.eslVisible ? "true" : "false"}" aria-label="${isAm ? "የኢትዮጵያ የምልክት ቋንቋ (S)" : "Ethiopian Sign Language (S)"}" title="${isAm ? "የኢትዮጵያ የምልክት ቋንቋ (S)" : "Ethiopian Sign Language (S)"}">
+                    <span aria-hidden="true">${ICONS.sign}</span>
+                  </button>
 
-              <button class="btn-ctrl" id="btn-transcript-toggle" aria-pressed="${this.prefs.transcriptVisible !== false ? "true" : "false"}" aria-label="${isAm ? "የጽሑፍ ግልባጭ ማሳያ" : "Toggle Transcript"}">
-                📄 ${isAm ? "ግልባጭ" : "Transcript"}
-              </button>
+                  <button class="btn-ctrl" id="btn-ad" aria-pressed="${this.prefs.audioDescriptionEnabled ? "true" : "false"}" aria-label="${isAm ? "የድምጽ ማብራሪያ (D)" : "Audio Description (D)"}" title="${isAm ? "የድምጽ ማብራሪያ (D)" : "Audio Description (D)"}">
+                    <span aria-hidden="true">${ICONS.ad}</span>
+                  </button>
 
-              <button class="btn-ctrl" id="btn-prefs" aria-expanded="false" aria-label="${isAm ? "የተደራሽነት ምርጫዎች" : "Accessibility Preferences"}">
-                ⚙ ${isAm ? "ምርጫዎች" : "Settings"}
-              </button>
+                  <button class="btn-ctrl" id="btn-transcript-toggle" aria-pressed="${this.prefs.transcriptVisible !== false ? "true" : "false"}" aria-label="${isAm ? "የጽሑፍ ግልባጭ ማሳያ (T)" : "Toggle Transcript (T)"}" title="${isAm ? "የጽሑፍ ግልባጭ ማሳያ (T)" : "Toggle Transcript (T)"}">
+                    <span aria-hidden="true">${ICONS.transcript}</span>
+                  </button>
+
+                  <span class="ctrl-divider" aria-hidden="true"></span>
+
+                  <button class="btn-ctrl" id="btn-speed-faster" aria-label="${isAm ? "ፍጥነት ጨምር (>)" : "Increase speed (>)"}" title="${isAm ? "ፍጥነት ጨምር (>)" : "Increase speed (>)"}">
+                    <span aria-hidden="true">${ICONS.faster}</span>
+                  </button>
+
+                  <button class="btn-ctrl" id="btn-speed-slower" aria-label="${isAm ? "ፍጥነት ቀንስ (<)" : "Decrease speed (<)"}" title="${isAm ? "ፍጥነት ቀንስ (<)" : "Decrease speed (<)"}">
+                    <span aria-hidden="true">${ICONS.slower}</span>
+                  </button>
+
+                  <span class="ctrl-divider" aria-hidden="true"></span>
+                </div>
+
+                <!-- Right: Settings, Fullscreen, Volume -->
+                <div class="controls-cluster">
+                  <button class="btn-ctrl" id="btn-prefs" aria-expanded="false" aria-label="${isAm ? "የተደራሽነት ምርጫዎች" : "Accessibility Preferences"}" title="${isAm ? "የተደራሽነት ምርጫዎች" : "Accessibility Preferences"}">
+                    <span aria-hidden="true">${ICONS.prefs}</span>
+                  </button>
+
+                  <button class="btn-ctrl" id="btn-fullscreen" aria-pressed="false" aria-label="${isAm ? "ሙሉ ማያ ገጽ (F)" : "Fullscreen (F)"}" title="${isAm ? "ሙሉ ማያ ገጽ (F)" : "Fullscreen (F)"}">
+                    <span id="fullscreen-icon" aria-hidden="true">${ICONS.fullscreenEnter}</span>
+                  </button>
+
+                  <button class="btn-ctrl" id="btn-mute" aria-pressed="false" aria-label="${isAm ? "ድምጽ አጥፋ (M)" : "Mute (M)"}" title="${isAm ? "ድምጽ አጥፋ (M)" : "Mute (M)"}">
+                    <span id="mute-icon" aria-hidden="true">${ICONS.volumeUnmuted}</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Status Strip -->
+              <div class="status-strip" aria-hidden="true">
+                <span class="status-item status-time" id="time-display">00:00 / 00:00</span>
+                <span class="status-item status-speed" id="speed-display">Speed: 1x</span>
+                <span class="status-item status-state" id="state-display">Paused</span>
+              </div>
             </div>
           </div>
 
@@ -1438,7 +1652,17 @@ export class A11yMediaPlayer extends HTMLElement {
   private attachEventListeners() {
     const playBtn = this.shadow.getElementById("btn-play");
     const playIcon = this.shadow.getElementById("play-icon");
-    const playText = this.shadow.getElementById("play-text");
+    const bigPlayBtn = this.shadow.getElementById("big-play-btn");
+    const restartBtn = this.shadow.getElementById("btn-restart");
+    const speedFasterBtn = this.shadow.getElementById("btn-speed-faster");
+    const speedSlowerBtn = this.shadow.getElementById("btn-speed-slower");
+    const speedDisplay = this.shadow.getElementById("speed-display");
+    const stateDisplay = this.shadow.getElementById("state-display");
+    const fullscreenBtn = this.shadow.getElementById("btn-fullscreen");
+    const fullscreenIcon = this.shadow.getElementById("fullscreen-icon");
+    const muteBtn = this.shadow.getElementById("btn-mute");
+    const muteIcon = this.shadow.getElementById("mute-icon");
+    const playerContainer = this.shadow.getElementById("player-container");
     const scrubber = this.shadow.getElementById("seek-scrubber") as HTMLInputElement;
     const timeDisplay = this.shadow.getElementById("time-display");
 
@@ -1451,22 +1675,150 @@ export class A11yMediaPlayer extends HTMLElement {
       }
     };
     if (playBtn) playBtn.addEventListener("click", togglePlay);
+    if (bigPlayBtn) bigPlayBtn.addEventListener("click", togglePlay);
+    this.mainVideo.addEventListener("click", togglePlay);
 
     this.mainVideo.addEventListener("play", () => {
-      if (playIcon && playText) {
-        playIcon.textContent = "⏸";
-        playText.textContent = this.activeLocale === "am" ? "አቁም" : "Pause";
-      }
-      playBtn?.setAttribute("aria-label", this.activeLocale === "am" ? "አቁም (Space)" : "Pause (Space)");
+      if (playIcon) playIcon.innerHTML = ICONS.pause;
+      playBtn?.setAttribute("aria-label", this.activeLocale === "am" ? "አቁም (Space / K)" : "Pause (Space / K)");
+      playBtn?.setAttribute("title", this.activeLocale === "am" ? "አቁም (Space / K)" : "Pause (Space / K)");
+      bigPlayBtn?.classList.add("is-hidden");
+      if (stateDisplay) stateDisplay.textContent = this.activeLocale === "am" ? "እየተጫወተ ነው" : "Playing";
     });
 
     this.mainVideo.addEventListener("pause", () => {
-      if (playIcon && playText) {
-        playIcon.textContent = "▶";
-        playText.textContent = this.activeLocale === "am" ? "አጫውት" : "Play";
+      if (playIcon) playIcon.innerHTML = ICONS.play;
+      playBtn?.setAttribute("aria-label", this.activeLocale === "am" ? "አጫውት (Space / K)" : "Play (Space / K)");
+      playBtn?.setAttribute("title", this.activeLocale === "am" ? "አጫውት (Space / K)" : "Play (Space / K)");
+      bigPlayBtn?.classList.remove("is-hidden");
+      if (stateDisplay) {
+        stateDisplay.textContent = this.mainVideo.ended
+          ? (this.activeLocale === "am" ? "ተጠናቋል" : "End of track")
+          : (this.activeLocale === "am" ? "ቆሟል" : "Paused");
       }
-      playBtn?.setAttribute("aria-label", this.activeLocale === "am" ? "አጫውት (Space)" : "Play (Space)");
     });
+
+    this.mainVideo.addEventListener("ended", () => {
+      if (playIcon) playIcon.innerHTML = ICONS.play;
+      playBtn?.setAttribute("aria-label", this.activeLocale === "am" ? "አጫውት (Space / K)" : "Play (Space / K)");
+      playBtn?.setAttribute("title", this.activeLocale === "am" ? "አጫውት (Space / K)" : "Play (Space / K)");
+      bigPlayBtn?.classList.remove("is-hidden");
+      if (stateDisplay) stateDisplay.textContent = this.activeLocale === "am" ? "ተጠናቋል" : "End of track";
+    });
+
+    // Restart Video to Beginning
+    restartBtn?.addEventListener("click", () => {
+      this.mainVideo.currentTime = 0;
+      this.mainVideo.play();
+      this.transcriptViewer.updateActiveTime(0);
+    });
+
+    // Speed Controls (Faster / Slower)
+    const SPEEDS = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0];
+    const updateSpeedDisplay = () => {
+      const rate = this.mainVideo.playbackRate;
+      if (speedDisplay) {
+        speedDisplay.textContent = `Speed: ${rate}x`;
+      }
+    };
+
+    speedFasterBtn?.addEventListener("click", () => {
+      const current = this.mainVideo.playbackRate;
+      const higher = SPEEDS.filter((s) => s > current + 0.01);
+      const next = higher.length > 0 ? higher[0] : 2.0;
+      this.mainVideo.playbackRate = next;
+      updateSpeedDisplay();
+    });
+
+    speedSlowerBtn?.addEventListener("click", () => {
+      const current = this.mainVideo.playbackRate;
+      const lower = SPEEDS.filter((s) => s < current - 0.01);
+      const prev = lower.length > 0 ? lower[lower.length - 1] : 0.5;
+      this.mainVideo.playbackRate = prev;
+      updateSpeedDisplay();
+    });
+
+    // Fullscreen Toggle
+    const isFullscreen = () => {
+      return (
+        document.fullscreenElement === playerContainer ||
+        (document as any).webkitFullscreenElement === playerContainer
+      );
+    };
+
+    const toggleFullscreen = async () => {
+      try {
+        if (!isFullscreen()) {
+          if (playerContainer?.requestFullscreen) {
+            await playerContainer.requestFullscreen();
+          } else if ((playerContainer as any)?.webkitRequestFullscreen) {
+            await (playerContainer as any).webkitRequestFullscreen();
+          }
+        } else {
+          if (document.exitFullscreen) {
+            await document.exitFullscreen();
+          } else if ((document as any).webkitExitFullscreen) {
+            await (document as any).webkitExitFullscreen();
+          }
+        }
+      } catch (err) {
+        console.warn("Fullscreen toggle failed:", err);
+      }
+    };
+
+    fullscreenBtn?.addEventListener("click", toggleFullscreen);
+
+    const updateFullscreenState = () => {
+      const active = isFullscreen();
+      fullscreenBtn?.setAttribute("aria-pressed", active ? "true" : "false");
+      fullscreenBtn?.setAttribute(
+        "aria-label",
+        active
+          ? (this.activeLocale === "am" ? "ከሙሉ ማያ ገጽ ውጣ (F)" : "Exit Fullscreen (F)")
+          : (this.activeLocale === "am" ? "ሙሉ ማያ ገጽ (F)" : "Fullscreen (F)")
+      );
+      fullscreenBtn?.setAttribute(
+        "title",
+        active
+          ? (this.activeLocale === "am" ? "ከሙሉ ማያ ገጽ ውጣ (F)" : "Exit Fullscreen (F)")
+          : (this.activeLocale === "am" ? "ሙሉ ማያ ገጽ (F)" : "Fullscreen (F)")
+      );
+      if (fullscreenIcon) {
+        fullscreenIcon.innerHTML = active ? ICONS.fullscreenExit : ICONS.fullscreenEnter;
+      }
+    };
+
+    document.addEventListener("fullscreenchange", updateFullscreenState);
+    document.addEventListener("webkitfullscreenchange", updateFullscreenState);
+
+    // Mute / Volume Toggle
+    const toggleMute = () => {
+      this.mainVideo.muted = !this.mainVideo.muted;
+    };
+
+    muteBtn?.addEventListener("click", toggleMute);
+
+    const updateMuteState = () => {
+      const isMuted = this.mainVideo.muted;
+      muteBtn?.setAttribute("aria-pressed", isMuted ? "true" : "false");
+      muteBtn?.setAttribute(
+        "aria-label",
+        isMuted
+          ? (this.activeLocale === "am" ? "ድምጽ አብራ (M)" : "Unmute (M)")
+          : (this.activeLocale === "am" ? "ድምጽ አጥፋ (M)" : "Mute (M)")
+      );
+      muteBtn?.setAttribute(
+        "title",
+        isMuted
+          ? (this.activeLocale === "am" ? "ድምጽ አብራ (M)" : "Unmute (M)")
+          : (this.activeLocale === "am" ? "ድምጽ አጥፋ (M)" : "Mute (M)")
+      );
+      if (muteIcon) {
+        muteIcon.innerHTML = isMuted ? ICONS.volumeMuted : ICONS.volumeUnmuted;
+      }
+    };
+
+    this.mainVideo.addEventListener("volumechange", updateMuteState);
 
     // Time update & Scrubber
     this.mainVideo.addEventListener("timeupdate", () => {
@@ -1517,7 +1869,15 @@ export class A11yMediaPlayer extends HTMLElement {
       const nextIdx = (order.indexOf(this.prefs.captionLanguage) + 1) % order.length;
       this.prefs.captionLanguage = order[nextIdx];
       savePreferences({ captionLanguage: this.prefs.captionLanguage });
-      btnCC.textContent = `CC (${this.prefs.captionLanguage.toUpperCase()})`;
+      const isOff = this.prefs.captionLanguage === "off";
+      btnCC.setAttribute("aria-pressed", isOff ? "false" : "true");
+      btnCC.setAttribute("title", `Captions: ${this.prefs.captionLanguage.toUpperCase()} (C)`);
+      btnCC.setAttribute(
+        "aria-label",
+        this.activeLocale === "am"
+          ? `የትርጉም ጽሑፍ: ${this.prefs.captionLanguage.toUpperCase()} (C)`
+          : `Captions: ${this.prefs.captionLanguage.toUpperCase()} (C)`
+      );
       await this.loadCaptionTrack(this.prefs.captionLanguage);
     });
 
@@ -1629,7 +1989,17 @@ export class A11yMediaPlayer extends HTMLElement {
     this.shadow.getElementById("select-cc-lang")?.addEventListener("change", async (e) => {
       this.prefs.captionLanguage = (e.target as HTMLSelectElement).value;
       savePreferences({ captionLanguage: this.prefs.captionLanguage });
-      if (btnCC) btnCC.textContent = `CC (${this.prefs.captionLanguage.toUpperCase()})`;
+      if (btnCC) {
+        const isOff = this.prefs.captionLanguage === "off";
+        btnCC.setAttribute("aria-pressed", isOff ? "false" : "true");
+        btnCC.setAttribute("title", `Captions: ${this.prefs.captionLanguage.toUpperCase()} (C)`);
+        btnCC.setAttribute(
+          "aria-label",
+          this.activeLocale === "am"
+            ? `የትርጉም ጽሑፍ: ${this.prefs.captionLanguage.toUpperCase()} (C)`
+            : `Captions: ${this.prefs.captionLanguage.toUpperCase()} (C)`
+        );
+      }
       await this.loadCaptionTrack(this.prefs.captionLanguage);
     });
 
@@ -1689,7 +2059,29 @@ export class A11yMediaPlayer extends HTMLElement {
         case "m":
         case "M":
           e.preventDefault();
-          this.mainVideo.muted = !this.mainVideo.muted;
+          toggleMute();
+          break;
+        case "f":
+        case "F":
+          e.preventDefault();
+          toggleFullscreen();
+          break;
+        case "0":
+        case "Home":
+          e.preventDefault();
+          this.mainVideo.currentTime = 0;
+          this.mainVideo.play();
+          this.transcriptViewer.updateActiveTime(0);
+          break;
+        case ">":
+        case ".":
+          e.preventDefault();
+          speedFasterBtn?.click();
+          break;
+        case "<":
+        case ",":
+          e.preventDefault();
+          speedSlowerBtn?.click();
           break;
         case "c":
         case "C":

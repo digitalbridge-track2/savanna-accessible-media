@@ -1,9 +1,9 @@
-(function(f,L){typeof exports=="object"&&typeof module<"u"?L(exports):typeof define=="function"&&define.amd?define(["exports"],L):(f=typeof globalThis<"u"?globalThis:f||self,L(f.AbugidaMediaKit={}))})(this,function(f){"use strict";var he=Object.defineProperty;var pe=(f,L,v)=>L in f?he(f,L,{enumerable:!0,configurable:!0,writable:!0,value:v}):f[L]=v;var l=(f,L,v)=>pe(f,typeof L!="symbol"?L+"":L,v);const L="abugida_media_preferences",v={captionLanguage:"en",captionSize:"medium",captionTheme:"default",audioDescriptionEnabled:!1,eslVisible:!0,eslPosition:"bottom-right",eslSize:"medium",playbackRate:1,transcriptVisible:!0,transcriptWidth:350,transcriptHeight:460,eslWidth:340,eslHeight:240};function U(){try{const b=localStorage.getItem(L);if(!b)return{...v};const s=JSON.parse(b);return{...v,...s}}catch{return{...v}}}function F(b){try{const e={...U(),...b};return localStorage.setItem(L,JSON.stringify(e)),e}catch{return{...v,...b}}}function J(){try{localStorage.removeItem(L)}catch{}return{...v}}function q(b){const s=[],e=b.split(/\r?\n/);let i=0;for(;i<e.length&&!e[i].includes("-->");)i++;for(;i<e.length;){const t=e[i].trim();if(t.includes("-->")){const n=t.split("-->").map(r=>r.trim().split(" ")[0]);if(n.length>=2){const r=Y(n[0]),g=Y(n[1]);i++;const m=[];for(;i<e.length&&e[i].trim()!=="";)m.push(e[i].trim()),i++;m.length>0&&s.push({start:r,end:g,text:m.join(`
-`)})}}i++}return s}function Y(b){const s=b.split(":");let e=0,i=0,t=0;return s.length===3?(e=parseFloat(s[0]),i=parseFloat(s[1]),t=parseFloat(s[2].replace(",","."))):s.length===2&&(i=parseFloat(s[0]),t=parseFloat(s[1].replace(",","."))),e*3600+i*60+t}function K(b,s){let e="18px";s==="small"&&(e="14px"),s==="large"&&(e="24px"),s==="xlarge"&&(e="32px");let i="#FFFFFF",t="rgba(0, 0, 0, 0.85)",n="none";return b==="yellow-black"?(i="#FFEB3B",t="#000000",n="2px solid #FFEB3B"):b==="white-black"?(i="#FFFFFF",t="#000000",n="2px solid #FFFFFF"):b==="black-yellow"&&(i="#000000",t="#FFEB3B",n="2px solid #000000"),`
+(function(g,V){typeof exports=="object"&&typeof module<"u"?V(exports):typeof define=="function"&&define.amd?define(["exports"],V):(g=typeof globalThis<"u"?globalThis:g||self,V(g.AbugidaMediaKit={}))})(this,function(g){"use strict";var ye=Object.defineProperty;var ve=(g,V,E)=>V in g?ye(g,V,{enumerable:!0,configurable:!0,writable:!0,value:E}):g[V]=E;var d=(g,V,E)=>ve(g,typeof V!="symbol"?V+"":V,E);const V="abugida_media_preferences",E={captionLanguage:"en",captionSize:"medium",captionTheme:"default",audioDescriptionEnabled:!1,eslVisible:!0,eslPosition:"bottom-right",eslSize:"medium",playbackRate:1,transcriptVisible:!0,transcriptWidth:350,transcriptHeight:460,eslWidth:340,eslHeight:240};function Z(){try{const m=localStorage.getItem(V);if(!m)return{...E};const s=JSON.parse(m);return{...E,...s}}catch{return{...E}}}function D(m){try{const e={...Z(),...m};return localStorage.setItem(V,JSON.stringify(e)),e}catch{return{...E,...m}}}function te(){try{localStorage.removeItem(V)}catch{}return{...E}}function ie(m){const s=[],e=m.split(/\r?\n/);let i=0;for(;i<e.length&&!e[i].includes("-->");)i++;for(;i<e.length;){const t=e[i].trim();if(t.includes("-->")){const a=t.split("-->").map(o=>o.trim().split(" ")[0]);if(a.length>=2){const o=se(a[0]),h=se(a[1]);i++;const k=[];for(;i<e.length&&e[i].trim()!=="";)k.push(e[i].trim()),i++;k.length>0&&s.push({start:o,end:h,text:k.join(`
+`)})}}i++}return s}function se(m){const s=m.split(":");let e=0,i=0,t=0;return s.length===3?(e=parseFloat(s[0]),i=parseFloat(s[1]),t=parseFloat(s[2].replace(",","."))):s.length===2&&(i=parseFloat(s[0]),t=parseFloat(s[1].replace(",","."))),e*3600+i*60+t}function ae(m,s){let e="18px";s==="small"&&(e="14px"),s==="large"&&(e="24px"),s==="xlarge"&&(e="32px");let i="#FFFFFF",t="rgba(0, 0, 0, 0.85)",a="none";return m==="yellow-black"?(i="#FFEB3B",t="#000000",a="2px solid #FFEB3B"):m==="white-black"?(i="#FFFFFF",t="#000000",a="2px solid #FFFFFF"):m==="black-yellow"&&(i="#000000",t="#FFEB3B",a="2px solid #000000"),`
     font-size: ${e};
     color: ${i};
     background: ${t};
-    border: ${n};
+    border: ${a};
     line-height: 1.4;
     padding: 0.35rem 0.75rem;
     border-radius: 4px;
@@ -12,7 +12,7 @@
     text-align: center;
     box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     white-space: pre-line;
-  `}class Q{constructor(s,e){l(this,"mainVideo");l(this,"signVideo",null);l(this,"driftThreshold");l(this,"isSyncing",!1);l(this,"onSignStatusChange");l(this,"mainListeners",{});l(this,"signListeners",{});this.mainVideo=s,this.driftThreshold=(e==null?void 0:e.driftThreshold)??.25,this.onSignStatusChange=e==null?void 0:e.onSignStatusChange,this.setupMainListeners()}setSignVideo(s){if(this.cleanupSignListeners(),this.signVideo=s,this.signVideo){if(this.signVideo.muted=!0,this.signVideo.playsInline=!0,this.signVideo.playbackRate=this.mainVideo.playbackRate,!isNaN(this.mainVideo.currentTime)&&this.mainVideo.currentTime>0)try{this.signVideo.currentTime=this.mainVideo.currentTime}catch{}this.setupSignListeners(),this.notifyStatus(this.signVideo.readyState>=2?"ready":"loading")}else this.notifyStatus("none")}notifyStatus(s){this.onSignStatusChange&&this.onSignStatusChange(s)}setupMainListeners(){this.mainListeners.play=()=>{this.signVideo&&this.signVideo.paused&&!this.mainVideo.paused&&this.signVideo.play().catch(()=>{})},this.mainListeners.pause=()=>{this.signVideo&&!this.signVideo.paused&&this.signVideo.pause()},this.mainListeners.seeking=()=>{this.signVideo&&!isNaN(this.mainVideo.currentTime)&&(this.signVideo.currentTime=this.mainVideo.currentTime)},this.mainListeners.seeked=()=>{this.signVideo&&!isNaN(this.mainVideo.currentTime)&&(this.signVideo.currentTime=this.mainVideo.currentTime,this.mainVideo.paused&&!this.signVideo.paused&&this.signVideo.pause())},this.mainListeners.ratechange=()=>{this.signVideo&&(this.signVideo.playbackRate=this.mainVideo.playbackRate)},this.mainListeners.timeupdate=()=>{this.checkDrift()},this.mainListeners.ended=()=>{this.signVideo&&!this.signVideo.paused&&this.signVideo.pause()};for(const[s,e]of Object.entries(this.mainListeners))this.mainVideo.addEventListener(s,e)}setupSignListeners(){if(this.signVideo){this.signListeners.waiting=()=>{this.notifyStatus("loading")},this.signListeners.canplay=()=>{this.notifyStatus("ready"),!this.mainVideo.paused&&this.signVideo&&this.signVideo.paused&&this.signVideo.play().catch(()=>{})},this.signListeners.playing=()=>{this.notifyStatus("ready"),this.mainVideo.paused&&this.signVideo&&!this.signVideo.paused&&this.signVideo.pause()},this.signListeners.error=()=>{console.warn("Secondary EthSL sign language video stream encountered an error."),this.notifyStatus("error")};for(const[s,e]of Object.entries(this.signListeners))this.signVideo.addEventListener(s,e)}}checkDrift(){if(!this.signVideo||this.isSyncing||this.signVideo.readyState<2)return;if(Math.abs(this.mainVideo.currentTime-this.signVideo.currentTime)>this.driftThreshold){this.isSyncing=!0;try{this.signVideo.currentTime=this.mainVideo.currentTime}catch{}setTimeout(()=>{this.isSyncing=!1},50)}}async switchSource(s){const e=!this.mainVideo.paused,i=this.mainVideo.currentTime,t=this.mainVideo.playbackRate;return this.mainVideo.src=s,this.mainVideo.load(),new Promise(n=>{const r=async()=>{if(this.mainVideo.removeEventListener("loadedmetadata",r),this.mainVideo.currentTime=i,this.mainVideo.playbackRate=t,e)try{await this.mainVideo.play()}catch{}if(this.signVideo){try{this.signVideo.currentTime=i}catch{}e?this.signVideo.play().catch(()=>{}):this.signVideo.pause()}n()};this.mainVideo.addEventListener("loadedmetadata",r)})}cleanupSignListeners(){if(this.signVideo)for(const[s,e]of Object.entries(this.signListeners))this.signVideo.removeEventListener(s,e);this.signListeners={}}destroy(){for(const[s,e]of Object.entries(this.mainListeners))this.mainVideo.removeEventListener(s,e);this.mainListeners={},this.cleanupSignListeners(),this.signVideo=null}}class X{constructor(s,e){l(this,"segments",[]);l(this,"container");l(this,"onSeekAndPlay");l(this,"onFollowChange");l(this,"currentActiveId",null);l(this,"searchQuery","");l(this,"isFollowing",!0);l(this,"userPausedFollowing",!1);l(this,"locale","en");l(this,"listElement",null);l(this,"followBtn",null);l(this,"statusElement",null);this.container=s,this.onSeekAndPlay=e.onSeekAndPlay,this.onFollowChange=e.onFollowChange,this.locale=e.locale||"en"}setLocale(s){this.locale!==s&&(this.locale=s,this.render())}setSegments(s){this.segments=s.map(e=>({...e,start:Number(e.start)||0,end:Number(e.end)||0})).sort((e,i)=>e.start-i.start),this.render()}setSearchQuery(s){this.searchQuery=s.toLowerCase().trim(),this.render()}getActiveSegment(s){return this.segments.length&&this.segments.find(e=>s>=e.start&&s<e.end)||null}updateActiveTime(s){const e=this.getActiveSegment(s),i=e?e.id:null;i!==this.currentActiveId&&(this.currentActiveId=i,this.highlightSegment(i),this.isFollowing&&i!==null&&this.scrollToActiveCue(i))}highlightSegment(s){if(!this.container)return;const e=this.container.querySelector(".transcript-item.active");if(e&&e.classList.remove("active"),s!==null){const i=this.container.querySelector(`[data-segment-id="${s}"]`);i&&i.classList.add("active")}}scrollToActiveCue(s){if(!this.listElement)return;const e=this.listElement.querySelector(`[data-segment-id="${s}"]`);if(!e)return;this.listElement.scrollTop;const i=this.listElement.clientHeight,t=e.offsetTop,n=e.clientHeight,r=t-i/2+n/2;this.listElement.scrollTo({top:Math.max(0,r),behavior:"smooth"})}setFollowing(s){this.setFollowingState(s,!0)}setFollowingState(s,e=!1){var i;if(this.isFollowing=s,e&&(this.userPausedFollowing=!s),(i=this.onFollowChange)==null||i.call(this,s),this.followBtn){this.followBtn.setAttribute("aria-pressed",s?"true":"false");const t=this.locale==="am";s?(this.followBtn.textContent=t?"✓ በተከታታይ አንብብ":"✓ Follow Playback",this.followBtn.setAttribute("aria-label",t?"የጽሑፍ ግልባጭ ተከታትሎ ማንበብ በርቷል":"Follow playback active (Click to pause auto-scroll)")):(this.followBtn.textContent=t?"↻ ተከታትሎ ማንበብ ቀጥል":"↻ Resume Following",this.followBtn.setAttribute("aria-label",t?"ተከታትሎ ማንበብ ቆሟል፤ እንደገና ለማስጀመር ይጫኑ":"Following paused (Click to resume auto-scroll)"))}s&&this.currentActiveId!==null&&this.scrollToActiveCue(this.currentActiveId)}formatTime(s){const e=Math.floor(s/60),i=Math.floor(s%60);return`${e.toString().padStart(2,"0")}:${i.toString().padStart(2,"0")}`}render(){var i;const s=this.locale==="am",e=this.searchQuery?this.segments.filter(t=>t.text.toLowerCase().includes(this.searchQuery)||t.speaker&&t.speaker.toLowerCase().includes(this.searchQuery)||t.visualDescription&&t.visualDescription.toLowerCase().includes(this.searchQuery)):this.segments;if(this.container.innerHTML=`
+  `}class ne{constructor(s,e){d(this,"mainVideo");d(this,"signVideo",null);d(this,"driftThreshold");d(this,"isSyncing",!1);d(this,"onSignStatusChange");d(this,"mainListeners",{});d(this,"signListeners",{});this.mainVideo=s,this.driftThreshold=(e==null?void 0:e.driftThreshold)??.25,this.onSignStatusChange=e==null?void 0:e.onSignStatusChange,this.setupMainListeners()}setSignVideo(s){if(this.cleanupSignListeners(),this.signVideo=s,this.signVideo){if(this.signVideo.muted=!0,this.signVideo.playsInline=!0,this.signVideo.playbackRate=this.mainVideo.playbackRate,!isNaN(this.mainVideo.currentTime)&&this.mainVideo.currentTime>0)try{this.signVideo.currentTime=this.mainVideo.currentTime}catch{}this.setupSignListeners(),this.notifyStatus(this.signVideo.readyState>=2?"ready":"loading")}else this.notifyStatus("none")}notifyStatus(s){this.onSignStatusChange&&this.onSignStatusChange(s)}setupMainListeners(){this.mainListeners.play=()=>{this.signVideo&&this.signVideo.paused&&!this.mainVideo.paused&&this.signVideo.play().catch(()=>{})},this.mainListeners.pause=()=>{this.signVideo&&!this.signVideo.paused&&this.signVideo.pause()},this.mainListeners.seeking=()=>{this.signVideo&&!isNaN(this.mainVideo.currentTime)&&(this.signVideo.currentTime=this.mainVideo.currentTime)},this.mainListeners.seeked=()=>{this.signVideo&&!isNaN(this.mainVideo.currentTime)&&(this.signVideo.currentTime=this.mainVideo.currentTime,this.mainVideo.paused&&!this.signVideo.paused&&this.signVideo.pause())},this.mainListeners.ratechange=()=>{this.signVideo&&(this.signVideo.playbackRate=this.mainVideo.playbackRate)},this.mainListeners.timeupdate=()=>{this.checkDrift()},this.mainListeners.ended=()=>{this.signVideo&&!this.signVideo.paused&&this.signVideo.pause()};for(const[s,e]of Object.entries(this.mainListeners))this.mainVideo.addEventListener(s,e)}setupSignListeners(){if(this.signVideo){this.signListeners.waiting=()=>{this.notifyStatus("loading")},this.signListeners.canplay=()=>{this.notifyStatus("ready"),!this.mainVideo.paused&&this.signVideo&&this.signVideo.paused&&this.signVideo.play().catch(()=>{})},this.signListeners.playing=()=>{this.notifyStatus("ready"),this.mainVideo.paused&&this.signVideo&&!this.signVideo.paused&&this.signVideo.pause()},this.signListeners.error=()=>{console.warn("Secondary EthSL sign language video stream encountered an error."),this.notifyStatus("error")};for(const[s,e]of Object.entries(this.signListeners))this.signVideo.addEventListener(s,e)}}checkDrift(){if(!this.signVideo||this.isSyncing||this.signVideo.readyState<2)return;if(Math.abs(this.mainVideo.currentTime-this.signVideo.currentTime)>this.driftThreshold){this.isSyncing=!0;try{this.signVideo.currentTime=this.mainVideo.currentTime}catch{}setTimeout(()=>{this.isSyncing=!1},50)}}async switchSource(s){const e=!this.mainVideo.paused,i=this.mainVideo.currentTime,t=this.mainVideo.playbackRate;return this.mainVideo.src=s,this.mainVideo.load(),new Promise(a=>{const o=async()=>{if(this.mainVideo.removeEventListener("loadedmetadata",o),this.mainVideo.currentTime=i,this.mainVideo.playbackRate=t,e)try{await this.mainVideo.play()}catch{}if(this.signVideo){try{this.signVideo.currentTime=i}catch{}e?this.signVideo.play().catch(()=>{}):this.signVideo.pause()}a()};this.mainVideo.addEventListener("loadedmetadata",o)})}cleanupSignListeners(){if(this.signVideo)for(const[s,e]of Object.entries(this.signListeners))this.signVideo.removeEventListener(s,e);this.signListeners={}}destroy(){for(const[s,e]of Object.entries(this.mainListeners))this.mainVideo.removeEventListener(s,e);this.mainListeners={},this.cleanupSignListeners(),this.signVideo=null}}class re{constructor(s,e){d(this,"segments",[]);d(this,"container");d(this,"onSeekAndPlay");d(this,"onFollowChange");d(this,"currentActiveId",null);d(this,"searchQuery","");d(this,"isFollowing",!0);d(this,"userPausedFollowing",!1);d(this,"locale","en");d(this,"listElement",null);d(this,"followBtn",null);d(this,"statusElement",null);this.container=s,this.onSeekAndPlay=e.onSeekAndPlay,this.onFollowChange=e.onFollowChange,this.locale=e.locale||"en"}setLocale(s){this.locale!==s&&(this.locale=s,this.render())}setSegments(s){this.segments=s.map(e=>({...e,start:Number(e.start)||0,end:Number(e.end)||0})).sort((e,i)=>e.start-i.start),this.render()}setSearchQuery(s){this.searchQuery=s.toLowerCase().trim(),this.render()}getActiveSegment(s){return this.segments.length&&this.segments.find(e=>s>=e.start&&s<e.end)||null}updateActiveTime(s){const e=this.getActiveSegment(s),i=e?e.id:null;i!==this.currentActiveId&&(this.currentActiveId=i,this.highlightSegment(i),this.isFollowing&&i!==null&&this.scrollToActiveCue(i))}highlightSegment(s){if(!this.container)return;const e=this.container.querySelector(".transcript-item.active");if(e&&e.classList.remove("active"),s!==null){const i=this.container.querySelector(`[data-segment-id="${s}"]`);i&&i.classList.add("active")}}scrollToActiveCue(s){if(!this.listElement)return;const e=this.listElement.querySelector(`[data-segment-id="${s}"]`);if(!e)return;this.listElement.scrollTop;const i=this.listElement.clientHeight,t=e.offsetTop,a=e.clientHeight,o=t-i/2+a/2;this.listElement.scrollTo({top:Math.max(0,o),behavior:"smooth"})}setFollowing(s){this.setFollowingState(s,!0)}setFollowingState(s,e=!1){var i;if(this.isFollowing=s,e&&(this.userPausedFollowing=!s),(i=this.onFollowChange)==null||i.call(this,s),this.followBtn){this.followBtn.setAttribute("aria-pressed",s?"true":"false");const t=this.locale==="am";s?(this.followBtn.textContent=t?"✓ በተከታታይ አንብብ":"✓ Follow Playback",this.followBtn.setAttribute("aria-label",t?"የጽሑፍ ግልባጭ ተከታትሎ ማንበብ በርቷል":"Follow playback active (Click to pause auto-scroll)")):(this.followBtn.textContent=t?"↻ ተከታትሎ ማንበብ ቀጥል":"↻ Resume Following",this.followBtn.setAttribute("aria-label",t?"ተከታትሎ ማንበብ ቆሟል፤ እንደገና ለማስጀመር ይጫኑ":"Following paused (Click to resume auto-scroll)"))}s&&this.currentActiveId!==null&&this.scrollToActiveCue(this.currentActiveId)}formatTime(s){const e=Math.floor(s/60),i=Math.floor(s%60);return`${e.toString().padStart(2,"0")}:${i.toString().padStart(2,"0")}`}render(){var i;const s=this.locale==="am",e=this.searchQuery?this.segments.filter(t=>t.text.toLowerCase().includes(this.searchQuery)||t.speaker&&t.speaker.toLowerCase().includes(this.searchQuery)||t.visualDescription&&t.visualDescription.toLowerCase().includes(this.searchQuery)):this.segments;if(this.container.innerHTML=`
       <div class="transcript-controls-row">
         <button 
           type="button" 
@@ -28,14 +28,14 @@
               ${s?"ምንም የሚዛመድ የጽሑፍ ግልባጭ አልተገኘም።":"No transcript segments match your search."}
             </p>`:`
           <ul class="transcript-list" role="list" id="transcript-list-box" tabindex="0" aria-label="${s?"የጽሑፍ ግልባጭ ዝርዝር":"Transcript cues"}">
-            ${e.map(t=>{const n=this.formatTime(t.start),r=t.id===this.currentActiveId,g=s?`ከ ${n} ጀምሮ አጫውት`:`Play from ${n}`;return`
-                <li class="transcript-item ${r?"active":""}" data-segment-id="${t.id}">
+            ${e.map(t=>{const a=this.formatTime(t.start),o=t.id===this.currentActiveId,h=s?`ከ ${a} ጀምሮ አጫውት`:`Play from ${a}`;return`
+                <li class="transcript-item ${o?"active":""}" data-segment-id="${t.id}">
                   <button 
                     type="button" 
                     class="btn-seek-time" 
                     data-time="${t.start}" 
-                    aria-label="${g}">
-                    ${n}
+                    aria-label="${h}">
+                    ${a}
                   </button>
                   <div class="segment-content">
                     ${t.speaker?`<strong class="speaker-label">${this.escapeHtml(t.speaker)}:</strong>`:""}
@@ -48,7 +48,7 @@
               `}).join("")}
           </ul>
         `}
-    `,this.listElement=this.container.querySelector("#transcript-list-box"),this.followBtn=this.container.querySelector("#btn-toggle-follow"),(i=this.followBtn)==null||i.addEventListener("click",()=>{this.setFollowingState(!this.isFollowing,!0)}),this.listElement){const t=()=>{this.isFollowing&&this.setFollowingState(!1,!0)};this.listElement.addEventListener("wheel",t,{passive:!0}),this.listElement.addEventListener("touchmove",t,{passive:!0}),this.listElement.addEventListener("keydown",n=>{["ArrowUp","ArrowDown","PageUp","PageDown","Home","End"].includes(n.key)&&t()})}this.container.querySelectorAll(".btn-seek-time").forEach(t=>{t.addEventListener("click",n=>{const r=parseFloat(n.currentTarget.dataset.time||"0");this.onSeekAndPlay(r),n.currentTarget.focus()})})}escapeHtml(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}}class G extends HTMLElement{constructor(){super();l(this,"shadow");l(this,"manifest",null);l(this,"activeLocale","en");l(this,"prefs");l(this,"mainVideo");l(this,"signVideo",null);l(this,"syncController");l(this,"pendingSeekTime",null);l(this,"currentCues",[]);l(this,"captionOverlay");l(this,"transcriptViewer");l(this,"isPreferencesOpen",!1);this.shadow=this.attachShadow({mode:"open"}),this.prefs=U()}static get observedAttributes(){return["manifest-src","locale"]}connectedCallback(){this.activeLocale=this.getAttribute("locale")||"en";const e=this.getAttribute("manifest-src");e&&this.loadManifest(e)}disconnectedCallback(){this.syncController&&this.syncController.destroy()}attributeChangedCallback(e,i,t){i!==t&&(e==="locale"?(this.activeLocale=t||"en",this.updateLocaleStrings()):e==="manifest-src"&&this.loadManifest(t))}async loadManifest(e){try{const i=await fetch(e);if(!i.ok)throw new Error(`HTTP error ${i.status}`);const t=await i.json();let n;try{n=new URL(e,window.location.href)}catch{n=new URL(window.location.href)}const r=g=>{if(!g)return g;try{return new URL(g,n).href}catch{return g}};this.manifest={...t,poster:t.poster?{...t.poster,src:r(t.poster.src)}:void 0,sources:(t.sources||[]).map(g=>({...g,src:r(g.src)})),captionTracks:(t.captionTracks||[]).map(g=>({...g,src:r(g.src)})),transcript:t.transcript?{...t.transcript,src:r(t.transcript.src)}:t.transcript},this.render(),await this.initTracksAndTranscript()}catch(i){this.renderError(i instanceof Error?i.message:"Failed to load manifest")}}async initTracksAndTranscript(){var e;if(this.manifest&&(await this.loadCaptionTrack(this.prefs.captionLanguage),(e=this.manifest.transcript)!=null&&e.src))try{const i=await fetch(this.manifest.transcript.src);if(i.ok){const n=((await i.json()).segments||[]).map(r=>({id:r.id,start:r.start_ms!==void 0?r.start_ms/1e3:r.start||0,end:r.end_ms!==void 0?r.end_ms/1e3:r.end||0,speaker:r.speaker,text:r.text||r.draft_text||"",visualDescription:r.visual_description||r.visualDescription}));this.transcriptViewer.setSegments(n)}}catch(i){console.warn("Could not load external transcript file, using fallback cues",i)}}async loadCaptionTrack(e){if(!this.manifest||e==="off"){this.currentCues=[],this.updateCaptionDisplay();return}const i=this.manifest.captionTracks.find(t=>t.language===e);if(!i){this.currentCues=[],this.updateCaptionDisplay();return}try{const t=await fetch(i.src);if(t.ok){const n=await t.text();this.currentCues=q(n)}}catch{this.currentCues=[]}this.updateCaptionDisplay()}updateCaptionDisplay(){if(!this.captionOverlay||!this.mainVideo)return;if(this.prefs.captionLanguage==="off"||this.currentCues.length===0){this.captionOverlay.style.display="none";return}const e=this.mainVideo.currentTime,i=this.currentCues.find(t=>e>=t.start&&e<=t.end);i?(this.captionOverlay.style.display="block",this.captionOverlay.style.cssText=K(this.prefs.captionTheme,this.prefs.captionSize),this.captionOverlay.textContent=i.text):this.captionOverlay.style.display="none"}seekAndPlay(e){if(isNaN(this.mainVideo.duration)||this.mainVideo.readyState<1){this.pendingSeekTime=e;const i=()=>{this.mainVideo.removeEventListener("loadedmetadata",i),this.mainVideo.currentTime=e,this.mainVideo.play().catch(()=>{}),this.pendingSeekTime=null};this.mainVideo.addEventListener("loadedmetadata",i);return}this.mainVideo.currentTime=e,this.mainVideo.play().catch(i=>{console.warn("Playback interrupted or prevented on seek:",i)})}renderError(e){this.shadow.innerHTML=`
+    `,this.listElement=this.container.querySelector("#transcript-list-box"),this.followBtn=this.container.querySelector("#btn-toggle-follow"),(i=this.followBtn)==null||i.addEventListener("click",()=>{this.setFollowingState(!this.isFollowing,!0)}),this.listElement){const t=()=>{this.isFollowing&&this.setFollowingState(!1,!0)};this.listElement.addEventListener("wheel",t,{passive:!0}),this.listElement.addEventListener("touchmove",t,{passive:!0}),this.listElement.addEventListener("keydown",a=>{["ArrowUp","ArrowDown","PageUp","PageDown","Home","End"].includes(a.key)&&t()})}this.container.querySelectorAll(".btn-seek-time").forEach(t=>{t.addEventListener("click",a=>{const o=parseFloat(a.currentTarget.dataset.time||"0");this.onSeekAndPlay(o),a.currentTarget.focus()})})}escapeHtml(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}}const L={play:'<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>',pause:'<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>',restart:'<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>',rewind:'<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg>',forward:'<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg>',cc:'<svg viewBox="0 0 24 24" width="22" height="20" fill="currentColor" aria-hidden="true"><path d="M19 4H5a2 2 0 00-2 2v12a2 2 0 002 2h14a2 2 0 002-2V6a2 2 0 00-2-2zm-8 7H9.5v-.5h-2v3h2V13H11v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-4a1 1 0 011-1h3a1 1 0 011 1v1zm7 0h-1.5v-.5h-2v3h2V13H18v1a1 1 0 01-1 1h-3a1 1 0 01-1-1v-4a1 1 0 011-1h3a1 1 0 011 1v1z"/></svg>',sign:'<svg viewBox="0 0 24 24" width="22" height="20" fill="currentColor" aria-hidden="true"><path d="M21 9h-4.2l-1.3-3.9C15.2 4.4 14.5 4 13.7 4c-.7 0-1.4.3-1.8.9L10 8H6c-1.1 0-2 .9-2 2v7c0 1.1.9 2 2 2h6.8l5.8-2.5c.9-.4 1.4-1.3 1.4-2.3V11c0-1.1-.9-2-2-2zm-9 9H6v-7h4.5l2.1-3.2c.2-.3.6-.4.9-.4.3 0 .6.2.8.5l1.3 3.9v.2H12v6zm7-3.7l-5 2.1V11h6v3.3z"/></svg>',ad:'<svg viewBox="0 0 24 24" width="22" height="20" fill="currentColor" aria-hidden="true"><path d="M4 4h5c4.42 0 8 3.58 8 8s-3.58 8-8 8H4V4zm5 13c2.76 0 5-2.24 5-5s-2.24-5-5-5H7v10h2zm10-9.8a7.96 7.96 0 010 9.6l1.5 1.5c3.5-3.5 3.5-9.1 0-12.6l-1.5 1.5zm-2.5 2.5a4.46 4.46 0 010 4.6l1.5 1.5c1.9-2.1 1.9-5.1 0-7.2l-1.5 1.1z"/></svg>',transcript:'<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>',faster:'<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M21.5 14.5c0-.83-.67-1.5-1.5-1.5h-1.18c.43-.88.68-1.87.68-2.92 0-3.35-2.45-6.08-5.5-6.08-1.3 0-2.5.5-3.41 1.34L8.7 3.45a1.5 1.5 0 00-2.12 2.12l1.6 1.6C7.45 8.1 7 9.25 7 10.5c0 1.05.43 2.01 1.12 2.72L5.4 14.94A2 2 0 004 16.5C4 18.43 5.57 20 7.5 20h11c1.66 0 3-1.34 3-3 0-.91-.41-1.72-1.05-2.27.64-.32 1.05-.98 1.05-1.73zM14 6c1.93 0 3.5 1.79 3.5 4 0 .72-.18 1.4-.49 1.98l-3.92-3.92C13.36 6.8 13.67 6 14 6z"/></svg>',slower:'<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M19 13c-.55 0-1 .45-1 1 0 1.65-1.35 3-3 3H9c-1.65 0-3-1.35-3-3 0-.55-.45-1-1-1s-1 .45-1 1c0 2.42 1.72 4.44 4 4.9V20c0 .55.45 1 1 1s1-.45 1-1v-1.05c.32.03.66.05 1 .05s.68-.02 1-.05V20c0 .55.45 1 1 1s1-.45 1-1v-1.1c2.28-.46 4-2.48 4-4.9 0-.55-.45-1-1-1zm1.5-4c-.83 0-1.5.67-1.5 1.5 0 .28.08.53.21.75C17.7 10.5 15.98 10 14 10H10c-1.98 0-3.7.5-5.21 1.25.13-.22.21-.47.21-.75 0-.83-.67-1.5-1.5-1.5S2 9.67 2 10.5c0 .76.57 1.38 1.3 1.48C3.1 12.5 3 13 3 13.5c0 .35.03.69.08 1.03C2.45 14.89 2 15.64 2 16.5 2 17.6 2.9 18.5 4 18.5h.2c.4 1.2 1.44 2.1 2.7 2.38V21.5c0 .55.45 1 1 1s1-.45 1-1V21h6v.5c0 .55.45 1 1 1s1-.45 1-1v-.62c1.26-.28 2.3-1.18 2.7-2.38h.2c1.1 0 2-.9 2-2 0-.86-.45-1.61-1.08-1.97.05-.34.08-.68.08-1.03 0-.53-.1-1.04-.3-1.52.73-.1 1.3-.72 1.3-1.48 0-.83-.67-1.5-1.5-1.5zM12 7c3.86 0 7 3.14 7 6H5c0-2.86 3.14-6 7-6z"/></svg>',prefs:'<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.488.488 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>',fullscreenEnter:'<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>',fullscreenExit:'<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>',volumeUnmuted:'<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>',volumeMuted:'<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>'};class oe extends HTMLElement{constructor(){super();d(this,"shadow");d(this,"manifest",null);d(this,"activeLocale","en");d(this,"prefs");d(this,"mainVideo");d(this,"signVideo",null);d(this,"syncController");d(this,"pendingSeekTime",null);d(this,"currentCues",[]);d(this,"captionOverlay");d(this,"transcriptViewer");d(this,"isPreferencesOpen",!1);this.shadow=this.attachShadow({mode:"open"}),this.prefs=Z()}static get observedAttributes(){return["manifest-src","locale"]}connectedCallback(){this.activeLocale=this.getAttribute("locale")||"en";const e=this.getAttribute("manifest-src");e&&this.loadManifest(e)}disconnectedCallback(){this.syncController&&this.syncController.destroy()}attributeChangedCallback(e,i,t){i!==t&&(e==="locale"?(this.activeLocale=t||"en",this.updateLocaleStrings()):e==="manifest-src"&&this.loadManifest(t))}async loadManifest(e){try{const i=await fetch(e);if(!i.ok)throw new Error(`HTTP error ${i.status}`);const t=await i.json();let a;try{a=new URL(e,window.location.href)}catch{a=new URL(window.location.href)}const o=h=>{if(!h)return h;try{return new URL(h,a).href}catch{return h}};this.manifest={...t,poster:t.poster?{...t.poster,src:o(t.poster.src)}:void 0,sources:(t.sources||[]).map(h=>({...h,src:o(h.src)})),captionTracks:(t.captionTracks||[]).map(h=>({...h,src:o(h.src)})),transcript:t.transcript?{...t.transcript,src:o(t.transcript.src)}:t.transcript},this.render(),await this.initTracksAndTranscript()}catch(i){this.renderError(i instanceof Error?i.message:"Failed to load manifest")}}async initTracksAndTranscript(){var e;if(this.manifest&&(await this.loadCaptionTrack(this.prefs.captionLanguage),(e=this.manifest.transcript)!=null&&e.src))try{const i=await fetch(this.manifest.transcript.src);if(i.ok){const a=((await i.json()).segments||[]).map(o=>({id:o.id,start:o.start_ms!==void 0?o.start_ms/1e3:o.start||0,end:o.end_ms!==void 0?o.end_ms/1e3:o.end||0,speaker:o.speaker,text:o.text||o.draft_text||"",visualDescription:o.visual_description||o.visualDescription}));this.transcriptViewer.setSegments(a)}}catch(i){console.warn("Could not load external transcript file, using fallback cues",i)}}async loadCaptionTrack(e){if(!this.manifest||e==="off"){this.currentCues=[],this.updateCaptionDisplay();return}const i=this.manifest.captionTracks.find(t=>t.language===e);if(!i){this.currentCues=[],this.updateCaptionDisplay();return}try{const t=await fetch(i.src);if(t.ok){const a=await t.text();this.currentCues=ie(a)}}catch{this.currentCues=[]}this.updateCaptionDisplay()}updateCaptionDisplay(){if(!this.captionOverlay||!this.mainVideo)return;if(this.prefs.captionLanguage==="off"||this.currentCues.length===0){this.captionOverlay.style.display="none";return}const e=this.mainVideo.currentTime,i=this.currentCues.find(t=>e>=t.start&&e<=t.end);i?(this.captionOverlay.style.display="block",this.captionOverlay.style.cssText=ae(this.prefs.captionTheme,this.prefs.captionSize),this.captionOverlay.textContent=i.text):this.captionOverlay.style.display="none"}seekAndPlay(e){if(isNaN(this.mainVideo.duration)||this.mainVideo.readyState<1){this.pendingSeekTime=e;const i=()=>{this.mainVideo.removeEventListener("loadedmetadata",i),this.mainVideo.currentTime=e,this.mainVideo.play().catch(()=>{}),this.pendingSeekTime=null};this.mainVideo.addEventListener("loadedmetadata",i);return}this.mainVideo.currentTime=e,this.mainVideo.play().catch(i=>{console.warn("Playback interrupted or prevented on seek:",i)})}renderError(e){this.shadow.innerHTML=`
       <style>
         :host { display: block; font-family: system-ui, sans-serif; }
         .error-card {
@@ -62,13 +62,25 @@
       <div class="error-card" role="alert">
         <strong>Error:</strong> ${e}
       </div>
-    `}render(){var p,a,w,u;const e=this.activeLocale==="am",i=this.manifest?this.manifest.title[this.activeLocale]:"Media Player",t=(p=this.manifest)==null?void 0:p.sources.find(S=>S.kind==="main"),n=(a=this.manifest)==null?void 0:a.sources.find(S=>S.kind==="sign"),r=this.prefs.transcriptWidth||v.transcriptWidth||350,g=this.prefs.transcriptHeight||v.transcriptHeight||480,m=this.prefs.eslWidth||v.eslWidth||340,y=this.prefs.eslHeight||v.eslHeight||250;this.shadow.innerHTML=`
+    `}render(){var p,n,f,A;const e=this.activeLocale==="am",i=this.manifest?this.manifest.title[this.activeLocale]:"Media Player",t=(p=this.manifest)==null?void 0:p.sources.find(F=>F.kind==="main"),a=(n=this.manifest)==null?void 0:n.sources.find(F=>F.kind==="sign"),o=this.prefs.transcriptWidth||E.transcriptWidth||350,h=this.prefs.transcriptHeight||E.transcriptHeight||480,k=this.prefs.eslWidth||E.eslWidth||340,$=this.prefs.eslHeight||E.eslHeight||250;this.shadow.innerHTML=`
       <style>
         :host {
           display: block;
           max-width: 100%;
           font-family: var(--font-body, system-ui, -apple-system, sans-serif);
           color: var(--color-ink, #14201B);
+        }
+
+        .sr-only {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          border: 0;
         }
 
         /* 3-Panel Flexible Stage (Transcript | Main Video | Sign Language) */
@@ -269,37 +281,106 @@
           background: rgba(14, 165, 233, 0.25);
         }
 
-        /* Center Main Player Panel */
+        /* Center Main Player Panel - Horizontal Rectangular Cinema Proportion */
         .main-player-panel {
-          flex: 1 1 440px;
-          min-width: 320px;
-          max-width: 780px;
-          background: #000;
+          flex: 2 1 680px;
+          min-width: 480px;
+          max-width: 880px;
+          width: 100%;
+          background: #111417;
           border-radius: 8px;
           overflow: hidden;
-          box-shadow: 0 4px 18px rgba(0,0,0,0.2);
+          box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
           position: relative;
           outline: none;
           box-sizing: border-box;
+          display: flex;
+          flex-direction: column;
         }
         .main-player-panel:focus-visible {
           outline: 3px solid var(--color-focus, #005FCC);
           outline-offset: 3px;
         }
+        .main-player-panel:fullscreen,
+        .main-player-panel:-webkit-full-screen {
+          width: 100vw !important;
+          height: 100vh !important;
+          max-width: 100vw !important;
+          max-height: 100vh !important;
+          border-radius: 0 !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          display: flex !important;
+          flex-direction: column !important;
+          background: #000 !important;
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          z-index: 999999 !important;
+        }
         .video-viewport {
           position: relative;
           width: 100%;
-          aspect-ratio: 16/9;
+          aspect-ratio: 16 / 9;
           background: #050505;
           display: flex;
           align-items: center;
           justify-content: center;
+          overflow: hidden;
+        }
+        .main-player-panel:fullscreen .video-viewport,
+        .main-player-panel:-webkit-full-screen .video-viewport {
+          flex: 1 1 auto !important;
+          height: auto !important;
+          max-height: calc(100vh - 84px) !important;
+          width: 100% !important;
         }
         video.main-video {
           width: 100%;
           height: 100%;
           object-fit: contain;
           display: block;
+          cursor: pointer;
+        }
+
+        /* Big Play Button Overlay */
+        .big-play-btn {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 76px;
+          height: 56px;
+          background: rgba(0, 0, 0, 0.78);
+          border: 2.5px solid #84CC16;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          z-index: 12;
+          transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.65);
+          padding: 0;
+          outline: none;
+        }
+        .big-play-btn:hover {
+          transform: translate(-50%, -50%) scale(1.08);
+          background: rgba(0, 0, 0, 0.92);
+          border-color: #A3E635;
+          box-shadow: 0 6px 26px rgba(132, 204, 22, 0.4);
+        }
+        .big-play-btn:focus-visible {
+          outline: 3px solid var(--color-accent, #F2C14E);
+          outline-offset: 3px;
+        }
+        .big-play-btn.is-hidden {
+          display: none !important;
+        }
+        .big-play-svg {
+          width: 30px;
+          height: 30px;
+          margin-left: 3px;
         }
 
         /* Custom Captions Overlay */
@@ -318,67 +399,127 @@
           pointer-events: auto;
         }
 
-        /* Controls Toolbar */
+        /* Controls Toolbar (Able Player Inspired Modern Clean Layout) */
         .controls-toolbar {
           display: flex;
-          flex-wrap: wrap;
-          align-items: center;
-          gap: 0.5rem;
-          padding: 0.75rem 1rem;
-          background: #14201B;
+          flex-direction: column;
+          background: #1F2428;
           color: #FFF;
-          border-top: 1px solid #2A3B32;
+          border-top: 1px solid #30363D;
+          user-select: none;
+          flex-shrink: 0;
         }
-        .btn-ctrl {
-          background: #2A3B32;
-          color: #FFF;
-          border: 1px solid #52615A;
-          border-radius: 4px;
-          padding: 0.5rem 0.8rem;
-          font-size: 0.875rem;
-          font-weight: 600;
-          cursor: pointer;
-          min-height: 44px;
-          min-width: 44px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.35rem;
-        }
-        .btn-ctrl:focus-visible {
-          outline: 3px solid var(--color-accent, #F2C14E);
-          outline-offset: 2px;
-        }
-        .btn-ctrl:hover {
-          background: var(--color-brand, #0B5D4E);
-        }
-        .btn-ctrl[aria-pressed="true"] {
-          background: var(--color-brand, #0B5D4E);
-          border-color: var(--color-accent, #F2C14E);
-        }
-        .time-readout {
-          font-size: 0.875rem;
-          font-variant-numeric: tabular-nums;
-          padding: 0 0.5rem;
-          white-space: nowrap;
+        .main-player-panel:fullscreen .controls-toolbar,
+        .main-player-panel:-webkit-full-screen .controls-toolbar {
+          flex-shrink: 0 !important;
+          width: 100% !important;
         }
         .scrubber-container {
           width: 100%;
           display: flex;
           align-items: center;
-          gap: 0.5rem;
-          margin-bottom: 0.5rem;
+          padding: 6px 12px 2px 12px;
+          box-sizing: border-box;
         }
         input[type="range"].scrubber {
           flex: 1;
-          height: 8px;
-          accent-color: var(--color-accent, #F2C14E);
+          width: 100%;
+          height: 6px;
+          accent-color: #FFFFFF;
           cursor: pointer;
-          min-height: 44px;
+          background: #4B5563;
+          border-radius: 3px;
+          outline: none;
+          margin: 0;
+          padding: 0;
+          min-height: 20px;
+          transition: height 0.1s ease;
+        }
+        input[type="range"].scrubber:hover {
+          height: 8px;
         }
         input[type="range"].scrubber:focus-visible {
-          outline: 3px solid var(--color-accent, #F2C14E);
+          outline: 2px solid var(--color-accent, #F2C14E);
           outline-offset: 2px;
+        }
+        .controls-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 3px 8px;
+          gap: 2px;
+          flex-wrap: nowrap;
+          overflow-x: auto;
+        }
+        .controls-cluster {
+          display: flex;
+          align-items: center;
+          gap: 2px;
+        }
+        .btn-ctrl {
+          background: transparent;
+          color: #F8F9FA;
+          border: 1px solid transparent;
+          border-radius: 4px;
+          padding: 0;
+          width: 36px;
+          height: 36px;
+          min-width: 36px;
+          min-height: 36px;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+          flex-shrink: 0;
+          position: relative;
+        }
+        .btn-ctrl:hover {
+          background: rgba(255, 255, 255, 0.18);
+          color: #FFF;
+        }
+        .btn-ctrl:focus-visible {
+          outline: 2px solid var(--color-accent, #F2C14E);
+          outline-offset: 2px;
+        }
+        .btn-ctrl[aria-pressed="true"] {
+          background: rgba(14, 165, 233, 0.25);
+          color: #38BDF8;
+          border-bottom: 2px solid var(--color-accent, #F2C14E);
+        }
+        .ctrl-divider {
+          display: inline-block;
+          width: 1px;
+          height: 18px;
+          background: rgba(255, 255, 255, 0.22);
+          margin: 0 4px;
+          flex-shrink: 0;
+        }
+        .status-strip {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          background: #111417;
+          color: #E2E8F0;
+          font-size: 0.76rem;
+          font-family: monospace, system-ui, sans-serif;
+          padding: 3px 12px 5px 12px;
+          border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .status-item {
+          white-space: nowrap;
+        }
+        .status-time {
+          font-variant-numeric: tabular-nums;
+          font-weight: 500;
+          color: #F8FAFC;
+        }
+        .status-speed {
+          color: #CBD5E1;
+        }
+        .status-state {
+          font-style: italic;
+          color: #94A3B8;
         }
 
         /* LEFT: Resizable Transcript Window */
@@ -614,7 +755,7 @@
           <div 
             class="window-panel transcript-window" 
             id="transcript-window"
-            style="width: ${r}px; height: ${g}px; flex: 0 0 ${r}px; display: ${this.prefs.transcriptVisible!==!1?"flex":"none"};"
+            style="width: ${o}px; height: ${h}px; flex: 0 0 ${o}px; display: ${this.prefs.transcriptVisible!==!1?"flex":"none"};"
             aria-label="${e?"የትምህርቱ የጽሑፍ ግልባጭ መስኮት":"Lesson Transcript Window"}">
             
             <!-- Transcript Titlebar -->
@@ -687,9 +828,21 @@
                 class="main-video" 
                 playsinline 
                 preload="metadata"
-                poster="${((u=(w=this.manifest)==null?void 0:w.poster)==null?void 0:u.src)||""}"
+                poster="${((A=(f=this.manifest)==null?void 0:f.poster)==null?void 0:A.src)||""}"
                 src="${t?t.src:""}">
               </video>
+
+              <!-- Big Play Button Overlay -->
+              <button 
+                type="button" 
+                class="big-play-btn" 
+                id="big-play-btn" 
+                aria-label="${e?"ቪዲዮውን አጫውት (Space / K)":"Play video (Space / K)"}"
+                title="${e?"ቪዲዮውን አጫውት":"Play video"}">
+                <svg viewBox="0 0 48 48" class="big-play-svg" aria-hidden="true">
+                  <polygon points="18,12 36,24 18,36" fill="#FFFFFF"/>
+                </svg>
+              </button>
 
               <!-- Captions Overlay -->
               <div class="captions-container" aria-hidden="true">
@@ -697,8 +850,9 @@
               </div>
             </div>
 
-            <!-- Controls Toolbar -->
+            <!-- Controls Toolbar (Able Player Inspired Modern Clean Layout) -->
             <div class="controls-toolbar" role="toolbar" aria-label="${e?"የቪዲዮ መቆጣጠሪያዎች":"Video player controls"}">
+              <!-- Scrubber -->
               <div class="scrubber-container">
                 <label for="seek-scrubber" class="sr-only">${e?"የቪዲዮ መገኛ አሞሌ":"Seek video position"}</label>
                 <input 
@@ -709,41 +863,82 @@
                   max="100" 
                   value="0" 
                   aria-label="${e?"የቪዲዮ መገኛ አሞሌ":"Video timeline position"}">
-                <span class="time-readout" id="time-display">00:00 / 00:00</span>
               </div>
 
-              <button class="btn-ctrl" id="btn-play" aria-label="${e?"አጫውት (Space / K)":"Play (Space / K)"}">
-                <span id="play-icon" aria-hidden="true">▶</span>
-                <span id="play-text">${e?"አጫውት":"Play"}</span>
-              </button>
+              <!-- Controls Row -->
+              <div class="controls-row">
+                <!-- Left: Playback & Navigation -->
+                <div class="controls-cluster">
+                  <button class="btn-ctrl" id="btn-play" aria-label="${e?"አጫውት (Space / K)":"Play (Space / K)"}" title="${e?"አጫውት (Space / K)":"Play (Space / K)"}">
+                    <span id="play-icon" aria-hidden="true">${L.play}</span>
+                  </button>
 
-              <button class="btn-ctrl" id="btn-rewind" aria-label="${e?"ወደኋላ 5 ሰከንድ (J)":"Rewind 5 seconds (J)"}">
-                ↺ 5s
-              </button>
+                  <button class="btn-ctrl" id="btn-restart" aria-label="${e?"እንደገና ጀምር (0 / Home)":"Restart (0 / Home)"}" title="${e?"እንደገና ጀምር (0 / Home)":"Restart (0 / Home)"}">
+                    <span aria-hidden="true">${L.restart}</span>
+                  </button>
 
-              <button class="btn-ctrl" id="btn-forward" aria-label="${e?"ወደፊት 5 ሰከንድ (L)":"Forward 5 seconds (L)"}">
-                ↻ 5s
-              </button>
+                  <button class="btn-ctrl" id="btn-rewind" aria-label="${e?"ወደኋላ 5 ሰከንድ (J / ←)":"Rewind 5 seconds (J / ←)"}" title="${e?"ወደኋላ 5 ሰከንድ (J / ←)":"Rewind 5 seconds (J / ←)"}">
+                    <span aria-hidden="true">${L.rewind}</span>
+                  </button>
 
-              <button class="btn-ctrl" id="btn-ad" aria-pressed="${this.prefs.audioDescriptionEnabled?"true":"false"}" aria-label="${e?"የድምጽ ማብራሪያ (D)":"Audio Description (D)"}">
-                AD
-              </button>
+                  <button class="btn-ctrl" id="btn-forward" aria-label="${e?"ወደፊት 5 ሰከንድ (L / →)":"Forward 5 seconds (L / →)"}" title="${e?"ወደፊት 5 ሰከንድ (L / →)":"Forward 5 seconds (L / →)"}">
+                    <span aria-hidden="true">${L.forward}</span>
+                  </button>
+                </div>
 
-              <button class="btn-ctrl" id="btn-cc" aria-expanded="false" aria-label="${e?"የትርጉም ጽሑፍ (C)":"Captions (C)"}">
-                CC (${this.prefs.captionLanguage.toUpperCase()})
-              </button>
+                <!-- Center: Accessibility & Speed -->
+                <div class="controls-cluster">
+                  <button class="btn-ctrl" id="btn-cc" aria-pressed="${this.prefs.captionLanguage!=="off"?"true":"false"}" aria-label="${e?"የትርጉም ጽሑፍ (C)":"Captions (C)"}" title="${e?"የትርጉም ጽሑፍ (C)":"Captions (C)"}">
+                    <span aria-hidden="true">${L.cc}</span>
+                  </button>
 
-              <button class="btn-ctrl" id="btn-esl" aria-pressed="${this.prefs.eslVisible?"true":"false"}" aria-label="${e?"የኢትዮጵያ የምልክት ቋንቋ (S)":"Ethiopian Sign Language (S)"}">
-                EthSL
-              </button>
+                  <button class="btn-ctrl" id="btn-esl" aria-pressed="${this.prefs.eslVisible?"true":"false"}" aria-label="${e?"የኢትዮጵያ የምልክት ቋንቋ (S)":"Ethiopian Sign Language (S)"}" title="${e?"የኢትዮጵያ የምልክት ቋንቋ (S)":"Ethiopian Sign Language (S)"}">
+                    <span aria-hidden="true">${L.sign}</span>
+                  </button>
 
-              <button class="btn-ctrl" id="btn-transcript-toggle" aria-pressed="${this.prefs.transcriptVisible!==!1?"true":"false"}" aria-label="${e?"የጽሑፍ ግልባጭ ማሳያ":"Toggle Transcript"}">
-                📄 ${e?"ግልባጭ":"Transcript"}
-              </button>
+                  <button class="btn-ctrl" id="btn-ad" aria-pressed="${this.prefs.audioDescriptionEnabled?"true":"false"}" aria-label="${e?"የድምጽ ማብራሪያ (D)":"Audio Description (D)"}" title="${e?"የድምጽ ማብራሪያ (D)":"Audio Description (D)"}">
+                    <span aria-hidden="true">${L.ad}</span>
+                  </button>
 
-              <button class="btn-ctrl" id="btn-prefs" aria-expanded="false" aria-label="${e?"የተደራሽነት ምርጫዎች":"Accessibility Preferences"}">
-                ⚙ ${e?"ምርጫዎች":"Settings"}
-              </button>
+                  <button class="btn-ctrl" id="btn-transcript-toggle" aria-pressed="${this.prefs.transcriptVisible!==!1?"true":"false"}" aria-label="${e?"የጽሑፍ ግልባጭ ማሳያ (T)":"Toggle Transcript (T)"}" title="${e?"የጽሑፍ ግልባጭ ማሳያ (T)":"Toggle Transcript (T)"}">
+                    <span aria-hidden="true">${L.transcript}</span>
+                  </button>
+
+                  <span class="ctrl-divider" aria-hidden="true"></span>
+
+                  <button class="btn-ctrl" id="btn-speed-faster" aria-label="${e?"ፍጥነት ጨምር (>)":"Increase speed (>)"}" title="${e?"ፍጥነት ጨምር (>)":"Increase speed (>)"}">
+                    <span aria-hidden="true">${L.faster}</span>
+                  </button>
+
+                  <button class="btn-ctrl" id="btn-speed-slower" aria-label="${e?"ፍጥነት ቀንስ (<)":"Decrease speed (<)"}" title="${e?"ፍጥነት ቀንስ (<)":"Decrease speed (<)"}">
+                    <span aria-hidden="true">${L.slower}</span>
+                  </button>
+
+                  <span class="ctrl-divider" aria-hidden="true"></span>
+                </div>
+
+                <!-- Right: Settings, Fullscreen, Volume -->
+                <div class="controls-cluster">
+                  <button class="btn-ctrl" id="btn-prefs" aria-expanded="false" aria-label="${e?"የተደራሽነት ምርጫዎች":"Accessibility Preferences"}" title="${e?"የተደራሽነት ምርጫዎች":"Accessibility Preferences"}">
+                    <span aria-hidden="true">${L.prefs}</span>
+                  </button>
+
+                  <button class="btn-ctrl" id="btn-fullscreen" aria-pressed="false" aria-label="${e?"ሙሉ ማያ ገጽ (F)":"Fullscreen (F)"}" title="${e?"ሙሉ ማያ ገጽ (F)":"Fullscreen (F)"}">
+                    <span id="fullscreen-icon" aria-hidden="true">${L.fullscreenEnter}</span>
+                  </button>
+
+                  <button class="btn-ctrl" id="btn-mute" aria-pressed="false" aria-label="${e?"ድምጽ አጥፋ (M)":"Mute (M)"}" title="${e?"ድምጽ አጥፋ (M)":"Mute (M)"}">
+                    <span id="mute-icon" aria-hidden="true">${L.volumeUnmuted}</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Status Strip -->
+              <div class="status-strip" aria-hidden="true">
+                <span class="status-item status-time" id="time-display">00:00 / 00:00</span>
+                <span class="status-item status-speed" id="speed-display">Speed: 1x</span>
+                <span class="status-item status-state" id="state-display">Paused</span>
+              </div>
             </div>
           </div>
 
@@ -751,7 +946,7 @@
           <div 
             class="window-panel esl-window" 
             id="esl-window" 
-            style="width: ${m}px; height: ${y}px; flex: 0 0 ${m}px; display: ${this.prefs.eslVisible&&n?"flex":"none"};"
+            style="width: ${k}px; height: ${$}px; flex: 0 0 ${k}px; display: ${this.prefs.eslVisible&&a?"flex":"none"};"
             aria-label="${e?"የኢትዮጵያ የምልክት ቋንቋ መስኮት":"Ethiopian Sign Language Window"}">
             
             <!-- Sign Titlebar -->
@@ -786,7 +981,7 @@
                 muted 
                 playsinline 
                 preload="metadata"
-                src="${n?n.src:""}">
+                src="${a?a.src:""}">
               </video>
             </div>
 
@@ -854,7 +1049,7 @@
           </div>
         </div>
       </section>
-    `,this.bindDOMElements(),this.attachEventListeners(),this.setupWindowInteractions()}bindDOMElements(){this.mainVideo=this.shadow.getElementById("main-video"),this.signVideo=this.shadow.getElementById("sign-video"),this.captionOverlay=this.shadow.getElementById("caption-overlay"),this.syncController=new Q(this.mainVideo,{driftThreshold:.25,onSignStatusChange:t=>{const n=this.shadow.getElementById("sign-status-indicator");n&&(t==="loading"?(n.style.display="inline-block",n.textContent=this.activeLocale==="am"?"በመጫን ላይ...":"Loading..."):t==="error"?(n.style.display="inline-block",n.textContent=this.activeLocale==="am"?"ምልክት ቋንቋ አልተገኘም":"Sign Unavailable",n.style.background="#FEF2F2",n.style.color="#991B1B"):(n.style.display="inline-block",n.textContent="EthSL",n.style.background="rgba(255,255,255,0.2)",n.style.color="#FFF"))}}),this.signVideo&&this.syncController.setSignVideo(this.signVideo);const e=this.shadow.getElementById("transcript-target"),i=this.shadow.getElementById("cb-auto-scroll");this.transcriptViewer=new X(e,{locale:this.activeLocale,onSeekAndPlay:t=>{this.seekAndPlay(t)},onFollowChange:t=>{i&&(i.checked=t)}})}setupWindowInteractions(){const e=this.shadow.getElementById("player-stage");if(!e)return;const i=(t,n,r,g,m,y,p)=>{const a=this.shadow.getElementById(t),w=this.shadow.getElementById(n),u=this.shadow.getElementById(r),S=this.shadow.getElementById(g),B=this.shadow.getElementById(m),j=y?this.shadow.getElementById(y):null;if(!a||!w||!u)return;let d=null,D=!1,C="corner",V=0,H=0,A=0,M=0,T=null;const N=c=>{if(!D)return;const h=c.clientX-V,x=c.clientY-H;T!==null&&cancelAnimationFrame(T),T=requestAnimationFrame(()=>{let k=A,$=M;C==="corner"||C==="right"?k=Math.min(p.maxWidth,Math.max(p.minWidth,A+h)):C==="left"&&(k=Math.min(p.maxWidth,Math.max(p.minWidth,A-h))),(C==="corner"||C==="bottom")&&($=Math.min(p.maxHeight,Math.max(p.minHeight,M+x))),a.style.width=`${k}px`,a.style.height=`${$}px`,a.style.flex=`0 0 ${k}px`,d&&(d.style.width=`${k}px`,d.style.height=`${$}px`,d.style.flex=`0 0 ${k}px`)})},P=()=>{D&&(D=!1,a.classList.remove("is-resizing"),window.removeEventListener("pointermove",N),window.removeEventListener("pointerup",P),window.removeEventListener("pointercancel",P),T!==null&&(cancelAnimationFrame(T),T=null),p.onSaveSize(a.offsetWidth,a.offsetHeight))},I=(c,h)=>{D=!0,C=c,V=h.clientX,H=h.clientY,A=a.offsetWidth,M=a.offsetHeight,a.classList.add("is-resizing"),window.addEventListener("pointermove",N),window.addEventListener("pointerup",P),window.addEventListener("pointercancel",P),h.preventDefault(),h.stopPropagation()};u.addEventListener("pointerdown",c=>I("corner",c)),S==null||S.addEventListener("pointerdown",c=>I("bottom",c)),B==null||B.addEventListener("pointerdown",c=>I("right",c)),j==null||j.addEventListener("pointerdown",c=>I("left",c)),u.addEventListener("keydown",c=>{let h=a.offsetWidth,x=a.offsetHeight,k=!1;c.key==="ArrowRight"?(h=Math.min(p.maxWidth,h+20),k=!0):c.key==="ArrowLeft"?(h=Math.max(p.minWidth,h-20),k=!0):c.key==="ArrowDown"?(x=Math.min(p.maxHeight,x+20),k=!0):c.key==="ArrowUp"&&(x=Math.max(p.minHeight,x-20),k=!0),k&&(c.preventDefault(),a.style.width=`${h}px`,a.style.height=`${x}px`,a.style.flex=`0 0 ${h}px`,d&&(d.style.width=`${h}px`,d.style.height=`${x}px`,d.style.flex=`0 0 ${h}px`),p.onSaveSize(h,x))});let z=!1,O=0,o=0,E=0,R=0,W=null;a.addEventListener("pointerdown",()=>{if(a.classList.contains("floating")){a.style.zIndex="100";const c=t==="transcript-window"?"esl-window":"transcript-window",h=this.shadow.getElementById(c);h&&h.classList.contains("floating")&&(h.style.zIndex="90")}});const ae=c=>{const h=c.clientX-O,x=c.clientY-o;!z&&Math.hypot(h,x)>4&&(z=!0,!d&&a.parentNode&&(d=document.createElement("div"),d.className="window-placeholder",d.style.width=`${a.offsetWidth}px`,d.style.height=`${a.offsetHeight}px`,d.style.flex=a.style.flex||`0 0 ${a.offsetWidth}px`,a.parentNode.insertBefore(d,a)),a.classList.add("floating"),a.style.position="absolute",a.style.zIndex="100"),z&&(W!==null&&cancelAnimationFrame(W),W=requestAnimationFrame(()=>{const k=E+h,$=R+x;a.style.left=`${k}px`,a.style.top=`${$}px`,a.style.right="auto",a.style.bottom="auto"}))},_=()=>{z&&(z=!1),window.removeEventListener("pointermove",ae),window.removeEventListener("pointerup",_),window.removeEventListener("pointercancel",_),W!==null&&(cancelAnimationFrame(W),W=null)};w.addEventListener("pointerdown",c=>{if(c.target.tagName==="INPUT"||c.target.tagName==="SELECT")return;O=c.clientX,o=c.clientY;const h=e.getBoundingClientRect(),x=a.getBoundingClientRect();E=a.style.left?parseFloat(a.style.left):x.left-h.left,R=a.style.top?parseFloat(a.style.top):x.top-h.top,z=!1,a.style.zIndex="100";const k=t==="transcript-window"?"esl-window":"transcript-window",$=this.shadow.getElementById(k);$&&$.classList.contains("floating")&&($.style.zIndex="90"),window.addEventListener("pointermove",ae),window.addEventListener("pointerup",_),window.addEventListener("pointercancel",_)}),w.addEventListener("keydown",c=>{let h=!1;const x=20;if(!a.classList.contains("floating")){!d&&a.parentNode&&(d=document.createElement("div"),d.className="window-placeholder",d.style.width=`${a.offsetWidth}px`,d.style.height=`${a.offsetHeight}px`,d.style.flex=a.style.flex||`0 0 ${a.offsetWidth}px`,a.parentNode.insertBefore(d,a));const re=e.getBoundingClientRect(),oe=a.getBoundingClientRect();a.classList.add("floating"),a.style.position="absolute",a.style.zIndex="100",a.style.left=`${oe.left-re.left}px`,a.style.top=`${oe.top-re.top}px`}let k=parseFloat(a.style.left)||0,$=parseFloat(a.style.top)||0;c.key==="ArrowRight"?(k+=x,h=!0):c.key==="ArrowLeft"?(k-=x,h=!0):c.key==="ArrowDown"?($+=x,h=!0):c.key==="ArrowUp"&&($-=x,h=!0),h&&(c.preventDefault(),a.style.left=`${k}px`,a.style.top=`${$}px`)});const ne=()=>{a.classList.remove("floating"),a.style.position="",a.style.left="",a.style.top="",a.style.right="",a.style.bottom="",a.style.zIndex="",d&&(d.remove(),d=null)};w.addEventListener("dblclick",ne),a.__reDock=ne};i("transcript-window","transcript-drag-handle","transcript-resize-handle","transcript-resize-edge-bottom","transcript-resize-edge-right",null,{minWidth:220,maxWidth:750,minHeight:200,maxHeight:900,onSaveSize:(t,n)=>{this.prefs.transcriptWidth=t,this.prefs.transcriptHeight=n,F({transcriptWidth:t,transcriptHeight:n})}}),i("esl-window","esl-drag-handle","esl-resize-handle","esl-resize-edge-bottom","esl-resize-edge-right","esl-resize-edge-left",{minWidth:200,maxWidth:700,minHeight:160,maxHeight:700,onSaveSize:(t,n)=>{this.prefs.eslWidth=t,this.prefs.eslHeight=n,F({eslWidth:t,eslHeight:n})}})}attachEventListeners(){var N,P,I,z,O;const e=this.shadow.getElementById("btn-play"),i=this.shadow.getElementById("play-icon"),t=this.shadow.getElementById("play-text"),n=this.shadow.getElementById("seek-scrubber"),r=this.shadow.getElementById("time-display"),g=()=>{this.mainVideo.paused?this.mainVideo.play():this.mainVideo.pause()};e&&e.addEventListener("click",g),this.mainVideo.addEventListener("play",()=>{i&&t&&(i.textContent="⏸",t.textContent=this.activeLocale==="am"?"አቁም":"Pause"),e==null||e.setAttribute("aria-label",this.activeLocale==="am"?"አቁም (Space)":"Pause (Space)")}),this.mainVideo.addEventListener("pause",()=>{i&&t&&(i.textContent="▶",t.textContent=this.activeLocale==="am"?"አጫውት":"Play"),e==null||e.setAttribute("aria-label",this.activeLocale==="am"?"አጫውት (Space)":"Play (Space)")}),this.mainVideo.addEventListener("timeupdate",()=>{const o=this.mainVideo.currentTime,E=this.mainVideo.duration||1;n&&!n.matches(":active")&&(n.value=(o/E*100).toFixed(1)),r&&(r.textContent=`${this.formatTime(o)} / ${this.formatTime(E)}`),this.updateCaptionDisplay(),this.transcriptViewer.updateActiveTime(o)}),n.addEventListener("input",()=>{const o=this.mainVideo.duration||1;this.mainVideo.currentTime=parseFloat(n.value)/100*o}),(N=this.shadow.getElementById("btn-rewind"))==null||N.addEventListener("click",()=>{this.mainVideo.currentTime=Math.max(0,this.mainVideo.currentTime-5)}),(P=this.shadow.getElementById("btn-forward"))==null||P.addEventListener("click",()=>{this.mainVideo.currentTime=Math.min(this.mainVideo.duration||1e3,this.mainVideo.currentTime+5)});const m=this.shadow.getElementById("btn-ad");m==null||m.addEventListener("click",async()=>{if(!this.manifest)return;this.prefs.audioDescriptionEnabled=!this.prefs.audioDescriptionEnabled,F({audioDescriptionEnabled:this.prefs.audioDescriptionEnabled}),m.setAttribute("aria-pressed",this.prefs.audioDescriptionEnabled?"true":"false");const o=this.prefs.audioDescriptionEnabled?"described":"main",E=this.manifest.sources.find(R=>R.kind===o)||this.manifest.sources.find(R=>R.kind==="main");E&&await this.syncController.switchSource(E.src)});const y=this.shadow.getElementById("btn-cc");y==null||y.addEventListener("click",async()=>{const o=["en","am","off"],E=(o.indexOf(this.prefs.captionLanguage)+1)%o.length;this.prefs.captionLanguage=o[E],F({captionLanguage:this.prefs.captionLanguage}),y.textContent=`CC (${this.prefs.captionLanguage.toUpperCase()})`,await this.loadCaptionTrack(this.prefs.captionLanguage)});const p=this.shadow.getElementById("btn-esl"),a=this.shadow.getElementById("esl-window");p==null||p.addEventListener("click",()=>{this.prefs.eslVisible=!this.prefs.eslVisible,F({eslVisible:this.prefs.eslVisible}),p.setAttribute("aria-pressed",this.prefs.eslVisible?"true":"false"),a&&(a.style.display=this.prefs.eslVisible?"flex":"none")});const w=this.shadow.getElementById("btn-transcript-toggle"),u=this.shadow.getElementById("transcript-window");w==null||w.addEventListener("click",()=>{const E=!((u==null?void 0:u.style.display)!=="none");this.prefs.transcriptVisible=E,F({transcriptVisible:E}),w.setAttribute("aria-pressed",E?"true":"false"),u&&(u.style.display=E?"flex":"none")});const S=this.shadow.getElementById("cb-auto-scroll");S==null||S.addEventListener("change",()=>{this.transcriptViewer.setFollowing(S.checked)});const B=this.shadow.getElementById("select-transcript-lang");B==null||B.addEventListener("change",()=>{const o=B.value;this.setAttribute("locale",o)});const j=()=>{var o;this.isPreferencesOpen=!0,V&&(V.style.display="flex"),(o=this.shadow.getElementById("select-cc-lang"))==null||o.focus()},d=this.shadow.getElementById("btn-prefs"),D=this.shadow.getElementById("btn-transcript-prefs"),C=this.shadow.getElementById("btn-esl-prefs"),V=this.shadow.getElementById("prefs-dialog"),H=this.shadow.getElementById("btn-close-prefs"),A=this.shadow.getElementById("btn-reset-layout");d==null||d.addEventListener("click",j),D==null||D.addEventListener("click",j),C==null||C.addEventListener("click",j),H==null||H.addEventListener("click",()=>{this.isPreferencesOpen=!1,V&&(V.style.display="none"),d==null||d.focus()}),A==null||A.addEventListener("click",()=>{var o,E;J(),this.prefs=U(),u&&((o=u.__reDock)==null||o.call(u),u.classList.remove("floating"),u.style.position="",u.style.left="",u.style.top="",u.style.right="",u.style.bottom="",u.style.zIndex="",u.style.width=`${v.transcriptWidth}px`,u.style.height=`${v.transcriptHeight}px`,u.style.flex=`0 0 ${v.transcriptWidth}px`,u.style.display="flex"),a&&((E=a.__reDock)==null||E.call(a),a.classList.remove("floating"),a.style.position="",a.style.left="",a.style.top="",a.style.right="",a.style.bottom="",a.style.zIndex="",a.style.width=`${v.eslWidth}px`,a.style.height=`${v.eslHeight}px`,a.style.flex=`0 0 ${v.eslWidth}px`,a.style.display="flex"),p&&p.setAttribute("aria-pressed","true"),w&&w.setAttribute("aria-pressed","true")}),(I=this.shadow.getElementById("select-cc-lang"))==null||I.addEventListener("change",async o=>{this.prefs.captionLanguage=o.target.value,F({captionLanguage:this.prefs.captionLanguage}),y&&(y.textContent=`CC (${this.prefs.captionLanguage.toUpperCase()})`),await this.loadCaptionTrack(this.prefs.captionLanguage)}),(z=this.shadow.getElementById("select-cc-size"))==null||z.addEventListener("change",o=>{this.prefs.captionSize=o.target.value,F({captionSize:this.prefs.captionSize}),this.updateCaptionDisplay()}),(O=this.shadow.getElementById("select-cc-theme"))==null||O.addEventListener("change",o=>{this.prefs.captionTheme=o.target.value,F({captionTheme:this.prefs.captionTheme}),this.updateCaptionDisplay()});const M=this.shadow.getElementById("transcript-search");M==null||M.addEventListener("input",()=>{this.transcriptViewer.setSearchQuery(M.value)});const T=this.shadow.getElementById("player-container");T==null||T.addEventListener("keydown",o=>{if(this.isPreferencesOpen){o.key==="Escape"&&(this.isPreferencesOpen=!1,V&&(V.style.display="none"),d==null||d.focus());return}if(!(o.target.tagName==="INPUT"||o.target.tagName==="SELECT"))switch(o.key){case" ":case"k":case"K":o.preventDefault(),g();break;case"j":case"J":case"ArrowLeft":o.preventDefault(),this.mainVideo.currentTime=Math.max(0,this.mainVideo.currentTime-5);break;case"l":case"L":case"ArrowRight":o.preventDefault(),this.mainVideo.currentTime=Math.min(this.mainVideo.duration||1e3,this.mainVideo.currentTime+5);break;case"m":case"M":o.preventDefault(),this.mainVideo.muted=!this.mainVideo.muted;break;case"c":case"C":o.preventDefault(),y==null||y.click();break;case"s":case"S":o.preventDefault(),p==null||p.click();break;case"d":case"D":o.preventDefault(),m==null||m.click();break;case"t":case"T":o.preventDefault(),w==null||w.click();break}})}updateLocaleStrings(){this.render(),this.initTracksAndTranscript()}formatTime(e){const i=Math.floor(e/60),t=Math.floor(e%60);return`${i.toString().padStart(2,"0")}:${t.toString().padStart(2,"0")}`}}customElements.get("a11y-media-player")||customElements.define("a11y-media-player",G);const Z=["መስከረም","ጥቅምት","ህዳር","ታኅሣሥ","ጥር","የካቲት","መጋቢት","ሚያዝያ","ግንቦት","ሰኔ","ሐምሌ","ነሐሴ","ጳጉሜ"];function ee(b){const s=typeof b=="string"?new Date(b):b,e=s.getUTCFullYear(),i=s.getUTCMonth()+1,t=s.getUTCDate(),n=Math.floor((14-i)/12),r=e+4800-n,g=i+12*n-3,m=t+Math.floor((153*g+2)/5)+365*r+Math.floor(r/4)-Math.floor(r/100)+Math.floor(r/400)-32045,y=(m-1723856)%1461,p=y%365+365*Math.floor(y/1460),a=4*Math.floor((m-1723856)/1461)+Math.floor(y/365)-Math.floor(y/1460),w=Math.floor(p/30)+1,u=p%30+1,S=Z[Math.min(w-1,12)];return{year:a,month:w,day:u,monthNameAmharic:S}}function te(b){const s=ee(b),e=`${s.monthNameAmharic} ${s.day}፣ ${s.year} ዓ.ም`;return{iso:b,ethiopic:e,display:`${b} (${e})`}}class ie extends HTMLElement{constructor(){super();l(this,"shadow");l(this,"job",null);l(this,"activeLocale","en");this.shadow=this.attachShadow({mode:"open"})}static get observedAttributes(){return["job-data","locale"]}connectedCallback(){this.activeLocale=this.getAttribute("locale")||"en";const e=this.getAttribute("job-data");if(e)try{this.job=JSON.parse(e)}catch{}this.render()}setJob(e){this.job=e,this.render()}attributeChangedCallback(e,i,t){if(i!==t){if(e==="locale")this.activeLocale=t||"en",this.render();else if(e==="job-data")try{this.job=JSON.parse(t),this.render()}catch{}}}render(){if(!this.job){this.shadow.innerHTML='<div class="job-placeholder">No job data supplied</div>';return}const e=this.activeLocale==="am",i=this.job.title[this.activeLocale]||this.job.title.en,t=this.job.location[this.activeLocale]||this.job.location.en,n=this.job.description[this.activeLocale]||this.job.description.en,r=this.job.applicationDeadline?te(this.job.applicationDeadline):null,g={"@context":"https://schema.org/","@type":"JobPosting",title:i,description:n,hiringOrganization:{"@type":"Organization",name:this.job.employer},jobLocation:{"@type":"Place",address:{"@type":"PostalAddress",addressLocality:t,addressCountry:"ET"}},validThrough:this.job.applicationDeadline||"2026-12-31"};this.shadow.innerHTML=`
+    `,this.bindDOMElements(),this.attachEventListeners(),this.setupWindowInteractions()}bindDOMElements(){this.mainVideo=this.shadow.getElementById("main-video"),this.signVideo=this.shadow.getElementById("sign-video"),this.captionOverlay=this.shadow.getElementById("caption-overlay"),this.syncController=new ne(this.mainVideo,{driftThreshold:.25,onSignStatusChange:t=>{const a=this.shadow.getElementById("sign-status-indicator");a&&(t==="loading"?(a.style.display="inline-block",a.textContent=this.activeLocale==="am"?"በመጫን ላይ...":"Loading..."):t==="error"?(a.style.display="inline-block",a.textContent=this.activeLocale==="am"?"ምልክት ቋንቋ አልተገኘም":"Sign Unavailable",a.style.background="#FEF2F2",a.style.color="#991B1B"):(a.style.display="inline-block",a.textContent="EthSL",a.style.background="rgba(255,255,255,0.2)",a.style.color="#FFF"))}}),this.signVideo&&this.syncController.setSignVideo(this.signVideo);const e=this.shadow.getElementById("transcript-target"),i=this.shadow.getElementById("cb-auto-scroll");this.transcriptViewer=new re(e,{locale:this.activeLocale,onSeekAndPlay:t=>{this.seekAndPlay(t)},onFollowChange:t=>{i&&(i.checked=t)}})}setupWindowInteractions(){const e=this.shadow.getElementById("player-stage");if(!e)return;const i=(t,a,o,h,k,$,p)=>{const n=this.shadow.getElementById(t),f=this.shadow.getElementById(a),A=this.shadow.getElementById(o),F=this.shadow.getElementById(h),I=this.shadow.getElementById(k),_=$?this.shadow.getElementById($):null;if(!n||!f||!A)return;let u=null,O=!1,P="corner",Y=0,Q=0,N=0,J=0,R=null;const B=l=>{if(!O)return;const c=l.clientX-Y,y=l.clientY-Q;R!==null&&cancelAnimationFrame(R),R=requestAnimationFrame(()=>{let b=N,C=J;P==="corner"||P==="right"?b=Math.min(p.maxWidth,Math.max(p.minWidth,N+c)):P==="left"&&(b=Math.min(p.maxWidth,Math.max(p.minWidth,N-c))),(P==="corner"||P==="bottom")&&(C=Math.min(p.maxHeight,Math.max(p.minHeight,J+y))),n.style.width=`${b}px`,n.style.height=`${C}px`,n.style.flex=`0 0 ${b}px`,u&&(u.style.width=`${b}px`,u.style.height=`${C}px`,u.style.flex=`0 0 ${b}px`)})},S=()=>{O&&(O=!1,n.classList.remove("is-resizing"),window.removeEventListener("pointermove",B),window.removeEventListener("pointerup",S),window.removeEventListener("pointercancel",S),R!==null&&(cancelAnimationFrame(R),R=null),p.onSaveSize(n.offsetWidth,n.offsetHeight))},z=(l,c)=>{O=!0,P=l,Y=c.clientX,Q=c.clientY,N=n.offsetWidth,J=n.offsetHeight,n.classList.add("is-resizing"),window.addEventListener("pointermove",B),window.addEventListener("pointerup",S),window.addEventListener("pointercancel",S),c.preventDefault(),c.stopPropagation()};A.addEventListener("pointerdown",l=>z("corner",l)),F==null||F.addEventListener("pointerdown",l=>z("bottom",l)),I==null||I.addEventListener("pointerdown",l=>z("right",l)),_==null||_.addEventListener("pointerdown",l=>z("left",l)),A.addEventListener("keydown",l=>{let c=n.offsetWidth,y=n.offsetHeight,b=!1;l.key==="ArrowRight"?(c=Math.min(p.maxWidth,c+20),b=!0):l.key==="ArrowLeft"?(c=Math.max(p.minWidth,c-20),b=!0):l.key==="ArrowDown"?(y=Math.min(p.maxHeight,y+20),b=!0):l.key==="ArrowUp"&&(y=Math.max(p.minHeight,y-20),b=!0),b&&(l.preventDefault(),n.style.width=`${c}px`,n.style.height=`${y}px`,n.style.flex=`0 0 ${c}px`,u&&(u.style.width=`${c}px`,u.style.height=`${y}px`,u.style.flex=`0 0 ${c}px`),p.onSaveSize(c,y))});let w=!1,T=0,x=0,U=0,K=0,H=null;n.addEventListener("pointerdown",()=>{if(n.classList.contains("floating")){n.style.zIndex="100";const l=t==="transcript-window"?"esl-window":"transcript-window",c=this.shadow.getElementById(l);c&&c.classList.contains("floating")&&(c.style.zIndex="90")}});const M=l=>{const c=l.clientX-T,y=l.clientY-x;!w&&Math.hypot(c,y)>4&&(w=!0,!u&&n.parentNode&&(u=document.createElement("div"),u.className="window-placeholder",u.style.width=`${n.offsetWidth}px`,u.style.height=`${n.offsetHeight}px`,u.style.flex=n.style.flex||`0 0 ${n.offsetWidth}px`,n.parentNode.insertBefore(u,n)),n.classList.add("floating"),n.style.position="absolute",n.style.zIndex="100"),w&&(H!==null&&cancelAnimationFrame(H),H=requestAnimationFrame(()=>{const b=U+c,C=K+y;n.style.left=`${b}px`,n.style.top=`${C}px`,n.style.right="auto",n.style.bottom="auto"}))},W=()=>{w&&(w=!1),window.removeEventListener("pointermove",M),window.removeEventListener("pointerup",W),window.removeEventListener("pointercancel",W),H!==null&&(cancelAnimationFrame(H),H=null)};f.addEventListener("pointerdown",l=>{if(l.target.tagName==="INPUT"||l.target.tagName==="SELECT")return;T=l.clientX,x=l.clientY;const c=e.getBoundingClientRect(),y=n.getBoundingClientRect();U=n.style.left?parseFloat(n.style.left):y.left-c.left,K=n.style.top?parseFloat(n.style.top):y.top-c.top,w=!1,n.style.zIndex="100";const b=t==="transcript-window"?"esl-window":"transcript-window",C=this.shadow.getElementById(b);C&&C.classList.contains("floating")&&(C.style.zIndex="90"),window.addEventListener("pointermove",M),window.addEventListener("pointerup",W),window.addEventListener("pointercancel",W)}),f.addEventListener("keydown",l=>{let c=!1;const y=20;if(!n.classList.contains("floating")){!u&&n.parentNode&&(u=document.createElement("div"),u.className="window-placeholder",u.style.width=`${n.offsetWidth}px`,u.style.height=`${n.offsetHeight}px`,u.style.flex=n.style.flex||`0 0 ${n.offsetWidth}px`,n.parentNode.insertBefore(u,n));const X=e.getBoundingClientRect(),G=n.getBoundingClientRect();n.classList.add("floating"),n.style.position="absolute",n.style.zIndex="100",n.style.left=`${G.left-X.left}px`,n.style.top=`${G.top-X.top}px`}let b=parseFloat(n.style.left)||0,C=parseFloat(n.style.top)||0;l.key==="ArrowRight"?(b+=y,c=!0):l.key==="ArrowLeft"?(b-=y,c=!0):l.key==="ArrowDown"?(C+=y,c=!0):l.key==="ArrowUp"&&(C-=y,c=!0),c&&(l.preventDefault(),n.style.left=`${b}px`,n.style.top=`${C}px`)});const q=()=>{n.classList.remove("floating"),n.style.position="",n.style.left="",n.style.top="",n.style.right="",n.style.bottom="",n.style.zIndex="",u&&(u.remove(),u=null)};f.addEventListener("dblclick",q),n.__reDock=q};i("transcript-window","transcript-drag-handle","transcript-resize-handle","transcript-resize-edge-bottom","transcript-resize-edge-right",null,{minWidth:220,maxWidth:750,minHeight:200,maxHeight:900,onSaveSize:(t,a)=>{this.prefs.transcriptWidth=t,this.prefs.transcriptHeight=a,D({transcriptWidth:t,transcriptHeight:a})}}),i("esl-window","esl-drag-handle","esl-resize-handle","esl-resize-edge-bottom","esl-resize-edge-right","esl-resize-edge-left",{minWidth:200,maxWidth:700,minHeight:160,maxHeight:700,onSaveSize:(t,a)=>{this.prefs.eslWidth=t,this.prefs.eslHeight=a,D({eslWidth:t,eslHeight:a})}})}attachEventListeners(){var X,G,ue,ge,me;const e=this.shadow.getElementById("btn-play"),i=this.shadow.getElementById("play-icon"),t=this.shadow.getElementById("big-play-btn"),a=this.shadow.getElementById("btn-restart"),o=this.shadow.getElementById("btn-speed-faster"),h=this.shadow.getElementById("btn-speed-slower"),k=this.shadow.getElementById("speed-display"),$=this.shadow.getElementById("state-display"),p=this.shadow.getElementById("btn-fullscreen"),n=this.shadow.getElementById("fullscreen-icon"),f=this.shadow.getElementById("btn-mute"),A=this.shadow.getElementById("mute-icon"),F=this.shadow.getElementById("player-container"),I=this.shadow.getElementById("seek-scrubber"),_=this.shadow.getElementById("time-display"),u=()=>{this.mainVideo.paused?this.mainVideo.play():this.mainVideo.pause()};e&&e.addEventListener("click",u),t&&t.addEventListener("click",u),this.mainVideo.addEventListener("click",u),this.mainVideo.addEventListener("play",()=>{i&&(i.innerHTML=L.pause),e==null||e.setAttribute("aria-label",this.activeLocale==="am"?"አቁም (Space / K)":"Pause (Space / K)"),e==null||e.setAttribute("title",this.activeLocale==="am"?"አቁም (Space / K)":"Pause (Space / K)"),t==null||t.classList.add("is-hidden"),$&&($.textContent=this.activeLocale==="am"?"እየተጫወተ ነው":"Playing")}),this.mainVideo.addEventListener("pause",()=>{i&&(i.innerHTML=L.play),e==null||e.setAttribute("aria-label",this.activeLocale==="am"?"አጫውት (Space / K)":"Play (Space / K)"),e==null||e.setAttribute("title",this.activeLocale==="am"?"አጫውት (Space / K)":"Play (Space / K)"),t==null||t.classList.remove("is-hidden"),$&&($.textContent=this.mainVideo.ended?this.activeLocale==="am"?"ተጠናቋል":"End of track":this.activeLocale==="am"?"ቆሟል":"Paused")}),this.mainVideo.addEventListener("ended",()=>{i&&(i.innerHTML=L.play),e==null||e.setAttribute("aria-label",this.activeLocale==="am"?"አጫውት (Space / K)":"Play (Space / K)"),e==null||e.setAttribute("title",this.activeLocale==="am"?"አጫውት (Space / K)":"Play (Space / K)"),t==null||t.classList.remove("is-hidden"),$&&($.textContent=this.activeLocale==="am"?"ተጠናቋል":"End of track")}),a==null||a.addEventListener("click",()=>{this.mainVideo.currentTime=0,this.mainVideo.play(),this.transcriptViewer.updateActiveTime(0)});const O=[.5,.75,1,1.25,1.5,2],P=()=>{const r=this.mainVideo.playbackRate;k&&(k.textContent=`Speed: ${r}x`)};o==null||o.addEventListener("click",()=>{const r=this.mainVideo.playbackRate,v=O.filter(ee=>ee>r+.01),j=v.length>0?v[0]:2;this.mainVideo.playbackRate=j,P()}),h==null||h.addEventListener("click",()=>{const r=this.mainVideo.playbackRate,v=O.filter(ee=>ee<r-.01),j=v.length>0?v[v.length-1]:.5;this.mainVideo.playbackRate=j,P()});const Y=()=>document.fullscreenElement===F||document.webkitFullscreenElement===F,Q=async()=>{try{Y()?document.exitFullscreen?await document.exitFullscreen():document.webkitExitFullscreen&&await document.webkitExitFullscreen():F!=null&&F.requestFullscreen?await F.requestFullscreen():F!=null&&F.webkitRequestFullscreen&&await F.webkitRequestFullscreen()}catch(r){console.warn("Fullscreen toggle failed:",r)}};p==null||p.addEventListener("click",Q);const N=()=>{const r=Y();p==null||p.setAttribute("aria-pressed",r?"true":"false"),p==null||p.setAttribute("aria-label",r?this.activeLocale==="am"?"ከሙሉ ማያ ገጽ ውጣ (F)":"Exit Fullscreen (F)":this.activeLocale==="am"?"ሙሉ ማያ ገጽ (F)":"Fullscreen (F)"),p==null||p.setAttribute("title",r?this.activeLocale==="am"?"ከሙሉ ማያ ገጽ ውጣ (F)":"Exit Fullscreen (F)":this.activeLocale==="am"?"ሙሉ ማያ ገጽ (F)":"Fullscreen (F)"),n&&(n.innerHTML=r?L.fullscreenExit:L.fullscreenEnter)};document.addEventListener("fullscreenchange",N),document.addEventListener("webkitfullscreenchange",N);const J=()=>{this.mainVideo.muted=!this.mainVideo.muted};f==null||f.addEventListener("click",J);const R=()=>{const r=this.mainVideo.muted;f==null||f.setAttribute("aria-pressed",r?"true":"false"),f==null||f.setAttribute("aria-label",r?this.activeLocale==="am"?"ድምጽ አብራ (M)":"Unmute (M)":this.activeLocale==="am"?"ድምጽ አጥፋ (M)":"Mute (M)"),f==null||f.setAttribute("title",r?this.activeLocale==="am"?"ድምጽ አብራ (M)":"Unmute (M)":this.activeLocale==="am"?"ድምጽ አጥፋ (M)":"Mute (M)"),A&&(A.innerHTML=r?L.volumeMuted:L.volumeUnmuted)};this.mainVideo.addEventListener("volumechange",R),this.mainVideo.addEventListener("timeupdate",()=>{const r=this.mainVideo.currentTime,v=this.mainVideo.duration||1;I&&!I.matches(":active")&&(I.value=(r/v*100).toFixed(1)),_&&(_.textContent=`${this.formatTime(r)} / ${this.formatTime(v)}`),this.updateCaptionDisplay(),this.transcriptViewer.updateActiveTime(r)}),I.addEventListener("input",()=>{const r=this.mainVideo.duration||1;this.mainVideo.currentTime=parseFloat(I.value)/100*r}),(X=this.shadow.getElementById("btn-rewind"))==null||X.addEventListener("click",()=>{this.mainVideo.currentTime=Math.max(0,this.mainVideo.currentTime-5)}),(G=this.shadow.getElementById("btn-forward"))==null||G.addEventListener("click",()=>{this.mainVideo.currentTime=Math.min(this.mainVideo.duration||1e3,this.mainVideo.currentTime+5)});const B=this.shadow.getElementById("btn-ad");B==null||B.addEventListener("click",async()=>{if(!this.manifest)return;this.prefs.audioDescriptionEnabled=!this.prefs.audioDescriptionEnabled,D({audioDescriptionEnabled:this.prefs.audioDescriptionEnabled}),B.setAttribute("aria-pressed",this.prefs.audioDescriptionEnabled?"true":"false");const r=this.prefs.audioDescriptionEnabled?"described":"main",v=this.manifest.sources.find(j=>j.kind===r)||this.manifest.sources.find(j=>j.kind==="main");v&&await this.syncController.switchSource(v.src)});const S=this.shadow.getElementById("btn-cc");S==null||S.addEventListener("click",async()=>{const r=["en","am","off"],v=(r.indexOf(this.prefs.captionLanguage)+1)%r.length;this.prefs.captionLanguage=r[v],D({captionLanguage:this.prefs.captionLanguage});const j=this.prefs.captionLanguage==="off";S.setAttribute("aria-pressed",j?"false":"true"),S.setAttribute("title",`Captions: ${this.prefs.captionLanguage.toUpperCase()} (C)`),S.setAttribute("aria-label",this.activeLocale==="am"?`የትርጉም ጽሑፍ: ${this.prefs.captionLanguage.toUpperCase()} (C)`:`Captions: ${this.prefs.captionLanguage.toUpperCase()} (C)`),await this.loadCaptionTrack(this.prefs.captionLanguage)});const z=this.shadow.getElementById("btn-esl"),w=this.shadow.getElementById("esl-window");z==null||z.addEventListener("click",()=>{this.prefs.eslVisible=!this.prefs.eslVisible,D({eslVisible:this.prefs.eslVisible}),z.setAttribute("aria-pressed",this.prefs.eslVisible?"true":"false"),w&&(w.style.display=this.prefs.eslVisible?"flex":"none")});const T=this.shadow.getElementById("btn-transcript-toggle"),x=this.shadow.getElementById("transcript-window");T==null||T.addEventListener("click",()=>{const v=!((x==null?void 0:x.style.display)!=="none");this.prefs.transcriptVisible=v,D({transcriptVisible:v}),T.setAttribute("aria-pressed",v?"true":"false"),x&&(x.style.display=v?"flex":"none")});const U=this.shadow.getElementById("cb-auto-scroll");U==null||U.addEventListener("change",()=>{this.transcriptViewer.setFollowing(U.checked)});const K=this.shadow.getElementById("select-transcript-lang");K==null||K.addEventListener("change",()=>{const r=K.value;this.setAttribute("locale",r)});const H=()=>{var r;this.isPreferencesOpen=!0,l&&(l.style.display="flex"),(r=this.shadow.getElementById("select-cc-lang"))==null||r.focus()},M=this.shadow.getElementById("btn-prefs"),W=this.shadow.getElementById("btn-transcript-prefs"),q=this.shadow.getElementById("btn-esl-prefs"),l=this.shadow.getElementById("prefs-dialog"),c=this.shadow.getElementById("btn-close-prefs"),y=this.shadow.getElementById("btn-reset-layout");M==null||M.addEventListener("click",H),W==null||W.addEventListener("click",H),q==null||q.addEventListener("click",H),c==null||c.addEventListener("click",()=>{this.isPreferencesOpen=!1,l&&(l.style.display="none"),M==null||M.focus()}),y==null||y.addEventListener("click",()=>{var r,v;te(),this.prefs=Z(),x&&((r=x.__reDock)==null||r.call(x),x.classList.remove("floating"),x.style.position="",x.style.left="",x.style.top="",x.style.right="",x.style.bottom="",x.style.zIndex="",x.style.width=`${E.transcriptWidth}px`,x.style.height=`${E.transcriptHeight}px`,x.style.flex=`0 0 ${E.transcriptWidth}px`,x.style.display="flex"),w&&((v=w.__reDock)==null||v.call(w),w.classList.remove("floating"),w.style.position="",w.style.left="",w.style.top="",w.style.right="",w.style.bottom="",w.style.zIndex="",w.style.width=`${E.eslWidth}px`,w.style.height=`${E.eslHeight}px`,w.style.flex=`0 0 ${E.eslWidth}px`,w.style.display="flex"),z&&z.setAttribute("aria-pressed","true"),T&&T.setAttribute("aria-pressed","true")}),(ue=this.shadow.getElementById("select-cc-lang"))==null||ue.addEventListener("change",async r=>{if(this.prefs.captionLanguage=r.target.value,D({captionLanguage:this.prefs.captionLanguage}),S){const v=this.prefs.captionLanguage==="off";S.setAttribute("aria-pressed",v?"false":"true"),S.setAttribute("title",`Captions: ${this.prefs.captionLanguage.toUpperCase()} (C)`),S.setAttribute("aria-label",this.activeLocale==="am"?`የትርጉም ጽሑፍ: ${this.prefs.captionLanguage.toUpperCase()} (C)`:`Captions: ${this.prefs.captionLanguage.toUpperCase()} (C)`)}await this.loadCaptionTrack(this.prefs.captionLanguage)}),(ge=this.shadow.getElementById("select-cc-size"))==null||ge.addEventListener("change",r=>{this.prefs.captionSize=r.target.value,D({captionSize:this.prefs.captionSize}),this.updateCaptionDisplay()}),(me=this.shadow.getElementById("select-cc-theme"))==null||me.addEventListener("change",r=>{this.prefs.captionTheme=r.target.value,D({captionTheme:this.prefs.captionTheme}),this.updateCaptionDisplay()});const b=this.shadow.getElementById("transcript-search");b==null||b.addEventListener("input",()=>{this.transcriptViewer.setSearchQuery(b.value)});const C=this.shadow.getElementById("player-container");C==null||C.addEventListener("keydown",r=>{if(this.isPreferencesOpen){r.key==="Escape"&&(this.isPreferencesOpen=!1,l&&(l.style.display="none"),M==null||M.focus());return}if(!(r.target.tagName==="INPUT"||r.target.tagName==="SELECT"))switch(r.key){case" ":case"k":case"K":r.preventDefault(),u();break;case"j":case"J":case"ArrowLeft":r.preventDefault(),this.mainVideo.currentTime=Math.max(0,this.mainVideo.currentTime-5);break;case"l":case"L":case"ArrowRight":r.preventDefault(),this.mainVideo.currentTime=Math.min(this.mainVideo.duration||1e3,this.mainVideo.currentTime+5);break;case"m":case"M":r.preventDefault(),J();break;case"f":case"F":r.preventDefault(),Q();break;case"0":case"Home":r.preventDefault(),this.mainVideo.currentTime=0,this.mainVideo.play(),this.transcriptViewer.updateActiveTime(0);break;case">":case".":r.preventDefault(),o==null||o.click();break;case"<":case",":r.preventDefault(),h==null||h.click();break;case"c":case"C":r.preventDefault(),S==null||S.click();break;case"s":case"S":r.preventDefault(),z==null||z.click();break;case"d":case"D":r.preventDefault(),B==null||B.click();break;case"t":case"T":r.preventDefault(),T==null||T.click();break}})}updateLocaleStrings(){this.render(),this.initTracksAndTranscript()}formatTime(e){const i=Math.floor(e/60),t=Math.floor(e%60);return`${i.toString().padStart(2,"0")}:${t.toString().padStart(2,"0")}`}}customElements.get("a11y-media-player")||customElements.define("a11y-media-player",oe);const le=["መስከረም","ጥቅምት","ህዳር","ታኅሣሥ","ጥር","የካቲት","መጋቢት","ሚያዝያ","ግንቦት","ሰኔ","ሐምሌ","ነሐሴ","ጳጉሜ"];function ce(m){const s=typeof m=="string"?new Date(m):m,e=s.getUTCFullYear(),i=s.getUTCMonth()+1,t=s.getUTCDate(),a=Math.floor((14-i)/12),o=e+4800-a,h=i+12*a-3,k=t+Math.floor((153*h+2)/5)+365*o+Math.floor(o/4)-Math.floor(o/100)+Math.floor(o/400)-32045,$=(k-1723856)%1461,p=$%365+365*Math.floor($/1460),n=4*Math.floor((k-1723856)/1461)+Math.floor($/365)-Math.floor($/1460),f=Math.floor(p/30)+1,A=p%30+1,F=le[Math.min(f-1,12)];return{year:n,month:f,day:A,monthNameAmharic:F}}function de(m){const s=ce(m),e=`${s.monthNameAmharic} ${s.day}፣ ${s.year} ዓ.ም`;return{iso:m,ethiopic:e,display:`${m} (${e})`}}class he extends HTMLElement{constructor(){super();d(this,"shadow");d(this,"job",null);d(this,"activeLocale","en");this.shadow=this.attachShadow({mode:"open"})}static get observedAttributes(){return["job-data","locale"]}connectedCallback(){this.activeLocale=this.getAttribute("locale")||"en";const e=this.getAttribute("job-data");if(e)try{this.job=JSON.parse(e)}catch{}this.render()}setJob(e){this.job=e,this.render()}attributeChangedCallback(e,i,t){if(i!==t){if(e==="locale")this.activeLocale=t||"en",this.render();else if(e==="job-data")try{this.job=JSON.parse(t),this.render()}catch{}}}render(){if(!this.job){this.shadow.innerHTML='<div class="job-placeholder">No job data supplied</div>';return}const e=this.activeLocale==="am",i=this.job.title[this.activeLocale]||this.job.title.en,t=this.job.location[this.activeLocale]||this.job.location.en,a=this.job.description[this.activeLocale]||this.job.description.en,o=this.job.applicationDeadline?de(this.job.applicationDeadline):null,h={"@context":"https://schema.org/","@type":"JobPosting",title:i,description:a,hiringOrganization:{"@type":"Organization",name:this.job.employer},jobLocation:{"@type":"Place",address:{"@type":"PostalAddress",addressLocality:t,addressCountry:"ET"}},validThrough:this.job.applicationDeadline||"2026-12-31"};this.shadow.innerHTML=`
       <style>
         :host {
           display: block;
@@ -991,7 +1186,7 @@
 
       <!-- schema.org/JobPosting JSON-LD -->
       <script type="application/ld+json">
-        ${JSON.stringify(g)}
+        ${JSON.stringify(h)}
       <\/script>
 
       <article class="card" aria-labelledby="job-title-${this.job.id}">
@@ -1001,7 +1196,7 @@
             <span><strong>${this.job.employer}</strong></span> &bull;
             <span>${t}</span> &bull;
             <span>${this.job.workMode.toUpperCase()}</span>
-            ${r?` &bull; <span class="badge calendar" aria-label="Deadline: ${r.display}">📅 ${e?"የማመልከቻ ማብቂያ፦":"Deadline:"} ${r.display}</span>`:""}
+            ${o?` &bull; <span class="badge calendar" aria-label="Deadline: ${o.display}">📅 ${e?"የማመልከቻ ማብቂያ፦":"Deadline:"} ${o.display}</span>`:""}
           </div>
         </header>
 
@@ -1020,17 +1215,17 @@
           </div>
         </section>
 
-        <p>${n}</p>
+        <p>${a}</p>
 
         <!-- Transparent Accommodations -->
         <div>
           <strong id="acc-heading-${this.job.id}">${e?"የተረጋገጡ ማመቻቸቶች (Accommodations Offered):":"Employer-Provided Accommodations:"}</strong>
           <ul class="tags-list" aria-labelledby="acc-heading-${this.job.id}">
-            ${this.job.accommodations.map(m=>`
+            ${this.job.accommodations.map(k=>`
               <li class="badge accommodation">
                 <span aria-hidden="true">✓</span>
-                <span>${m.label[this.activeLocale]||m.label.en}</span>
-                <small style="opacity: 0.85;">(${m.source})</small>
+                <span>${k.label[this.activeLocale]||k.label.en}</span>
+                <small style="opacity: 0.85;">(${k.source})</small>
               </li>
             `).join("")}
           </ul>
@@ -1049,5 +1244,5 @@
           <span class="share-feedback" id="share-feedback" aria-live="polite"></span>
         </footer>
       </article>
-    `,this.attachShareHandler()}attachShareHandler(){const e=this.shadow.getElementById("btn-share-cert"),i=this.shadow.getElementById("share-feedback");!e||!i||e.addEventListener("click",async()=>{const t=`${window.location.origin}/verify.html?certId=CERT-DB-2026-0042`;if(navigator.share)try{await navigator.share({title:"Demonstrated Certificate — Savanna Platform",text:"Verified Certificate for Digital Workplace Skills: Foundations",url:t}),i.textContent=this.activeLocale==="am"?"ተጋርቷል!":"Link shared!";return}catch{}try{await navigator.clipboard.writeText(t),i.textContent=this.activeLocale==="am"?"የምስክር ወረቀት አገናኝ ተገልብጧል!":"Certificate link copied to clipboard!"}catch{i.textContent=t}})}}customElements.get("a11y-job-card")||customElements.define("a11y-job-card",ie);const le="abugida-media",de=1;class se{constructor(){l(this,"db",null);l(this,"cacheName","abugida-offline-v1")}async init(){if(!this.db)return new Promise((s,e)=>{const i=indexedDB.open(le,de);i.onupgradeneeded=t=>{const n=t.target.result;n.objectStoreNames.contains("preferences")||n.createObjectStore("preferences"),n.objectStoreNames.contains("progress")||n.createObjectStore("progress",{keyPath:"lessonId"}),n.objectStoreNames.contains("packages")||n.createObjectStore("packages",{keyPath:"packageKey"})},i.onsuccess=t=>{this.db=t.target.result,s()},i.onerror=()=>{console.warn("IndexedDB unavailable, falling back to memory/localStorage"),s()}})}async saveProgress(s){if(await this.init(),!this.db){try{localStorage.setItem(`progress_${s.lessonId}`,JSON.stringify(s))}catch{}return}return new Promise(e=>{const i=this.db.transaction("progress","readwrite");i.objectStore("progress").put(s),i.oncomplete=()=>e(),i.onerror=()=>e()})}async getProgress(s){if(await this.init(),!this.db)try{const e=localStorage.getItem(`progress_${s}`);return e?JSON.parse(e):null}catch{return null}return new Promise(e=>{const n=this.db.transaction("progress","readonly").objectStore("progress").get(s);n.onsuccess=()=>e(n.result||null),n.onerror=()=>e(null)})}async downloadPackage(s,e,i,t,n){await this.init();const r=`${s}:${e}`;if(!("caches"in window))throw new Error("Cache Storage API is not supported in this browser.");try{const g=await caches.open(this.cacheName);let m=0;const y=t.length;for(const p of t){const a=await fetch(p);if(!a.ok)throw new Error(`Failed to fetch asset: ${p} (${a.status})`);await g.put(p,a.clone()),m++;const w=Math.round(m/y*100);n(w,m,y)}return await this.savePackageRecord({packageKey:r,lessonId:s,packageId:e,packageName:i,status:"ready",totalBytes:32e5,downloadedBytes:32e5,timestamp:Date.now()}),!0}catch(g){throw await this.savePackageRecord({packageKey:r,lessonId:s,packageId:e,packageName:i,status:"error",totalBytes:32e5,downloadedBytes:0,timestamp:Date.now(),error:g instanceof Error?g.message:"Download failed"}),g}}async isPackageReady(s,e){await this.init();const i=`${s}:${e}`,t=await this.getPackageRecord(i);return(t==null?void 0:t.status)==="ready"}async savePackageRecord(s){if(this.db)return new Promise(e=>{const i=this.db.transaction("packages","readwrite");i.objectStore("packages").put(s),i.oncomplete=()=>e(),i.onerror=()=>e()})}async getPackageRecord(s){return this.db?new Promise(e=>{const n=this.db.transaction("packages","readonly").objectStore("packages").get(s);n.onsuccess=()=>e(n.result||null),n.onerror=()=>e(null)}):null}}const ce=new se;f.A11yJobCard=ie,f.A11yMediaPlayer=G,f.DEFAULT_PREFERENCES=v,f.ETHIOPIC_MONTHS=Z,f.MediaSyncController=Q,f.OfflineStorageManager=se,f.TranscriptViewer=X,f.formatDualDate=te,f.getThemeStyles=K,f.loadPreferences=U,f.offlineStorage=ce,f.parseVTT=q,f.resetPreferences=J,f.savePreferences=F,f.toEthiopianDate=ee,Object.defineProperty(f,Symbol.toStringTag,{value:"Module"})});
+    `,this.attachShareHandler()}attachShareHandler(){const e=this.shadow.getElementById("btn-share-cert"),i=this.shadow.getElementById("share-feedback");!e||!i||e.addEventListener("click",async()=>{const t=`${window.location.origin}/verify.html?certId=CERT-DB-2026-0042`;if(navigator.share)try{await navigator.share({title:"Demonstrated Certificate — Savanna Platform",text:"Verified Certificate for Digital Workplace Skills: Foundations",url:t}),i.textContent=this.activeLocale==="am"?"ተጋርቷል!":"Link shared!";return}catch{}try{await navigator.clipboard.writeText(t),i.textContent=this.activeLocale==="am"?"የምስክር ወረቀት አገናኝ ተገልብጧል!":"Certificate link copied to clipboard!"}catch{i.textContent=t}})}}customElements.get("a11y-job-card")||customElements.define("a11y-job-card",he);const fe="abugida-media",be=1;class pe{constructor(){d(this,"db",null);d(this,"cacheName","abugida-offline-v1")}async init(){if(!this.db)return new Promise((s,e)=>{const i=indexedDB.open(fe,be);i.onupgradeneeded=t=>{const a=t.target.result;a.objectStoreNames.contains("preferences")||a.createObjectStore("preferences"),a.objectStoreNames.contains("progress")||a.createObjectStore("progress",{keyPath:"lessonId"}),a.objectStoreNames.contains("packages")||a.createObjectStore("packages",{keyPath:"packageKey"})},i.onsuccess=t=>{this.db=t.target.result,s()},i.onerror=()=>{console.warn("IndexedDB unavailable, falling back to memory/localStorage"),s()}})}async saveProgress(s){if(await this.init(),!this.db){try{localStorage.setItem(`progress_${s.lessonId}`,JSON.stringify(s))}catch{}return}return new Promise(e=>{const i=this.db.transaction("progress","readwrite");i.objectStore("progress").put(s),i.oncomplete=()=>e(),i.onerror=()=>e()})}async getProgress(s){if(await this.init(),!this.db)try{const e=localStorage.getItem(`progress_${s}`);return e?JSON.parse(e):null}catch{return null}return new Promise(e=>{const a=this.db.transaction("progress","readonly").objectStore("progress").get(s);a.onsuccess=()=>e(a.result||null),a.onerror=()=>e(null)})}async downloadPackage(s,e,i,t,a){await this.init();const o=`${s}:${e}`;if(!("caches"in window))throw new Error("Cache Storage API is not supported in this browser.");try{const h=await caches.open(this.cacheName);let k=0;const $=t.length;for(const p of t){const n=await fetch(p);if(!n.ok)throw new Error(`Failed to fetch asset: ${p} (${n.status})`);await h.put(p,n.clone()),k++;const f=Math.round(k/$*100);a(f,k,$)}return await this.savePackageRecord({packageKey:o,lessonId:s,packageId:e,packageName:i,status:"ready",totalBytes:32e5,downloadedBytes:32e5,timestamp:Date.now()}),!0}catch(h){throw await this.savePackageRecord({packageKey:o,lessonId:s,packageId:e,packageName:i,status:"error",totalBytes:32e5,downloadedBytes:0,timestamp:Date.now(),error:h instanceof Error?h.message:"Download failed"}),h}}async isPackageReady(s,e){await this.init();const i=`${s}:${e}`,t=await this.getPackageRecord(i);return(t==null?void 0:t.status)==="ready"}async savePackageRecord(s){if(this.db)return new Promise(e=>{const i=this.db.transaction("packages","readwrite");i.objectStore("packages").put(s),i.oncomplete=()=>e(),i.onerror=()=>e()})}async getPackageRecord(s){return this.db?new Promise(e=>{const a=this.db.transaction("packages","readonly").objectStore("packages").get(s);a.onsuccess=()=>e(a.result||null),a.onerror=()=>e(null)}):null}}const we=new pe;g.A11yJobCard=he,g.A11yMediaPlayer=oe,g.DEFAULT_PREFERENCES=E,g.ETHIOPIC_MONTHS=le,g.MediaSyncController=ne,g.OfflineStorageManager=pe,g.TranscriptViewer=re,g.formatDualDate=de,g.getThemeStyles=ae,g.loadPreferences=Z,g.offlineStorage=we,g.parseVTT=ie,g.resetPreferences=te,g.savePreferences=D,g.toEthiopianDate=ce,Object.defineProperty(g,Symbol.toStringTag,{value:"Module"})});
 //# sourceMappingURL=a11y-media-kit.umd.js.map
