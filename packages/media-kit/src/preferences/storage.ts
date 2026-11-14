@@ -12,6 +12,11 @@ export interface PlayerPreferences {
   eslPosition: ESLPosition;
   eslSize: ESLSize;
   playbackRate: number;
+  transcriptVisible?: boolean;
+  transcriptWidth?: number;
+  transcriptHeight?: number;
+  eslWidth?: number;
+  eslHeight?: number;
 }
 
 const STORAGE_KEY = "abugida_media_preferences";
@@ -25,6 +30,11 @@ export const DEFAULT_PREFERENCES: PlayerPreferences = {
   eslPosition: "bottom-right",
   eslSize: "medium",
   playbackRate: 1.0,
+  transcriptVisible: true,
+  transcriptWidth: 350,
+  transcriptHeight: 460,
+  eslWidth: 340,
+  eslHeight: 240,
 };
 
 export function loadPreferences(): PlayerPreferences {

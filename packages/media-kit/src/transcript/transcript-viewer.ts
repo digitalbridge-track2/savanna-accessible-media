@@ -10,12 +10,14 @@ export interface TranscriptSegmentData {
 export interface TranscriptViewerOptions {
   locale?: "en" | "am";
   onSeekAndPlay: (time: number) => void;
+  onFollowChange?: (isFollowing: boolean) => void;
 }
 
 export class TranscriptViewer {
   private segments: TranscriptSegmentData[] = [];
   private container: HTMLElement;
   private onSeekAndPlay: (time: number) => void;
+  private onFollowChange?: (isFollowing: boolean) => void;
   private currentActiveId: string | number | null = null;
   private searchQuery = "";
   private isFollowing = true;
@@ -28,6 +30,7 @@ export class TranscriptViewer {
   constructor(container: HTMLElement, options: TranscriptViewerOptions) {
     this.container = container;
     this.onSeekAndPlay = options.onSeekAndPlay;
+    this.onFollowChange = options.onFollowChange;
     this.locale = options.locale || "en";
   }
 
@@ -111,11 +114,16 @@ export class TranscriptViewer {
     });
   }
 
+  public setFollowing(following: boolean) {
+    this.setFollowingState(following, true);
+  }
+
   private setFollowingState(following: boolean, triggeredByUser = false) {
     this.isFollowing = following;
     if (triggeredByUser) {
       this.userPausedFollowing = !following;
     }
+    this.onFollowChange?.(following);
 
     if (this.followBtn) {
       this.followBtn.setAttribute("aria-pressed", following ? "true" : "false");

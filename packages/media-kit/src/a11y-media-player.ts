@@ -8,6 +8,7 @@ import {
   CaptionTheme,
   ESLPosition,
   ESLSize,
+  DEFAULT_PREFERENCES,
 } from "./preferences/storage.js";
 import { parseVTT, VTTCueItem, getThemeStyles } from "./captions/caption-manager.js";
 import { MediaSyncController, SignStatus } from "./media/sync-controller.js";
@@ -238,6 +239,11 @@ export class A11yMediaPlayer extends HTMLElement {
     const mainSource = this.manifest?.sources.find((s) => s.kind === "main");
     const signSource = this.manifest?.sources.find((s) => s.kind === "sign");
 
+    const transWidth = this.prefs.transcriptWidth || DEFAULT_PREFERENCES.transcriptWidth || 350;
+    const transHeight = this.prefs.transcriptHeight || DEFAULT_PREFERENCES.transcriptHeight || 480;
+    const eslWidth = this.prefs.eslWidth || DEFAULT_PREFERENCES.eslWidth || 340;
+    const eslHeight = this.prefs.eslHeight || DEFAULT_PREFERENCES.eslHeight || 250;
+
     this.shadow.innerHTML = `
       <style>
         :host {
@@ -246,14 +252,152 @@ export class A11yMediaPlayer extends HTMLElement {
           font-family: var(--font-body, system-ui, -apple-system, sans-serif);
           color: var(--color-ink, #14201B);
         }
-        .player-root {
+
+        /* 3-Panel Flexible Stage (Transcript | Main Video | Sign Language) */
+        .player-stage {
+          display: flex;
+          align-items: flex-start;
+          justify-content: center;
+          gap: 1.25rem;
+          position: relative;
+          width: 100%;
+          box-sizing: border-box;
+        }
+
+        /* Window Panels */
+        .window-panel {
+          position: relative;
+          background: #FFF;
+          border: 1px solid #CBD5E1;
+          border-radius: 6px;
+          box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          box-sizing: border-box;
+          transition: box-shadow 0.2s ease;
+        }
+        .window-panel.floating {
+          box-shadow: 0 14px 34px rgba(0,0,0,0.28);
+          border-color: #64748B;
+        }
+        .window-panel.is-resizing {
+          user-select: none;
+          transition: none !important;
+        }
+
+        /* Window Header / Title Bar */
+        .window-header {
+          background: #2E343A;
+          color: #F8F9FA;
+          height: 38px;
+          min-height: 38px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 0.5rem;
+          gap: 0.5rem;
+          user-select: none;
+          border-bottom: 1px solid rgba(0,0,0,0.3);
+        }
+        .btn-window-opt {
+          background: transparent;
+          border: none;
+          color: #F8F9FA;
+          font-size: 1.1rem;
+          cursor: pointer;
+          padding: 0;
+          width: 28px;
+          height: 28px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 4px;
+          line-height: 1;
+        }
+        .btn-window-opt:hover {
+          background: rgba(255,255,255,0.18);
+        }
+        .btn-window-opt:focus-visible {
+          outline: 2px solid var(--color-accent, #F2C14E);
+        }
+        .window-drag-handle {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: grab;
+          height: 100%;
+          padding: 0 0.5rem;
+          color: #CBD5E1;
+          font-size: 1.15rem;
+          line-height: 1;
+        }
+        .window-drag-handle:active {
+          cursor: grabbing;
+        }
+        .header-controls {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+        .auto-scroll-label {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          font-size: 0.8rem;
+          font-weight: 500;
+          color: #F8F9FA;
+          cursor: pointer;
+          user-select: none;
+          white-space: nowrap;
+        }
+        .header-select {
+          background: #FFF;
+          color: #1E293B;
+          border: 1px solid #94A3B8;
+          border-radius: 4px;
+          font-size: 0.78rem;
+          padding: 2px 6px;
+          height: 26px;
+          cursor: pointer;
+        }
+
+        /* Bottom-Right Corner Resize Grip */
+        .window-resize-handle {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          width: 18px;
+          height: 18px;
+          cursor: se-resize;
+          display: flex;
+          align-items: flex-end;
+          justify-content: flex-end;
+          padding: 2px;
+          font-size: 12px;
+          line-height: 1;
+          color: #64748B;
+          user-select: none;
+          z-index: 10;
+        }
+        .window-resize-handle:hover {
+          color: #0F172A;
+        }
+
+        /* Center Main Player Panel */
+        .main-player-panel {
+          flex: 1 1 480px;
+          min-width: 360px;
+          max-width: 760px;
           background: #000;
           border-radius: 8px;
-          position: relative;
           overflow: hidden;
+          box-shadow: 0 4px 18px rgba(0,0,0,0.2);
+          position: relative;
           outline: none;
         }
-        .player-root:focus-visible {
+        .main-player-panel:focus-visible {
           outline: 3px solid var(--color-focus, #005FCC);
           outline-offset: 3px;
         }
@@ -273,68 +417,10 @@ export class A11yMediaPlayer extends HTMLElement {
           display: block;
         }
 
-        /* Ethiopian Sign Language (EthSL) Window */
-        .esl-window {
-          position: absolute;
-          background: #111;
-          border: 2px solid #FFF;
-          border-radius: 6px;
-          overflow: hidden;
-          z-index: 20;
-          box-shadow: 0 4px 14px rgba(0,0,0,0.6);
-          touch-action: none;
-          transition: width 0.2s ease, top 0.2s ease, left 0.2s ease, right 0.2s ease, bottom 0.2s ease;
-        }
-        .esl-window.pos-top-right { top: 16px; right: 16px; bottom: auto; left: auto; }
-        .esl-window.pos-top-left { top: 16px; left: 16px; bottom: auto; right: auto; }
-        .esl-window.pos-bottom-right { bottom: 65px; right: 16px; top: auto; left: auto; }
-        .esl-window.pos-bottom-left { bottom: 65px; left: 16px; top: auto; right: auto; }
-
-        .esl-window.size-small { width: 22%; }
-        .esl-window.size-medium { width: 30%; }
-        .esl-window.size-large { width: 38%; }
-
-        .esl-drag-bar {
-          background: #1F2937;
-          color: #F9FAFB;
-          font-size: 0.75rem;
-          padding: 3px 8px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          cursor: move;
-          user-select: none;
-          border-bottom: 1px solid rgba(255,255,255,0.2);
-        }
-        .esl-drag-bar:focus-visible {
-          outline: 2px solid var(--color-focus, #005FCC);
-        }
-
-        video.sign-video {
-          width: 100%;
-          aspect-ratio: 16/9;
-          display: block;
-          object-fit: cover;
-        }
-
-        /* Status Badge for Secondary Sign Stream */
-        .sign-status-pill {
-          display: none;
-          position: absolute;
-          top: 8px;
-          left: 8px;
-          background: rgba(0,0,0,0.75);
-          color: #FFF;
-          font-size: 0.75rem;
-          padding: 2px 6px;
-          border-radius: 4px;
-          z-index: 25;
-        }
-
-        /* Captions overlay */
+        /* Custom Captions Overlay */
         .captions-container {
           position: absolute;
-          bottom: 75px;
+          bottom: 20px;
           left: 0;
           right: 0;
           display: flex;
@@ -391,8 +477,6 @@ export class A11yMediaPlayer extends HTMLElement {
           padding: 0 0.5rem;
           white-space: nowrap;
         }
-
-        /* Progress Bar */
         .scrubber-container {
           width: 100%;
           display: flex;
@@ -412,15 +496,170 @@ export class A11yMediaPlayer extends HTMLElement {
           outline-offset: 2px;
         }
 
-        /* Preferences Modal Dialog */
-        .dialog-backdrop {
-          position: absolute;
-          inset: 0;
-          background: rgba(0,0,0,0.75);
+        /* LEFT: Resizable Transcript Window */
+        .transcript-window {
+          flex: 0 0 auto;
+          min-width: 250px;
+          max-width: 650px;
+          min-height: 250px;
+          max-height: 850px;
+        }
+        .transcript-body {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          padding: 0.85rem 1rem 1rem 1rem;
+          overflow: hidden;
+          background: #FFF;
+        }
+        .transcript-title-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 0.75rem;
+          margin-bottom: 0.75rem;
+          flex-wrap: wrap;
+        }
+        .transcript-title {
+          margin: 0;
+          font-size: 1.15rem;
+          font-weight: 700;
+          color: #0F172A;
+        }
+        .search-box {
+          padding: 0.45rem 0.75rem;
+          border: 1px solid #CBD5E1;
+          border-radius: 4px;
+          font-size: 0.88rem;
+          min-width: 180px;
+          min-height: 38px;
+          flex: 1;
+        }
+        .transcript-scroll-area {
+          flex: 1;
+          overflow-y: auto;
+          min-height: 180px;
+        }
+
+        /* RIGHT: Resizable Sign Language Window (Outside of video frame) */
+        .esl-window {
+          flex: 0 0 auto;
+          min-width: 200px;
+          max-width: 600px;
+          min-height: 160px;
+          max-height: 600px;
+          background: #111;
+        }
+        .esl-video-body {
+          flex: 1;
+          position: relative;
+          background: #000;
           display: flex;
           align-items: center;
           justify-content: center;
-          z-index: 50;
+          overflow: hidden;
+        }
+        video.sign-video {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          display: block;
+        }
+        .sign-status-pill {
+          background: rgba(255,255,255,0.2);
+          color: #FFF;
+          font-size: 0.75rem;
+          font-weight: 600;
+          padding: 2px 7px;
+          border-radius: 4px;
+          border: 1px solid rgba(255,255,255,0.3);
+          display: inline-block;
+        }
+
+        /* Transcript cues, active highlight & visual descriptions */
+        .transcript-controls-row {
+          display: flex;
+          justify-content: flex-end;
+          margin-bottom: 0.5rem;
+        }
+        .btn-follow {
+          background: #F1F5F9;
+          border: 1px solid #CBD5E1;
+          border-radius: 4px;
+          padding: 0.35rem 0.75rem;
+          font-size: 0.82rem;
+          font-weight: 600;
+          color: #1E293B;
+          cursor: pointer;
+          min-height: 34px;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+        }
+        .btn-follow[aria-pressed="true"] {
+          background: #DCFCE7;
+          border-color: #86EFAC;
+          color: #166534;
+        }
+        .transcript-list {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 0.4rem;
+        }
+        .transcript-item {
+          display: flex;
+          align-items: flex-start;
+          gap: 0.65rem;
+          padding: 0.5rem 0.65rem;
+          border-radius: 4px;
+          border: 1px solid transparent;
+        }
+        .transcript-item:hover {
+          background: #F8FAFC;
+        }
+        .transcript-item.active {
+          background: #F0FDF4;
+          border-color: #86EFAC;
+        }
+        .btn-seek-time {
+          background: #F8FAFC;
+          border: 1px solid #CBD5E1;
+          color: var(--color-brand, #0B5D4E);
+          padding: 0.2rem 0.5rem;
+          border-radius: 4px;
+          font-family: monospace;
+          font-size: 0.82rem;
+          cursor: pointer;
+          min-height: 36px;
+          min-width: 50px;
+        }
+        .btn-seek-time:focus-visible {
+          outline: 3px solid var(--color-focus, #005FCC);
+        }
+        .visual-desc {
+          background: #FFF0F2;
+          border: 1px solid #F5C2CB;
+          border-radius: 4px;
+          color: #721C24;
+          padding: 0.45rem 0.75rem;
+          margin: 0.35rem 0;
+          font-style: italic;
+          font-size: 0.88rem;
+          line-height: 1.4;
+        }
+
+        /* Preferences Dialog */
+        .dialog-backdrop {
+          position: fixed;
+          inset: 0;
+          background: rgba(0,0,0,0.7);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
           padding: 1rem;
         }
         .dialog-panel {
@@ -454,146 +693,196 @@ export class A11yMediaPlayer extends HTMLElement {
           min-height: 44px;
         }
 
-        /* Transcript area */
-        .transcript-container {
-          margin-top: 1.5rem;
-          background: #FFF;
-          border: 1px solid var(--color-border, #B7C2BB);
-          border-radius: 8px;
-          padding: 1.25rem;
-        }
-        .transcript-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          flex-wrap: wrap;
-          gap: 0.75rem;
-          margin-bottom: 1rem;
-        }
-        .search-box {
-          padding: 0.5rem 0.75rem;
-          border: 1px solid #B7C2BB;
-          border-radius: 4px;
-          font-size: 0.9rem;
-          min-width: 240px;
-          min-height: 44px;
-        }
-        .transcript-controls-row {
-          display: flex;
-          justify-content: flex-end;
-          margin-bottom: 0.75rem;
-        }
-        .btn-follow {
-          background: #F1F5F9;
-          border: 1px solid var(--color-border, #B7C2BB);
-          border-radius: 4px;
-          padding: 0.4rem 0.9rem;
-          font-size: 0.88rem;
-          font-weight: 600;
-          color: var(--color-ink, #14201B);
-          cursor: pointer;
-          min-height: 38px;
-          display: inline-flex;
-          align-items: center;
-          gap: 0.35rem;
-          transition: background 0.15s ease, border-color 0.15s ease;
-        }
-        .btn-follow:hover {
-          background: #E2E8F0;
-        }
-        .btn-follow[aria-pressed="true"] {
-          background: #DCFCE7;
-          border-color: #86EFAC;
-          color: #166534;
-        }
-        .btn-follow:focus-visible {
-          outline: 3px solid var(--color-focus, #005FCC);
-          outline-offset: 2px;
-        }
-        .transcript-list {
-          list-style: none;
-          margin: 0;
-          padding: 0;
-          max-height: 380px;
-          overflow-y: auto;
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
-        .transcript-item {
-          display: flex;
-          align-items: flex-start;
-          gap: 0.75rem;
-          padding: 0.5rem;
-          border-radius: 4px;
-          border-left: 3px solid transparent;
-        }
-        .transcript-item.active {
-          background: #E8F5E9;
-          border-left-color: var(--color-brand, #0B5D4E);
-        }
-        .btn-seek-time {
-          background: #F7F8F5;
-          border: 1px solid #B7C2BB;
-          color: var(--color-brand, #0B5D4E);
-          padding: 0.25rem 0.5rem;
-          border-radius: 4px;
-          font-family: monospace;
-          font-size: 0.85rem;
-          cursor: pointer;
-          min-height: 44px;
-          min-width: 50px;
-        }
-        .btn-seek-time:focus-visible {
-          outline: 3px solid var(--color-focus, #005FCC);
-        }
-        .visual-desc {
-          font-size: 0.875rem;
-          color: #2E7D32;
-          background: #E8F5E9;
-          padding: 0.2rem 0.5rem;
-          border-radius: 4px;
-          margin-top: 0.25rem;
-        }
-
-        /* 200% Zoom & Narrow Screen Reflow */
-        @media (max-width: 640px) {
-          .esl-window {
-            position: static !important;
-            width: 100% !important;
-            max-width: 320px;
-            margin: 1rem auto 0 auto;
-            border: 2px solid var(--color-border);
-            box-shadow: none;
+        /* Responsive Reflow on Narrow Screens / Mobile */
+        @media (max-width: 1080px) {
+          .player-stage {
+            flex-direction: column;
+            align-items: center;
           }
-          .esl-drag-bar {
-            display: none !important;
+          .main-player-panel, .transcript-window, .esl-window {
+            width: 100% !important;
+            max-width: 720px;
+          }
+          .main-player-panel {
+            order: 1;
+          }
+          .esl-window {
+            order: 2;
+          }
+          .transcript-window {
+            order: 3;
           }
         }
       </style>
 
       <section class="player-component" aria-label="${title}">
-        <div class="player-root" id="player-container" tabindex="0" aria-label="${title} (Press ? for keyboard shortcuts)">
-          <div class="video-viewport">
-            <video 
-              id="main-video" 
-              class="main-video" 
-              playsinline 
-              preload="metadata"
-              poster="${this.manifest?.poster?.src || ""}"
-              src="${mainSource ? mainSource.src : ""}">
-            </video>
+        <div class="player-stage" id="player-stage">
 
-            <!-- Movable & Resizable EthSL Window -->
-            <div 
-              class="esl-window pos-${this.prefs.eslPosition} size-${this.prefs.eslSize}" 
-              id="esl-window" 
-              style="display: ${this.prefs.eslVisible && signSource ? "block" : "none"};"
-              aria-label="${isAm ? "የኢትዮጵያ የምልክት ቋንቋ መስኮት" : "Ethiopian Sign Language Window"}">
-              <div class="esl-drag-bar" id="esl-drag-handle" tabindex="0" role="button" aria-label="${isAm ? "የምልክት ቋንቋ መስኮት መጎተቻ" : "Sign language window drag handle"}">
-                <span>EthSL</span>
-                <span aria-hidden="true">✥</span>
+          <!-- LEFT: Movable & Resizable Transcript Window (Outside of video frame) -->
+          <div 
+            class="window-panel transcript-window" 
+            id="transcript-window"
+            style="width: ${transWidth}px; height: ${transHeight}px; flex: 0 0 ${transWidth}px; display: ${this.prefs.transcriptVisible !== false ? "flex" : "none"};"
+            aria-label="${isAm ? "የትምህርቱ የጽሑፍ ግልባጭ መስኮት" : "Lesson Transcript Window"}">
+            
+            <!-- Transcript Titlebar -->
+            <div class="window-header" id="transcript-header">
+              <button 
+                type="button" 
+                class="btn-window-opt" 
+                id="btn-transcript-prefs" 
+                aria-label="${isAm ? "የመስኮት አማራጮች" : "Window options"}" 
+                title="${isAm ? "የመስኮት አማራጮች" : "Window options"}">
+                ⚙
+              </button>
+              <div 
+                class="window-drag-handle" 
+                id="transcript-drag-handle" 
+                tabindex="0" 
+                role="button" 
+                aria-label="${isAm ? "የጽሑፍ ግልባጭ መስኮት መጎተቻ" : "Transcript window drag handle"}"
+                title="${isAm ? "ለመጎተት ይጫኑ፤ ወደቦታው ለመመለስ ሁለት ጊዜ ይጫኑ" : "Drag to move; double-click to re-dock"}">
+                <span aria-hidden="true">═</span>
               </div>
+              <div class="header-controls">
+                <label class="auto-scroll-label" for="cb-auto-scroll">
+                  <input type="checkbox" id="cb-auto-scroll" checked>
+                  <span>${isAm ? "ራስ-አንብብ" : "Auto scroll"}</span>
+                </label>
+                <label for="select-transcript-lang" class="sr-only">${isAm ? "ቋንቋ" : "Language"}</label>
+                <select id="select-transcript-lang" class="header-select" aria-label="${isAm ? "የጽሑፍ ግልባጭ ቋንቋ" : "Transcript Language"}">
+                  <option value="en" ${this.activeLocale === "en" ? "selected" : ""}>English</option>
+                  <option value="am" ${this.activeLocale === "am" ? "selected" : ""}>አማርኛ</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Transcript Body Content -->
+            <div class="transcript-body" id="transcript-body">
+              <div class="transcript-title-row">
+                <h3 class="transcript-title">${isAm ? "የትምህርቱ የጽሑፍ ግልባጭ" : "Transcript"}</h3>
+                <input 
+                  type="search" 
+                  id="transcript-search" 
+                  class="search-box" 
+                  placeholder="${isAm ? "በጽሑፉ ውስጥ ይፈልጉ..." : "Search transcript..."}" 
+                  aria-label="${isAm ? "በጽሑፉ ውስጥ ይፈልጉ" : "Search transcript"}">
+              </div>
+              <div id="transcript-target" class="transcript-scroll-area"></div>
+            </div>
+
+            <!-- Corner Resize Grip -->
+            <div 
+              class="window-resize-handle" 
+              id="transcript-resize-handle" 
+              role="separator" 
+              aria-label="${isAm ? "የጽሑፍ ግልባጭ መስኮት ማስተካከያ" : "Resize transcript window"}" 
+              title="${isAm ? "መጠኑን ለመቀየር ይጎትቱ" : "Drag to resize"}">
+              ◢
+            </div>
+          </div>
+
+          <!-- CENTER: Main Video Player & Controls -->
+          <div class="main-player-panel" id="player-container" tabindex="0" aria-label="${title} (Press ? for keyboard shortcuts)">
+            <div class="video-viewport">
+              <video 
+                id="main-video" 
+                class="main-video" 
+                playsinline 
+                preload="metadata"
+                poster="${this.manifest?.poster?.src || ""}"
+                src="${mainSource ? mainSource.src : ""}">
+              </video>
+
+              <!-- Captions Overlay -->
+              <div class="captions-container" aria-hidden="true">
+                <div class="captions-text" id="caption-overlay" style="display: none;"></div>
+              </div>
+            </div>
+
+            <!-- Controls Toolbar -->
+            <div class="controls-toolbar" role="toolbar" aria-label="${isAm ? "የቪዲዮ መቆጣጠሪያዎች" : "Video player controls"}">
+              <div class="scrubber-container">
+                <label for="seek-scrubber" class="sr-only">${isAm ? "የቪዲዮ መገኛ አሞሌ" : "Seek video position"}</label>
+                <input 
+                  type="range" 
+                  id="seek-scrubber" 
+                  class="scrubber" 
+                  min="0" 
+                  max="100" 
+                  value="0" 
+                  aria-label="${isAm ? "የቪዲዮ መገኛ አሞሌ" : "Video timeline position"}">
+                <span class="time-readout" id="time-display">00:00 / 00:00</span>
+              </div>
+
+              <button class="btn-ctrl" id="btn-play" aria-label="${isAm ? "አጫውት (Space / K)" : "Play (Space / K)"}">
+                <span id="play-icon" aria-hidden="true">▶</span>
+                <span id="play-text">${isAm ? "አጫውት" : "Play"}</span>
+              </button>
+
+              <button class="btn-ctrl" id="btn-rewind" aria-label="${isAm ? "ወደኋላ 5 ሰከንድ (J)" : "Rewind 5 seconds (J)"}">
+                ↺ 5s
+              </button>
+
+              <button class="btn-ctrl" id="btn-forward" aria-label="${isAm ? "ወደፊት 5 ሰከንድ (L)" : "Forward 5 seconds (L)"}">
+                ↻ 5s
+              </button>
+
+              <button class="btn-ctrl" id="btn-ad" aria-pressed="${this.prefs.audioDescriptionEnabled ? "true" : "false"}" aria-label="${isAm ? "የድምጽ ማብራሪያ (D)" : "Audio Description (D)"}">
+                AD
+              </button>
+
+              <button class="btn-ctrl" id="btn-cc" aria-expanded="false" aria-label="${isAm ? "የትርጉም ጽሑፍ (C)" : "Captions (C)"}">
+                CC (${this.prefs.captionLanguage.toUpperCase()})
+              </button>
+
+              <button class="btn-ctrl" id="btn-esl" aria-pressed="${this.prefs.eslVisible ? "true" : "false"}" aria-label="${isAm ? "የኢትዮጵያ የምልክት ቋንቋ (S)" : "Ethiopian Sign Language (S)"}">
+                EthSL
+              </button>
+
+              <button class="btn-ctrl" id="btn-transcript-toggle" aria-pressed="${this.prefs.transcriptVisible !== false ? "true" : "false"}" aria-label="${isAm ? "የጽሑፍ ግልባጭ ማሳያ" : "Toggle Transcript"}">
+                📄 ${isAm ? "ግልባጭ" : "Transcript"}
+              </button>
+
+              <button class="btn-ctrl" id="btn-prefs" aria-expanded="false" aria-label="${isAm ? "የተደራሽነት ምርጫዎች" : "Accessibility Preferences"}">
+                ⚙ ${isAm ? "ምርጫዎች" : "Settings"}
+              </button>
+            </div>
+          </div>
+
+          <!-- RIGHT: Movable & Resizable Sign Language Window (Outside of video frame) -->
+          <div 
+            class="window-panel esl-window" 
+            id="esl-window" 
+            style="width: ${eslWidth}px; height: ${eslHeight}px; flex: 0 0 ${eslWidth}px; display: ${this.prefs.eslVisible && signSource ? "flex" : "none"};"
+            aria-label="${isAm ? "የኢትዮጵያ የምልክት ቋንቋ መስኮት" : "Ethiopian Sign Language Window"}">
+            
+            <!-- Sign Titlebar -->
+            <div class="window-header" id="esl-header">
+              <button 
+                type="button" 
+                class="btn-window-opt" 
+                id="btn-esl-prefs" 
+                aria-label="${isAm ? "የመስኮት አማራጮች" : "Window options"}" 
+                title="${isAm ? "የመስኮት አማራጮች" : "Window options"}">
+                ⚙
+              </button>
+              <div 
+                class="window-drag-handle" 
+                id="esl-drag-handle" 
+                tabindex="0" 
+                role="button" 
+                aria-label="${isAm ? "የምልክት ቋንቋ መስኮት መጎተቻ" : "Sign language window drag handle"}"
+                title="${isAm ? "ለመጎተት ይጫኑ፤ ወደቦታው ለመመለስ ሁለት ጊዜ ይጫኑ" : "Drag to move; double-click to re-dock"}">
+                <span aria-hidden="true">═</span>
+              </div>
+              <div class="header-controls">
+                <span class="sign-status-pill" id="sign-status-indicator" role="status">EthSL</span>
+              </div>
+            </div>
+
+            <!-- Sign Video Body Content -->
+            <div class="esl-video-body">
               <video 
                 id="sign-video" 
                 class="sign-video" 
@@ -602,146 +891,71 @@ export class A11yMediaPlayer extends HTMLElement {
                 preload="metadata"
                 src="${signSource ? signSource.src : ""}">
               </video>
-              <div class="sign-status-pill" id="sign-status-indicator" role="status"></div>
             </div>
 
-            <!-- Custom Captions Overlay -->
-            <div class="captions-container" aria-hidden="true">
-              <div class="captions-text" id="caption-overlay" style="display: none;"></div>
+            <!-- Corner Resize Grip -->
+            <div 
+              class="window-resize-handle" 
+              id="esl-resize-handle" 
+              role="separator" 
+              aria-label="${isAm ? "የምልክት ቋንቋ መስኮት ማስተካከያ" : "Resize sign language window"}" 
+              title="${isAm ? "መጠኑን ለመቀየር ይጎትቱ" : "Drag to resize"}">
+              ◢
             </div>
           </div>
 
-          <!-- Controls Toolbar -->
-          <div class="controls-toolbar" role="toolbar" aria-label="${isAm ? "የቪዲዮ መቆጣጠሪያዎች" : "Video player controls"}">
-            <div class="scrubber-container">
-              <label for="seek-scrubber" class="sr-only">${isAm ? "የቪዲዮ መገኛ አሞሌ" : "Seek video position"}</label>
-              <input 
-                type="range" 
-                id="seek-scrubber" 
-                class="scrubber" 
-                min="0" 
-                max="100" 
-                value="0" 
-                aria-label="${isAm ? "የቪዲዮ መገኛ አሞሌ" : "Video timeline position"}">
-              <span class="time-readout" id="time-display">00:00 / 00:00</span>
+        </div>
+
+        <!-- Preferences Modal Dialog -->
+        <div class="dialog-backdrop" id="prefs-dialog" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="prefs-title">
+          <div class="dialog-panel">
+            <h3 id="prefs-title">${isAm ? "የተደራሽነት ምርጫዎች" : "Accessibility & Layout Settings"}</h3>
+            
+            <div class="form-row">
+              <label for="select-cc-lang">${isAm ? "የትርጉም ጽሑፍ ቋንቋ:" : "Caption Language:"}</label>
+              <select id="select-cc-lang">
+                <option value="en" ${this.prefs.captionLanguage === "en" ? "selected" : ""}>English (Reviewed)</option>
+                <option value="am" ${this.prefs.captionLanguage === "am" ? "selected" : ""}>አማርኛ (የተገመገመ)</option>
+                <option value="off" ${this.prefs.captionLanguage === "off" ? "selected" : ""}>Off</option>
+              </select>
             </div>
 
-            <button class="btn-ctrl" id="btn-play" aria-label="${isAm ? "አጫውት (Space / K)" : "Play (Space / K)"}">
-              <span id="play-icon" aria-hidden="true">▶</span>
-              <span id="play-text">${isAm ? "አጫውት" : "Play"}</span>
-            </button>
+            <div class="form-row">
+              <label for="select-cc-size">${isAm ? "የትርጉም ጽሑፍ መጠን:" : "Caption Font Size:"}</label>
+              <select id="select-cc-size">
+                <option value="small" ${this.prefs.captionSize === "small" ? "selected" : ""}>Small (14px)</option>
+                <option value="medium" ${this.prefs.captionSize === "medium" ? "selected" : ""}>Medium (18px - Standard)</option>
+                <option value="large" ${this.prefs.captionSize === "large" ? "selected" : ""}>Large (24px)</option>
+                <option value="xlarge" ${this.prefs.captionSize === "xlarge" ? "selected" : ""}>Extra Large (32px)</option>
+              </select>
+            </div>
 
-            <button class="btn-ctrl" id="btn-rewind" aria-label="${isAm ? "ወደኋላ 5 ሰከንድ (J)" : "Rewind 5 seconds (J)"}">
-              ↺ 5s
-            </button>
+            <div class="form-row">
+              <label for="select-cc-theme">${isAm ? "የንፅፅር ገጽታ:" : "Contrast Theme:"}</label>
+              <select id="select-cc-theme">
+                <option value="default" ${this.prefs.captionTheme === "default" ? "selected" : ""}>White on Translucent Black</option>
+                <option value="yellow-black" ${this.prefs.captionTheme === "yellow-black" ? "selected" : ""}>High Contrast (Yellow on Black)</option>
+                <option value="white-black" ${this.prefs.captionTheme === "white-black" ? "selected" : ""}>High Contrast (White on Black)</option>
+                <option value="black-yellow" ${this.prefs.captionTheme === "black-yellow" ? "selected" : ""}>High Contrast (Black on Yellow)</option>
+              </select>
+            </div>
 
-            <button class="btn-ctrl" id="btn-forward" aria-label="${isAm ? "ወደፊት 5 ሰከንድ (L)" : "Forward 5 seconds (L)"}">
-              ↻ 5s
-            </button>
-
-            <button class="btn-ctrl" id="btn-ad" aria-pressed="${this.prefs.audioDescriptionEnabled ? "true" : "false"}" aria-label="${isAm ? "የድምጽ ማብራሪያ (D)" : "Audio Description (D)"}">
-              AD
-            </button>
-
-            <button class="btn-ctrl" id="btn-cc" aria-expanded="false" aria-label="${isAm ? "የትርጉም ጽሑፍ (C)" : "Captions (C)"}">
-              CC (${this.prefs.captionLanguage.toUpperCase()})
-            </button>
-
-            <button class="btn-ctrl" id="btn-esl" aria-pressed="${this.prefs.eslVisible ? "true" : "false"}" aria-label="${isAm ? "የኢትዮጵያ የምልክት ቋንቋ (S)" : "Ethiopian Sign Language (S)"}">
-              EthSL
-            </button>
-
-            <button class="btn-ctrl" id="btn-prefs" aria-expanded="false" aria-label="${isAm ? "የተደራሽነት ምርጫዎች" : "Accessibility Preferences"}">
-              ⚙ ${isAm ? "ምርጫዎች" : "Settings"}
-            </button>
-          </div>
-
-          <!-- Preferences Modal -->
-          <div class="dialog-backdrop" id="prefs-dialog" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="prefs-title">
-            <div class="dialog-panel">
-              <h3 id="prefs-title">${isAm ? "የተደራሽነት ምርጫዎች" : "Accessibility & Caption Settings"}</h3>
-              
-              <div class="form-row">
-                <label for="select-cc-lang">${isAm ? "የትርጉም ጽሑፍ ቋንቋ:" : "Caption Language:"}</label>
-                <select id="select-cc-lang">
-                  <option value="en" ${this.prefs.captionLanguage === "en" ? "selected" : ""}>English (Reviewed)</option>
-                  <option value="am" ${this.prefs.captionLanguage === "am" ? "selected" : ""}>አማርኛ (የተገመገመ)</option>
-                  <option value="off" ${this.prefs.captionLanguage === "off" ? "selected" : ""}>Off</option>
-                </select>
-              </div>
-
-              <div class="form-row">
-                <label for="select-cc-size">${isAm ? "የትርጉም ጽሑፍ መጠን:" : "Caption Font Size:"}</label>
-                <select id="select-cc-size">
-                  <option value="small" ${this.prefs.captionSize === "small" ? "selected" : ""}>Small (14px)</option>
-                  <option value="medium" ${this.prefs.captionSize === "medium" ? "selected" : ""}>Medium (18px - Standard)</option>
-                  <option value="large" ${this.prefs.captionSize === "large" ? "selected" : ""}>Large (24px)</option>
-                  <option value="xlarge" ${this.prefs.captionSize === "xlarge" ? "selected" : ""}>Extra Large (32px)</option>
-                </select>
-              </div>
-
-              <div class="form-row">
-                <label for="select-cc-theme">${isAm ? "የንፅፅር ገጽታ:" : "Contrast Theme:"}</label>
-                <select id="select-cc-theme">
-                  <option value="default" ${this.prefs.captionTheme === "default" ? "selected" : ""}>White on Translucent Black</option>
-                  <option value="yellow-black" ${this.prefs.captionTheme === "yellow-black" ? "selected" : ""}>High Contrast (Yellow on Black)</option>
-                  <option value="white-black" ${this.prefs.captionTheme === "white-black" ? "selected" : ""}>High Contrast (White on Black)</option>
-                  <option value="black-yellow" ${this.prefs.captionTheme === "black-yellow" ? "selected" : ""}>High Contrast (Black on Yellow)</option>
-                </select>
-              </div>
-
-              <div class="form-row">
-                <label for="select-esl-pos">${isAm ? "የምልክት ቋንቋ አቀማመጥ:" : "Sign Language Position:"}</label>
-                <select id="select-esl-pos">
-                  <option value="bottom-right" ${this.prefs.eslPosition === "bottom-right" ? "selected" : ""}>Bottom Right</option>
-                  <option value="bottom-left" ${this.prefs.eslPosition === "bottom-left" ? "selected" : ""}>Bottom Left</option>
-                  <option value="top-right" ${this.prefs.eslPosition === "top-right" ? "selected" : ""}>Top Right</option>
-                  <option value="top-left" ${this.prefs.eslPosition === "top-left" ? "selected" : ""}>Top Left</option>
-                </select>
-              </div>
-
-              <div class="form-row">
-                <label for="select-esl-size">${isAm ? "የምልክት ቋንቋ መጠን:" : "Sign Language Size:"}</label>
-                <select id="select-esl-size">
-                  <option value="small" ${this.prefs.eslSize === "small" ? "selected" : ""}>Small (22%)</option>
-                  <option value="medium" ${this.prefs.eslSize === "medium" ? "selected" : ""}>Medium (30%)</option>
-                  <option value="large" ${this.prefs.eslSize === "large" ? "selected" : ""}>Large (38%)</option>
-                </select>
-              </div>
-
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; flex-wrap: wrap; gap: 0.75rem;">
-                <button type="button" class="btn-ctrl" id="btn-reset-layout" style="background: #475569;">
-                  ↺ ${isAm ? "አቀማመጥን ዳግም አስጀምር" : "Reset Layout"}
-                </button>
-                <button type="button" class="btn-ctrl" id="btn-close-prefs" style="background: var(--color-brand, #0B5D4E);">
-                  ${isAm ? "ተግብር እና ዝጋ" : "Save & Close"}
-                </button>
-              </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; flex-wrap: wrap; gap: 0.75rem;">
+              <button type="button" class="btn-ctrl" id="btn-reset-layout" style="background: #475569;">
+                ↺ ${isAm ? "አቀማመጥን ዳግም አስጀምር" : "Reset Layout"}
+              </button>
+              <button type="button" class="btn-ctrl" id="btn-close-prefs" style="background: var(--color-brand, #0B5D4E);">
+                ${isAm ? "ተግብር እና ዝጋ" : "Save & Close"}
+              </button>
             </div>
           </div>
         </div>
-
-        <!-- Synchronized Transcript Section -->
-        <section class="transcript-container" aria-label="${isAm ? "የተመሳሰለ የጽሑፍ ግልባጭ" : "Synchronized Interactive Transcript"}">
-          <div class="transcript-header">
-            <h3 style="margin: 0; color: var(--color-brand, #0B5D4E);">
-              ${isAm ? "የትምህርቱ የጽሑፍ ግልባጭ" : "Lesson Transcript"}
-            </h3>
-            <input 
-              type="search" 
-              id="transcript-search" 
-              class="search-box" 
-              placeholder="${isAm ? "በጽሑፉ ውስጥ ይፈልጉ..." : "Search transcript..."}" 
-              aria-label="${isAm ? "በጽሑፉ ውስጥ ይፈልጉ" : "Search transcript"}">
-          </div>
-          <div id="transcript-target"></div>
-        </section>
       </section>
     `;
 
     this.bindDOMElements();
     this.attachEventListeners();
-    this.setupESLDrag();
+    this.setupWindowInteractions();
   }
 
   private bindDOMElements() {
@@ -763,7 +977,10 @@ export class A11yMediaPlayer extends HTMLElement {
             badge.style.background = "#FEF2F2";
             badge.style.color = "#991B1B";
           } else {
-            badge.style.display = "none";
+            badge.style.display = "inline-block";
+            badge.textContent = "EthSL";
+            badge.style.background = "rgba(255,255,255,0.2)";
+            badge.style.color = "#FFF";
           }
         }
       },
@@ -774,74 +991,187 @@ export class A11yMediaPlayer extends HTMLElement {
     }
 
     const transcriptTarget = this.shadow.getElementById("transcript-target") as HTMLElement;
+    const autoScrollCb = this.shadow.getElementById("cb-auto-scroll") as HTMLInputElement;
+
     this.transcriptViewer = new TranscriptViewer(transcriptTarget, {
       locale: this.activeLocale,
       onSeekAndPlay: (time) => {
         this.seekAndPlay(time);
       },
+      onFollowChange: (isFollowing) => {
+        if (autoScrollCb) {
+          autoScrollCb.checked = isFollowing;
+        }
+      },
     });
   }
 
-  private setupESLDrag() {
-    const eslWindow = this.shadow.getElementById("esl-window") as HTMLElement;
-    const dragHandle = this.shadow.getElementById("esl-drag-handle") as HTMLElement;
-    const viewport = this.shadow.querySelector(".video-viewport") as HTMLElement;
-    if (!eslWindow || !dragHandle || !viewport) return;
+  private setupWindowInteractions() {
+    const stage = this.shadow.getElementById("player-stage") as HTMLElement;
+    if (!stage) return;
 
-    let isDragging = false;
-    let startX = 0;
-    let startY = 0;
-    let initialLeft = 0;
-    let initialTop = 0;
+    // Helper for making a window panel smoothly draggable and resizable
+    const initWindow = (
+      winId: string,
+      dragHandleId: string,
+      resizeHandleId: string,
+      opts: {
+        minWidth: number;
+        maxWidth: number;
+        minHeight: number;
+        maxHeight: number;
+        onSaveSize: (w: number, h: number) => void;
+      }
+    ) => {
+      const winEl = this.shadow.getElementById(winId) as HTMLElement;
+      const dragHandle = this.shadow.getElementById(dragHandleId) as HTMLElement;
+      const resizeHandle = this.shadow.getElementById(resizeHandleId) as HTMLElement;
+      if (!winEl || !dragHandle || !resizeHandle) return;
 
-    dragHandle.addEventListener("pointerdown", (e) => {
-      isDragging = true;
-      dragHandle.setPointerCapture(e.pointerId);
-      startX = e.clientX;
-      startY = e.clientY;
+      // --- Resizing Controller ---
+      let isResizing = false;
+      let startX = 0;
+      let startY = 0;
+      let startW = 0;
+      let startH = 0;
 
-      const rect = eslWindow.getBoundingClientRect();
-      const vpRect = viewport.getBoundingClientRect();
-      initialLeft = rect.left - vpRect.left;
-      initialTop = rect.top - vpRect.top;
+      resizeHandle.addEventListener("pointerdown", (e) => {
+        isResizing = true;
+        resizeHandle.setPointerCapture(e.pointerId);
+        startX = e.clientX;
+        startY = e.clientY;
+        startW = winEl.offsetWidth;
+        startH = winEl.offsetHeight;
+        winEl.classList.add("is-resizing");
+        e.preventDefault();
+        e.stopPropagation();
+      });
 
-      eslWindow.style.left = `${initialLeft}px`;
-      eslWindow.style.top = `${initialTop}px`;
-      eslWindow.style.right = "auto";
-      eslWindow.style.bottom = "auto";
-      e.preventDefault();
-    });
+      resizeHandle.addEventListener("pointermove", (e) => {
+        if (!isResizing) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
 
-    dragHandle.addEventListener("pointermove", (e) => {
-      if (!isDragging) return;
-      const dx = e.clientX - startX;
-      const dy = e.clientY - startY;
+        const newW = Math.min(opts.maxWidth, Math.max(opts.minWidth, startW + dx));
+        const newH = Math.min(opts.maxHeight, Math.max(opts.minHeight, startH + dy));
 
-      const vpRect = viewport.getBoundingClientRect();
-      const winRect = eslWindow.getBoundingClientRect();
+        winEl.style.width = `${newW}px`;
+        winEl.style.height = `${newH}px`;
+        winEl.style.flex = `0 0 ${newW}px`;
+      });
 
-      // Strict boundary clamping within video viewport
-      const maxLeft = Math.max(0, vpRect.width - winRect.width);
-      const maxTop = Math.max(0, vpRect.height - winRect.height);
+      const endResize = (e: PointerEvent) => {
+        if (isResizing) {
+          isResizing = false;
+          winEl.classList.remove("is-resizing");
+          try {
+            resizeHandle.releasePointerCapture(e.pointerId);
+          } catch {}
+          opts.onSaveSize(winEl.offsetWidth, winEl.offsetHeight);
+        }
+      };
 
-      const newLeft = Math.min(Math.max(0, initialLeft + dx), maxLeft);
-      const newTop = Math.min(Math.max(0, initialTop + dy), maxTop);
+      resizeHandle.addEventListener("pointerup", endResize);
+      resizeHandle.addEventListener("pointercancel", endResize);
 
-      eslWindow.style.left = `${newLeft}px`;
-      eslWindow.style.top = `${newTop}px`;
-    });
+      // --- Dragging & Floating Controller ---
+      let isDragging = false;
+      let dragStartX = 0;
+      let dragStartY = 0;
+      let initialLeft = 0;
+      let initialTop = 0;
 
-    const endDrag = (e: PointerEvent) => {
-      if (isDragging) {
+      dragHandle.addEventListener("pointerdown", (e) => {
+        if ((e.target as HTMLElement).tagName === "INPUT" || (e.target as HTMLElement).tagName === "SELECT") {
+          return;
+        }
+        dragHandle.setPointerCapture(e.pointerId);
+        dragStartX = e.clientX;
+        dragStartY = e.clientY;
+
+        const stageRect = stage.getBoundingClientRect();
+        const winRect = winEl.getBoundingClientRect();
+        initialLeft = winRect.left - stageRect.left;
+        initialTop = winRect.top - stageRect.top;
         isDragging = false;
+      });
+
+      dragHandle.addEventListener("pointermove", (e) => {
+        const dx = e.clientX - dragStartX;
+        const dy = e.clientY - dragStartY;
+
+        if (!isDragging && Math.hypot(dx, dy) > 4) {
+          isDragging = true;
+          winEl.classList.add("floating");
+          winEl.style.position = "absolute";
+          winEl.style.zIndex = "60";
+        }
+
+        if (isDragging) {
+          const stageRect = stage.getBoundingClientRect();
+          const winRect = winEl.getBoundingClientRect();
+          const maxLeft = Math.max(0, stageRect.width - winRect.width);
+          const maxTop = Math.max(0, stageRect.height - 40);
+
+          const newLeft = Math.min(maxLeft, Math.max(0, initialLeft + dx));
+          const newTop = Math.min(maxTop, Math.max(0, initialTop + dy));
+
+          winEl.style.left = `${newLeft}px`;
+          winEl.style.top = `${newTop}px`;
+          winEl.style.right = "auto";
+          winEl.style.bottom = "auto";
+        }
+      });
+
+      const endDrag = (e: PointerEvent) => {
+        if (isDragging) {
+          isDragging = false;
+        }
         try {
           dragHandle.releasePointerCapture(e.pointerId);
         } catch {}
-      }
+      };
+
+      dragHandle.addEventListener("pointerup", endDrag);
+      dragHandle.addEventListener("pointercancel", endDrag);
+
+      // Double-click on drag handle re-docks window to side-by-side layout
+      dragHandle.addEventListener("dblclick", () => {
+        winEl.classList.remove("floating");
+        winEl.style.position = "";
+        winEl.style.left = "";
+        winEl.style.top = "";
+        winEl.style.right = "";
+        winEl.style.bottom = "";
+        winEl.style.zIndex = "";
+      });
     };
 
-    dragHandle.addEventListener("pointerup", endDrag);
-    dragHandle.addEventListener("pointercancel", endDrag);
+    // Initialize Transcript Window
+    initWindow("transcript-window", "transcript-drag-handle", "transcript-resize-handle", {
+      minWidth: 250,
+      maxWidth: 650,
+      minHeight: 250,
+      maxHeight: 850,
+      onSaveSize: (w, h) => {
+        this.prefs.transcriptWidth = w;
+        this.prefs.transcriptHeight = h;
+        savePreferences({ transcriptWidth: w, transcriptHeight: h });
+      },
+    });
+
+    // Initialize Sign Language Window
+    initWindow("esl-window", "esl-drag-handle", "esl-resize-handle", {
+      minWidth: 200,
+      maxWidth: 600,
+      minHeight: 160,
+      maxHeight: 600,
+      onSaveSize: (w, h) => {
+        this.prefs.eslWidth = w;
+        this.prefs.eslHeight = h;
+        savePreferences({ eslWidth: w, eslHeight: h });
+      },
+    });
   }
 
   private attachEventListeners() {
@@ -896,7 +1226,7 @@ export class A11yMediaPlayer extends HTMLElement {
       this.mainVideo.currentTime = (parseFloat(scrubber.value) / 100) * duration;
     });
 
-    // Seek buttons
+    // Rewind / Forward
     this.shadow.getElementById("btn-rewind")?.addEventListener("click", () => {
       this.mainVideo.currentTime = Math.max(0, this.mainVideo.currentTime - 5);
     });
@@ -938,21 +1268,54 @@ export class A11yMediaPlayer extends HTMLElement {
       savePreferences({ eslVisible: this.prefs.eslVisible });
       btnESL.setAttribute("aria-pressed", this.prefs.eslVisible ? "true" : "false");
       if (eslWindow) {
-        eslWindow.style.display = this.prefs.eslVisible ? "block" : "none";
+        eslWindow.style.display = this.prefs.eslVisible ? "flex" : "none";
       }
     });
 
-    // Preferences Dialog Open/Close
+    // Transcript Toggle
+    const btnTranscript = this.shadow.getElementById("btn-transcript-toggle");
+    const transcriptWindow = this.shadow.getElementById("transcript-window");
+    btnTranscript?.addEventListener("click", () => {
+      const isVisible = transcriptWindow?.style.display !== "none";
+      const nextState = !isVisible;
+      this.prefs.transcriptVisible = nextState;
+      savePreferences({ transcriptVisible: nextState });
+      btnTranscript.setAttribute("aria-pressed", nextState ? "true" : "false");
+      if (transcriptWindow) {
+        transcriptWindow.style.display = nextState ? "flex" : "none";
+      }
+    });
+
+    // Auto-scroll Checkbox in Transcript Header
+    const cbAutoScroll = this.shadow.getElementById("cb-auto-scroll") as HTMLInputElement;
+    cbAutoScroll?.addEventListener("change", () => {
+      this.transcriptViewer.setFollowing(cbAutoScroll.checked);
+    });
+
+    // Language Select in Transcript Header
+    const selectTranscriptLang = this.shadow.getElementById("select-transcript-lang") as HTMLSelectElement;
+    selectTranscriptLang?.addEventListener("change", () => {
+      const newLocale = selectTranscriptLang.value as "en" | "am";
+      this.setAttribute("locale", newLocale);
+    });
+
+    // Window Options Buttons (Cog icons on Transcript and Sign headers)
+    const openPrefs = () => {
+      this.isPreferencesOpen = true;
+      if (prefsDialog) prefsDialog.style.display = "flex";
+      this.shadow.getElementById("select-cc-lang")?.focus();
+    };
+
     const btnPrefs = this.shadow.getElementById("btn-prefs");
+    const btnTranscriptPrefs = this.shadow.getElementById("btn-transcript-prefs");
+    const btnEslPrefs = this.shadow.getElementById("btn-esl-prefs");
     const prefsDialog = this.shadow.getElementById("prefs-dialog");
     const btnClosePrefs = this.shadow.getElementById("btn-close-prefs");
     const btnResetLayout = this.shadow.getElementById("btn-reset-layout");
 
-    btnPrefs?.addEventListener("click", () => {
-      this.isPreferencesOpen = true;
-      if (prefsDialog) prefsDialog.style.display = "flex";
-      this.shadow.getElementById("select-cc-lang")?.focus();
-    });
+    btnPrefs?.addEventListener("click", openPrefs);
+    btnTranscriptPrefs?.addEventListener("click", openPrefs);
+    btnEslPrefs?.addEventListener("click", openPrefs);
 
     btnClosePrefs?.addEventListener("click", () => {
       this.isPreferencesOpen = false;
@@ -960,21 +1323,43 @@ export class A11yMediaPlayer extends HTMLElement {
       btnPrefs?.focus();
     });
 
-    // Reset Layout Button
+    // Reset Layout Button (Restores side-by-side docked layout & default dimensions)
     btnResetLayout?.addEventListener("click", () => {
       resetPreferences();
       this.prefs = loadPreferences();
+
+      // Reset Transcript Window
+      if (transcriptWindow) {
+        transcriptWindow.classList.remove("floating");
+        transcriptWindow.style.position = "";
+        transcriptWindow.style.left = "";
+        transcriptWindow.style.top = "";
+        transcriptWindow.style.right = "";
+        transcriptWindow.style.bottom = "";
+        transcriptWindow.style.zIndex = "";
+        transcriptWindow.style.width = `${DEFAULT_PREFERENCES.transcriptWidth}px`;
+        transcriptWindow.style.height = `${DEFAULT_PREFERENCES.transcriptHeight}px`;
+        transcriptWindow.style.flex = `0 0 ${DEFAULT_PREFERENCES.transcriptWidth}px`;
+        transcriptWindow.style.display = "flex";
+      }
+
+      // Reset Sign Language Window
       if (eslWindow) {
+        eslWindow.classList.remove("floating");
+        eslWindow.style.position = "";
         eslWindow.style.left = "";
         eslWindow.style.top = "";
         eslWindow.style.right = "";
         eslWindow.style.bottom = "";
-        eslWindow.className = `esl-window pos-${this.prefs.eslPosition} size-${this.prefs.eslSize}`;
+        eslWindow.style.zIndex = "";
+        eslWindow.style.width = `${DEFAULT_PREFERENCES.eslWidth}px`;
+        eslWindow.style.height = `${DEFAULT_PREFERENCES.eslHeight}px`;
+        eslWindow.style.flex = `0 0 ${DEFAULT_PREFERENCES.eslWidth}px`;
+        eslWindow.style.display = "flex";
       }
-      const selectPos = this.shadow.getElementById("select-esl-pos") as HTMLSelectElement;
-      const selectSize = this.shadow.getElementById("select-esl-size") as HTMLSelectElement;
-      if (selectPos) selectPos.value = this.prefs.eslPosition;
-      if (selectSize) selectSize.value = this.prefs.eslSize;
+
+      if (btnESL) btnESL.setAttribute("aria-pressed", "true");
+      if (btnTranscript) btnTranscript.setAttribute("aria-pressed", "true");
     });
 
     // Preference Form Inputs
@@ -997,26 +1382,6 @@ export class A11yMediaPlayer extends HTMLElement {
       this.updateCaptionDisplay();
     });
 
-    this.shadow.getElementById("select-esl-pos")?.addEventListener("change", (e) => {
-      this.prefs.eslPosition = (e.target as HTMLSelectElement).value as ESLPosition;
-      savePreferences({ eslPosition: this.prefs.eslPosition });
-      if (eslWindow) {
-        eslWindow.style.left = "";
-        eslWindow.style.top = "";
-        eslWindow.style.right = "";
-        eslWindow.style.bottom = "";
-        eslWindow.className = `esl-window pos-${this.prefs.eslPosition} size-${this.prefs.eslSize}`;
-      }
-    });
-
-    this.shadow.getElementById("select-esl-size")?.addEventListener("change", (e) => {
-      this.prefs.eslSize = (e.target as HTMLSelectElement).value as ESLSize;
-      savePreferences({ eslSize: this.prefs.eslSize });
-      if (eslWindow) {
-        eslWindow.className = `esl-window pos-${this.prefs.eslPosition} size-${this.prefs.eslSize}`;
-      }
-    });
-
     // Transcript Search
     const searchInput = this.shadow.getElementById("transcript-search") as HTMLInputElement;
     searchInput?.addEventListener("input", () => {
@@ -1035,7 +1400,6 @@ export class A11yMediaPlayer extends HTMLElement {
         return;
       }
 
-      // Ignore if focus is in a form input
       if ((e.target as HTMLElement).tagName === "INPUT" || (e.target as HTMLElement).tagName === "SELECT") {
         return;
       }
@@ -1079,32 +1443,13 @@ export class A11yMediaPlayer extends HTMLElement {
           e.preventDefault();
           btnAD?.click();
           break;
-        case "+":
-        case "=":
+        case "t":
+        case "T":
           e.preventDefault();
-          this.cycleESLSize(1);
-          break;
-        case "-":
-        case "_":
-          e.preventDefault();
-          this.cycleESLSize(-1);
+          btnTranscript?.click();
           break;
       }
     });
-  }
-
-  private cycleESLSize(direction: number) {
-    const sizes: ESLSize[] = ["small", "medium", "large"];
-    let idx = sizes.indexOf(this.prefs.eslSize) + direction;
-    if (idx < 0) idx = 0;
-    if (idx >= sizes.length) idx = sizes.length - 1;
-    this.prefs.eslSize = sizes[idx];
-    savePreferences({ eslSize: this.prefs.eslSize });
-
-    const eslWindow = this.shadow.getElementById("esl-window");
-    if (eslWindow) {
-      eslWindow.className = `esl-window pos-${this.prefs.eslPosition} size-${this.prefs.eslSize}`;
-    }
   }
 
   private updateLocaleStrings() {

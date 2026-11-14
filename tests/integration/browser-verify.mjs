@@ -5,7 +5,7 @@ async function runBrowserVerification() {
   console.log("Launching headless Chrome...");
   const chromeProc = spawn(chromePath, [
     "--headless=new",
-    "--remote-debugging-port=9222",
+    "--remote-debugging-port=9225",
     "--disable-gpu",
     "--no-sandbox",
     "--disable-dev-shm-usage",
@@ -15,11 +15,11 @@ async function runBrowserVerification() {
   await new Promise((r) => setTimeout(r, 1500));
 
   try {
-    const verRes = await fetch("http://127.0.0.1:9222/json/version");
+    const verRes = await fetch("http://127.0.0.1:9225/json/version");
     const verData = await verRes.json();
     console.log("Connected to Chrome:", verData.Browser);
 
-    const newTabRes = await fetch("http://127.0.0.1:9222/json/new?http://localhost:3000/lesson", {
+    const newTabRes = await fetch("http://127.0.0.1:9225/json/new?http://localhost:3000/lesson", {
       method: "PUT",
     });
     const tabData = await newTabRes.json();
@@ -64,16 +64,28 @@ async function runBrowserVerification() {
         if (!shadow) return { error: "ShadowRoot not found" };
 
         const mainVideo = shadow.querySelector("#main-video");
+        const videoViewport = shadow.querySelector(".video-viewport");
+        const transcriptWindow = shadow.querySelector("#transcript-window");
         const eslWindow = shadow.querySelector("#esl-window");
-        const dragHandle = shadow.querySelector("#esl-drag-handle");
+        const playerStage = shadow.querySelector("#player-stage");
+
+        const transcriptDragHandle = shadow.querySelector("#transcript-drag-handle");
+        const eslDragHandle = shadow.querySelector("#esl-drag-handle");
+        const transcriptResizeHandle = shadow.querySelector("#transcript-resize-handle");
+        const eslResizeHandle = shadow.querySelector("#esl-resize-handle");
+
         const signVideo = shadow.querySelector("#sign-video");
         const statusIndicator = shadow.querySelector("#sign-status-indicator");
+        const cbAutoScroll = shadow.querySelector("#cb-auto-scroll");
+        const selectTranscriptLang = shadow.querySelector("#select-transcript-lang");
 
-        const followBtn = shadow.querySelector("#btn-toggle-follow");
         const segmentButtons = Array.from(shadow.querySelectorAll(".btn-seek-time"));
         const searchInput = shadow.querySelector("#transcript-search");
         const resetBtn = shadow.querySelector("#btn-reset-layout");
-        const prefsDialog = shadow.querySelector("#prefs-dialog");
+
+        // Verify that neither transcript nor esl-window is inside video-viewport
+        const transcriptOutsideVideo = !videoViewport.contains(transcriptWindow);
+        const eslOutsideVideo = !videoViewport.contains(eslWindow);
 
         // Test seeking and focus retention
         let seekTestPassed = false;
@@ -86,26 +98,23 @@ async function runBrowserVerification() {
           activeElementAfterSeek = shadow.activeElement ? shadow.activeElement.tagName : "none";
         }
 
-        // Test follow toggle
-        let followToggleInitial = followBtn ? followBtn.getAttribute("aria-pressed") : null;
-        if (followBtn) {
-          followBtn.click();
+        // Test auto scroll checkbox
+        let autoScrollInitial = cbAutoScroll ? cbAutoScroll.checked : null;
+        if (cbAutoScroll) {
+          cbAutoScroll.click();
         }
-        let followToggleAfterClick = followBtn ? followBtn.getAttribute("aria-pressed") : null;
-        if (followBtn) {
-          followBtn.click(); // restore following
+        let autoScrollAfterClick = cbAutoScroll ? cbAutoScroll.checked : null;
+        if (cbAutoScroll) {
+          cbAutoScroll.click(); // restore
         }
-        let followToggleRestored = followBtn ? followBtn.getAttribute("aria-pressed") : null;
 
         // Test search filtering
-        let searchCountBefore = segmentButtons.length;
         let searchFilterSuccess = false;
         if (searchInput) {
           searchInput.value = "Welcome";
           searchInput.dispatchEvent(new Event("input", { bubbles: true }));
           const filteredItems = shadow.querySelectorAll("#transcript-target .transcript-item");
           searchFilterSuccess = filteredItems.length >= 1;
-          // reset search
           searchInput.value = "";
           searchInput.dispatchEvent(new Event("input", { bubbles: true }));
         }
@@ -113,16 +122,22 @@ async function runBrowserVerification() {
         return {
           playerMounted: true,
           mainVideoPresent: !!mainVideo,
+          transcriptWindowPresent: !!transcriptWindow,
           eslWindowPresent: !!eslWindow,
-          dragHandlePresent: !!dragHandle,
+          transcriptOutsideVideo,
+          eslOutsideVideo,
+          transcriptDragHandlePresent: !!transcriptDragHandle,
+          eslDragHandlePresent: !!eslDragHandle,
+          transcriptResizeHandlePresent: !!transcriptResizeHandle,
+          eslResizeHandlePresent: !!eslResizeHandle,
           signVideoMuted: signVideo ? signVideo.muted : false,
           segmentCount: segmentButtons.length,
           firstSegmentLabel: segmentButtons[0] ? segmentButtons[0].getAttribute("aria-label") : null,
           seekTestPassed,
           activeElementRetained: activeElementAfterSeek.toLowerCase() === "button",
-          followToggleInitial,
-          followToggleAfterClick,
-          followToggleRestored,
+          autoScrollInitial,
+          autoScrollAfterClick,
+          selectTranscriptLangPresent: !!selectTranscriptLang,
           searchInputPresent: !!searchInput,
           searchFilterSuccess,
           statusIndicatorPresent: !!statusIndicator,
@@ -133,35 +148,6 @@ async function runBrowserVerification() {
     });
 
     console.log("Evaluation Results Full:\n", JSON.stringify(evalResult.result?.result?.value || evalResult, null, 2));
-
-    // Test responsive viewport (narrow screen < 640px)
-    await send("Emulation.setDeviceMetricsOverride", {
-      width: 480,
-      height: 800,
-      deviceScaleFactor: 1,
-      mobile: true,
-    });
-
-    await new Promise((r) => setTimeout(r, 600));
-
-    const responsiveResult = await send("Runtime.evaluate", {
-      expression: `(() => {
-        const player = document.querySelector("a11y-media-player");
-        const shadow = player.shadowRoot;
-        const eslWindow = shadow.querySelector("#esl-window");
-        const styles = window.getComputedStyle(eslWindow);
-        const dragHandle = shadow.querySelector("#esl-drag-handle");
-        const dragStyles = window.getComputedStyle(dragHandle);
-        return {
-          viewportWidth: window.innerWidth,
-          eslPosition: styles.position,
-          dragHandleDisplay: dragStyles.display,
-        };
-      })()`,
-      returnByValue: true,
-    });
-
-    console.log("Narrow Screen Responsive Results:\n", JSON.stringify(responsiveResult.result?.result?.value || responsiveResult, null, 2));
 
     ws.close();
   } finally {
