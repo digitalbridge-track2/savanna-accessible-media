@@ -276,6 +276,34 @@ async function run() {
     fs.writeFileSync("evidence/studio-verified.png", Buffer.from(snapStudio.data, "base64"));
     console.log("Saved evidence/studio-verified.png");
 
+    // 4. Verify Certificate Credential Verification view (/verify)
+    console.log("Navigating to http://localhost:3000/verify?id=CERT-DB-2026-0042...");
+    await send("Page.navigate", { url: "http://localhost:3000/verify?id=CERT-DB-2026-0042" });
+    await new Promise((r) => setTimeout(r, 1500));
+
+    const verifyEval = await send("Runtime.evaluate", {
+      expression: `(() => {
+        const text = document.body.innerText;
+        const certFound = text.includes("CERT-DB-2026-0042") && text.includes("Demonstrated Credential Verified");
+        const hasDualDate = text.includes("2026-11-14") && text.includes("ህዳር 5");
+        const hasRecipient = text.includes("Demonstration Learner");
+        const copyBtn = Array.from(document.querySelectorAll("button")).find(b => b.textContent.includes("Copy Shareable Link"));
+        
+        return {
+          certFound,
+          hasDualDate,
+          hasRecipient,
+          hasCopyButton: Boolean(copyBtn)
+        };
+      })()`,
+      returnByValue: true,
+    });
+    console.log("Certificate Verification Evaluation:", JSON.stringify(verifyEval.result.value, null, 2));
+
+    const snapVerify = await send("Page.captureScreenshot", { format: "png" });
+    fs.writeFileSync("evidence/verify-credential.png", Buffer.from(snapVerify.data, "base64"));
+    console.log("Saved evidence/verify-credential.png");
+
     console.log("All automated UI verifications completed successfully!");
     ws.close();
   } finally {
