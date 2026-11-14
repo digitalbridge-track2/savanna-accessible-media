@@ -2283,5 +2283,6 @@ if (!customElements.get("a11y-media-player")) {
   customElements.define("a11y-media-player", A11yMediaPlayer);
 }
 if (!customElements.get("db-player")) {
-  customElements.define("db-player", A11yMediaPlayer);
+  class DbPlayer extends A11yMediaPlayer {}
+  customElements.define("db-player", DbPlayer);
 }
