@@ -4,6 +4,12 @@ import { resolve } from "path";
 
 export default defineConfig({
   plugins: [react()],
+  server: {
+    cors: true,
+  },
+  preview: {
+    cors: true,
+  },
   build: {
     rollupOptions: {
       input: {

@@ -21,11 +21,12 @@ const ICONS = {
   rewind: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg>`,
   forward: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg>`,
   cc: `<svg viewBox="0 0 24 24" width="22" height="20" fill="currentColor" aria-hidden="true"><path d="M19 4H5a2 2 0 00-2 2v12a2 2 0 002 2h14a2 2 0 002-2V6a2 2 0 00-2-2zm-8 7H9.5v-.5h-2v3h2V13H11v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-4a1 1 0 011-1h3a1 1 0 011 1v1zm7 0h-1.5v-.5h-2v3h2V13H18v1a1 1 0 01-1 1h-3a1 1 0 01-1-1v-4a1 1 0 011-1h3a1 1 0 011 1v1z"/></svg>`,
-  sign: `<svg viewBox="0 0 24 24" width="22" height="20" fill="currentColor" aria-hidden="true"><path d="M21 9h-4.2l-1.3-3.9C15.2 4.4 14.5 4 13.7 4c-.7 0-1.4.3-1.8.9L10 8H6c-1.1 0-2 .9-2 2v7c0 1.1.9 2 2 2h6.8l5.8-2.5c.9-.4 1.4-1.3 1.4-2.3V11c0-1.1-.9-2-2-2zm-9 9H6v-7h4.5l2.1-3.2c.2-.3.6-.4.9-.4.3 0 .6.2.8.5l1.3 3.9v.2H12v6zm7-3.7l-5 2.1V11h6v3.3z"/></svg>`,
-  ad: `<svg viewBox="0 0 24 24" width="22" height="20" fill="currentColor" aria-hidden="true"><path d="M4 4h5c4.42 0 8 3.58 8 8s-3.58 8-8 8H4V4zm5 13c2.76 0 5-2.24 5-5s-2.24-5-5-5H7v10h2zm10-9.8a7.96 7.96 0 010 9.6l1.5 1.5c3.5-3.5 3.5-9.1 0-12.6l-1.5 1.5zm-2.5 2.5a4.46 4.46 0 010 4.6l1.5 1.5c1.9-2.1 1.9-5.1 0-7.2l-1.5 1.1z"/></svg>`,
+  sign: `<svg viewBox="0 0 30 20" width="26" height="20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="1.5" y="1.5" width="27" height="17" rx="3.5"/><text x="15" y="14" text-anchor="middle" fill="currentColor" stroke="none" font-size="10" font-weight="bold" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" letter-spacing="0.5">ESL</text></svg>`,
+  esl: `<svg viewBox="0 0 30 20" width="26" height="20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="1.5" y="1.5" width="27" height="17" rx="3.5"/><text x="15" y="14" text-anchor="middle" fill="currentColor" stroke="none" font-size="10" font-weight="bold" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" letter-spacing="0.5">ESL</text></svg>`,
+  ad: `<svg viewBox="0 0 24 20" width="24" height="20" fill="currentColor" aria-hidden="true"><path d="M2.5 3h6.5c3.6 0 6.5 2.9 6.5 7s-2.9 7-6.5 7H2.5V3zm3.5 11h3c2 0 3.5-1.6 3.5-4s-1.5-4-3.5-4H6v8z"/><path d="M17.5 7.2c1 1.6 1 4 0 5.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/><path d="M20.2 5.2c2 2.8 2 6.8 0 9.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg>`,
   transcript: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>`,
-  faster: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M21.5 14.5c0-.83-.67-1.5-1.5-1.5h-1.18c.43-.88.68-1.87.68-2.92 0-3.35-2.45-6.08-5.5-6.08-1.3 0-2.5.5-3.41 1.34L8.7 3.45a1.5 1.5 0 00-2.12 2.12l1.6 1.6C7.45 8.1 7 9.25 7 10.5c0 1.05.43 2.01 1.12 2.72L5.4 14.94A2 2 0 004 16.5C4 18.43 5.57 20 7.5 20h11c1.66 0 3-1.34 3-3 0-.91-.41-1.72-1.05-2.27.64-.32 1.05-.98 1.05-1.73zM14 6c1.93 0 3.5 1.79 3.5 4 0 .72-.18 1.4-.49 1.98l-3.92-3.92C13.36 6.8 13.67 6 14 6z"/></svg>`,
-  slower: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M19 13c-.55 0-1 .45-1 1 0 1.65-1.35 3-3 3H9c-1.65 0-3-1.35-3-3 0-.55-.45-1-1-1s-1 .45-1 1c0 2.42 1.72 4.44 4 4.9V20c0 .55.45 1 1 1s1-.45 1-1v-1.05c.32.03.66.05 1 .05s.68-.02 1-.05V20c0 .55.45 1 1 1s1-.45 1-1v-1.1c2.28-.46 4-2.48 4-4.9 0-.55-.45-1-1-1zm1.5-4c-.83 0-1.5.67-1.5 1.5 0 .28.08.53.21.75C17.7 10.5 15.98 10 14 10H10c-1.98 0-3.7.5-5.21 1.25.13-.22.21-.47.21-.75 0-.83-.67-1.5-1.5-1.5S2 9.67 2 10.5c0 .76.57 1.38 1.3 1.48C3.1 12.5 3 13 3 13.5c0 .35.03.69.08 1.03C2.45 14.89 2 15.64 2 16.5 2 17.6 2.9 18.5 4 18.5h.2c.4 1.2 1.44 2.1 2.7 2.38V21.5c0 .55.45 1 1 1s1-.45 1-1V21h6v.5c0 .55.45 1 1 1s1-.45 1-1v-.62c1.26-.28 2.3-1.18 2.7-2.38h.2c1.1 0 2-.9 2-2 0-.86-.45-1.61-1.08-1.97.05-.34.08-.68.08-1.03 0-.53-.1-1.04-.3-1.52.73-.1 1.3-.72 1.3-1.48 0-.83-.67-1.5-1.5-1.5zM12 7c3.86 0 7 3.14 7 6H5c0-2.86 3.14-6 7-6z"/></svg>`,
+  faster: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>`,
+  slower: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11H7v-2h10v2z"/></svg>`,
   prefs: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.488.488 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>`,
   fullscreenEnter: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>`,
   fullscreenExit: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>`,
@@ -258,10 +259,10 @@ export class A11yMediaPlayer extends HTMLElement {
     const mainSource = this.manifest?.sources.find((s) => s.kind === "main");
     const signSource = this.manifest?.sources.find((s) => s.kind === "sign");
 
-    const transWidth = this.prefs.transcriptWidth || DEFAULT_PREFERENCES.transcriptWidth || 350;
-    const transHeight = this.prefs.transcriptHeight || DEFAULT_PREFERENCES.transcriptHeight || 480;
-    const eslWidth = this.prefs.eslWidth || DEFAULT_PREFERENCES.eslWidth || 340;
-    const eslHeight = this.prefs.eslHeight || DEFAULT_PREFERENCES.eslHeight || 250;
+    const transWidth = this.prefs.transcriptWidth || DEFAULT_PREFERENCES.transcriptWidth || 280;
+    const transHeight = this.prefs.transcriptHeight || DEFAULT_PREFERENCES.transcriptHeight || 420;
+    const eslWidth = this.prefs.eslWidth || DEFAULT_PREFERENCES.eslWidth || 260;
+    const eslHeight = this.prefs.eslHeight || DEFAULT_PREFERENCES.eslHeight || 200;
 
     this.shadow.innerHTML = `
       <style>
@@ -288,10 +289,10 @@ export class A11yMediaPlayer extends HTMLElement {
         .player-stage {
           display: flex;
           flex-direction: row;
-          flex-wrap: wrap;
+          flex-wrap: nowrap;
           align-items: flex-start;
           justify-content: center;
-          gap: 1.25rem;
+          gap: 0.85rem;
           position: relative;
           width: 100%;
           box-sizing: border-box;
@@ -484,9 +485,9 @@ export class A11yMediaPlayer extends HTMLElement {
 
         /* Center Main Player Panel - Horizontal Rectangular Cinema Proportion */
         .main-player-panel {
-          flex: 2 1 680px;
-          min-width: 480px;
-          max-width: 880px;
+          flex: 1 1 500px;
+          min-width: 320px;
+          max-width: 580px;
           width: 100%;
           background: #111417;
           border-radius: 8px;
@@ -725,9 +726,9 @@ export class A11yMediaPlayer extends HTMLElement {
 
         /* LEFT: Resizable Transcript Window */
         .transcript-window {
-          flex: 0 0 auto;
-          min-width: 220px;
-          max-width: 750px;
+          flex: 0 0 280px;
+          min-width: 200px;
+          max-width: 550px;
           min-height: 200px;
           max-height: 900px;
         }
@@ -774,9 +775,9 @@ export class A11yMediaPlayer extends HTMLElement {
 
         /* RIGHT: Resizable Sign Language Window (Outside of video frame) */
         .esl-window {
-          flex: 0 0 auto;
-          min-width: 200px;
-          max-width: 700px;
+          flex: 0 0 260px;
+          min-width: 180px;
+          max-width: 500px;
           min-height: 160px;
           max-height: 700px;
           background: #111;
@@ -928,14 +929,53 @@ export class A11yMediaPlayer extends HTMLElement {
           min-height: 44px;
         }
 
-        /* Responsive Reflow on Small Mobile Screens */
-        @media (max-width: 680px) {
+        /* Dialog Action Buttons (Accessible, Un-squished) */
+        .btn-dialog-action {
+          padding: 0.6rem 1.25rem;
+          font-size: 0.95rem;
+          font-weight: 600;
+          border-radius: 6px;
+          min-height: 42px;
+          border: 1px solid transparent;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.4rem;
+          transition: background 0.15s ease, transform 0.1s ease;
+          width: auto;
+          min-width: 130px;
+        }
+        .btn-dialog-action:focus-visible {
+          outline: 3px solid var(--color-accent, #F2C14E);
+          outline-offset: 2px;
+        }
+        .btn-dialog-reset {
+          background: #475569;
+          color: #FFFFFF;
+        }
+        .btn-dialog-reset:hover {
+          background: #334155;
+        }
+        .btn-dialog-save {
+          background: var(--color-brand, #0B5D4E);
+          color: #FFFFFF;
+        }
+        .btn-dialog-save:hover {
+          background: #084338;
+        }
+
+        /* Responsive Reflow on Narrow Screens */
+        @media (max-width: 880px) {
           .player-stage {
+            flex-wrap: wrap;
             flex-direction: column;
-            align-items: stretch;
+            align-items: center;
           }
           .main-player-panel, .transcript-window, .esl-window {
             max-width: 100%;
+            width: 100% !important;
+            flex: 1 1 auto !important;
           }
           .main-player-panel {
             order: 1;
@@ -1093,8 +1133,8 @@ export class A11yMediaPlayer extends HTMLElement {
                     <span aria-hidden="true">${ICONS.cc}</span>
                   </button>
 
-                  <button class="btn-ctrl" id="btn-esl" aria-pressed="${this.prefs.eslVisible ? "true" : "false"}" aria-label="${isAm ? "የኢትዮጵያ የምልክት ቋንቋ (S)" : "Ethiopian Sign Language (S)"}" title="${isAm ? "የኢትዮጵያ የምልክት ቋንቋ (S)" : "Ethiopian Sign Language (S)"}">
-                    <span aria-hidden="true">${ICONS.sign}</span>
+                  <button class="btn-ctrl" id="btn-esl" aria-pressed="${this.prefs.eslVisible ? "true" : "false"}" aria-label="${isAm ? "የኢትዮጵያ የምልክት ቋንቋ (ESL) (S)" : "Ethiopian Sign Language (ESL) (S)"}" title="${isAm ? "የኢትዮጵያ የምልክት ቋንቋ (ESL) (S)" : "Ethiopian Sign Language (ESL) (S)"}">
+                    <span aria-hidden="true">${ICONS.esl}</span>
                   </button>
 
                   <button class="btn-ctrl" id="btn-ad" aria-pressed="${this.prefs.audioDescriptionEnabled ? "true" : "false"}" aria-label="${isAm ? "የድምጽ ማብራሪያ (D)" : "Audio Description (D)"}" title="${isAm ? "የድምጽ ማብራሪያ (D)" : "Audio Description (D)"}">
@@ -1240,10 +1280,10 @@ export class A11yMediaPlayer extends HTMLElement {
             </div>
 
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; flex-wrap: wrap; gap: 0.75rem;">
-              <button type="button" class="btn-ctrl" id="btn-reset-layout" style="background: #475569;">
+              <button type="button" class="btn-dialog-action btn-dialog-reset" id="btn-reset-layout">
                 ↺ ${isAm ? "አቀማመጥን ዳግም አስጀምር" : "Reset Layout"}
               </button>
-              <button type="button" class="btn-ctrl" id="btn-close-prefs" style="background: var(--color-brand, #0B5D4E);">
+              <button type="button" class="btn-dialog-action btn-dialog-save" id="btn-close-prefs">
                 ${isAm ? "ተግብር እና ዝጋ" : "Save & Close"}
               </button>
             </div>
@@ -1738,11 +1778,12 @@ export class A11yMediaPlayer extends HTMLElement {
       updateSpeedDisplay();
     });
 
-    // Fullscreen Toggle
+    // Fullscreen Toggle (Bi-directional enter & exit)
     const isFullscreen = () => {
-      return (
-        document.fullscreenElement === playerContainer ||
-        (document as any).webkitFullscreenElement === playerContainer
+      return Boolean(
+        document.fullscreenElement ||
+        (document as any).webkitFullscreenElement ||
+        (this.shadow as any).fullscreenElement
       );
     };
 
@@ -1923,8 +1964,14 @@ export class A11yMediaPlayer extends HTMLElement {
     // Window Options Buttons (Cog icons on Transcript and Sign headers)
     const openPrefs = () => {
       this.isPreferencesOpen = true;
+      const ccLangSelect = this.shadow.getElementById("select-cc-lang") as HTMLSelectElement | null;
+      const ccSizeSelect = this.shadow.getElementById("select-cc-size") as HTMLSelectElement | null;
+      const ccThemeSelect = this.shadow.getElementById("select-cc-theme") as HTMLSelectElement | null;
+      if (ccLangSelect) ccLangSelect.value = this.prefs.captionLanguage;
+      if (ccSizeSelect) ccSizeSelect.value = this.prefs.captionSize;
+      if (ccThemeSelect) ccThemeSelect.value = this.prefs.captionTheme;
       if (prefsDialog) prefsDialog.style.display = "flex";
-      this.shadow.getElementById("select-cc-lang")?.focus();
+      ccLangSelect?.focus();
     };
 
     const btnPrefs = this.shadow.getElementById("btn-prefs");
@@ -1938,7 +1985,31 @@ export class A11yMediaPlayer extends HTMLElement {
     btnTranscriptPrefs?.addEventListener("click", openPrefs);
     btnEslPrefs?.addEventListener("click", openPrefs);
 
-    btnClosePrefs?.addEventListener("click", () => {
+    btnClosePrefs?.addEventListener("click", async () => {
+      const ccLangSelect = this.shadow.getElementById("select-cc-lang") as HTMLSelectElement | null;
+      const ccSizeSelect = this.shadow.getElementById("select-cc-size") as HTMLSelectElement | null;
+      const ccThemeSelect = this.shadow.getElementById("select-cc-theme") as HTMLSelectElement | null;
+
+      if (ccLangSelect && ccLangSelect.value !== this.prefs.captionLanguage) {
+        this.prefs.captionLanguage = ccLangSelect.value;
+        savePreferences({ captionLanguage: this.prefs.captionLanguage });
+        if (btnCC) {
+          const isOff = this.prefs.captionLanguage === "off";
+          btnCC.setAttribute("aria-pressed", isOff ? "false" : "true");
+        }
+        await this.loadCaptionTrack(this.prefs.captionLanguage);
+      }
+      if (ccSizeSelect && ccSizeSelect.value !== this.prefs.captionSize) {
+        this.prefs.captionSize = ccSizeSelect.value as CaptionSize;
+        savePreferences({ captionSize: this.prefs.captionSize });
+        this.updateCaptionDisplay();
+      }
+      if (ccThemeSelect && ccThemeSelect.value !== this.prefs.captionTheme) {
+        this.prefs.captionTheme = ccThemeSelect.value as CaptionTheme;
+        savePreferences({ captionTheme: this.prefs.captionTheme });
+        this.updateCaptionDisplay();
+      }
+
       this.isPreferencesOpen = false;
       if (prefsDialog) prefsDialog.style.display = "none";
       btnPrefs?.focus();
@@ -1948,6 +2019,17 @@ export class A11yMediaPlayer extends HTMLElement {
     btnResetLayout?.addEventListener("click", () => {
       resetPreferences();
       this.prefs = loadPreferences();
+
+      // Reset select controls inside dialog
+      const ccLangSelect = this.shadow.getElementById("select-cc-lang") as HTMLSelectElement | null;
+      const ccSizeSelect = this.shadow.getElementById("select-cc-size") as HTMLSelectElement | null;
+      const ccThemeSelect = this.shadow.getElementById("select-cc-theme") as HTMLSelectElement | null;
+      if (ccLangSelect) ccLangSelect.value = this.prefs.captionLanguage;
+      if (ccSizeSelect) ccSizeSelect.value = this.prefs.captionSize;
+      if (ccThemeSelect) ccThemeSelect.value = this.prefs.captionTheme;
+
+      this.updateCaptionDisplay();
+      this.loadCaptionTrack(this.prefs.captionLanguage);
 
       // Reset Transcript Window
       if (transcriptWindow) {
