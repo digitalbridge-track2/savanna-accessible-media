@@ -33,6 +33,39 @@
   --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, "Noto Sans Ethiopic", system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
   --max-content-width: 1280px;
+
+  /* Apple Signature Motion Tokens */
+  --ease-apple: cubic-bezier(0.4, 0, 0.6, 1);
+  --ease-spring: cubic-bezier(0.25, 1, 0.5, 1);
+  --duration-fast: 160ms;
+  --duration-normal: 240ms;
+  --duration-smooth: 320ms;
+}
+
+/* Reduced Motion Override for Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Signature Apple Entrance */
+@keyframes apple-entrance {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+main > div {
+  animation: apple-entrance var(--duration-normal) var(--ease-apple) both;
 }
 
 @media (forced-colors: active) {
