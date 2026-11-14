@@ -102,12 +102,22 @@ If a script is missing, add its minimal implementation to `package.json`; do not
 - Reuse schema-generated/shared types. Validate external data at system boundaries.
 - Keep media synchronization, described-source switching, preferences, offline storage, certificate lookup, and UI rendering separate.
 - Python: type hints, Pydantic boundaries, small services, and deterministic tests using a fake ASR adapter. Never require a real model in CI.
-- CSS: use tokens from `PRD.md`; support Ethiopic text without fixed-height clipping.
+- CSS: use tokens from `PRD.md` and `tokens.css`; support Ethiopic text without fixed-height clipping.
 - Prefer small, audited dependencies. Check licenses and avoid framework lock-in.
 - Use meaningful accessible names and user-facing copy; do not expose raw exceptions.
 - Keep host-specific Savanna and certificate-provider logic in thin adapters rather than the component core.
 - Keep demonstration credentials and jobs explicitly marked in their fixtures.
 - Do not commit secrets, uploaded learner media, large models, generated media packs, or real learner credentials.
+
+### Visual design and styling (Apple.com Design System)
+
+- Foundation: Light interface on near-white background (`#FFFFFF`) with neutral surfaces (`#F5F5F7`), ink text (`#1D1D1F`, 16.8:1 contrast), and action blue accent (`#0071E3` / `#0066CC`).
+- Typography: SF Pro Display / SF Pro Text with system fallback, paired with `Noto Sans Ethiopic` for Ge'ez script. Large headings tightened (`-0.011em` tracking); body text normal tracking.
+- Depth and Elevation: Soft neutral shadows (`rgba(0, 0, 0, 0.08)` to `rgba(0, 0, 0, 0.12)`); never tint shadows with color.
+- Corner Radii: 980px pill radius for primary controls and badges, 16px radius for structural content cards and dialogs.
+- Buttons & Controls: Sentence/Title case only (never all-caps). Visible `:focus-visible` ring (2px solid `#0071E3`, 2px offset).
+- Motion: Snappy 240ms ease transitions (`cubic-bezier(0.4, 0, 0.6, 1)`); always respect `@media (prefers-reduced-motion: reduce)`.
+- Non-negotiable constraint: Visual polish must strictly preserve WCAG 2.2 AA contrast (≥ 4.5:1 body, ≥ 3:1 UI), keyboard navigation, and screen-reader semantics.
 
 ## Evidence discipline
 

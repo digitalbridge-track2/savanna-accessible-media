@@ -47,91 +47,84 @@ export const EmbedView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
 
   return (
     <div>
-      <h2 style={{ fontSize: "1.8rem", color: "var(--color-brand)", marginBottom: "0.5rem" }}>
+      <h2 style={{ fontSize: "34px", color: "var(--color-ink)", marginBottom: "0.5rem", letterSpacing: "-0.011em" }}>
         {isAm ? "ደረጃ 1፡ የስክሪፕት ታግ አጠቃቀም" : "Level 1: Standalone Script-Tag Embed"}
       </h2>
-      <p style={{ margin: "0 0 1.5rem 0", color: "var(--color-muted-ink)", fontSize: "1.05rem" }}>
+      <p style={{ margin: "0 0 1.75rem 0", color: "var(--color-muted-ink)", fontSize: "17px" }}>
         {isAm
           ? "ለነባር የትምህርት መድረኮች (Savanna LMS፣ Moodle፣ Canvas) ያለምንም የግንባታ ቅድመ ሁኔታ በአንድ መስመር HTML ይጫኑ።"
           : "Zero-dependency drop-in for existing platforms (Savanna LMS, Moodle, Canvas, WordPress). Just add one script tag."}
       </p>
 
-      <section className="card" style={{ marginBottom: "2rem" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem", flexWrap: "wrap", gap: "0.5rem" }}>
-          <h3 style={{ margin: 0, color: "var(--color-brand)" }}>
+      <section className="card" style={{ marginBottom: "2.5rem" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.85rem", flexWrap: "wrap", gap: "0.5rem" }}>
+          <h3 style={{ margin: 0, color: "var(--color-ink)", fontSize: "21px", letterSpacing: "-0.005em" }}>
             {isAm ? "የማካተት ኮድ ምሳሌ" : "HTML Integration Snippet"}
           </h3>
           <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
             {copied && (
               <span
+                role="status"
                 style={{
-                  fontSize: "0.85rem",
-                  color: "#166534",
-                  fontWeight: 600,
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "0.25rem",
+                  fontSize: "13px",
+                  color: "#128045",
+                  fontWeight: 500,
+                  background: "#E8F8F0",
+                  padding: "0.35rem 0.85rem",
+                  borderRadius: "var(--radius-pill)",
                 }}
-                aria-live="polite"
               >
-                ✓ {isAm ? "ኮዱ ተገልብጧል!" : "Copied to Clipboard!"}
+                ✓ {isAm ? "ኮዱ ተገልብጧል።" : "Snippet copied to clipboard."}
               </span>
             )}
             <button
               type="button"
-              className="btn btn-outline"
+              className="btn btn-primary"
               onClick={handleCopy}
-              style={{ fontSize: "0.85rem", padding: "0.4rem 0.85rem", minHeight: "36px" }}
+              style={{ minHeight: "38px", padding: "0.45rem 1.15rem", fontSize: "13px" }}
             >
-              {copied
-                ? (isAm ? "ተገልብጧል!" : "Copied!")
-                : (isAm ? "ኮዱን ቅዳ" : "Copy Snippet")}
+              {isAm ? "ኮዱን ቅዳ" : "Copy Snippet"}
             </button>
           </div>
         </div>
 
-        <p style={{ margin: "0 0 1rem 0", color: "var(--color-muted-ink)", fontSize: "0.93rem" }}>
-          {isAm
-            ? "ይህንን ኮድ በማንኛውም የኤችቲኤምኤል ገጽ ላይ ይለጥፉ፡"
-            : "Copy and paste this snippet into any standard web page or LMS content block:"}
-        </p>
-
         <pre
           style={{
-            background: "#0F172A",
-            color: "#F8FAFC",
-            padding: "1.25rem",
-            borderRadius: "6px",
+            background: "#1D1D1F",
+            color: "#F5F5F7",
+            padding: "1.25rem 1.5rem",
+            borderRadius: "var(--radius-card)",
             overflowX: "auto",
-            fontSize: "0.9rem",
-            lineHeight: 1.5,
+            fontSize: "13px",
+            lineHeight: 1.55,
+            fontFamily: "var(--font-mono)",
+            margin: 0,
+            border: "1px solid #333336",
           }}
         >
           <code>{codeSnippet}</code>
         </pre>
       </section>
 
-      <section className="card" style={{ marginBottom: "2rem" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem", flexWrap: "wrap", gap: "0.5rem" }}>
-          <h3 style={{ margin: 0, color: "var(--color-brand)" }}>
-            {isAm ? "የቀጥታ ማሳያ" : "Live Embedded Instance"}
+      {/* Live Preview Section */}
+      <section style={{ marginBottom: "3rem" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "1.25rem", flexWrap: "wrap", gap: "0.5rem" }}>
+          <h3 style={{ margin: 0, color: "var(--color-ink)", fontSize: "24px", letterSpacing: "-0.008em" }}>
+            {isAm ? "የቀጥታ የተካተተ ምሳሌ (Live Embedded Instance)" : "Live Embedded Instance"}
           </h3>
-          <a
-            href="/standalone-embed.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-outline"
-            style={{ fontSize: "0.85rem", padding: "0.4rem 0.85rem", minHeight: "36px" }}
-          >
-            {isAm ? "ነጻ የ HTML ገጽ ክፈት ↗" : "Open Standalone HTML Page (Zero Framework) ↗"}
-          </a>
+          <span className="badge badge-brand">
+            Shadow DOM Isolated
+          </span>
         </div>
-        <p style={{ margin: "0 0 1.5rem 0", color: "var(--color-muted-ink)", fontSize: "0.93rem" }}>
-          {isAm ? "ከዚህ በታች ያለው ማጫወቻ በድረ-ገጹ ውስጥ በቀጥታ የተቀመጠ ነው፡" : "The component below is instantiated via the standalone web component:"}
+        <p style={{ margin: "0 0 1.5rem 0", color: "var(--color-muted-ink)", fontSize: "14px" }}>
+          {isAm
+            ? "ከዚህ በታች ያለው ማጫወቻ በ Shadow DOM ውስጥ የተዘጋጀ ሲሆን ከውጭ ገጾች ጋር ምንም ዓይነት የ CSS ወይም የስክሪፕት ግጭት አይፈጥርም።"
+            : "The instance below demonstrates seamless mounting via standard custom elements with encapsulated styling and zero CSS bleed."}
         </p>
 
         {/* @ts-ignore custom element */}
         <a11y-media-player
+          id="embedded-player"
           manifest-src="/lessons/digital-workplace/lesson.json"
           locale={locale}
         />

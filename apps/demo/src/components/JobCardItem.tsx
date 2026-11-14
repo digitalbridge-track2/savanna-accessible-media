@@ -125,15 +125,16 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
             id={`job-title-${job.id}`}
             style={{
               margin: "0 0 0.35rem 0",
-              fontSize: "1.15rem",
-              fontWeight: 700,
-              color: "var(--color-brand)",
+              fontSize: "1.2rem",
+              fontWeight: 600,
+              color: "var(--color-ink)",
+              letterSpacing: "-0.005em",
             }}
           >
             {title}
           </h4>
-          <p style={{ margin: 0, color: "var(--color-muted-ink)", fontWeight: 500, fontSize: "0.92rem" }}>
-            <strong>{employer}</strong> · <span>{location}</span>{" "}
+          <p style={{ margin: 0, color: "var(--color-muted-ink)", fontWeight: 400, fontSize: "14px" }}>
+            <strong style={{ color: "var(--color-ink)" }}>{employer}</strong> · <span>{location}</span>{" "}
             {job.workMode && <span style={{ textTransform: "capitalize" }}>({job.workMode})</span>}
           </p>
         </div>
@@ -146,86 +147,77 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
             aria-pressed={isPlaying}
             aria-label={`${isPlaying ? (isAm ? "አቁም" : "Pause") : (isAm ? "የድምፅ ማጠቃለያ አድምጥ" : "Listen to summary")} for ${title}`}
             style={{
-              fontSize: "0.85rem",
-              padding: "0.4rem 0.85rem",
-              minHeight: "38px",
-              flexShrink: 0,
+              fontSize: "13px",
+              padding: "0.45rem 1rem",
+              minHeight: "36px",
             }}
           >
-            {isPlaying
-              ? (isAm ? "ድምፁን አቁም" : "Pause Audio")
-              : (isAm ? "የድምፅ ማጠቃለያ" : "Listen to Summary")}
+            {isPlaying ? (
+              <>
+                <span aria-hidden="true">❚❚</span> {isAm ? "አቁም" : "Pause"}
+              </>
+            ) : (
+              <>
+                <span aria-hidden="true">▶</span> {isAm ? "የድምፅ ማጠቃለያ" : "Audio Summary"}
+              </>
+            )}
           </button>
         )}
       </div>
 
-      <p style={{ margin: 0, lineHeight: 1.6, color: "var(--color-ink)", fontSize: "0.95rem" }}>
+      <p style={{ margin: 0, fontSize: "14px", lineHeight: 1.5, color: "var(--color-muted-ink)" }}>
         {description}
       </p>
 
-      {/* Accommodations Disclosure */}
+      {/* Verified Disability Accommodations Pills */}
       {accommodationsList.length > 0 && (
-        <div
-          style={{
-            background: "#F8FAFC",
-            padding: "0.75rem 1rem",
-            borderRadius: "6px",
-            border: "1px solid var(--color-border)",
-          }}
-        >
-          <strong
+        <div style={{ marginTop: "0.25rem" }}>
+          <p
             style={{
-              fontSize: "0.8rem",
-              textTransform: "uppercase",
-              letterSpacing: "0.5px",
+              margin: "0 0 0.4rem 0",
+              fontSize: "12px",
+              fontWeight: 600,
               color: "var(--color-muted-ink)",
-              display: "block",
-              marginBottom: "0.4rem",
+              textTransform: "uppercase",
+              letterSpacing: "0.04em",
             }}
           >
-            {isAm ? "የተረጋገጡ ድጋፎች (Accommodations):" : "Verified Accommodations Provided:"}
-          </strong>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
-            {accommodationsList.map((acc, index) => {
-              const label = resolveLocalized(acc.label, locale);
-              return (
-                <span key={acc.id || index} className="badge badge-brand">
-                  {label}
-                </span>
-              );
-            })}
+            {isAm ? "የተረጋገጡ የተደራሽነት ድጋፎች" : "Verified Workplace Accommodations"}
+          </p>
+          <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+            {accommodationsList.map((acc, idx) => (
+              <span
+                key={idx}
+                className="badge badge-brand"
+                title={`Disability Accommodation Disclosure: ${resolveLocalized(acc.label, locale)}`}
+              >
+                ✓ {resolveLocalized(acc.label, locale)}
+              </span>
+            ))}
           </div>
         </div>
       )}
 
-      {/* Structured Microdata & Standards Indicator */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: "0.5rem",
-          fontSize: "0.82rem",
-          color: "var(--color-muted-ink)",
-          paddingTop: "0.5rem",
-          borderTop: "1px solid var(--color-border)",
-        }}
-      >
-        <span>
-          Format: <code>schema.org/JobPosting</code> JSON-LD
-        </span>
-        {job.applicationUrl && (
-          <a
-            href={job.applicationUrl}
-            target="_blank"
-            rel="noreferrer"
-            style={{ fontWeight: 600, color: "var(--color-brand)" }}
-          >
-            {isAm ? "ያመልክቱ (Apply) ↗" : "Apply Now ↗"}
-          </a>
-        )}
-      </div>
+      {/* Audio Text Transcript Equivalent */}
+      {job.audioSummary?.textEquivalent && (
+        <details
+          style={{
+            background: "#FFFFFF",
+            padding: "0.6rem 0.85rem",
+            borderRadius: "var(--radius-sm)",
+            fontSize: "13px",
+            border: "1px solid var(--color-border-subtle)",
+            color: "var(--color-muted-ink)",
+          }}
+        >
+          <summary style={{ cursor: "pointer", fontWeight: 500, color: "var(--color-link)" }}>
+            {isAm ? "የድምፅ ማጠቃለያውን በጽሑፍ ይመልከቱ" : "Read text equivalent of audio summary"}
+          </summary>
+          <p style={{ margin: "0.5rem 0 0 0", lineHeight: 1.5, color: "var(--color-ink)" }}>
+            {job.audioSummary.textEquivalent}
+          </p>
+        </details>
+      )}
     </article>
   );
 };

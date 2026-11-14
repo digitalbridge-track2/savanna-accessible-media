@@ -33,14 +33,14 @@ export class ErrorBoundary extends React.Component<
             maxWidth: "680px",
             margin: "4rem auto",
             padding: "2rem",
-            background: "#FEF2F2",
-            border: "1px solid #FECACA",
-            borderRadius: "8px",
-            color: "#991B1B",
+            background: "#FFF5F5",
+            border: "1px solid #FFD2D2",
+            borderRadius: "var(--radius-card)",
+            color: "#D70015",
           }}
         >
           <h2 style={{ margin: "0 0 1rem 0", fontSize: "1.3rem" }}>Application Error</h2>
-          <p style={{ margin: "0 0 1.5rem 0", color: "#7F1D1D" }}>
+          <p style={{ margin: "0 0 1.5rem 0", color: "#8E0000" }}>
             {this.state.error?.message || "An unexpected error occurred."}
           </p>
           <button
@@ -89,7 +89,7 @@ export const AppContent: React.FC = () => {
         {isAm ? "ወደ ዋናው ይዘት ዝለል" : "Skip to main content"}
       </a>
 
-      {/* Main Header */}
+      {/* Main Header with Apple-style Layout & Refined Spacing */}
       <header className="site-header">
         <div
           style={{
@@ -104,10 +104,10 @@ export const AppContent: React.FC = () => {
             <h1
               style={{
                 margin: 0,
-                fontSize: "1.65rem",
-                fontWeight: 700,
-                color: "var(--color-brand)",
-                letterSpacing: "-0.01em",
+                fontSize: "1.75rem",
+                fontWeight: 600,
+                color: "var(--color-ink)",
+                letterSpacing: "-0.015em",
               }}
             >
               Abugida Media Kit (አቡጊዳ)
@@ -116,12 +116,13 @@ export const AppContent: React.FC = () => {
               style={{
                 margin: "0.25rem 0 0 0",
                 color: "var(--color-muted-ink)",
-                fontSize: "0.92rem",
+                fontSize: "0.94rem",
+                fontWeight: 400,
               }}
             >
               {isAm
-                ? "ትራክ 2፡ ተደራሽ የትምህርት ሚዲያ እና የሥራ መግቢያ በር · ዲጂታል ብሪጅ 2026"
-                : "Track 2: Accessible Learning Media & Career Gateway · Digital Bridge 2026"}
+                ? "ተደራሽ የትምህርት ሚዲያ እና የሥራ መግቢያ በር · ዲጂታል ብሪጅ 2026"
+                : "Accessible Learning Media & Career Gateway · Digital Bridge 2026"}
             </p>
           </div>
 
@@ -129,20 +130,20 @@ export const AppContent: React.FC = () => {
             {/* Dual Calendar Badge */}
             <span
               className="badge badge-neutral"
-              style={{ fontSize: "0.82rem", padding: "0.4rem 0.75rem" }}
+              style={{ fontSize: "13px", padding: "0.35rem 0.85rem", borderRadius: "var(--radius-pill)" }}
               title="Ethiopian & Gregorian Dual Calendar"
             >
               {dualDate.display}
             </span>
 
-            {/* Language Switcher */}
+            {/* Language Switcher - Apple Segmented Pill */}
             <div
               style={{
                 display: "inline-flex",
-                background: "#F1F5F9",
-                border: "1px solid var(--color-border)",
-                padding: "2px",
-                borderRadius: "6px",
+                background: "var(--color-surface)",
+                border: "1px solid var(--color-border-subtle)",
+                padding: "3px",
+                borderRadius: "var(--radius-pill)",
               }}
               role="group"
               aria-label={isAm ? "ቋንቋ ይምረጡ" : "Select Language"}
@@ -151,16 +152,17 @@ export const AppContent: React.FC = () => {
                 type="button"
                 onClick={() => handleLocaleChange("en")}
                 style={{
-                  padding: "0.35rem 0.8rem",
+                  padding: "0.35rem 0.95rem",
                   border: "none",
-                  borderRadius: "4px",
-                  background: locale === "en" ? "var(--color-brand)" : "transparent",
-                  color: locale === "en" ? "#ffffff" : "#334155",
-                  fontWeight: 600,
-                  fontSize: "0.85rem",
+                  borderRadius: "var(--radius-pill)",
+                  background: locale === "en" ? "#FFFFFF" : "transparent",
+                  color: locale === "en" ? "var(--color-ink)" : "var(--color-muted-ink)",
+                  fontWeight: locale === "en" ? 600 : 500,
+                  fontSize: "13px",
                   cursor: "pointer",
-                  minHeight: "34px",
-                  transition: "background 0.12s ease, color 0.12s ease",
+                  minHeight: "32px",
+                  boxShadow: locale === "en" ? "0 2px 6px rgba(0, 0, 0, 0.08)" : "none",
+                  transition: "background 0.16s ease, color 0.16s ease, box-shadow 0.16s ease",
                 }}
                 aria-pressed={locale === "en"}
               >
@@ -170,16 +172,17 @@ export const AppContent: React.FC = () => {
                 type="button"
                 onClick={() => handleLocaleChange("am")}
                 style={{
-                  padding: "0.35rem 0.8rem",
+                  padding: "0.35rem 0.95rem",
                   border: "none",
-                  borderRadius: "4px",
-                  background: locale === "am" ? "var(--color-brand)" : "transparent",
-                  color: locale === "am" ? "#ffffff" : "#334155",
-                  fontWeight: 600,
-                  fontSize: "0.85rem",
+                  borderRadius: "var(--radius-pill)",
+                  background: locale === "am" ? "#FFFFFF" : "transparent",
+                  color: locale === "am" ? "var(--color-ink)" : "var(--color-muted-ink)",
+                  fontWeight: locale === "am" ? 600 : 500,
+                  fontSize: "13px",
                   cursor: "pointer",
-                  minHeight: "34px",
-                  transition: "background 0.12s ease, color 0.12s ease",
+                  minHeight: "32px",
+                  boxShadow: locale === "am" ? "0 2px 6px rgba(0, 0, 0, 0.08)" : "none",
+                  transition: "background 0.16s ease, color 0.16s ease, box-shadow 0.16s ease",
                 }}
                 aria-pressed={locale === "am"}
               >
@@ -210,36 +213,32 @@ export const AppContent: React.FC = () => {
         {currentPath === "/embed" && <EmbedView locale={locale} />}
       </main>
 
-      {/* Accessible Footer */}
+      {/* Clean Footer */}
       <footer
         style={{
-          marginTop: "4rem",
+          marginTop: "4.5rem",
           paddingTop: "2rem",
-          borderTop: "1px solid var(--color-border)",
+          borderTop: "1px solid var(--color-border-subtle)",
           color: "var(--color-muted-ink)",
-          fontSize: "0.88rem",
+          fontSize: "13px",
           display: "flex",
           justifyContent: "space-between",
+          alignItems: "center",
           flexWrap: "wrap",
-          gap: "1.5rem",
+          gap: "1rem",
         }}
       >
-        <div>
-          <strong>Abugida Media Kit (አቡጊዳ)</strong> · Digital Bridge Accessibility Hackathon 2026
-          <div style={{ marginTop: "0.3rem", fontSize: "0.82rem", color: "var(--color-muted-ink)" }}>
-            ALX Ethiopia · LIWAY · SNV · Mercy Corps · AAAPD · Tomorrow is Better
-          </div>
-        </div>
-
-        <div style={{ display: "flex", gap: "1.25rem", alignItems: "center", flexWrap: "wrap" }}>
-          <span className="badge badge-success">WCAG 2.2 AA Conformance</span>
-          <a
-            href="http://localhost:8000/docs"
-            target="_blank"
-            rel="noreferrer"
-            style={{ color: "var(--color-brand)", fontWeight: 600 }}
-          >
-            FastAPI OpenAPI Docs (/docs) ↗
+        <p style={{ margin: 0 }}>
+          {isAm
+            ? "© 2026 አቡጊዳ ሚዲያ ኪት (ትራክ 2) · ክፍት ድር ደረጃዎች እና የተደራሽነት መስፈርቶች (WCAG 2.2 AA) የተጠበቁ ናቸው።"
+            : "© 2026 Abugida Media Kit (Track 2) · Built on Open Web Standards & WCAG 2.2 Level AA."}
+        </p>
+        <div style={{ display: "flex", gap: "1.25rem", alignItems: "center" }}>
+          <a href="/verify?id=CERT-DB-2026-0042" style={{ color: "var(--color-link)" }}>
+            {isAm ? "ምስክር ወረቀት አረጋግጥ" : "Verify Certificate"}
+          </a>
+          <a href="/lesson.en.html" style={{ color: "var(--color-link)" }}>
+            {isAm ? "ቀላል HTML ሰነድ" : "Accessible HTML Handout"}
           </a>
         </div>
       </footer>
