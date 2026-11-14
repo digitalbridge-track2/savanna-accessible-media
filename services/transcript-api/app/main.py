@@ -21,8 +21,64 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# In-memory webhook subscriptions store
+# In-memory webhook subscriptions and transcript cache
 WEBHOOKS: List[Dict[str, str]] = []
+DYNAMIC_TRANSCRIPTS: Dict[str, Dict[str, List["TranscriptSegment"]]] = {}
+
+def parse_vtt_cues(vtt_text: str, default_speaker: str = "Instructor") -> List["TranscriptSegment"]:
+    lines = vtt_text.strip().splitlines()
+    segments = []
+    current_start = 0
+    current_end = 0
+    current_text = []
+    seg_id = 1
+
+    def parse_ms(ts: str) -> int:
+        parts = ts.strip().split(":")
+        if len(parts) == 3:
+            h, m, s = parts
+            return int((float(h) * 3600 + float(m) * 60 + float(s)) * 1000)
+        elif len(parts) == 2:
+            m, s = parts
+            return int((float(m) * 60 + float(s)) * 1000)
+        return int(float(ts) * 1000)
+
+    for line in lines:
+        line_clean = line.strip()
+        if "-->" in line_clean:
+            if current_text:
+                full_txt = "\n".join(current_text)
+                segments.append(TranscriptSegment(
+                    id=seg_id,
+                    start_ms=current_start,
+                    end_ms=current_end,
+                    draft_text=full_txt,
+                    reviewed_text=full_txt,
+                    speaker=default_speaker,
+                    review_status="reviewed"
+                ))
+                seg_id += 1
+                current_text = []
+            parts = line_clean.split("-->")
+            start_str = parts[0].strip().split()[0]
+            end_str = parts[1].strip().split()[0]
+            current_start = parse_ms(start_str)
+            current_end = parse_ms(end_str)
+        elif line_clean and not line_clean.startswith("WEBVTT") and not line_clean.startswith("NOTE") and not line_clean.isdigit():
+            current_text.append(line_clean)
+
+    if current_text:
+        full_txt = "\n".join(current_text)
+        segments.append(TranscriptSegment(
+            id=seg_id,
+            start_ms=current_start,
+            end_ms=current_end,
+            draft_text=full_txt,
+            reviewed_text=full_txt,
+            speaker=default_speaker,
+            review_status="reviewed"
+        ))
+    return segments
 
 # --- Data Models ---
 class HealthResponse(BaseModel):
@@ -148,10 +204,19 @@ def get_lesson(lesson_id: str):
 
 @app.get("/api/v1/lessons/{lesson_id}/transcript", response_model=TranscriptResponse, tags=["Lessons"])
 def get_transcript(lesson_id: str, lang: str = "en"):
+    # Return dynamically cached/updated transcript if available
+    cached = DYNAMIC_TRANSCRIPTS.get(lesson_id, {}).get(lang)
+    if cached:
+        return {
+            "lessonId": lesson_id,
+            "language": lang,
+            "segments": cached
+        }
+
     if lang == "am":
         segments = [
-            TranscriptSegment(id=1, start_ms=0, end_ms=4500, draft_text="እንኳን ወደዚህ የሥልጠና ፕሮግራም በደህና መጡ", reviewed_text="እንኳን ወደዚህ የሥልጠና ፕሮግራም በደህና መጡ", speaker="አስተማሪ"),
-            TranscriptSegment(id=2, start_ms=4500, end_ms=9000, draft_text="ዛሬ ስለ ዲጂታል የሥራ ቦታ ክህሎቶች እንማራለን", reviewed_text="ዛሬ ስለ ዲጂታል የሥራ ቦታ ክህሎቶች እንማራለን", speaker="አስተማሪ")
+            TranscriptSegment(id=1, start_ms=0, end_ms=4500, draft_text="እንኳን ወደዚህ የሥልጠና ፕሮግራም በደህና መጡ", reviewed_text="እንኳን ወደ ዲጂታል የሥራ ቦታ ክህሎቶች መሠረታዊ ትምህርት በደህና መጡ።", speaker="አስተማሪ"),
+            TranscriptSegment(id=2, start_ms=4500, end_ms=9000, draft_text="ዛሬ ስለ ዲጂታል የሥራ ቦታ ክህሎቶች እንማራለን", reviewed_text="በዚህ ትምህርት የርቀት የሥራ ግንኙነትን እና ተደራሽ የሰነድ አዘገጃጀትን እንመለከታለን።", speaker="አስተማሪ")
         ]
     else:
         segments = [
@@ -191,11 +256,32 @@ def upload_captions(lesson_id: str, payload: CaptionUploadRequest):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid WebVTT format. Must contain WEBVTT header and cue timestamps."
         )
+
+    # Parse and store in memory
+    parsed = parse_vtt_cues(payload.vttContent, default_speaker=payload.author or "Instructor")
+    if lesson_id not in DYNAMIC_TRANSCRIPTS:
+        DYNAMIC_TRANSCRIPTS[lesson_id] = {}
+    DYNAMIC_TRANSCRIPTS[lesson_id][payload.language] = parsed
+
+    # Save to disk locations for live demo serving
+    import pathlib
+    target_paths = [
+        pathlib.Path(f"apps/demo/public/lessons/digital-workplace/captions.{payload.language}.vtt"),
+        pathlib.Path(f"apps/demo/dist/lessons/digital-workplace/captions.{payload.language}.vtt"),
+        pathlib.Path(f"savanna/lessons/digital-workplace/captions.{payload.language}.vtt"),
+    ]
+    for p in target_paths:
+        try:
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_text(payload.vttContent, encoding="utf-8")
+        except Exception:
+            pass
+
     return {
         "status": "success",
         "lessonId": lesson_id,
         "language": payload.language,
-        "cuesCount": max(1, cues_count),
+        "cuesCount": max(len(parsed), cues_count),
         "message": f"Caption track for {payload.language} successfully saved and published."
     }
 

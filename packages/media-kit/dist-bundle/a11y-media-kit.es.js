@@ -1,6 +1,6 @@
-var re = Object.defineProperty;
-var oe = (u, s, e) => s in u ? re(u, s, { enumerable: !0, configurable: !0, writable: !0, value: e }) : u[s] = e;
-var h = (u, s, e) => oe(u, typeof s != "symbol" ? s + "" : s, e);
+var oe = Object.defineProperty;
+var le = (u, s, e) => s in u ? oe(u, s, { enumerable: !0, configurable: !0, writable: !0, value: e }) : u[s] = e;
+var d = (u, s, e) => le(u, typeof s != "symbol" ? s + "" : s, e);
 const Z = "abugida_media_preferences", C = {
   captionLanguage: "en",
   captionSize: "medium",
@@ -34,14 +34,14 @@ function A(u) {
     return { ...C, ...u };
   }
 }
-function le() {
+function ce() {
   try {
     localStorage.removeItem(Z);
   } catch {
   }
   return { ...C };
 }
-function ce(u) {
+function ae(u) {
   const s = [], e = u.split(/\r?\n/);
   let i = 0;
   for (; i < e.length && !e[i].includes("-->"); )
@@ -51,14 +51,14 @@ function ce(u) {
     if (t.includes("-->")) {
       const a = t.split("-->").map((o) => o.trim().split(" ")[0]);
       if (a.length >= 2) {
-        const o = ae(a[0]), c = ae(a[1]);
+        const o = ne(a[0]), l = ne(a[1]);
         i++;
         const f = [];
         for (; i < e.length && e[i].trim() !== ""; )
           f.push(e[i].trim()), i++;
         f.length > 0 && s.push({
           start: o,
-          end: c,
+          end: l,
           text: f.join(`
 `)
         });
@@ -68,7 +68,7 @@ function ce(u) {
   }
   return s;
 }
-function ae(u) {
+function ne(u) {
   const s = u.split(":");
   let e = 0, i = 0, t = 0;
   return s.length === 3 ? (e = parseFloat(s[0]), i = parseFloat(s[1]), t = parseFloat(s[2].replace(",", "."))) : s.length === 2 && (i = parseFloat(s[0]), t = parseFloat(s[1].replace(",", "."))), e * 3600 + i * 60 + t;
@@ -94,14 +94,14 @@ function de(u, s) {
 }
 class he {
   constructor(s, e) {
-    h(this, "mainVideo");
-    h(this, "signVideo", null);
-    h(this, "driftThreshold");
-    h(this, "isSyncing", !1);
-    h(this, "onSignStatusChange");
+    d(this, "mainVideo");
+    d(this, "signVideo", null);
+    d(this, "driftThreshold");
+    d(this, "isSyncing", !1);
+    d(this, "onSignStatusChange");
     // Stored listener references for clean teardown
-    h(this, "mainListeners", {});
-    h(this, "signListeners", {});
+    d(this, "mainListeners", {});
+    d(this, "signListeners", {});
     this.mainVideo = s, this.driftThreshold = (e == null ? void 0 : e.driftThreshold) ?? 0.25, this.onSignStatusChange = e == null ? void 0 : e.onSignStatusChange, this.setupMainListeners();
   }
   setSignVideo(s) {
@@ -207,18 +207,18 @@ class he {
 }
 class pe {
   constructor(s, e) {
-    h(this, "segments", []);
-    h(this, "container");
-    h(this, "onSeekAndPlay");
-    h(this, "onFollowChange");
-    h(this, "currentActiveId", null);
-    h(this, "searchQuery", "");
-    h(this, "isFollowing", !0);
-    h(this, "userPausedFollowing", !1);
-    h(this, "locale", "en");
-    h(this, "listElement", null);
-    h(this, "followBtn", null);
-    h(this, "statusElement", null);
+    d(this, "segments", []);
+    d(this, "container");
+    d(this, "onSeekAndPlay");
+    d(this, "onFollowChange");
+    d(this, "currentActiveId", null);
+    d(this, "searchQuery", "");
+    d(this, "isFollowing", !0);
+    d(this, "userPausedFollowing", !1);
+    d(this, "locale", "en");
+    d(this, "listElement", null);
+    d(this, "followBtn", null);
+    d(this, "statusElement", null);
     this.container = s, this.onSeekAndPlay = e.onSeekAndPlay, this.onFollowChange = e.onFollowChange, this.locale = e.locale || "en";
   }
   setLocale(s) {
@@ -304,14 +304,14 @@ class pe {
             </p>` : `
           <ul class="transcript-list" role="list" id="transcript-list-box" tabindex="0" aria-label="${s ? "የጽሑፍ ግልባጭ ዝርዝር" : "Transcript cues"}">
             ${e.map((t) => {
-      const a = this.formatTime(t.start), o = t.id === this.currentActiveId, c = s ? `ከ ${a} ጀምሮ አጫውት` : `Play from ${a}`;
+      const a = this.formatTime(t.start), o = t.id === this.currentActiveId, l = s ? `ከ ${a} ጀምሮ አጫውት` : `Play from ${a}`;
       return `
                 <li class="transcript-item ${o ? "active" : ""}" data-segment-id="${t.id}">
                   <button 
                     type="button" 
                     class="btn-seek-time" 
                     data-time="${t.start}" 
-                    aria-label="${c}">
+                    aria-label="${l}">
                     ${a}
                   </button>
                   <div class="segment-content">
@@ -365,25 +365,28 @@ const L = {
   volumeUnmuted: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>',
   volumeMuted: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>'
 };
-class ne extends HTMLElement {
+class re extends HTMLElement {
   constructor() {
     super();
-    h(this, "shadow");
-    h(this, "manifest", null);
-    h(this, "activeLocale", "en");
-    h(this, "prefs");
+    d(this, "shadow");
+    d(this, "manifest", null);
+    d(this, "activeLocale", "en");
+    d(this, "prefs");
     // Media & sync
-    h(this, "mainVideo");
-    h(this, "signVideo", null);
-    h(this, "syncController");
-    h(this, "pendingSeekTime", null);
+    d(this, "mainVideo");
+    d(this, "signVideo", null);
+    d(this, "syncController");
+    d(this, "pendingSeekTime", null);
     // Captions
-    h(this, "currentCues", []);
-    h(this, "captionOverlay");
+    d(this, "currentCues", []);
+    d(this, "captionOverlay");
     // Transcript
-    h(this, "transcriptViewer");
+    d(this, "transcriptViewer");
     // UI state
-    h(this, "isPreferencesOpen", !1);
+    d(this, "isPreferencesOpen", !1);
+    d(this, "onCaptionsUpdated", () => {
+      this.initTracksAndTranscript();
+    });
     this.shadow = this.attachShadow({ mode: "open" }), this.prefs = G();
   }
   static get observedAttributes() {
@@ -392,10 +395,10 @@ class ne extends HTMLElement {
   connectedCallback() {
     this.activeLocale = this.getAttribute("lang") || this.getAttribute("locale") || "en";
     const e = this.getAttribute("manifest-src");
-    e ? this.loadManifest(e) : this.getAttribute("src") && this.initFromAttributes();
+    e ? this.loadManifest(e) : this.getAttribute("src") && this.initFromAttributes(), window.addEventListener("db-player:captions-updated", this.onCaptionsUpdated);
   }
   disconnectedCallback() {
-    this.syncController && this.syncController.destroy();
+    window.removeEventListener("db-player:captions-updated", this.onCaptionsUpdated), this.syncController && this.syncController.destroy();
   }
   attributeChangedCallback(e, i, t) {
     i !== t && (e === "locale" || e === "lang" ? (this.activeLocale = t || "en", this.updateLocaleStrings()) : e === "manifest-src" ? this.loadManifest(t) : (e === "src" || e === "captions" || e === "sign" || e === "describe") && (this.getAttribute("manifest-src") || this.initFromAttributes()));
@@ -405,7 +408,7 @@ class ne extends HTMLElement {
     if (!e) return;
     const i = this.getAttribute("lang") || this.getAttribute("locale") || "en";
     this.activeLocale = i;
-    const t = this.getAttribute("captions") || "", a = this.getAttribute("sign"), o = this.getAttribute("describe"), c = t.split(",").map((f) => f.trim()).filter(Boolean).map((f) => {
+    const t = this.getAttribute("captions") || "", a = this.getAttribute("sign"), o = this.getAttribute("describe"), l = t.split(",").map((f) => f.trim()).filter(Boolean).map((f) => {
       const x = f.includes(".am.") || f.endsWith("am.vtt") || f.includes("am");
       return {
         id: x ? "cap-am" : "cap-en",
@@ -422,7 +425,7 @@ class ne extends HTMLElement {
         { id: "main-video", kind: "main", src: e, mimeType: "video/mp4" },
         ...a ? [{ id: "sign-video", kind: "sign", src: a, mimeType: "video/mp4" }] : []
       ],
-      captionTracks: c,
+      captionTracks: l,
       audioDescription: o ? { src: o } : void 0
     }, this.render(), this.initTracksAndTranscript();
   }
@@ -437,24 +440,24 @@ class ne extends HTMLElement {
       } catch {
         a = new URL(window.location.href);
       }
-      const o = (c) => {
-        if (!c) return c;
+      const o = (l) => {
+        if (!l) return l;
         try {
-          return new URL(c, a).href;
+          return new URL(l, a).href;
         } catch {
-          return c;
+          return l;
         }
       };
       this.manifest = {
         ...t,
         poster: t.poster ? { ...t.poster, src: o(t.poster.src) } : void 0,
-        sources: (t.sources || []).map((c) => ({
-          ...c,
-          src: o(c.src)
+        sources: (t.sources || []).map((l) => ({
+          ...l,
+          src: o(l.src)
         })),
-        captionTracks: (t.captionTracks || []).map((c) => ({
-          ...c,
-          src: o(c.src)
+        captionTracks: (t.captionTracks || []).map((l) => ({
+          ...l,
+          src: o(l.src)
         })),
         transcript: t.transcript ? {
           ...t.transcript,
@@ -466,23 +469,41 @@ class ne extends HTMLElement {
     }
   }
   async initTracksAndTranscript() {
-    var e;
-    if (this.manifest && (await this.loadCaptionTrack(this.prefs.captionLanguage), (e = this.manifest.transcript) != null && e.src))
+    var i;
+    if (!this.manifest) return;
+    await this.loadCaptionTrack(this.prefs.captionLanguage);
+    const e = typeof localStorage < "u" ? localStorage.getItem(`db-player:custom-transcript:${this.activeLocale}`) : null;
+    if (e)
       try {
-        const i = await fetch(this.manifest.transcript.src);
-        if (i.ok) {
-          const a = ((await i.json()).segments || []).map((o) => ({
-            id: o.id,
-            start: o.start_ms !== void 0 ? o.start_ms / 1e3 : o.start || 0,
-            end: o.end_ms !== void 0 ? o.end_ms / 1e3 : o.end || 0,
-            speaker: o.speaker,
-            text: o.text || o.draft_text || "",
-            visualDescription: o.visual_description || o.visualDescription
+        const a = (JSON.parse(e).segments || []).map((o) => ({
+          id: o.id,
+          start: o.start_ms !== void 0 ? o.start_ms / 1e3 : o.start || 0,
+          end: o.end_ms !== void 0 ? o.end_ms / 1e3 : o.end || 0,
+          speaker: o.speaker,
+          text: o.text || o.reviewedText || o.draft_text || o.draftText || "",
+          visualDescription: o.visual_description || o.visualDescription
+        }));
+        this.transcriptViewer.setSegments(a);
+        return;
+      } catch (t) {
+        console.warn("Could not parse custom transcript, falling back to manifest src", t);
+      }
+    if ((i = this.manifest.transcript) != null && i.src)
+      try {
+        const t = await fetch(this.manifest.transcript.src);
+        if (t.ok) {
+          const o = ((await t.json()).segments || []).map((l) => ({
+            id: l.id,
+            start: l.start_ms !== void 0 ? l.start_ms / 1e3 : l.start || 0,
+            end: l.end_ms !== void 0 ? l.end_ms / 1e3 : l.end || 0,
+            speaker: l.speaker,
+            text: l.text || l.draft_text || "",
+            visualDescription: l.visual_description || l.visualDescription
           }));
-          this.transcriptViewer.setSegments(a);
+          this.transcriptViewer.setSegments(o);
         }
-      } catch (i) {
-        console.warn("Could not load external transcript file, using fallback cues", i);
+      } catch (t) {
+        console.warn("Could not load external transcript file, using fallback cues", t);
       }
   }
   async loadCaptionTrack(e) {
@@ -496,10 +517,15 @@ class ne extends HTMLElement {
       return;
     }
     try {
-      const t = await fetch(i.src);
-      if (t.ok) {
-        const a = await t.text();
-        this.currentCues = ce(a);
+      const t = typeof localStorage < "u" ? localStorage.getItem(`db-player:custom-vtt:${e}`) : null;
+      if (t)
+        this.currentCues = ae(t);
+      else {
+        const a = await fetch(i.src);
+        if (a.ok) {
+          const o = await a.text();
+          this.currentCues = ae(o);
+        }
       }
     } catch {
       this.currentCues = [];
@@ -548,7 +574,7 @@ class ne extends HTMLElement {
   }
   render() {
     var p, n, b, D;
-    const e = this.activeLocale === "am", i = this.manifest ? this.manifest.title[this.activeLocale] : "Media Player", t = (p = this.manifest) == null ? void 0 : p.sources.find((S) => S.kind === "main"), a = (n = this.manifest) == null ? void 0 : n.sources.find((S) => S.kind === "sign"), o = this.prefs.transcriptWidth || C.transcriptWidth || 280, c = this.prefs.transcriptHeight || C.transcriptHeight || 420, f = this.prefs.eslWidth || C.eslWidth || 260, x = this.prefs.eslHeight || C.eslHeight || 200;
+    const e = this.activeLocale === "am", i = this.manifest ? this.manifest.title[this.activeLocale] : "Media Player", t = (p = this.manifest) == null ? void 0 : p.sources.find((S) => S.kind === "main"), a = (n = this.manifest) == null ? void 0 : n.sources.find((S) => S.kind === "sign"), o = this.prefs.transcriptWidth || C.transcriptWidth || 280, l = this.prefs.transcriptHeight || C.transcriptHeight || 420, f = this.prefs.eslWidth || C.eslWidth || 260, x = this.prefs.eslHeight || C.eslHeight || 200;
     this.shadow.innerHTML = `
       <style>
         :host {
@@ -1299,7 +1325,7 @@ class ne extends HTMLElement {
           <div 
             class="window-panel transcript-window" 
             id="transcript-window"
-            style="width: ${o}px; height: ${c}px; flex: 0 0 ${o}px; display: ${this.prefs.transcriptVisible !== !1 ? "flex" : "none"};"
+            style="width: ${o}px; height: ${l}px; flex: 0 0 ${o}px; display: ${this.prefs.transcriptVisible !== !1 ? "flex" : "none"};"
             aria-label="${e ? "የትምህርቱ የጽሑፍ ግልባጭ መስኮት" : "Lesson Transcript Window"}">
             
             <!-- Transcript Titlebar -->
@@ -1617,53 +1643,53 @@ class ne extends HTMLElement {
   setupWindowInteractions() {
     const e = this.shadow.getElementById("player-stage");
     if (!e) return;
-    const i = (t, a, o, c, f, x, p) => {
-      const n = this.shadow.getElementById(t), b = this.shadow.getElementById(a), D = this.shadow.getElementById(o), S = this.shadow.getElementById(c), H = this.shadow.getElementById(f), K = x ? this.shadow.getElementById(x) : null;
+    const i = (t, a, o, l, f, x, p) => {
+      const n = this.shadow.getElementById(t), b = this.shadow.getElementById(a), D = this.shadow.getElementById(o), S = this.shadow.getElementById(l), I = this.shadow.getElementById(f), _ = x ? this.shadow.getElementById(x) : null;
       if (!n || !b || !D) return;
-      let m = null, W = !1, I = "corner", q = 0, Y = 0, N = 0, _ = 0, j = null;
-      const B = (l) => {
+      let m = null, W = !1, H = "corner", q = 0, Y = 0, N = 0, K = 0, j = null;
+      const B = (c) => {
         if (!W) return;
-        const d = l.clientX - q, y = l.clientY - Y;
+        const h = c.clientX - q, y = c.clientY - Y;
         j !== null && cancelAnimationFrame(j), j = requestAnimationFrame(() => {
-          let w = N, $ = _;
-          I === "corner" || I === "right" ? w = Math.min(p.maxWidth, Math.max(p.minWidth, N + d)) : I === "left" && (w = Math.min(p.maxWidth, Math.max(p.minWidth, N - d))), (I === "corner" || I === "bottom") && ($ = Math.min(p.maxHeight, Math.max(p.minHeight, _ + y))), n.style.width = `${w}px`, n.style.height = `${$}px`, n.style.flex = `0 0 ${w}px`, m && (m.style.width = `${w}px`, m.style.height = `${$}px`, m.style.flex = `0 0 ${w}px`);
+          let w = N, $ = K;
+          H === "corner" || H === "right" ? w = Math.min(p.maxWidth, Math.max(p.minWidth, N + h)) : H === "left" && (w = Math.min(p.maxWidth, Math.max(p.minWidth, N - h))), (H === "corner" || H === "bottom") && ($ = Math.min(p.maxHeight, Math.max(p.minHeight, K + y))), n.style.width = `${w}px`, n.style.height = `${$}px`, n.style.flex = `0 0 ${w}px`, m && (m.style.width = `${w}px`, m.style.height = `${$}px`, m.style.flex = `0 0 ${w}px`);
         });
       }, E = () => {
         W && (W = !1, n.classList.remove("is-resizing"), window.removeEventListener("pointermove", B), window.removeEventListener("pointerup", E), window.removeEventListener("pointercancel", E), j !== null && (cancelAnimationFrame(j), j = null), p.onSaveSize(n.offsetWidth, n.offsetHeight));
-      }, V = (l, d) => {
-        W = !0, I = l, q = d.clientX, Y = d.clientY, N = n.offsetWidth, _ = n.offsetHeight, n.classList.add("is-resizing"), window.addEventListener("pointermove", B), window.addEventListener("pointerup", E), window.addEventListener("pointercancel", E), d.preventDefault(), d.stopPropagation();
+      }, V = (c, h) => {
+        W = !0, H = c, q = h.clientX, Y = h.clientY, N = n.offsetWidth, K = n.offsetHeight, n.classList.add("is-resizing"), window.addEventListener("pointermove", B), window.addEventListener("pointerup", E), window.addEventListener("pointercancel", E), h.preventDefault(), h.stopPropagation();
       };
-      D.addEventListener("pointerdown", (l) => V("corner", l)), S == null || S.addEventListener("pointerdown", (l) => V("bottom", l)), H == null || H.addEventListener("pointerdown", (l) => V("right", l)), K == null || K.addEventListener("pointerdown", (l) => V("left", l)), D.addEventListener("keydown", (l) => {
-        let d = n.offsetWidth, y = n.offsetHeight, w = !1;
-        l.key === "ArrowRight" ? (d = Math.min(p.maxWidth, d + 20), w = !0) : l.key === "ArrowLeft" ? (d = Math.max(p.minWidth, d - 20), w = !0) : l.key === "ArrowDown" ? (y = Math.min(p.maxHeight, y + 20), w = !0) : l.key === "ArrowUp" && (y = Math.max(p.minHeight, y - 20), w = !0), w && (l.preventDefault(), n.style.width = `${d}px`, n.style.height = `${y}px`, n.style.flex = `0 0 ${d}px`, m && (m.style.width = `${d}px`, m.style.height = `${y}px`, m.style.flex = `0 0 ${d}px`), p.onSaveSize(d, y));
+      D.addEventListener("pointerdown", (c) => V("corner", c)), S == null || S.addEventListener("pointerdown", (c) => V("bottom", c)), I == null || I.addEventListener("pointerdown", (c) => V("right", c)), _ == null || _.addEventListener("pointerdown", (c) => V("left", c)), D.addEventListener("keydown", (c) => {
+        let h = n.offsetWidth, y = n.offsetHeight, w = !1;
+        c.key === "ArrowRight" ? (h = Math.min(p.maxWidth, h + 20), w = !0) : c.key === "ArrowLeft" ? (h = Math.max(p.minWidth, h - 20), w = !0) : c.key === "ArrowDown" ? (y = Math.min(p.maxHeight, y + 20), w = !0) : c.key === "ArrowUp" && (y = Math.max(p.minHeight, y - 20), w = !0), w && (c.preventDefault(), n.style.width = `${h}px`, n.style.height = `${y}px`, n.style.flex = `0 0 ${h}px`, m && (m.style.width = `${h}px`, m.style.height = `${y}px`, m.style.flex = `0 0 ${h}px`), p.onSaveSize(h, y));
       });
       let v = !1, z = 0, k = 0, O = 0, U = 0, M = null;
       n.addEventListener("pointerdown", () => {
         if (n.classList.contains("floating")) {
           n.style.zIndex = "100";
-          const l = t === "transcript-window" ? "esl-window" : "transcript-window", d = this.shadow.getElementById(l);
-          d && d.classList.contains("floating") && (d.style.zIndex = "90");
+          const c = t === "transcript-window" ? "esl-window" : "transcript-window", h = this.shadow.getElementById(c);
+          h && h.classList.contains("floating") && (h.style.zIndex = "90");
         }
       });
-      const T = (l) => {
-        const d = l.clientX - z, y = l.clientY - k;
-        !v && Math.hypot(d, y) > 4 && (v = !0, !m && n.parentNode && (m = document.createElement("div"), m.className = "window-placeholder", m.style.width = `${n.offsetWidth}px`, m.style.height = `${n.offsetHeight}px`, m.style.flex = n.style.flex || `0 0 ${n.offsetWidth}px`, n.parentNode.insertBefore(m, n)), n.classList.add("floating"), n.style.position = "absolute", n.style.zIndex = "100"), v && (M !== null && cancelAnimationFrame(M), M = requestAnimationFrame(() => {
-          const w = O + d, $ = U + y;
+      const T = (c) => {
+        const h = c.clientX - z, y = c.clientY - k;
+        !v && Math.hypot(h, y) > 4 && (v = !0, !m && n.parentNode && (m = document.createElement("div"), m.className = "window-placeholder", m.style.width = `${n.offsetWidth}px`, m.style.height = `${n.offsetHeight}px`, m.style.flex = n.style.flex || `0 0 ${n.offsetWidth}px`, n.parentNode.insertBefore(m, n)), n.classList.add("floating"), n.style.position = "absolute", n.style.zIndex = "100"), v && (M !== null && cancelAnimationFrame(M), M = requestAnimationFrame(() => {
+          const w = O + h, $ = U + y;
           n.style.left = `${w}px`, n.style.top = `${$}px`, n.style.right = "auto", n.style.bottom = "auto";
         }));
       }, P = () => {
         v && (v = !1), window.removeEventListener("pointermove", T), window.removeEventListener("pointerup", P), window.removeEventListener("pointercancel", P), M !== null && (cancelAnimationFrame(M), M = null);
       };
-      b.addEventListener("pointerdown", (l) => {
-        if (l.target.tagName === "INPUT" || l.target.tagName === "SELECT")
+      b.addEventListener("pointerdown", (c) => {
+        if (c.target.tagName === "INPUT" || c.target.tagName === "SELECT")
           return;
-        z = l.clientX, k = l.clientY;
-        const d = e.getBoundingClientRect(), y = n.getBoundingClientRect();
-        O = n.style.left ? parseFloat(n.style.left) : y.left - d.left, U = n.style.top ? parseFloat(n.style.top) : y.top - d.top, v = !1, n.style.zIndex = "100";
+        z = c.clientX, k = c.clientY;
+        const h = e.getBoundingClientRect(), y = n.getBoundingClientRect();
+        O = n.style.left ? parseFloat(n.style.left) : y.left - h.left, U = n.style.top ? parseFloat(n.style.top) : y.top - h.top, v = !1, n.style.zIndex = "100";
         const w = t === "transcript-window" ? "esl-window" : "transcript-window", $ = this.shadow.getElementById(w);
         $ && $.classList.contains("floating") && ($.style.zIndex = "90"), window.addEventListener("pointermove", T), window.addEventListener("pointerup", P), window.addEventListener("pointercancel", P);
-      }), b.addEventListener("keydown", (l) => {
-        let d = !1;
+      }), b.addEventListener("keydown", (c) => {
+        let h = !1;
         const y = 20;
         if (!n.classList.contains("floating")) {
           !m && n.parentNode && (m = document.createElement("div"), m.className = "window-placeholder", m.style.width = `${n.offsetWidth}px`, m.style.height = `${n.offsetHeight}px`, m.style.flex = n.style.flex || `0 0 ${n.offsetWidth}px`, n.parentNode.insertBefore(m, n));
@@ -1671,7 +1697,7 @@ class ne extends HTMLElement {
           n.classList.add("floating"), n.style.position = "absolute", n.style.zIndex = "100", n.style.left = `${X.left - Q.left}px`, n.style.top = `${X.top - Q.top}px`;
         }
         let w = parseFloat(n.style.left) || 0, $ = parseFloat(n.style.top) || 0;
-        l.key === "ArrowRight" ? (w += y, d = !0) : l.key === "ArrowLeft" ? (w -= y, d = !0) : l.key === "ArrowDown" ? ($ += y, d = !0) : l.key === "ArrowUp" && ($ -= y, d = !0), d && (l.preventDefault(), n.style.left = `${w}px`, n.style.top = `${$}px`);
+        c.key === "ArrowRight" ? (w += y, h = !0) : c.key === "ArrowLeft" ? (w -= y, h = !0) : c.key === "ArrowDown" ? ($ += y, h = !0) : c.key === "ArrowUp" && ($ -= y, h = !0), h && (c.preventDefault(), n.style.left = `${w}px`, n.style.top = `${$}px`);
       });
       const J = () => {
         n.classList.remove("floating"), n.style.position = "", n.style.left = "", n.style.top = "", n.style.right = "", n.style.bottom = "", n.style.zIndex = "", m && (m.remove(), m = null);
@@ -1714,7 +1740,7 @@ class ne extends HTMLElement {
   }
   attachEventListeners() {
     var Q, X, ee, te, ie;
-    const e = this.shadow.getElementById("btn-play"), i = this.shadow.getElementById("play-icon"), t = this.shadow.getElementById("big-play-btn"), a = this.shadow.getElementById("btn-restart"), o = this.shadow.getElementById("btn-speed-faster"), c = this.shadow.getElementById("btn-speed-slower"), f = this.shadow.getElementById("speed-display"), x = this.shadow.getElementById("state-display"), p = this.shadow.getElementById("btn-fullscreen"), n = this.shadow.getElementById("fullscreen-icon"), b = this.shadow.getElementById("btn-mute"), D = this.shadow.getElementById("mute-icon"), S = this.shadow.getElementById("player-container"), H = this.shadow.getElementById("seek-scrubber"), K = this.shadow.getElementById("time-display"), m = () => {
+    const e = this.shadow.getElementById("btn-play"), i = this.shadow.getElementById("play-icon"), t = this.shadow.getElementById("big-play-btn"), a = this.shadow.getElementById("btn-restart"), o = this.shadow.getElementById("btn-speed-faster"), l = this.shadow.getElementById("btn-speed-slower"), f = this.shadow.getElementById("speed-display"), x = this.shadow.getElementById("state-display"), p = this.shadow.getElementById("btn-fullscreen"), n = this.shadow.getElementById("fullscreen-icon"), b = this.shadow.getElementById("btn-mute"), D = this.shadow.getElementById("mute-icon"), S = this.shadow.getElementById("player-container"), I = this.shadow.getElementById("seek-scrubber"), _ = this.shadow.getElementById("time-display"), m = () => {
       this.mainVideo.paused ? this.mainVideo.play() : this.mainVideo.pause();
     };
     e && e.addEventListener("click", m), t && t.addEventListener("click", m), this.mainVideo.addEventListener("click", m), this.mainVideo.addEventListener("play", () => {
@@ -1732,16 +1758,16 @@ class ne extends HTMLElement {
     }), a == null || a.addEventListener("click", () => {
       this.mainVideo.currentTime = 0, this.mainVideo.play(), this.transcriptViewer.updateActiveTime(0);
     });
-    const W = [0.5, 0.75, 1, 1.25, 1.5, 2], I = () => {
+    const W = [0.5, 0.75, 1, 1.25, 1.5, 2], H = () => {
       const r = this.mainVideo.playbackRate;
       f && (f.textContent = `Speed: ${r}x`);
     };
     o == null || o.addEventListener("click", () => {
       const r = this.mainVideo.playbackRate, g = W.filter((R) => R > r + 0.01), F = g.length > 0 ? g[0] : 2;
-      this.mainVideo.playbackRate = F, I();
-    }), c == null || c.addEventListener("click", () => {
+      this.mainVideo.playbackRate = F, H();
+    }), l == null || l.addEventListener("click", () => {
       const r = this.mainVideo.playbackRate, g = W.filter((R) => R < r - 0.01), F = g.length > 0 ? g[g.length - 1] : 0.5;
-      this.mainVideo.playbackRate = F, I();
+      this.mainVideo.playbackRate = F, H();
     });
     const q = () => !!(document.fullscreenElement || document.webkitFullscreenElement || this.shadow.fullscreenElement), Y = async () => {
       try {
@@ -1762,10 +1788,10 @@ class ne extends HTMLElement {
       ), n && (n.innerHTML = r ? L.fullscreenExit : L.fullscreenEnter);
     };
     document.addEventListener("fullscreenchange", N), document.addEventListener("webkitfullscreenchange", N);
-    const _ = () => {
+    const K = () => {
       this.mainVideo.muted = !this.mainVideo.muted;
     };
-    b == null || b.addEventListener("click", _);
+    b == null || b.addEventListener("click", K);
     const j = () => {
       const r = this.mainVideo.muted;
       b == null || b.setAttribute("aria-pressed", r ? "true" : "false"), b == null || b.setAttribute(
@@ -1778,7 +1804,7 @@ class ne extends HTMLElement {
     };
     this.mainVideo.addEventListener("volumechange", j), this.mainVideo.addEventListener("timeupdate", () => {
       const r = this.mainVideo.currentTime, g = this.mainVideo.duration || 1;
-      H && !H.matches(":active") && (H.value = (r / g * 100).toFixed(1)), K && (K.textContent = `${this.formatTime(r)} / ${this.formatTime(g)}`), this.updateCaptionDisplay(), this.transcriptViewer.updateActiveTime(r), this.dispatchEvent(
+      I && !I.matches(":active") && (I.value = (r / g * 100).toFixed(1)), _ && (_.textContent = `${this.formatTime(r)} / ${this.formatTime(g)}`), this.updateCaptionDisplay(), this.transcriptViewer.updateActiveTime(r), this.dispatchEvent(
         new CustomEvent("db-player:progress", {
           bubbles: !0,
           composed: !0,
@@ -1788,9 +1814,9 @@ class ne extends HTMLElement {
           }
         })
       );
-    }), H.addEventListener("input", () => {
+    }), I.addEventListener("input", () => {
       const r = this.mainVideo.duration || 1;
-      this.mainVideo.currentTime = parseFloat(H.value) / 100 * r;
+      this.mainVideo.currentTime = parseFloat(I.value) / 100 * r;
     }), (Q = this.shadow.getElementById("btn-rewind")) == null || Q.addEventListener("click", () => {
       this.mainVideo.currentTime = Math.max(0, this.mainVideo.currentTime - 5);
     }), (X = this.shadow.getElementById("btn-forward")) == null || X.addEventListener("click", () => {
@@ -1834,9 +1860,9 @@ class ne extends HTMLElement {
     const M = () => {
       this.isPreferencesOpen = !0;
       const r = this.shadow.getElementById("select-cc-lang"), g = this.shadow.getElementById("select-cc-size"), F = this.shadow.getElementById("select-cc-theme");
-      r && (r.value = this.prefs.captionLanguage), g && (g.value = this.prefs.captionSize), F && (F.value = this.prefs.captionTheme), l && (l.style.display = "flex"), r == null || r.focus();
-    }, T = this.shadow.getElementById("btn-prefs"), P = this.shadow.getElementById("btn-transcript-prefs"), J = this.shadow.getElementById("btn-esl-prefs"), l = this.shadow.getElementById("prefs-dialog"), d = this.shadow.getElementById("btn-close-prefs"), y = this.shadow.getElementById("btn-reset-layout");
-    T == null || T.addEventListener("click", M), P == null || P.addEventListener("click", M), J == null || J.addEventListener("click", M), d == null || d.addEventListener("click", async () => {
+      r && (r.value = this.prefs.captionLanguage), g && (g.value = this.prefs.captionSize), F && (F.value = this.prefs.captionTheme), c && (c.style.display = "flex"), r == null || r.focus();
+    }, T = this.shadow.getElementById("btn-prefs"), P = this.shadow.getElementById("btn-transcript-prefs"), J = this.shadow.getElementById("btn-esl-prefs"), c = this.shadow.getElementById("prefs-dialog"), h = this.shadow.getElementById("btn-close-prefs"), y = this.shadow.getElementById("btn-reset-layout");
+    T == null || T.addEventListener("click", M), P == null || P.addEventListener("click", M), J == null || J.addEventListener("click", M), h == null || h.addEventListener("click", async () => {
       const r = this.shadow.getElementById("select-cc-lang"), g = this.shadow.getElementById("select-cc-size"), F = this.shadow.getElementById("select-cc-theme");
       if (r && r.value !== this.prefs.captionLanguage) {
         if (this.prefs.captionLanguage = r.value, A({ captionLanguage: this.prefs.captionLanguage }), E) {
@@ -1845,10 +1871,10 @@ class ne extends HTMLElement {
         }
         await this.loadCaptionTrack(this.prefs.captionLanguage);
       }
-      g && g.value !== this.prefs.captionSize && (this.prefs.captionSize = g.value, A({ captionSize: this.prefs.captionSize }), this.updateCaptionDisplay()), F && F.value !== this.prefs.captionTheme && (this.prefs.captionTheme = F.value, A({ captionTheme: this.prefs.captionTheme }), this.updateCaptionDisplay()), this.isPreferencesOpen = !1, l && (l.style.display = "none"), T == null || T.focus();
+      g && g.value !== this.prefs.captionSize && (this.prefs.captionSize = g.value, A({ captionSize: this.prefs.captionSize }), this.updateCaptionDisplay()), F && F.value !== this.prefs.captionTheme && (this.prefs.captionTheme = F.value, A({ captionTheme: this.prefs.captionTheme }), this.updateCaptionDisplay()), this.isPreferencesOpen = !1, c && (c.style.display = "none"), T == null || T.focus();
     }), y == null || y.addEventListener("click", () => {
       var R, se;
-      le(), this.prefs = G();
+      ce(), this.prefs = G();
       const r = this.shadow.getElementById("select-cc-lang"), g = this.shadow.getElementById("select-cc-size"), F = this.shadow.getElementById("select-cc-theme");
       r && (r.value = this.prefs.captionLanguage), g && (g.value = this.prefs.captionSize), F && (F.value = this.prefs.captionTheme), this.updateCaptionDisplay(), this.loadCaptionTrack(this.prefs.captionLanguage), k && ((R = k.__reDock) == null || R.call(k), k.classList.remove("floating"), k.style.position = "", k.style.left = "", k.style.top = "", k.style.right = "", k.style.bottom = "", k.style.zIndex = "", k.style.width = `${C.transcriptWidth}px`, k.style.height = `${C.transcriptHeight}px`, k.style.flex = `0 0 ${C.transcriptWidth}px`, k.style.display = "flex"), v && ((se = v.__reDock) == null || se.call(v), v.classList.remove("floating"), v.style.position = "", v.style.left = "", v.style.top = "", v.style.right = "", v.style.bottom = "", v.style.zIndex = "", v.style.width = `${C.eslWidth}px`, v.style.height = `${C.eslHeight}px`, v.style.flex = `0 0 ${C.eslWidth}px`, v.style.display = "flex"), V && V.setAttribute("aria-pressed", "true"), z && z.setAttribute("aria-pressed", "true");
     }), (ee = this.shadow.getElementById("select-cc-lang")) == null || ee.addEventListener("change", async (r) => {
@@ -1872,7 +1898,7 @@ class ne extends HTMLElement {
     const $ = this.shadow.getElementById("player-container");
     $ == null || $.addEventListener("keydown", (r) => {
       if (this.isPreferencesOpen) {
-        r.key === "Escape" && (this.isPreferencesOpen = !1, l && (l.style.display = "none"), T == null || T.focus());
+        r.key === "Escape" && (this.isPreferencesOpen = !1, c && (c.style.display = "none"), T == null || T.focus());
         return;
       }
       if (!(r.target.tagName === "INPUT" || r.target.tagName === "SELECT"))
@@ -1894,7 +1920,7 @@ class ne extends HTMLElement {
             break;
           case "m":
           case "M":
-            r.preventDefault(), _();
+            r.preventDefault(), K();
             break;
           case "f":
           case "F":
@@ -1910,7 +1936,7 @@ class ne extends HTMLElement {
             break;
           case "<":
           case ",":
-            r.preventDefault(), c == null || c.click();
+            r.preventDefault(), l == null || l.click();
             break;
           case "c":
           case "C":
@@ -1939,9 +1965,9 @@ class ne extends HTMLElement {
     return `${i.toString().padStart(2, "0")}:${t.toString().padStart(2, "0")}`;
   }
 }
-customElements.get("a11y-media-player") || customElements.define("a11y-media-player", ne);
+customElements.get("a11y-media-player") || customElements.define("a11y-media-player", re);
 if (!customElements.get("db-player")) {
-  class u extends ne {
+  class u extends re {
   }
   customElements.define("db-player", u);
 }
@@ -1974,7 +2000,7 @@ const ue = [
   // Pagume (13)
 ];
 function ge(u) {
-  const s = typeof u == "string" ? new Date(u) : u, e = s.getUTCFullYear(), i = s.getUTCMonth() + 1, t = s.getUTCDate(), a = Math.floor((14 - i) / 12), o = e + 4800 - a, c = i + 12 * a - 3, f = t + Math.floor((153 * c + 2) / 5) + 365 * o + Math.floor(o / 4) - Math.floor(o / 100) + Math.floor(o / 400) - 32045, x = (f - 1723856) % 1461, p = x % 365 + 365 * Math.floor(x / 1460), n = 4 * Math.floor((f - 1723856) / 1461) + Math.floor(x / 365) - Math.floor(x / 1460), b = Math.floor(p / 30) + 1, D = p % 30 + 1, S = ue[Math.min(b - 1, 12)];
+  const s = typeof u == "string" ? new Date(u) : u, e = s.getUTCFullYear(), i = s.getUTCMonth() + 1, t = s.getUTCDate(), a = Math.floor((14 - i) / 12), o = e + 4800 - a, l = i + 12 * a - 3, f = t + Math.floor((153 * l + 2) / 5) + 365 * o + Math.floor(o / 4) - Math.floor(o / 100) + Math.floor(o / 400) - 32045, x = (f - 1723856) % 1461, p = x % 365 + 365 * Math.floor(x / 1460), n = 4 * Math.floor((f - 1723856) / 1461) + Math.floor(x / 365) - Math.floor(x / 1460), b = Math.floor(p / 30) + 1, D = p % 30 + 1, S = ue[Math.min(b - 1, 12)];
   return {
     year: n,
     month: b,
@@ -1993,9 +2019,9 @@ function me(u) {
 class fe extends HTMLElement {
   constructor() {
     super();
-    h(this, "shadow");
-    h(this, "job", null);
-    h(this, "activeLocale", "en");
+    d(this, "shadow");
+    d(this, "job", null);
+    d(this, "activeLocale", "en");
     this.shadow = this.attachShadow({ mode: "open" });
   }
   static get observedAttributes() {
@@ -2030,7 +2056,7 @@ class fe extends HTMLElement {
       this.shadow.innerHTML = '<div class="job-placeholder">No job data supplied</div>';
       return;
     }
-    const e = this.activeLocale === "am", i = this.job.title[this.activeLocale] || this.job.title.en, t = this.job.location[this.activeLocale] || this.job.location.en, a = this.job.description[this.activeLocale] || this.job.description.en, o = this.job.applicationDeadline ? me(this.job.applicationDeadline) : null, c = {
+    const e = this.activeLocale === "am", i = this.job.title[this.activeLocale] || this.job.title.en, t = this.job.location[this.activeLocale] || this.job.location.en, a = this.job.description[this.activeLocale] || this.job.description.en, o = this.job.applicationDeadline ? me(this.job.applicationDeadline) : null, l = {
       "@context": "https://schema.org/",
       "@type": "JobPosting",
       title: i,
@@ -2186,7 +2212,7 @@ class fe extends HTMLElement {
 
       <!-- schema.org/JobPosting JSON-LD -->
       <script type="application/ld+json">
-        ${JSON.stringify(c)}
+        ${JSON.stringify(l)}
       <\/script>
 
       <article class="card" aria-labelledby="job-title-${this.job.id}">
@@ -2274,8 +2300,8 @@ customElements.get("a11y-job-card") || customElements.define("a11y-job-card", fe
 const be = "abugida-media", we = 1;
 class ve {
   constructor() {
-    h(this, "db", null);
-    h(this, "cacheName", "abugida-offline-v1");
+    d(this, "db", null);
+    d(this, "cacheName", "abugida-offline-v1");
   }
   async init() {
     if (!this.db)
@@ -2325,14 +2351,14 @@ class ve {
     if (!("caches" in window))
       throw new Error("Cache Storage API is not supported in this browser.");
     try {
-      const c = await caches.open(this.cacheName);
+      const l = await caches.open(this.cacheName);
       let f = 0;
       const x = t.length;
       for (const p of t) {
         const n = await fetch(p);
         if (!n.ok)
           throw new Error(`Failed to fetch asset: ${p} (${n.status})`);
-        await c.put(p, n.clone()), f++;
+        await l.put(p, n.clone()), f++;
         const b = Math.round(f / x * 100);
         a(b, f, x);
       }
@@ -2346,7 +2372,7 @@ class ve {
         downloadedBytes: 32e5,
         timestamp: Date.now()
       }), !0;
-    } catch (c) {
+    } catch (l) {
       throw await this.savePackageRecord({
         packageKey: o,
         lessonId: s,
@@ -2356,8 +2382,8 @@ class ve {
         totalBytes: 32e5,
         downloadedBytes: 0,
         timestamp: Date.now(),
-        error: c instanceof Error ? c.message : "Download failed"
-      }), c;
+        error: l instanceof Error ? l.message : "Download failed"
+      }), l;
     }
   }
   async isPackageReady(s, e) {
@@ -2382,7 +2408,7 @@ class ve {
 const xe = new ve();
 export {
   fe as A11yJobCard,
-  ne as A11yMediaPlayer,
+  re as A11yMediaPlayer,
   C as DEFAULT_PREFERENCES,
   ue as ETHIOPIC_MONTHS,
   he as MediaSyncController,
@@ -2392,8 +2418,8 @@ export {
   de as getThemeStyles,
   G as loadPreferences,
   xe as offlineStorage,
-  ce as parseVTT,
-  le as resetPreferences,
+  ae as parseVTT,
+  ce as resetPreferences,
   A as savePreferences,
   ge as toEthiopianDate
 };

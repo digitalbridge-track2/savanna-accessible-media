@@ -106,6 +106,55 @@ const ENGLISH_SAMPLE: StudioSegment[] = [
   },
 ];
 
+function toUnicodeBraille(text: string): string {
+  const BRAILLE_MAP: Record<string, string> = {
+    a: "⠁", b: "⠃", c: "⠉", d: "⠙", e: "⠑", f: "⠋", g: "⠛", h: "⠓", i: "⠊", j: "⠚",
+    k: "⠅", l: "⠇", m: "⠍", n: "⠝", o: "⠕", p: "⠏", q: "⠟", r: "⠗", s: "⠎", t: "⠞",
+    u: "⠥", v: "⠧", w: "⠺", x: "⠭", y: "⠽", z: "⠵",
+    " ": " ", ".": "⠲", ",": "⠂", ";": "⠆", ":": "⠒", "!": "⠖", "?": "⠦",
+    "-": "⠤", "(": "⠶", ")": "⠶", "\"": "⠦", "'": "⠄"
+  };
+
+  let out = "";
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    const lower = ch.toLowerCase();
+    if (ch >= "A" && ch <= "Z") {
+      out += "⠠" + (BRAILLE_MAP[lower] || lower);
+    } else if (ch >= "0" && ch <= "9") {
+      const numMap: Record<string, string> = {
+        "1": "⠁", "2": "⠃", "3": "⠉", "4": "⠙", "5": "⠑",
+        "6": "⠋", "7": "⠛", "8": "⠓", "9": "⠊", "0": "⠚"
+      };
+      if (i === 0 || !/[0-9]/.test(text[i - 1])) {
+        out += "⠼";
+      }
+      out += numMap[ch] || ch;
+    } else if (BRAILLE_MAP[ch]) {
+      out += BRAILLE_MAP[ch];
+    } else {
+      out += ch;
+    }
+  }
+  return out;
+}
+
+function toAsciiBraille(text: string): string {
+  let res = "";
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (ch >= "A" && ch <= "Z") {
+      res += "," + ch;
+    } else if (ch >= "0" && ch <= "9") {
+      if (i === 0 || !/[0-9]/.test(text[i - 1])) res += "#";
+      res += String.fromCharCode(ch.charCodeAt(0) + 16);
+    } else {
+      res += ch;
+    }
+  }
+  return res;
+}
+
 function formatTime(seconds: number): string {
   const mins = Math.floor(seconds / 60);
   const secs = (seconds % 60).toFixed(1);
@@ -113,10 +162,12 @@ function formatTime(seconds: number): string {
 }
 
 function formatVTTTime(seconds: number): string {
-  const mins = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  const ms = Math.floor((seconds % 1) * 1000);
-  return `00:${mins < 10 ? "0" : ""}${mins}:${secs < 10 ? "0" : ""}${secs}.${ms < 10 ? "00" : ms < 100 ? "0" : ""}${ms}`;
+  const totalMs = Math.max(0, Math.round(seconds * 1000));
+  const hours = Math.floor(totalMs / 3600000);
+  const mins = Math.floor((totalMs % 3600000) / 60000);
+  const secs = Math.floor((totalMs % 60000) / 1000);
+  const ms = totalMs % 1000;
+  return `${String(hours).padStart(2, "0")}:${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}.${String(ms).padStart(3, "0")}`;
 }
 
 function parseVTTContent(vttContent: string): StudioSegment[] {
@@ -402,67 +453,131 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
   };
 
   const generateVTT = (): string => {
-    let vtt = "WEBVTT - Human Reviewed Captions\n\n";
-    for (const seg of segments) {
+    let vtt = `WEBVTT - Digital Workplace Skills (${isAm ? "አማርኛ የተገመገመ" : "English Human-Reviewed"})\n\n`;
+    for (let i = 0; i < segments.length; i++) {
+      const seg = segments[i];
       const text = seg.reviewedText || seg.draftText;
-      vtt += `${formatVTTTime(seg.start)} --> ${formatVTTTime(seg.end)}\n${text}\n\n`;
+      vtt += `${i + 1}\n`;
+      vtt += `${formatVTTTime(seg.start)} --> ${formatVTTTime(seg.end)}\n`;
+      vtt += `${text}\n\n`;
     }
     return vtt;
   };
 
   const handleExportVTT = () => {
-    downloadFile(generateVTT(), "captions.reviewed.vtt", "text/vtt;charset=utf-8");
+    downloadFile(generateVTT(), isAm ? "captions.reviewed.am.vtt" : "captions.reviewed.en.vtt", "text/vtt;charset=utf-8");
     setStatusMsg(isAm ? "WebVTT ፋይል በተሳካ ሁኔታ ወርዷል።" : "Exported captions.reviewed.vtt successfully.");
   };
 
   const handleExportJSON = () => {
-    const jsonStr = JSON.stringify({ segments }, null, 2);
-    downloadFile(jsonStr, "transcript.reviewed.json", "application/json");
+    const jsonOutput = {
+      lessonId: "digital-workplace-01",
+      language: isAm ? "am" : "en",
+      title: isAm ? "የዲጂታል የሥራ ቦታ ክህሎቶች፡ መሠረታዊ" : "Digital Workplace Skills: Foundations",
+      exportedAt: new Date().toISOString(),
+      reviewStatus: reviewedCount === segments.length ? "verified" : "partial_draft",
+      segments: segments.map((seg) => ({
+        id: seg.id,
+        start: seg.start,
+        end: seg.end,
+        speaker: seg.speaker,
+        text: seg.reviewedText || seg.draftText,
+        draftText: seg.draftText,
+        status: seg.status,
+        visualDescription: isAm ? "የስላይድ ማብራሪያ" : "Visual presentation slide",
+      })),
+    };
+    const jsonStr = JSON.stringify(jsonOutput, null, 2);
+    downloadFile(jsonStr, isAm ? "transcript.reviewed.am.json" : "transcript.reviewed.en.json", "application/json");
     setStatusMsg(isAm ? "የጽሑፍ ግልባጭ JSON በተሳካ ሁኔታ ወርዷል።" : "Exported transcript.reviewed.json successfully.");
   };
 
   const handleExportBRF = () => {
-    let brfText = "DIGITAL WORKPLACE SKILLS - BRAILLE TRANSCRIPT (GRADE 1)\n\n";
-    for (const seg of segments) {
-      const clean = (seg.reviewedText || seg.draftText)
-        .toUpperCase()
-        .replace(/[^A-Z0-9 .,!?]/g, "");
-      brfText += `${clean}\n`;
+    const title = isAm
+      ? "የዲጂታል የሥራ ቦታ ክህሎቶች - የትምህርት ግልባጭ"
+      : "DIGITAL WORKPLACE SKILLS: FOUNDATIONS - ACCESSIBLE TRANSCRIPT";
+
+    let brf = "======================================================================\n";
+    brf += `${title}\n`;
+    brf += "STANDARD: GRADE 1 BRAILLE & ETHIOPIAN ACCESSIBLE TRANSCRIPT FORMAT\n";
+    brf += `LANGUAGE: ${isAm ? "AMHARIC (አማርኛ)" : "ENGLISH"}\n`;
+    brf += "DATE: 2026-11-14 (HIDAR 5, 2019 E.C.)\n";
+    brf += `TOTAL SEGMENTS: ${segments.length}\n`;
+    brf += "======================================================================\n\n";
+
+    for (let i = 0; i < segments.length; i++) {
+      const seg = segments[i];
+      const text = seg.reviewedText || seg.draftText;
+      const timeHeader = `[#${i + 1} | ${formatTime(seg.start)} - ${formatTime(seg.end)} | ${seg.speaker}]`;
+
+      brf += `${timeHeader}\n`;
+      brf += `TEXT: ${text}\n`;
+      brf += `BRAILLE: ${toUnicodeBraille(text)}\n`;
+      brf += `EMBOSSER (ASCII): ${toAsciiBraille(text)}\n\n`;
     }
-    downloadFile(brfText, "lesson-transcript.brf", "text/plain");
+
+    downloadFile(brf, isAm ? "lesson-transcript.am.brf" : "lesson-transcript.en.brf", "text/plain;charset=utf-8");
     setStatusMsg(isAm ? "የብሬይል ፋይል (.brf) በተሳካ ሁኔታ ወርዷል።" : "Exported lesson-transcript.brf successfully.");
   };
 
   const handlePublishToAPI = async () => {
     setIsPublishing(true);
-    setStatusMsg(isAm ? "ወደ ሰርቨር እየተላከ ነው..." : "Publishing reviewed captions to Level 2 API...");
+    setStatusMsg(isAm ? "ወደ Level 2 API እና ቀጥታ ማጫወቻው እየተላከ ነው..." : "Publishing reviewed captions to Level 2 API & live player...");
+
+    const vttContent = generateVTT();
+    const langKey = isAm ? "am" : "en";
+
+    // 1. Store in localStorage so live player on /lesson updates in real time
     try {
-      const vttContent = generateVTT();
+      localStorage.setItem(`db-player:custom-vtt:${langKey}`, vttContent);
+      const jsonOutput = {
+        lessonId: "digital-workplace-01",
+        language: langKey,
+        segments: segments.map((seg) => ({
+          id: seg.id,
+          start: seg.start,
+          end: seg.end,
+          speaker: seg.speaker,
+          text: seg.reviewedText || seg.draftText,
+          status: seg.status,
+          visualDescription: "",
+        })),
+      };
+      localStorage.setItem(`db-player:custom-transcript:${langKey}`, JSON.stringify(jsonOutput));
+      window.dispatchEvent(new CustomEvent("db-player:captions-updated", {
+        detail: { language: langKey, vttContent }
+      }));
+    } catch (err) {
+      console.warn("Local storage update warning:", err);
+    }
+
+    // 2. Publish to FastAPI Level 2 service on port 8000
+    try {
       const res = await fetch("http://localhost:8000/api/v1/lessons/digital-workplace-01/captions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          language: isAm ? "am" : "en",
+          language: langKey,
           vttContent,
           author: "Human Reviewer (Studio)",
         }),
       });
 
       if (!res.ok) {
-        throw new Error(`API returned HTTP ${res.status}`);
+        throw new Error(`HTTP ${res.status}`);
       }
 
       const data = await res.json();
       setStatusMsg(
         isAm
-          ? `✓ ${data.cuesCount} መስመሮች ወደ Level 2 API በተሳካ ሁኔታ ተልከው ታትመዋል።`
-          : `✓ Successfully published ${data.cuesCount} reviewed cues to Level 2 API.`
+          ? `✓ ${data.cuesCount} መስመሮች ወደ Level 2 API (Port 8000) እና ቀጥታ ማጫወቻው በተሳካ ሁኔታ ተልከው ታትመዋል!`
+          : `✓ Successfully published ${data.cuesCount} cues to Level 2 API (Port 8000) and live lesson player!`
       );
     } catch {
       setStatusMsg(
         isAm
-          ? "Level 2 API አልተገኘም (ኦፍላይን ነው)። ፋይሉን በቀጥታ በWebVTT አውርደው ማካተት ይችላሉ።"
-          : "Level 2 API is currently offline. You can download the verified WebVTT file directly."
+          ? "✓ የትርጉም ጽሑፉ በመሣሪያው ላይ ተቀምጦ ለቀጥታ ማጫወቻው ዝግጁ ሆኗል (Level 2 API ኦፍላይን ነው)።"
+          : "✓ Captions saved to browser storage for the live lesson player (Level 2 API server is currently unreachable)."
       );
     } finally {
       setIsPublishing(false);
@@ -477,10 +592,12 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
       {/* Hidden native audio element for synchronized snippet playback */}
       <audio
         ref={audioRef}
-        src="/lessons/digital-workplace/media/lesson-audio.opus"
         preload="metadata"
         aria-hidden="true"
-      />
+      >
+        <source src="/lessons/digital-workplace/media/lesson-audio.opus" type="audio/ogg; codecs=opus" />
+        <source src="/lessons/digital-workplace/media/lesson.mp4" type="video/mp4" />
+      </audio>
 
       {/* Header */}
       <div style={{ marginBottom: "2rem" }}>
@@ -1158,17 +1275,36 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
             style={{
               marginTop: "1.25rem",
               padding: "0.75rem 1.25rem",
-              background: statusMsg.includes("አልተገኘም") || statusMsg.includes("offline") ? "#FFF3CD" : "#E8F8F0",
-              color: statusMsg.includes("አልተገኘም") || statusMsg.includes("offline") ? "#856404" : "#128045",
+              background: statusMsg.includes("አልተገኘም") || statusMsg.includes("offline") || statusMsg.includes("unreachable") ? "#FFF3CD" : "#E8F8F0",
+              color: statusMsg.includes("አልተገኘም") || statusMsg.includes("offline") || statusMsg.includes("unreachable") ? "#856404" : "#128045",
               borderRadius: "var(--radius-pill)",
               fontWeight: 600,
               fontSize: "13px",
-              display: "inline-block",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.85rem",
+              flexWrap: "wrap",
             }}
             role="status"
             aria-live="polite"
           >
-            {statusMsg}
+            <span>{statusMsg}</span>
+            {statusMsg.includes("✓") && (
+              <a
+                href="/lesson"
+                style={{
+                  color: "#0071E3",
+                  fontWeight: 700,
+                  textDecoration: "underline",
+                  fontSize: "13px",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.25rem",
+                }}
+              >
+                {isAm ? "በቀጥታ ማጫወቻው ተመልከት →" : "View in Lesson Player →"}
+              </a>
+            )}
           </div>
         )}
       </section>

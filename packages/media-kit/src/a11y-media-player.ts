@@ -66,6 +66,10 @@ export class A11yMediaPlayer extends HTMLElement {
     this.prefs = loadPreferences();
   }
 
+  private onCaptionsUpdated = () => {
+    this.initTracksAndTranscript();
+  };
+
   connectedCallback() {
     this.activeLocale = (this.getAttribute("lang") as "en" | "am") || (this.getAttribute("locale") as "en" | "am") || "en";
     const manifestSrc = this.getAttribute("manifest-src");
@@ -74,9 +78,11 @@ export class A11yMediaPlayer extends HTMLElement {
     } else if (this.getAttribute("src")) {
       this.initFromAttributes();
     }
+    window.addEventListener("db-player:captions-updated", this.onCaptionsUpdated);
   }
 
   disconnectedCallback() {
+    window.removeEventListener("db-player:captions-updated", this.onCaptionsUpdated);
     if (this.syncController) {
       this.syncController.destroy();
     }
@@ -189,7 +195,26 @@ export class A11yMediaPlayer extends HTMLElement {
     // Load active caption track
     await this.loadCaptionTrack(this.prefs.captionLanguage);
 
-    // Load transcript
+    // Load transcript: check for published custom transcript first
+    const customTranscript = typeof localStorage !== "undefined" ? localStorage.getItem(`db-player:custom-transcript:${this.activeLocale}`) : null;
+    if (customTranscript) {
+      try {
+        const data = JSON.parse(customTranscript);
+        const segments: TranscriptSegmentData[] = (data.segments || []).map((seg: any) => ({
+          id: seg.id,
+          start: seg.start_ms !== undefined ? seg.start_ms / 1000 : seg.start || 0,
+          end: seg.end_ms !== undefined ? seg.end_ms / 1000 : seg.end || 0,
+          speaker: seg.speaker,
+          text: seg.text || seg.reviewedText || seg.draft_text || seg.draftText || "",
+          visualDescription: seg.visual_description || seg.visualDescription,
+        }));
+        this.transcriptViewer.setSegments(segments);
+        return;
+      } catch (e) {
+        console.warn("Could not parse custom transcript, falling back to manifest src", e);
+      }
+    }
+
     if (this.manifest.transcript?.src) {
       try {
         const res = await fetch(this.manifest.transcript.src);
@@ -226,10 +251,16 @@ export class A11yMediaPlayer extends HTMLElement {
     }
 
     try {
-      const res = await fetch(trackMeta.src);
-      if (res.ok) {
-        const vttText = await res.text();
-        this.currentCues = parseVTT(vttText);
+      // Check for user-published custom captions in localStorage first
+      const customVtt = typeof localStorage !== "undefined" ? localStorage.getItem(`db-player:custom-vtt:${lang}`) : null;
+      if (customVtt) {
+        this.currentCues = parseVTT(customVtt);
+      } else {
+        const res = await fetch(trackMeta.src);
+        if (res.ok) {
+          const vttText = await res.text();
+          this.currentCues = parseVTT(vttText);
+        }
       }
     } catch {
       this.currentCues = [];
