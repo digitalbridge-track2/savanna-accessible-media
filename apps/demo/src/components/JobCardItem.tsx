@@ -32,23 +32,60 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
   const audioSrc = job.audioSummary?.src;
 
   const toggleAudio = () => {
-    if (!audioSrc) return;
-
-    if (!audioRef.current) {
-      audioRef.current = new Audio(audioSrc);
-      audioRef.current.addEventListener("ended", () => setIsPlaying(false));
-      audioRef.current.addEventListener("pause", () => setIsPlaying(false));
-      audioRef.current.addEventListener("play", () => setIsPlaying(true));
-      audioRef.current.addEventListener("error", () => setIsPlaying(false));
+    // If browser is already speaking via speech synthesis, cancel it
+    if (typeof window !== "undefined" && window.speechSynthesis && window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+      setIsPlaying(false);
+      return;
     }
 
     if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play().catch((err) => {
-        console.warn("Audio playback prevented:", err);
-        setIsPlaying(false);
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+      if (typeof window !== "undefined" && window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+      setIsPlaying(false);
+      return;
+    }
+
+    // Try HTML5 audio first, with fallback to SpeechSynthesis
+    if (audioSrc) {
+      if (!audioRef.current) {
+        audioRef.current = new Audio(audioSrc);
+        audioRef.current.addEventListener("ended", () => setIsPlaying(false));
+        audioRef.current.addEventListener("pause", () => setIsPlaying(false));
+        audioRef.current.addEventListener("play", () => setIsPlaying(true));
+        audioRef.current.addEventListener("error", () => {
+          speakFallback();
+        });
+      }
+
+      audioRef.current.play().then(() => {
+        setIsPlaying(true);
+      }).catch((err) => {
+        console.warn("Audio element play error, falling back to speech synthesis:", err);
+        speakFallback();
       });
+    } else {
+      speakFallback();
+    }
+  };
+
+  const speakFallback = () => {
+    const textToSpeak = job.audioSummary?.textEquivalent || description || title;
+    if (typeof window !== "undefined" && "speechSynthesis" in window && textToSpeak) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(textToSpeak);
+      utterance.lang = locale === "am" ? "am-ET" : "en-US";
+      utterance.rate = 1.0;
+      utterance.onstart = () => setIsPlaying(true);
+      utterance.onend = () => setIsPlaying(false);
+      utterance.onerror = () => setIsPlaying(false);
+      window.speechSynthesis.speak(utterance);
+    } else {
+      setIsPlaying(false);
     }
   };
 
@@ -57,6 +94,9 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
   const location = resolveLocalized(job.location, locale);
   const description = resolveLocalized(job.description, locale);
   const employer = typeof job.employer === "string" ? job.employer : resolveLocalized(job.employer, locale);
+
+  // Clean location string to avoid duplicate parenthetical like "(Hybrid) (Hybrid)"
+  const cleanLocation = location.replace(/\s*\([^)]*\)\s*$/, "").trim();
 
   const accommodationsList = Array.isArray(job.accommodations) ? job.accommodations : [];
 
@@ -133,9 +173,24 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
           >
             {title}
           </h4>
-          <p style={{ margin: 0, color: "var(--color-muted-ink)", fontWeight: 400, fontSize: "14px" }}>
-            <strong style={{ color: "var(--color-ink)" }}>{employer}</strong> · <span>{location}</span>{" "}
-            {job.workMode && <span style={{ textTransform: "capitalize" }}>({job.workMode})</span>}
+          <p style={{ margin: 0, color: "var(--color-muted-ink)", fontWeight: 400, fontSize: "14px", display: "flex", alignItems: "center", gap: "0.4rem", flexWrap: "wrap" }}>
+            <strong style={{ color: "var(--color-ink)" }}>{employer}</strong> · <span>{cleanLocation || location}</span>
+            {job.workMode && (
+              <span
+                className="badge"
+                style={{
+                  fontSize: "11px",
+                  padding: "0.15rem 0.55rem",
+                  background: "#F1F5F9",
+                  color: "#475569",
+                  borderRadius: "var(--radius-pill)",
+                  textTransform: "capitalize",
+                  fontWeight: 600,
+                }}
+              >
+                {job.workMode}
+              </span>
+            )}
           </p>
         </div>
 
@@ -217,6 +272,27 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
             {job.audioSummary.textEquivalent}
           </p>
         </details>
+      )}
+
+      {job.applicationUrl && (
+        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "0.25rem" }}>
+          <a
+            href={job.applicationUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="btn btn-outline"
+            style={{
+              fontSize: "12px",
+              padding: "0.35rem 0.85rem",
+              textDecoration: "none",
+              color: "var(--color-brand)",
+              borderColor: "var(--color-brand)",
+              fontWeight: 600,
+            }}
+          >
+            {isAm ? "ለሥራው አመልክት (Apply)" : "Apply for Role"} &rarr;
+          </a>
+        </div>
       )}
     </article>
   );

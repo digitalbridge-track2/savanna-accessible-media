@@ -355,10 +355,10 @@ const $ = {
   forward: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg>',
   cc: '<svg viewBox="0 0 24 24" width="22" height="20" fill="currentColor" aria-hidden="true"><path d="M19 4H5a2 2 0 00-2 2v12a2 2 0 002 2h14a2 2 0 002-2V6a2 2 0 00-2-2zm-8 7H9.5v-.5h-2v3h2V13H11v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-4a1 1 0 011-1h3a1 1 0 011 1v1zm7 0h-1.5v-.5h-2v3h2V13H18v1a1 1 0 01-1 1h-3a1 1 0 01-1-1v-4a1 1 0 011-1h3a1 1 0 011 1v1z"/></svg>',
   esl: '<svg viewBox="0 0 32 20" width="28" height="20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="1.5" y="1.5" width="29" height="17" rx="3.5" fill="rgba(255,255,255,0.06)"/><text x="16" y="14" text-anchor="middle" fill="currentColor" stroke="none" font-size="11" font-weight="bold" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" letter-spacing="0.5">ESL</text></svg>',
-  ad: '<svg viewBox="0 0 26 20" width="26" height="20" fill="currentColor" aria-hidden="true"><path d="M2 3.5h5.5c3.3 0 5.8 2.5 5.8 6.5s-2.5 6.5-5.8 6.5H2V3.5zm3 10.2h2.2c1.8 0 3.3-1.4 3.3-3.7s-1.5-3.7-3.3-3.7H5v7.4z"/><path d="M15 7.5c1 1.5 1 3.5 0 5M18 5.5c1.8 2.5 1.8 6.5 0 9M21 3.5c2.6 3.8 2.6 9.2 0 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+  ad: '<svg viewBox="0 0 24 24" width="22" height="20" fill="currentColor" aria-hidden="true"><path d="M3 3.5h6.2c4.2 0 7.3 3 7.3 7.5s-3.1 7.5-7.3 7.5H3V3.5zm3.6 3.4v8.2h2.4c2.2 0 3.7-1.7 3.7-4.1s-1.5-4.1-3.7-4.1H6.6z"/><path d="M17.5 8.5c1 1.5 1 3.5 0 5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M20.5 6c2 2.7 2 7.3 0 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>',
   transcript: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>',
-  faster: '<svg viewBox="0 0 24 24" width="22" height="20" fill="currentColor" aria-hidden="true"><path d="M22 10.5c-.3-.2-.7-.1-.9.2l-1.5 2.1c-.5-.4-1.2-.7-2-.8l1.4-2.8c.2-.4.1-.9-.3-1.1s-.9-.1-1.1.3L15.9 11c-.7-.1-1.4 0-2 .3l-1.3-1.8c-.3-.4-.8-.5-1.2-.2-.4.3-.5.8-.2 1.2l1.2 1.7c-.8.6-1.3 1.5-1.5 2.5L7 13c-.6 0-1 .4-1 1s.4 1 1 1l3.5 1.5c.2.8.7 1.5 1.4 2l-2.4 2.4c-.4.4-.4 1 0 1.4.2.2.5.3.7.3s.5-.1.7-.3l2.8-2.8c1.3.5 2.8.4 4-.4l2.3 1.5c.4.3 1 .1 1.2-.3.3-.4.1-1-.3-1.2L19 18.2c.7-.9 1.1-2 1-3.2l1.8-1.5c.4-.3.5-.8.2-1.2zM2 13h3c.6 0 1-.4 1-1s-.4-1-1-1H2c-.6 0-1 .4-1 1s.4 1 1 1zm1 3h2c.6 0 1-.4 1-1s-.4-1-1-1H3c-.6 0-1 .4-1 1s.4 1 1 1z"/></svg>',
-  slower: '<svg viewBox="0 0 24 24" width="22" height="20" fill="currentColor" aria-hidden="true"><path d="M19 12c-.2-3.3-2.7-6-6-6-2.6 0-4.8 1.7-5.6 4-.8-.1-1.6.3-2 1-.5.7-.5 1.6 0 2.3.4.6 1.1 1 1.9 1 .2 1.8 1.4 3.3 3 4l-.8 1.6c-.2.5 0 1 .5 1.2.5.2 1 0 1.2-.5l.9-1.8c.6.1 1.2.2 1.9.2s1.3-.1 1.9-.2l.9 1.8c.2.5.7.7 1.2.5.5-.2.7-.7.5-1.2l-.8-1.6c1.6-.7 2.8-2.2 3-4 .8 0 1.5-.4 1.9-1 .5-.7.5-1.6 0-2.3-.4-.7-1.2-1.1-2-1.1zm-6-4c2.2 0 4.1 1.6 4.5 3.8-.7.4-1.7.7-2.8.9-.7-1-1.9-1.7-3.2-1.7s-2.5.7-3.2 1.7c-1.1-.2-2.1-.5-2.8-.9.4-2.2 2.3-3.8 4.5-3.8zm-1.5 5.5c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5-1.5-.7-1.5-1.5.7-1.5 1.5-1.5z"/></svg>',
+  faster: '<svg viewBox="0 0 24 24" width="22" height="20" fill="currentColor" aria-hidden="true"><path d="M12 4a9 9 0 0 0-9 9c0 2.4 1 4.5 2.6 6.1l1.4-1.4A7 7 0 0 1 5 13a7 7 0 0 1 12.6-4.2l1.5-1.5A9 9 0 0 0 12 4z"/><path d="M12.5 12.9a1.5 1.5 0 0 0 1-1.4c0-.8-.7-1.5-1.5-1.5s-1.5.7-1.5 1.5a1.5 1.5 0 0 0 .5 1.1l3.2 3.2 1.1-1.1-2.8-1.8z"/><path d="M18 12v6M15 15h6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
+  slower: '<svg viewBox="0 0 24 24" width="22" height="20" fill="currentColor" aria-hidden="true"><path d="M12 4a9 9 0 0 0-9 9c0 2.4 1 4.5 2.6 6.1l1.4-1.4A7 7 0 0 1 5 13a7 7 0 0 1 12.6-4.2l1.5-1.5A9 9 0 0 0 12 4z"/><path d="M11 11.5a1.5 1.5 0 0 0-1 1.4c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5a1.5 1.5 0 0 0-.5-1.1l-3.2-3.2-1.1 1.1 2.8 1.8z"/><rect x="15" y="14" width="6" height="2.2" rx="1"/></svg>',
   prefs: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.488.488 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>',
   fullscreenEnter: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>',
   fullscreenExit: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>',
@@ -796,9 +796,9 @@ class ue extends HTMLElement {
 
         /* Center Main Player Panel - Balanced Horizontal Cinema Proportion */
         .main-player-panel {
-          flex: 1 1 420px;
-          min-width: 280px;
-          max-width: 500px;
+          flex: 1 1 360px;
+          min-width: 260px;
+          max-width: 440px;
           width: 100%;
           background: #111417;
           border-radius: 8px;
@@ -814,6 +814,8 @@ class ue extends HTMLElement {
           outline: 3px solid var(--color-focus, #005FCC);
           outline-offset: 3px;
         }
+        :host(:fullscreen) #player-container,
+        :host(:-webkit-full-screen) #player-container,
         #player-container:fullscreen,
         #player-container:-webkit-full-screen,
         .main-player-panel:fullscreen,
@@ -1804,7 +1806,7 @@ class ue extends HTMLElement {
       const n = this.mainVideo.playbackRate, c = _.filter((D) => D < n - 0.01), L = c.length > 0 ? c[c.length - 1] : 0.5;
       this.mainVideo.playbackRate = L, W();
     });
-    const Y = () => !!(document.fullscreenElement || document.webkitFullscreenElement || this.shadow.fullscreenElement || u != null && u.classList.contains("is-fullscreen")), Q = async () => {
+    const Y = () => !!(document.fullscreenElement || document.webkitFullscreenElement || this.shadow.fullscreenElement || u != null && u.classList.contains("is-fullscreen") || this.hasAttribute("data-fullscreen")), Q = async () => {
       try {
         Y() ? ((document.fullscreenElement || document.webkitFullscreenElement || this.shadow.fullscreenElement) && (document.exitFullscreen ? await document.exitFullscreen() : document.webkitExitFullscreen && await document.webkitExitFullscreen()), u == null || u.classList.remove("is-fullscreen"), this.removeAttribute("data-fullscreen"), H()) : u != null && u.requestFullscreen ? await u.requestFullscreen() : u != null && u.webkitRequestFullscreen ? await u.webkitRequestFullscreen() : (u == null || u.classList.add("is-fullscreen"), this.setAttribute("data-fullscreen", "true"), H());
       } catch (n) {

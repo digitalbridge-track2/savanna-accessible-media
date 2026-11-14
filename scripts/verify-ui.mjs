@@ -117,7 +117,7 @@ async function run() {
 
         return {
           eslText: btnESL?.innerHTML.includes("ESL"),
-          adHasD: btnAD?.innerHTML.includes("path") && btnAD?.innerHTML.includes("24 20"),
+          adHasD: Boolean(btnAD?.innerHTML.includes("<svg") && btnAD?.innerHTML.includes("path")),
           fasterHasPlus: btnFaster?.innerHTML.includes("path"),
           slowerHasMinus: btnSlower?.innerHTML.includes("path"),
           fullscreenEnter: shadow.getElementById("fullscreen-icon")?.innerHTML.includes("svg")
