@@ -289,12 +289,15 @@ export class A11yMediaPlayer extends HTMLElement {
           transition: none !important;
         }
         .window-placeholder {
-          border: 2px dashed #94A3B8;
-          background: rgba(148, 163, 184, 0.08);
-          border-radius: 6px;
+          display: block;
+          visibility: hidden;
+          border: none !important;
+          background: transparent !important;
+          box-shadow: none !important;
+          outline: none !important;
           box-sizing: border-box;
           flex-shrink: 0;
-          transition: none;
+          pointer-events: none;
         }
 
         /* Window Header / Title Bar */
@@ -1228,7 +1231,7 @@ export class A11yMediaPlayer extends HTMLElement {
         }
       });
 
-      // --- Stable Dragging & Floating Controller (With Ghost Placeholder) ---
+      // --- Free Dragging & Floating Controller (Move in ANY direction, No visible borders) ---
       let isDragging = false;
       let dragStartX = 0;
       let dragStartY = 0;
@@ -1236,13 +1239,25 @@ export class A11yMediaPlayer extends HTMLElement {
       let initialTop = 0;
       let dragRaf: number | null = null;
 
+      // Bring clicked floating window to the front
+      winEl.addEventListener("pointerdown", () => {
+        if (winEl.classList.contains("floating")) {
+          winEl.style.zIndex = "100";
+          const otherWinId = winId === "transcript-window" ? "esl-window" : "transcript-window";
+          const otherWin = this.shadow.getElementById(otherWinId);
+          if (otherWin && otherWin.classList.contains("floating")) {
+            otherWin.style.zIndex = "90";
+          }
+        }
+      });
+
       const onDragPointerMove = (e: PointerEvent) => {
         const dx = e.clientX - dragStartX;
         const dy = e.clientY - dragStartY;
 
-        if (!isDragging && Math.hypot(dx, dy) > 5) {
+        if (!isDragging && Math.hypot(dx, dy) > 4) {
           isDragging = true;
-          // Create in-flow placeholder so other panels never collapse or jump
+          // Create in-flow invisible spacer so surrounding layout does not collapse
           if (!placeholderEl && winEl.parentNode) {
             placeholderEl = document.createElement("div");
             placeholderEl.className = "window-placeholder";
@@ -1253,19 +1268,15 @@ export class A11yMediaPlayer extends HTMLElement {
           }
           winEl.classList.add("floating");
           winEl.style.position = "absolute";
-          winEl.style.zIndex = "60";
+          winEl.style.zIndex = "100";
         }
 
         if (isDragging) {
           if (dragRaf !== null) cancelAnimationFrame(dragRaf);
           dragRaf = requestAnimationFrame(() => {
-            const stageRect = stage.getBoundingClientRect();
-            const winRect = winEl.getBoundingClientRect();
-            const maxLeft = Math.max(0, stageRect.width - winRect.width);
-            const maxTop = Math.max(0, stageRect.height - 40);
-
-            const newLeft = Math.min(maxLeft, Math.max(0, initialLeft + dx));
-            const newTop = Math.min(maxTop, Math.max(0, initialTop + dy));
+            // Unrestricted movement in ANY direction (up, down, left, right)
+            const newLeft = initialLeft + dx;
+            const newTop = initialTop + dy;
 
             winEl.style.left = `${newLeft}px`;
             winEl.style.top = `${newTop}px`;
@@ -1297,13 +1308,68 @@ export class A11yMediaPlayer extends HTMLElement {
 
         const stageRect = stage.getBoundingClientRect();
         const winRect = winEl.getBoundingClientRect();
-        initialLeft = winRect.left - stageRect.left;
-        initialTop = winRect.top - stageRect.top;
+        initialLeft = winEl.style.left ? parseFloat(winEl.style.left) : (winRect.left - stageRect.left);
+        initialTop = winEl.style.top ? parseFloat(winEl.style.top) : (winRect.top - stageRect.top);
         isDragging = false;
+
+        // Bring current window to front
+        winEl.style.zIndex = "100";
+        const otherWinId = winId === "transcript-window" ? "esl-window" : "transcript-window";
+        const otherWin = this.shadow.getElementById(otherWinId);
+        if (otherWin && otherWin.classList.contains("floating")) {
+          otherWin.style.zIndex = "90";
+        }
 
         window.addEventListener("pointermove", onDragPointerMove);
         window.addEventListener("pointerup", onDragPointerUp);
         window.addEventListener("pointercancel", onDragPointerUp);
+      });
+
+      // Keyboard accessible moving in any direction (Arrow keys on drag handle)
+      dragHandle.addEventListener("keydown", (e: KeyboardEvent) => {
+        let changed = false;
+        const step = 20;
+
+        if (!winEl.classList.contains("floating")) {
+          if (!placeholderEl && winEl.parentNode) {
+            placeholderEl = document.createElement("div");
+            placeholderEl.className = "window-placeholder";
+            placeholderEl.style.width = `${winEl.offsetWidth}px`;
+            placeholderEl.style.height = `${winEl.offsetHeight}px`;
+            placeholderEl.style.flex = winEl.style.flex || `0 0 ${winEl.offsetWidth}px`;
+            winEl.parentNode.insertBefore(placeholderEl, winEl);
+          }
+          const stageRect = stage.getBoundingClientRect();
+          const winRect = winEl.getBoundingClientRect();
+          winEl.classList.add("floating");
+          winEl.style.position = "absolute";
+          winEl.style.zIndex = "100";
+          winEl.style.left = `${winRect.left - stageRect.left}px`;
+          winEl.style.top = `${winRect.top - stageRect.top}px`;
+        }
+
+        let curLeft = parseFloat(winEl.style.left) || 0;
+        let curTop = parseFloat(winEl.style.top) || 0;
+
+        if (e.key === "ArrowRight") {
+          curLeft += step;
+          changed = true;
+        } else if (e.key === "ArrowLeft") {
+          curLeft -= step;
+          changed = true;
+        } else if (e.key === "ArrowDown") {
+          curTop += step;
+          changed = true;
+        } else if (e.key === "ArrowUp") {
+          curTop -= step;
+          changed = true;
+        }
+
+        if (changed) {
+          e.preventDefault();
+          winEl.style.left = `${curLeft}px`;
+          winEl.style.top = `${curTop}px`;
+        }
       });
 
       // Double-click on drag handle re-docks window cleanly to original stage slot
