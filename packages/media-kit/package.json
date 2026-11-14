@@ -5,13 +5,14 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && vite build",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@abugida/lesson-schema": "0.1.0"
   },
   "devDependencies": {
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vite": "^5.2.0"
   }
 }

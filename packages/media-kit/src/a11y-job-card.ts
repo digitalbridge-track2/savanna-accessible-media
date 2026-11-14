@@ -1,4 +1,5 @@
 import { AccessibleJob } from "@abugida/lesson-schema";
+import { formatDualDate } from "./localization/ethiopian-calendar.js";
 
 export class A11yJobCard extends HTMLElement {
   static get observedAttributes() {
@@ -54,6 +55,11 @@ export class A11yJobCard extends HTMLElement {
     const title = this.job.title[this.activeLocale] || this.job.title.en;
     const location = this.job.location[this.activeLocale] || this.job.location.en;
     const description = this.job.description[this.activeLocale] || this.job.description.en;
+
+    // Dual-calendar formatting for application deadline
+    const deadlineDual = this.job.applicationDeadline
+      ? formatDualDate(this.job.applicationDeadline)
+      : null;
 
     // schema.org/JobPosting JSON-LD
     const jsonLd = {
@@ -157,6 +163,11 @@ export class A11yJobCard extends HTMLElement {
           color: #0D47A1;
           border-color: #90CAF9;
         }
+        .badge.calendar {
+          background: #FFF3E0;
+          color: #E65100;
+          border-color: #FFE0B2;
+        }
         .action-row {
           display: flex;
           gap: 1rem;
@@ -218,6 +229,11 @@ export class A11yJobCard extends HTMLElement {
             <span><strong>${this.job.employer}</strong></span> &bull;
             <span>${location}</span> &bull;
             <span>${this.job.workMode.toUpperCase()}</span>
+            ${
+              deadlineDual
+                ? ` &bull; <span class="badge calendar" aria-label="Deadline: ${deadlineDual.display}">📅 ${isAm ? "የማመልከቻ ማብቂያ፦" : "Deadline:"} ${deadlineDual.display}</span>`
+                : ""
+            }
           </div>
         </header>
 

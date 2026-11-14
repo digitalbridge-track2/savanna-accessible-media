@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Transcript Studio — Abugida Media Kit</title>
   <link rel="stylesheet" href="/src/styles/tokens.css">
+  <script type="module" src="/src/studio.ts"></script>
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -29,57 +30,36 @@
 
     <main id="main-content">
       <section style="background: var(--color-surface); padding: 1.5rem; border: 1px solid var(--color-border); border-radius: 8px; margin-bottom: 2rem;">
-        <h3>Review Pipeline</h3>
-        <p>All ASR outputs remain flagged as <strong>Draft</strong> until verified by a human reviewer.</p>
-
-        <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem;">
-          <label for="sample-select"><strong>Select Sample:</strong></label>
-          <select id="sample-select" style="padding: 0.5rem; border-radius: 4px; border: 1px solid var(--color-border);">
-            <option value="digital-workplace">Digital Workplace Skills (Amharic & English)</option>
-          </select>
-          <button style="background: var(--color-brand); color: #fff; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; min-height: 44px;">
-            Load Job
-          </button>
-        </div>
+        <h3>Review &amp; Edit Pipeline</h3>
+        <p>
+          AI and automated ASR outputs remain flagged as <strong>Draft</strong> until verified by a human reviewer. 
+          Edit corrections directly in the table below, then export your verified WebVTT or JSON files.
+        </p>
 
         <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
           <thead>
             <tr style="text-align: left; border-bottom: 2px solid var(--color-border);">
-              <th style="padding: 0.5rem;">Time</th>
-              <th style="padding: 0.5rem;">Speaker</th>
-              <th style="padding: 0.5rem;">Draft ASR Text</th>
-              <th style="padding: 0.5rem;">Reviewed Text</th>
-              <th style="padding: 0.5rem;">Status</th>
+              <th style="padding: 0.75rem;">Time Range</th>
+              <th style="padding: 0.75rem;">Speaker</th>
+              <th style="padding: 0.75rem;">Draft ASR Output</th>
+              <th style="padding: 0.75rem;">Human Reviewed Text</th>
+              <th style="padding: 0.75rem;">Status</th>
             </tr>
           </thead>
-          <tbody>
-            <tr style="border-bottom: 1px solid var(--color-border);">
-              <td style="padding: 0.5rem;"><code>00:00 - 00:04</code></td>
-              <td style="padding: 0.5rem;">Instructor</td>
-              <td style="padding: 0.5rem;">እንኳን ወደዚህ የሥልጠና ፕሮግራም በደህና መጡ</td>
-              <td style="padding: 0.5rem;">
-                <input type="text" value="እንኳን ወደዚህ የሥልጠና ፕሮግራም በደህና መጡ" style="width: 100%; padding: 0.4rem; border: 1px solid var(--color-border); border-radius: 4px;" aria-label="Reviewed text segment 1">
-              </td>
-              <td style="padding: 0.5rem;"><span style="background: #E8F5E9; color: #1B5E20; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.85rem;">Reviewed</span></td>
-            </tr>
-            <tr style="border-bottom: 1px solid var(--color-border);">
-              <td style="padding: 0.5rem;"><code>00:04 - 00:08</code></td>
-              <td style="padding: 0.5rem;">Instructor</td>
-              <td style="padding: 0.5rem;">ዛሬ ስለ ዲጂታል የሥራ ቦታ ክህሎቶች እንማራለን</td>
-              <td style="padding: 0.5rem;">
-                <input type="text" value="ዛሬ ስለ ዲጂታል የሥራ ቦታ ክህሎቶች እንማራለን" style="width: 100%; padding: 0.4rem; border: 1px solid var(--color-border); border-radius: 4px;" aria-label="Reviewed text segment 2">
-              </td>
-              <td style="padding: 0.5rem;"><span style="background: #FFF8E1; color: #F57F17; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.85rem;">Draft</span></td>
-            </tr>
+          <tbody id="segments-tbody">
+            <!-- Dynamically populated by /src/studio.ts -->
           </tbody>
         </table>
 
-        <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
-          <button style="background: var(--color-brand); color: #fff; padding: 0.6rem 1.2rem; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; min-height: 44px;">
-            Export WebVTT
+        <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+          <button id="btn-export-vtt" style="background: var(--color-brand); color: #fff; padding: 0.7rem 1.4rem; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; min-height: 44px;">
+            📥 Export Reviewed WebVTT (.vtt)
           </button>
-          <button style="background: var(--color-surface); color: var(--color-ink); border: 1px solid var(--color-border); padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; min-height: 44px;">
-            Export JSON
+          <button id="btn-export-json" style="background: var(--color-surface); color: var(--color-brand); border: 2px solid var(--color-brand); padding: 0.7rem 1.4rem; border-radius: 4px; font-weight: bold; cursor: pointer; min-height: 44px;">
+            📥 Export Transcript JSON (.json)
+          </button>
+          <button id="btn-export-brf" style="background: #37474F; color: #fff; padding: 0.7rem 1.4rem; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; min-height: 44px;">
+            ⠃⠗⠋ Export Braille (.brf)
           </button>
         </div>
       </section>
