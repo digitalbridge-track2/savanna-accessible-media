@@ -813,6 +813,19 @@ export class A11yMediaPlayer extends HTMLElement {
           min-width: 0;
           overflow-y: auto;
         }
+        .transcript-scroll-area::-webkit-scrollbar {
+          width: 6px;
+        }
+        .transcript-scroll-area::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .transcript-scroll-area::-webkit-scrollbar-thumb {
+          background: rgba(0, 0, 0, 0.18);
+          border-radius: 980px;
+        }
+        .transcript-scroll-area::-webkit-scrollbar-thumb:hover {
+          background: rgba(0, 0, 0, 0.32);
+        }
 
         /* RIGHT: Resizable Sign Language Window (Outside of video frame) */
         .esl-window {
@@ -932,7 +945,9 @@ export class A11yMediaPlayer extends HTMLElement {
         .dialog-backdrop {
           position: fixed;
           inset: 0;
-          background: rgba(0,0,0,0.7);
+          background: rgba(0, 0, 0, 0.45);
+          backdrop-filter: blur(20px) saturate(180%);
+          -webkit-backdrop-filter: blur(20px) saturate(180%);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -940,17 +955,20 @@ export class A11yMediaPlayer extends HTMLElement {
           padding: 1rem;
         }
         .dialog-panel {
-          background: #FFF;
-          color: #14201B;
-          padding: 1.5rem;
-          border-radius: 8px;
+          background: #FFFFFF;
+          color: #1D1D1F;
+          padding: 1.75rem 2rem;
+          border-radius: 16px;
           max-width: 500px;
           width: 100%;
-          box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+          border: 1px solid rgba(255, 255, 255, 0.2);
         }
         .dialog-panel h3 {
           margin-top: 0;
-          color: var(--color-brand, #0B5D4E);
+          color: #1D1D1F;
+          font-size: 21px;
+          letter-spacing: -0.005em;
         }
         .form-row {
           margin-bottom: 1rem;
