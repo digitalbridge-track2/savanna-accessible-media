@@ -134,8 +134,9 @@ export const NavLink: React.FC<{
   to: RoutePath;
   children: React.ReactNode;
   className?: string;
+  style?: React.CSSProperties;
   onClick?: () => void;
-}> = ({ to, children, className = "nav-link", onClick }) => {
+}> = ({ to, children, className = "nav-link", style, onClick }) => {
   const { currentPath, navigate } = useRouter();
   const isActive = currentPath === to;
 
@@ -143,6 +144,7 @@ export const NavLink: React.FC<{
     <a
       href={to}
       className={className}
+      style={style}
       aria-current={isActive ? "page" : undefined}
       onClick={(e) => {
         // Allow ctrl+click or meta+click to open in new tab

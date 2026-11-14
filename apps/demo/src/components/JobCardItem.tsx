@@ -60,6 +60,41 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
 
   const accommodationsList = Array.isArray(job.accommodations) ? job.accommodations : [];
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    title,
+    description,
+    hiringOrganization: {
+      "@type": "Organization",
+      name: employer,
+    },
+    jobLocation: {
+      "@type": "Place",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: location,
+        addressCountry: "ET",
+      },
+    },
+    employmentType: job.workMode ? job.workMode.toUpperCase() : "HYBRID",
+    validThrough: job.applicationDeadline || "2026-12-31",
+    jobBenefits: accommodationsList.map((acc) => {
+      const label = resolveLocalized(acc.label, locale);
+      return `${label} (${acc.source || "Employer Verified"})`;
+    }),
+    audio: job.audioSummary
+      ? {
+          "@type": "AudioObject",
+          contentUrl: job.audioSummary.src,
+          encodingFormat: job.audioSummary.type || "audio/mp3",
+          duration: `PT${job.audioSummary.durationSeconds || 30}S`,
+          description: job.audioSummary.textEquivalent,
+          transcript: job.audioSummary.textEquivalent,
+        }
+      : undefined,
+  };
+
   return (
     <article
       className="card"
@@ -71,6 +106,11 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
       }}
       aria-labelledby={`job-title-${job.id}`}
     >
+      {/* Schema.org / JobPosting Microdata */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div
         style={{
           display: "flex",

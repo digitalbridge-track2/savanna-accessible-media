@@ -60,11 +60,12 @@ export const LessonView: React.FC<LessonViewProps> = ({ locale }) => {
         "/lessons/digital-workplace/media/poster.webp",
       ];
 
-      await offlineStorage.savePackage(
+      await offlineStorage.downloadPackage(
         "digital-workplace-01",
         "pkg-3g-light",
+        "3G Light Study Pack",
         assetsToCache,
-        3.2 * 1024 * 1024
+        () => {}
       );
 
       setIsPackReady(true);
