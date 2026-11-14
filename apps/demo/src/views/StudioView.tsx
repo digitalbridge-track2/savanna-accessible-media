@@ -136,7 +136,7 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
         <div style={{ overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "600px" }}>
             <thead>
-              <tr style={{ textAlign: "left", borderBottom: "2px solid var(--color-border)" }}>
+              <tr style={{ textAlign: "left", borderBottom: "2px solid var(--color-border)", background: "#F8FAFC" }}>
                 <th style={{ padding: "0.75rem" }}>{isAm ? "የጊዜ ገደብ" : "Time Range"}</th>
                 <th style={{ padding: "0.75rem" }}>{isAm ? "ተናጋሪ" : "Speaker"}</th>
                 <th style={{ padding: "0.75rem" }}>{isAm ? "የረቂቅ ASR ውጤት" : "Draft ASR Output"}</th>
@@ -159,10 +159,10 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                       onChange={(e) => handleTextChange(seg.id, e.target.value)}
                       style={{
                         width: "100%",
-                        padding: "0.5rem",
+                        padding: "0.45rem 0.65rem",
                         border: "1px solid var(--color-border)",
                         borderRadius: "4px",
-                        fontSize: "0.95rem",
+                        fontSize: "0.92rem",
                       }}
                       aria-label={`${isAm ? "የተስተካከለ ጽሑፍ ለ" : "Reviewed text for segment"} ${seg.id}`}
                     />
@@ -171,11 +171,11 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                     <button
                       type="button"
                       onClick={() => handleToggleStatus(seg.id)}
-                      className={`badge ${seg.status === "reviewed" ? "badge-success" : "badge-accent"}`}
-                      style={{ border: "none", cursor: "pointer", padding: "0.4rem 0.8rem", fontSize: "0.85rem" }}
+                      className={`badge ${seg.status === "reviewed" ? "badge-success" : "badge-neutral"}`}
+                      style={{ border: "none", cursor: "pointer", padding: "0.35rem 0.75rem", fontSize: "0.82rem" }}
                       aria-label={`${isAm ? "ሁኔታን ቀይር" : "Toggle status for segment"} ${seg.id}`}
                     >
-                      {seg.status === "reviewed" ? "✓ " + (isAm ? "የተረጋገጠ" : "Reviewed") : "✎ " + (isAm ? "ረቂቅ" : "Draft")}
+                      {seg.status === "reviewed" ? (isAm ? "የተረጋገጠ" : "Reviewed") : (isAm ? "ረቂቅ" : "Draft")}
                     </button>
                   </td>
                 </tr>
@@ -185,15 +185,15 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
         </div>
 
         {/* Export Buttons */}
-        <div style={{ marginTop: "2rem", display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "center" }}>
+        <div style={{ marginTop: "2rem", display: "flex", gap: "0.85rem", flexWrap: "wrap", alignItems: "center" }}>
           <button type="button" onClick={handleExportVTT} className="btn btn-primary">
-            📥 {isAm ? "የተረጋገጠ WebVTT አውርድ (.vtt)" : "Export Reviewed WebVTT (.vtt)"}
+            {isAm ? "የተረጋገጠ WebVTT አውርድ (.vtt)" : "Export Reviewed WebVTT (.vtt)"}
           </button>
           <button type="button" onClick={handleExportJSON} className="btn btn-outline">
-            📥 {isAm ? "የጽሑፍ ግልባጭ JSON አውርድ (.json)" : "Export Transcript JSON (.json)"}
+            {isAm ? "የጽሑፍ ግልባጭ JSON አውርድ (.json)" : "Export Transcript JSON (.json)"}
           </button>
           <button type="button" onClick={handleExportBRF} className="btn btn-secondary">
-            ⠃⠗⠋ {isAm ? "የብሬይል ፋይል አውርድ (.brf)" : "Export Braille (.brf)"}
+            {isAm ? "የብሬይል ፋይል አውርድ (.brf)" : "Export Braille (.brf)"}
           </button>
         </div>
 
@@ -202,10 +202,11 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
             style={{
               marginTop: "1rem",
               padding: "0.5rem 0.75rem",
-              background: "#E8F5E9",
-              color: "#1B5E20",
+              background: "#F0FDF4",
+              color: "#166534",
               borderRadius: "4px",
               fontWeight: 500,
+              fontSize: "0.92rem",
             }}
             aria-live="polite"
           >

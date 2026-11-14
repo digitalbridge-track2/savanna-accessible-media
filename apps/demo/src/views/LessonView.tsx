@@ -24,8 +24,8 @@ export const LessonView: React.FC<LessonViewProps> = ({ locale }) => {
       if (ready) {
         setDownloadMsg(
           isAm
-            ? "✓ ይህ ትምህርት በመሣሪያዎ ላይ ተቀምጧል (ያለ ኢንተርኔት መጠቀም ይችላሉ)።"
-            : "✓ Lesson package is stored offline and ready for airplane mode."
+            ? "ይህ ትምህርት በመሣሪያዎ ላይ ተቀምጧል (ያለ ኢንተርኔት መጠቀም ይችላሉ)።"
+            : "Lesson package is stored offline and ready for airplane mode."
         );
       }
     });
@@ -70,8 +70,8 @@ export const LessonView: React.FC<LessonViewProps> = ({ locale }) => {
       setIsPackReady(true);
       setDownloadMsg(
         isAm
-          ? "✓ የወረደው ጥቅል ተጠናቋል! ያለ ኢንተርኔት መጠቀም ይችላሉ።"
-          : "✓ Package cached successfully! 3.2 MB stored for offline study."
+          ? "የወረደው ጥቅል ተጠናቋል! ያለ ኢንተርኔት መጠቀም ይችላሉ።"
+          : "Package cached successfully! 3.2 MB stored for offline study."
       );
     } catch (err) {
       console.error("Failed to cache offline pack:", err);
@@ -87,7 +87,7 @@ export const LessonView: React.FC<LessonViewProps> = ({ locale }) => {
     <div>
       {/* Breadcrumb Navigation */}
       <nav aria-label="Breadcrumb" style={{ marginBottom: "1.5rem" }}>
-        <ol style={{ display: "flex", gap: "0.5rem", listStyle: "none", padding: 0, margin: 0, fontSize: "0.95rem" }}>
+        <ol style={{ display: "flex", gap: "0.5rem", listStyle: "none", padding: 0, margin: 0, fontSize: "0.92rem" }}>
           <li>
             <NavLink to="/">Home</NavLink> &gt;
           </li>
@@ -104,7 +104,7 @@ export const LessonView: React.FC<LessonViewProps> = ({ locale }) => {
         <h2 style={{ fontSize: "1.8rem", color: "var(--color-brand)", margin: "0 0 0.5rem 0" }}>
           {isAm ? "የዲጂታል የሥራ ቦታ ክህሎቶች፡ መሠረታዊ" : "Digital Workplace Skills: Foundations"}
         </h2>
-        <p style={{ margin: 0, color: "var(--color-muted-ink)", fontSize: "1.1rem" }}>
+        <p style={{ margin: 0, color: "var(--color-muted-ink)", fontSize: "1.05rem" }}>
           {isAm
             ? "ለዲጂታል ሥራ አስፈላጊ የሆኑ መሣሪያዎችን እና የትብብር አሠራሮችን ይማሩ።"
             : "Master the essential tools and collaborative workflows for digital employment."}
@@ -126,20 +126,20 @@ export const LessonView: React.FC<LessonViewProps> = ({ locale }) => {
           style={{
             marginTop: "1.5rem",
             padding: "1rem 1.25rem",
-            background: "#F4F7F5",
+            background: "#F8FAFC",
             border: "1px solid var(--color-border)",
             borderRadius: "6px",
             fontSize: "0.9rem",
           }}
         >
           <strong style={{ display: "block", marginBottom: "0.5rem", color: "var(--color-brand)" }}>
-            ⌨️ {isAm ? "የኪቦርድ አቋራጭ ቁልፎች (Keyboard-Only Controls):" : "Keyboard Shortcuts Reference:"}
+            {isAm ? "የኪቦርድ አቋራጭ ቁልፎች (Keyboard Controls):" : "Keyboard Shortcuts Reference:"}
           </strong>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "0.75rem" }}>
             <div><kbd>Space</kbd> / <kbd>k</kbd> : {isAm ? "አጫውት / አቁም" : "Play / Pause"}</div>
             <div><kbd>j</kbd> / <kbd>l</kbd> : {isAm ? "-10s / +10s ዝለል" : "-10s / +10s Seek"}</div>
             <div><kbd>m</kbd> : {isAm ? "ድምፅ አጥፋ / ክፈት" : "Mute / Unmute"}</div>
-            <div><kbd>c</kbd> : {isAm ? "የትርጉም ጽሑፍ ቀይር (Off/EN/AM)" : "Cycle Captions"}</div>
+            <div><kbd>c</kbd> : {isAm ? "የትርጉም ጽሑፍ ቀይር" : "Cycle Captions"}</div>
             <div><kbd>s</kbd> : {isAm ? "የምልክት ቋንቋ መስኮት (ESL)" : "Toggle Sign Language"}</div>
             <div><kbd>v</kbd> : {isAm ? "የድምፅ ማብራሪያ (AD)" : "Audio Description Track"}</div>
           </div>
@@ -167,20 +167,18 @@ export const LessonView: React.FC<LessonViewProps> = ({ locale }) => {
         </p>
         <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.75rem" }}>
           <li>
-            📄{" "}
             <a href="/lessons/digital-workplace/documents/lesson.en.html" target="_blank" rel="noreferrer" style={{ fontWeight: 600 }}>
               {isAm ? "ተደራሽ HTML ሰነድ" : "Accessible HTML Document"}
             </a>{" "}
-            <span style={{ color: "var(--color-muted-ink)", fontSize: "0.9rem" }}>
+            <span style={{ color: "var(--color-muted-ink)", fontSize: "0.88rem" }}>
               ({isAm ? "የተዋቀረ ሲማንቲክ HTML፣ 18 KB" : "Semantic HTML, 18 KB"})
             </span>
           </li>
           <li>
-            📑{" "}
             <a href="/lessons/digital-workplace/documents/lesson.en.tagged.pdf" download style={{ fontWeight: 600 }}>
               {isAm ? "የታገዘ ተደራሽ PDF (Tagged PDF)" : "Tagged Accessible PDF"}
             </a>{" "}
-            <span style={{ color: "var(--color-muted-ink)", fontSize: "0.9rem" }}>
+            <span style={{ color: "var(--color-muted-ink)", fontSize: "0.88rem" }}>
               ({isAm ? "የተረጋገጡ ታጎች፣ አማራጭ ጽሑፍ ያለው፣ 142 KB" : "Inspected tags, alternative text included, 142 KB"})
             </span>
           </li>
@@ -192,16 +190,16 @@ export const LessonView: React.FC<LessonViewProps> = ({ locale }) => {
         style={{
           marginBottom: "3rem",
           padding: "1.5rem",
-          background: "#E8F5E9",
-          border: "1px solid #A5D6A7",
+          background: "#F0FDF4",
+          border: "1px solid #BBF7D0",
           borderRadius: "8px",
         }}
         aria-labelledby="heading-offline"
       >
-        <h3 id="heading-offline" style={{ margin: "0 0 0.5rem 0", color: "#1B5E20" }}>
+        <h3 id="heading-offline" style={{ margin: "0 0 0.5rem 0", color: "#166534" }}>
           {isAm ? "የ 3G ዝቅተኛ ዳታ ከመስመር ውጭ የጥናት ጥቅል" : "3G Low-Data Offline Study Pack"}
         </h3>
-        <p style={{ margin: "0 0 1rem 0", color: "#2E7D32" }}>
+        <p style={{ margin: "0 0 1rem 0", color: "#15803D" }}>
           {isAm
             ? "የሞባይል ዳታዎን ይቆጥቡ እና ያለ ኢንተርኔት ግንኙነት መማርዎን ይቀጥሉ፡"
             : "Save mobile data and continue learning without internet access:"}
@@ -209,9 +207,9 @@ export const LessonView: React.FC<LessonViewProps> = ({ locale }) => {
 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
           <div>
-            <strong>{isAm ? "ቀላል ድምፅ + ጽሑፍ + HTML ጥቅል" : "Light Audio + Text + HTML Pack"}</strong> &bull;{" "}
+            <strong>{isAm ? "ቀላል ድምፅ + ጽሑፍ + HTML ጥቅል" : "Light Audio + Text + HTML Pack"}</strong> ·{" "}
             <span>{isAm ? "መጠኑ፡" : "Measured Size:"} <strong>3.2 MB</strong></span>
-            <div style={{ fontSize: "0.85rem", color: "#2E7D32", marginTop: "0.25rem" }}>
+            <div style={{ fontSize: "0.85rem", color: "#15803D", marginTop: "0.25rem" }}>
               {isAm
                 ? "የተጨመቀ 32kbps የድምፅ ትምህርት፣ ሲማንቲክ HTML እና ሙሉ የጽሑፍ ትርጉም ያካትታል። ከ 205MB HD ቪዲዮ 98.7% ዳታ ይቆጥባል።"
                 : "Includes compressed 32kbps Opus audio, semantic HTML, and full transcript. Saves 98.7% bandwidth vs 205 MB HD video."}
@@ -223,7 +221,7 @@ export const LessonView: React.FC<LessonViewProps> = ({ locale }) => {
             className="btn btn-primary"
             onClick={handleDownloadPack}
             disabled={isDownloading}
-            style={{ background: "#1B5E20", minHeight: "44px" }}
+            style={{ minHeight: "42px" }}
           >
             {isDownloading
               ? (isAm ? "በማውረድ ላይ..." : "Caching Pack...")
@@ -238,11 +236,11 @@ export const LessonView: React.FC<LessonViewProps> = ({ locale }) => {
             style={{
               marginTop: "1rem",
               padding: "0.5rem 0.75rem",
-              background: "#C8E6C9",
-              color: "#1B5E20",
+              background: "#DCFCE7",
+              color: "#166534",
               borderRadius: "4px",
               fontWeight: 500,
-              fontSize: "0.95rem",
+              fontSize: "0.92rem",
             }}
             aria-live="polite"
           >
@@ -253,7 +251,7 @@ export const LessonView: React.FC<LessonViewProps> = ({ locale }) => {
 
       {/* Career Gateway Section */}
       <section style={{ marginBottom: "2.5rem" }} aria-labelledby="heading-lesson-jobs">
-        <h3 id="heading-lesson-jobs" style={{ fontSize: "1.4rem", color: "var(--color-ink)", marginBottom: "0.5rem" }}>
+        <h3 id="heading-lesson-jobs" style={{ fontSize: "1.35rem", color: "var(--color-ink)", marginBottom: "0.5rem" }}>
           {isAm ? "የሥራ መግቢያ በር፡ ተዛማጅ የሥራ ዕድሎች" : "Career Gateway: Related Opportunities"}
         </h3>
         <p style={{ margin: "0 0 1.25rem 0", color: "var(--color-muted-ink)" }}>

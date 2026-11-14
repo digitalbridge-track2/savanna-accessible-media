@@ -9,13 +9,21 @@ interface HomeViewProps {
 
 export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
   const [jobs, setJobs] = useState<AccessibleJob[]>([]);
+  const [apiOnline, setApiOnline] = useState<boolean | null>(null);
   const isAm = locale === "am";
 
   useEffect(() => {
+    // Fetch local demonstration jobs
     fetch("/jobs/jobs.json")
       .then((res) => (res.ok ? res.json() : []))
       .then((data) => setJobs(data))
       .catch((err) => console.warn("Failed to load jobs:", err));
+
+    // Check FastAPI health
+    fetch("http://localhost:8000/health")
+      .then((res) => res.ok)
+      .then((online) => setApiOnline(online))
+      .catch(() => setApiOnline(false));
   }, []);
 
   return (
@@ -24,8 +32,8 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
       <section style={{ marginBottom: "3.5rem" }}>
         <h2
           style={{
-            fontSize: "2.2rem",
-            fontWeight: 800,
+            fontSize: "2.1rem",
+            fontWeight: 700,
             color: "var(--color-brand)",
             margin: "0 0 1rem 0",
             lineHeight: 1.25,
@@ -38,8 +46,8 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
         </h2>
         <p
           style={{
-            fontSize: "1.15rem",
-            maxWidth: "72ch",
+            fontSize: "1.1rem",
+            maxWidth: "70ch",
             color: "var(--color-ink)",
             lineHeight: 1.65,
             marginBottom: "1.75rem",
@@ -52,13 +60,13 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
 
         <div style={{ display: "flex", gap: "0.85rem", flexWrap: "wrap", alignItems: "center" }}>
           <NavLink to="/lesson" className="btn btn-primary">
-            {isAm ? "ትምህርቱን ጀምር →" : "Open Accessible Lesson →"}
+            {isAm ? "ተደራሽ ትምህርቱን ይክፈቱ" : "Open Accessible Lesson"}
           </NavLink>
           <NavLink to="/studio" className="btn btn-outline">
-            {isAm ? "የትርጉም ስቱዲዮ ክፈት" : "Open Transcript Studio"}
+            {isAm ? "የትርጉም ስቱዲዮ ይክፈቱ" : "Open Transcript Studio"}
           </NavLink>
           <NavLink to="/embed" className="btn btn-secondary">
-            {isAm ? "የስክሪፕት ታግ ማካተቻ" : "View Script Tag Embed"}
+            {isAm ? "የስክሪፕት ታግ ማካተቻ" : "Script Tag Embed"}
           </NavLink>
         </div>
       </section>
@@ -84,71 +92,85 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
             gap: "1.25rem",
           }}
         >
+          {/* Level 1 */}
           <div className="card" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <div>
-              <span className="badge badge-brand" style={{ marginBottom: "0.75rem" }}>Level 1 Drop-in</span>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+                <span className="badge badge-brand">Level 1</span>
+              </div>
               <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "1.15rem", color: "var(--color-brand)" }}>
-                {isAm ? "ደረጃ 1፡ የስክሪፕት ታግ" : "Level 1: Script Tag"}
+                {isAm ? "ደረጃ 1፡ የስክሪፕት ታግ ማካተቻ" : "Level 1: Script Tag Drop-in"}
               </h4>
-              <p style={{ margin: 0, fontSize: "0.95rem", color: "var(--color-muted-ink)", lineHeight: 1.55 }}>
+              <p style={{ margin: 0, fontSize: "0.93rem", color: "var(--color-muted-ink)", lineHeight: 1.55 }}>
                 {isAm
-                  ? "በማንኛውም የድር ገጽ ወይም LMS (Savanna, Moodle) ላይ በአንድ መስመር HTML ኮድ በቀላሉ ይጫኑ።"
-                  : "Embed the player on any web page or LMS with a single line of HTML. Zero build steps."}
+                  ? "በማንኛውም የድር ገጽ ወይም LMS (Savanna, Moodle) ላይ በአንድ መስመር HTML ኮድ በቀላሉ ይጫኑ። ምንም ተጨማሪ የግንባታ ቅድመ ሁኔታ የለውም።"
+                  : "Embed the player on any web page or LMS with a single line of HTML. Zero build steps required."}
               </p>
             </div>
-            <div style={{ marginTop: "1.25rem" }}>
+            <div style={{ marginTop: "1.5rem" }}>
               <NavLink
                 to="/embed"
                 className="btn btn-outline"
-                style={{ fontSize: "0.85rem", padding: "0.4rem 0.85rem", minHeight: "38px" }}
+                style={{ fontSize: "0.88rem", padding: "0.45rem 0.95rem", minHeight: "38px", width: "100%" }}
               >
-                {isAm ? "ኮዱን ይመልከቱ" : "View Embed Code"}
+                {isAm ? "የማካተቻ ኮዱን ይመልከቱ" : "View Embed Code"}
               </NavLink>
             </div>
           </div>
 
+          {/* Level 2 */}
           <div className="card" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <div>
-              <span className="badge badge-accent" style={{ marginBottom: "0.75rem" }}>Level 2 Pipeline</span>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+                <span className="badge badge-brand">Level 2</span>
+                {apiOnline !== null && (
+                  <span className={`badge ${apiOnline ? "badge-success" : "badge-neutral"}`}>
+                    {apiOnline ? (isAm ? "ኦንላይን" : "API Online") : (isAm ? "ከመስመር ውጭ" : "API Offline")}
+                  </span>
+                )}
+              </div>
               <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "1.15rem", color: "var(--color-brand)" }}>
-                {isAm ? "ደረጃ 2፡ የ REST ኤፒአይ" : "Level 2: REST API"}
+                {isAm ? "ደረጃ 2፡ የ REST ኤፒአይ ሰነዶች" : "Level 2: REST API Pipeline"}
               </h4>
-              <p style={{ margin: 0, fontSize: "0.95rem", color: "var(--color-muted-ink)", lineHeight: 1.55 }}>
+              <p style={{ margin: 0, fontSize: "0.93rem", color: "var(--color-muted-ink)", lineHeight: 1.55 }}>
                 {isAm
-                  ? "የአካባቢ ፈጣን FastAPI የድምፅ ትርጉም አገልግሎት ከሙሉ OpenAPI Swagger ሰነዶች ጋር።"
+                  ? "የአካባቢ ፈጣን FastAPI የድምፅ ትርጉም አገልግሎት ከሙሉ OpenAPI 3.0 Swagger ሰነዶች ጋር።"
                   : "Local FastAPI transcription and manifest pipeline with full OpenAPI 3.0 documentation."}
               </p>
             </div>
-            <div style={{ marginTop: "1.25rem" }}>
+            <div style={{ marginTop: "1.5rem" }}>
               <a
                 href="http://localhost:8000/docs"
                 target="_blank"
                 rel="noreferrer"
                 className="btn btn-outline"
-                style={{ fontSize: "0.85rem", padding: "0.4rem 0.85rem", minHeight: "38px" }}
+                style={{ fontSize: "0.88rem", padding: "0.45rem 0.95rem", minHeight: "38px", width: "100%" }}
               >
                 OpenAPI Swagger (/docs) ↗
               </a>
             </div>
           </div>
 
+          {/* Level 3 */}
           <div className="card" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <div>
-              <span className="badge badge-success" style={{ marginBottom: "0.75rem" }}>Level 3 Verified</span>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+                <span className="badge badge-brand">Level 3</span>
+              </div>
               <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "1.15rem", color: "var(--color-brand)" }}>
-                {isAm ? "ደረጃ 3፡ ክፍት ደረጃዎች" : "Level 3: Open Standards"}
+                {isAm ? "ደረጃ 3፡ ክፍት ደረጃዎች እና ምስክር ወረቀት" : "Level 3: Open Standards & Credentials"}
               </h4>
-              <p style={{ margin: 0, fontSize: "0.95rem", color: "var(--color-muted-ink)", lineHeight: 1.55 }}>
+              <p style={{ margin: 0, fontSize: "0.93rem", color: "var(--color-muted-ink)", lineHeight: 1.55 }}>
                 {isAm
-                  ? "ከ schema.org/JobPosting፣ መደበኛ WebVTT ንዑስ ርዕሶች እና ከሳቫና LMS ጋር ተኳሃኝ።"
+                  ? "ከ schema.org/JobPosting ማይክሮዳታ፣ መደበኛ WebVTT ንዑስ ርዕሶች እና ከሳቫና LMS ማረጋገጫ ጋር ሙሉ ተኳሃኝ።"
                   : "Compatible with schema.org/JobPosting microdata, standard WebVTT subtitles, and Savanna LMS."}
               </p>
             </div>
-            <div style={{ marginTop: "1.25rem" }}>
+            <div style={{ marginTop: "1.5rem" }}>
               <NavLink
                 to="/verify"
                 className="btn btn-outline"
-                style={{ fontSize: "0.85rem", padding: "0.4rem 0.85rem", minHeight: "38px" }}
+                style={{ fontSize: "0.88rem", padding: "0.45rem 0.95rem", minHeight: "38px", width: "100%" }}
               >
                 {isAm ? "የምስክር ወረቀት አረጋግጥ" : "Verify Credential"}
               </NavLink>
@@ -157,7 +179,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
         </div>
       </section>
 
-      {/* Career Gateway Preview */}
+      {/* Career Gateway Section */}
       <section style={{ marginBottom: "3.5rem" }} aria-labelledby="heading-career-preview">
         <div
           style={{
@@ -188,7 +210,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
             </p>
           </div>
           <span className="badge badge-success">
-            ✓ WCAG 1.4.10 Reflow Tested
+            WCAG 1.4.10 Reflow Tested
           </span>
         </div>
 
@@ -199,18 +221,18 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
         </div>
       </section>
 
-      {/* Disclaimer */}
+      {/* Clean Professional Disclaimer */}
       <aside
         style={{
-          background: "var(--color-accent-subtle)",
-          borderLeft: "4px solid var(--color-accent)",
+          background: "#F1F5F9",
+          borderLeft: "4px solid var(--color-brand)",
           padding: "1rem 1.25rem",
-          borderRadius: "8px",
-          fontSize: "0.9rem",
-          color: "#4A3B00",
+          borderRadius: "6px",
+          fontSize: "0.88rem",
+          color: "#334155",
         }}
       >
-        <strong>{isAm ? "ማስታወሻ፡" : "Notice:"}</strong>{" "}
+        <strong>{isAm ? "ማስታወሻ፡" : "Demonstration Notice:"}</strong>{" "}
         {isAm
           ? "ይህ የማሳያ አካባቢ የአካባቢ ሙከራ ፋይሎችን እና ምሳሌዎችን ይጠቀማል። ሁሉም ምስክር ወረቀቶች እና የሥራ ማስታወቂያዎች ለውድድሩ ማሳያ ብቻ የቀረቡ ናቸው።"
           : "This demonstration environment uses mock fixtures and local test media. All credentials and job postings are strictly demonstration data."}

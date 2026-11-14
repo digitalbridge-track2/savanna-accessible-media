@@ -85,15 +85,15 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
             id={`job-title-${job.id}`}
             style={{
               margin: "0 0 0.35rem 0",
-              fontSize: "1.2rem",
+              fontSize: "1.15rem",
               fontWeight: 700,
               color: "var(--color-brand)",
             }}
           >
             {title}
           </h4>
-          <p style={{ margin: 0, color: "var(--color-muted-ink)", fontWeight: 500, fontSize: "0.95rem" }}>
-            <strong>{employer}</strong> &bull; <span>{location}</span>{" "}
+          <p style={{ margin: 0, color: "var(--color-muted-ink)", fontWeight: 500, fontSize: "0.92rem" }}>
+            <strong>{employer}</strong> · <span>{location}</span>{" "}
             {job.workMode && <span style={{ textTransform: "capitalize" }}>({job.workMode})</span>}
           </p>
         </div>
@@ -104,20 +104,22 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
             className="btn btn-outline"
             onClick={toggleAudio}
             aria-pressed={isPlaying}
-            aria-label={`${isPlaying ? (isAm ? "አቁም" : "Pause") : (isAm ? "የድምፅ ማጠቃለያ አድምጥ" : "Listen to audio summary")} for ${title}`}
+            aria-label={`${isPlaying ? (isAm ? "አቁም" : "Pause") : (isAm ? "የድምፅ ማጠቃለያ አድምጥ" : "Listen to summary")} for ${title}`}
             style={{
               fontSize: "0.85rem",
               padding: "0.4rem 0.85rem",
-              minHeight: "40px",
+              minHeight: "38px",
               flexShrink: 0,
             }}
           >
-            {isPlaying ? "⏸ " + (isAm ? "አቁም" : "Pause Audio") : "🔊 " + (isAm ? "የድምፅ ማጠቃለያ" : "Audio Summary")}
+            {isPlaying
+              ? (isAm ? "ድምፁን አቁም" : "Pause Audio")
+              : (isAm ? "የድምፅ ማጠቃለያ" : "Listen to Summary")}
           </button>
         )}
       </div>
 
-      <p style={{ margin: 0, lineHeight: 1.6, color: "var(--color-ink)", fontSize: "0.98rem" }}>
+      <p style={{ margin: 0, lineHeight: 1.6, color: "var(--color-ink)", fontSize: "0.95rem" }}>
         {description}
       </p>
 
@@ -125,30 +127,30 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
       {accommodationsList.length > 0 && (
         <div
           style={{
-            background: "#F4F7F5",
-            padding: "0.85rem 1rem",
-            borderRadius: "8px",
-            border: "1px solid var(--color-border-subtle)",
+            background: "#F8FAFC",
+            padding: "0.75rem 1rem",
+            borderRadius: "6px",
+            border: "1px solid var(--color-border)",
           }}
         >
           <strong
             style={{
-              fontSize: "0.82rem",
+              fontSize: "0.8rem",
               textTransform: "uppercase",
               letterSpacing: "0.5px",
               color: "var(--color-muted-ink)",
               display: "block",
-              marginBottom: "0.5rem",
+              marginBottom: "0.4rem",
             }}
           >
-            {isAm ? "የተረጋገጡ ድጋፎች (Verified Accommodations):" : "Verified Accommodations Provided:"}
+            {isAm ? "የተረጋገጡ ድጋፎች (Accommodations):" : "Verified Accommodations Provided:"}
           </strong>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
             {accommodationsList.map((acc, index) => {
               const label = resolveLocalized(acc.label, locale);
               return (
                 <span key={acc.id || index} className="badge badge-brand">
-                  ✓ {label}
+                  {label}
                 </span>
               );
             })}
@@ -164,14 +166,14 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
           alignItems: "center",
           flexWrap: "wrap",
           gap: "0.5rem",
-          fontSize: "0.85rem",
+          fontSize: "0.82rem",
           color: "var(--color-muted-ink)",
-          paddingTop: "0.6rem",
-          borderTop: "1px solid var(--color-border-subtle)",
+          paddingTop: "0.5rem",
+          borderTop: "1px solid var(--color-border)",
         }}
       >
         <span>
-          🏷️ <code>schema.org/JobPosting</code> JSON-LD verified
+          Format: <code>schema.org/JobPosting</code> JSON-LD
         </span>
         {job.applicationUrl && (
           <a

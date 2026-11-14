@@ -37,16 +37,22 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
 
         <div
           style={{
-            background: "#E8F5E9",
-            borderLeft: "5px solid #2E7D32",
+            background: "#F0FDF4",
+            border: "1px solid #BBF7D0",
+            borderLeft: "4px solid #166534",
             padding: "1.25rem",
-            borderRadius: "8px",
+            borderRadius: "6px",
             marginBottom: "1.5rem",
           }}
         >
-          <h4 style={{ margin: "0 0 0.75rem 0", color: "#1B5E20", fontSize: "1.2rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <span>✓</span> {isAm ? "የተረጋገጠ ትክክለኛ ምስክር ወረቀት" : "Demonstrated Credential Verified"}
-          </h4>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem", flexWrap: "wrap", gap: "0.5rem" }}>
+            <h4 style={{ margin: 0, color: "#166534", fontSize: "1.15rem", fontWeight: 700 }}>
+              {isAm ? "የተረጋገጠ ትክክለኛ ምስክር ወረቀት" : "Demonstrated Credential Verified"}
+            </h4>
+            <span className="badge badge-success">
+              {isAm ? "ትክክለኛ" : "Verified"}
+            </span>
+          </div>
 
           <dl
             style={{
@@ -67,7 +73,7 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
             <dd>{isAm ? "የዲጂታል የሥራ ቦታ ክህሎቶች፡ መሠረታዊ" : "Digital Workplace Skills: Foundations"}</dd>
 
             <dt><strong>{isAm ? "ሰጪ ተቋም:" : "Issuer:"}</strong></dt>
-            <dd>Savanna Learning Platform &bull; Digital Bridge 2026</dd>
+            <dd>Savanna Learning Platform · Digital Bridge 2026</dd>
 
             <dt><strong>{isAm ? "የተሰጠበት ቀን:" : "Issue Date:"}</strong></dt>
             <dd>
@@ -78,10 +84,10 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
 
         <div style={{ display: "flex", gap: "1rem", alignItems: "center", flexWrap: "wrap" }}>
           <button type="button" onClick={handleCopy} className="btn btn-primary">
-            📋 {isAm ? "የማረጋገጫ ሊንኩን ቅዳ" : "Copy Shareable Link"}
+            {isAm ? "የማረጋገጫ ሊንኩን ቅዳ" : "Copy Shareable Link"}
           </button>
           {copyMsg && (
-            <span style={{ fontSize: "0.95rem", color: "#2E7D32", fontWeight: 500 }} aria-live="polite">
+            <span style={{ fontSize: "0.92rem", color: "#166534", fontWeight: 500 }} aria-live="polite">
               {copyMsg}
             </span>
           )}

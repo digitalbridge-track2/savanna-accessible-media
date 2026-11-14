@@ -7,7 +7,7 @@ import { StudioView } from "./views/StudioView";
 import { VerifyView } from "./views/VerifyView";
 import { EmbedView } from "./views/EmbedView";
 
-// Top-level Error Boundary to eliminate any possibility of a white screen
+// Error Boundary to prevent any blank or white screens
 export class ErrorBoundary extends React.Component<
   { children: React.ReactNode },
   { hasError: boolean; error: Error | null }
@@ -22,7 +22,7 @@ export class ErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error("ErrorBoundary caught an unhandled component error:", error, errorInfo);
+    console.error("ErrorBoundary caught:", error, errorInfo);
   }
 
   render() {
@@ -30,18 +30,18 @@ export class ErrorBoundary extends React.Component<
       return (
         <div
           style={{
-            maxWidth: "700px",
+            maxWidth: "680px",
             margin: "4rem auto",
             padding: "2rem",
-            background: "#FFF5F5",
-            border: "2px solid #FEB2B2",
-            borderRadius: "12px",
-            color: "#9B2C2C",
+            background: "#FEF2F2",
+            border: "1px solid #FECACA",
+            borderRadius: "8px",
+            color: "#991B1B",
           }}
         >
-          <h2 style={{ margin: "0 0 1rem 0" }}>Application Error Recovered</h2>
-          <p style={{ margin: "0 0 1.5rem 0", color: "#742A2A" }}>
-            {this.state.error?.message || "An unexpected error occurred in the component tree."}
+          <h2 style={{ margin: "0 0 1rem 0", fontSize: "1.3rem" }}>Application Error</h2>
+          <p style={{ margin: "0 0 1.5rem 0", color: "#7F1D1D" }}>
+            {this.state.error?.message || "An unexpected error occurred."}
           </p>
           <button
             type="button"
@@ -74,7 +74,6 @@ export const AppContent: React.FC = () => {
     localStorage.setItem("abugida-locale", newLocale);
   };
 
-  // Register service worker safely
   useEffect(() => {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/sw.js").catch((err) => {
@@ -85,12 +84,12 @@ export const AppContent: React.FC = () => {
 
   return (
     <div className="site-container">
-      {/* Skip to Content for Keyboard and Screen Reader Accessibility */}
+      {/* Skip to Content */}
       <a href="#main-content" className="skip-link">
         {isAm ? "ወደ ዋናው ይዘት ዝለል" : "Skip to main content"}
       </a>
 
-      {/* Main Header with Balanced Proportions */}
+      {/* Main Header */}
       <header className="site-header">
         <div
           style={{
@@ -115,52 +114,53 @@ export const AppContent: React.FC = () => {
             </h1>
             <p
               style={{
-                margin: "0.2rem 0 0 0",
+                margin: "0.25rem 0 0 0",
                 color: "var(--color-muted-ink)",
-                fontSize: "0.95rem",
+                fontSize: "0.92rem",
               }}
             >
               {isAm
-                ? "ትራክ 2፡ ተደራሽ የትምህርት ሚዲያ እና የሥራ መግቢያ በር &bull; ዲጂታል ብሪጅ 2026"
-                : "Track 2: Accessible Learning Media & Career Gateway &bull; Digital Bridge 2026"}
+                ? "ትራክ 2፡ ተደራሽ የትምህርት ሚዲያ እና የሥራ መግቢያ በር · ዲጂታል ብሪጅ 2026"
+                : "Track 2: Accessible Learning Media & Career Gateway · Digital Bridge 2026"}
             </p>
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
-            {/* Dual Calendar Pill */}
+            {/* Dual Calendar Badge */}
             <span
-              className="badge badge-accent"
-              style={{ fontSize: "0.82rem", padding: "0.4rem 0.8rem" }}
+              className="badge badge-neutral"
+              style={{ fontSize: "0.82rem", padding: "0.4rem 0.75rem" }}
               title="Ethiopian & Gregorian Dual Calendar"
             >
-              📅 {dualDate.display}
+              {dualDate.display}
             </span>
 
-            {/* Segmented Language Switcher */}
+            {/* Language Switcher */}
             <div
               style={{
                 display: "inline-flex",
-                background: "#E5ECE8",
-                padding: "3px",
-                borderRadius: "8px",
+                background: "#F1F5F9",
+                border: "1px solid var(--color-border)",
+                padding: "2px",
+                borderRadius: "6px",
               }}
               role="group"
-              aria-label={isAm ? "ቋንቋ ይምረጡ" : "Choose Language"}
+              aria-label={isAm ? "ቋንቋ ይምረጡ" : "Select Language"}
             >
               <button
                 type="button"
                 onClick={() => handleLocaleChange("en")}
                 style={{
-                  padding: "0.35rem 0.75rem",
+                  padding: "0.35rem 0.8rem",
                   border: "none",
-                  borderRadius: "6px",
+                  borderRadius: "4px",
                   background: locale === "en" ? "var(--color-brand)" : "transparent",
-                  color: locale === "en" ? "#ffffff" : "var(--color-ink)",
+                  color: locale === "en" ? "#ffffff" : "#334155",
                   fontWeight: 600,
                   fontSize: "0.85rem",
                   cursor: "pointer",
                   minHeight: "34px",
-                  transition: "background 0.15s ease, color 0.15s ease",
+                  transition: "background 0.12s ease, color 0.12s ease",
                 }}
                 aria-pressed={locale === "en"}
               >
@@ -170,16 +170,16 @@ export const AppContent: React.FC = () => {
                 type="button"
                 onClick={() => handleLocaleChange("am")}
                 style={{
-                  padding: "0.35rem 0.75rem",
+                  padding: "0.35rem 0.8rem",
                   border: "none",
-                  borderRadius: "6px",
+                  borderRadius: "4px",
                   background: locale === "am" ? "var(--color-brand)" : "transparent",
-                  color: locale === "am" ? "#ffffff" : "var(--color-ink)",
+                  color: locale === "am" ? "#ffffff" : "#334155",
                   fontWeight: 600,
                   fontSize: "0.85rem",
                   cursor: "pointer",
                   minHeight: "34px",
-                  transition: "background 0.15s ease, color 0.15s ease",
+                  transition: "background 0.12s ease, color 0.12s ease",
                 }}
                 aria-pressed={locale === "am"}
               >
@@ -189,14 +189,14 @@ export const AppContent: React.FC = () => {
           </div>
         </div>
 
-        {/* Accessible Segmented Navigation Bar */}
+        {/* Clean Segmented Navigation */}
         <nav className="main-nav" aria-label={isAm ? "ዋና አሰሳ" : "Main Navigation"}>
           <div className="nav-segmented">
-            <NavLink to="/">{isAm ? "🏠 መነሻ" : "🏠 Home"}</NavLink>
-            <NavLink to="/lesson">{isAm ? "📚 ተደራሽ ትምህርት" : "📚 Accessible Lesson"}</NavLink>
-            <NavLink to="/studio">{isAm ? "🎙️ የትርጉም ስቱዲዮ" : "🎙️ Transcript Studio"}</NavLink>
-            <NavLink to="/verify">{isAm ? "🎓 ምስክር ወረቀት" : "🎓 Verify Credential"}</NavLink>
-            <NavLink to="/embed">{isAm ? "📦 የስክሪፕት ታግ" : "📦 Script Tag Embed"}</NavLink>
+            <NavLink to="/">{isAm ? "መነሻ" : "Home"}</NavLink>
+            <NavLink to="/lesson">{isAm ? "ተደራሽ ትምህርት" : "Accessible Lesson"}</NavLink>
+            <NavLink to="/studio">{isAm ? "የትርጉም ስቱዲዮ" : "Transcript Studio"}</NavLink>
+            <NavLink to="/verify">{isAm ? "ምስክር ወረቀት ማረጋገጫ" : "Verify Credential"}</NavLink>
+            <NavLink to="/embed">{isAm ? "የስክሪፕት ታግ ማካተቻ" : "Script Tag Embed"}</NavLink>
           </div>
         </nav>
       </header>
@@ -210,14 +210,14 @@ export const AppContent: React.FC = () => {
         {currentPath === "/embed" && <EmbedView locale={locale} />}
       </main>
 
-      {/* Accessible Site Footer */}
+      {/* Accessible Footer */}
       <footer
         style={{
           marginTop: "4rem",
           paddingTop: "2rem",
           borderTop: "1px solid var(--color-border)",
           color: "var(--color-muted-ink)",
-          fontSize: "0.9rem",
+          fontSize: "0.88rem",
           display: "flex",
           justifyContent: "space-between",
           flexWrap: "wrap",
@@ -225,14 +225,14 @@ export const AppContent: React.FC = () => {
         }}
       >
         <div>
-          <strong>Abugida Media Kit (አቡጊዳ)</strong> &bull; Digital Bridge Accessibility Hackathon 2026
-          <div style={{ marginTop: "0.3rem", fontSize: "0.85rem", color: "var(--color-muted-ink)" }}>
-            ALX Ethiopia &bull; LIWAY &bull; SNV &bull; Mercy Corps &bull; AAAPD &bull; Tomorrow is Better
+          <strong>Abugida Media Kit (አቡጊዳ)</strong> · Digital Bridge Accessibility Hackathon 2026
+          <div style={{ marginTop: "0.3rem", fontSize: "0.82rem", color: "var(--color-muted-ink)" }}>
+            ALX Ethiopia · LIWAY · SNV · Mercy Corps · AAAPD · Tomorrow is Better
           </div>
         </div>
 
-        <div style={{ display: "flex", gap: "1.5rem", alignItems: "center", flexWrap: "wrap" }}>
-          <span className="badge badge-success">✓ WCAG 2.2 AA Conformance</span>
+        <div style={{ display: "flex", gap: "1.25rem", alignItems: "center", flexWrap: "wrap" }}>
+          <span className="badge badge-success">WCAG 2.2 AA Conformance</span>
           <a
             href="http://localhost:8000/docs"
             target="_blank"
