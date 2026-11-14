@@ -1,24 +1,47 @@
 :root {
-  --color-canvas: #F8FAFC;
-  --color-surface: #FFFFFF;
-  --color-ink: #0F172A;
-  --color-muted-ink: #475569;
-  --color-brand: #0B5D4E;
-  --color-brand-hover: #07473B;
-  --color-brand-subtle: #F0FDF4;
-  --color-focus: #005FCC;
-  --color-border: #E2E8F0;
-  --color-border-subtle: #F1F5F9;
+  /* Apple.com Light Design System Tokens */
+  --color-canvas: #FFFFFF;
+  --color-surface: #F5F5F7;
+  --color-surface-elevated: #FFFFFF;
+  --color-ink: #1D1D1F;
+  --color-muted-ink: #6E6E73;
+  --color-border: #D2D2D7;
+  --color-border-subtle: #E5E5EA;
 
-  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Ethiopic", system-ui, sans-serif;
+  /* Apple Action & Accent Colours (Accessible Contrast Verified) */
+  --color-brand: #0071E3;
+  --color-brand-hover: #0077ED;
+  --color-brand-active: #0062C4;
+  --color-brand-subtle: #F0F6FF;
+  --color-link: #0066CC;
+  --color-link-hover: #004499;
+  --color-focus: #0071E3;
+
+  /* Radii Family (Apple 980px pill default, 16px cards) */
+  --radius-pill: 980px;
+  --radius-card: 16px;
+  --radius-sm: 8px;
+
+  /* Neutral Measured Depth */
+  --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.06);
+  --shadow-elevated: 3px 5px 30px rgba(0, 0, 0, 0.12);
+  --shadow-floating: 0 16px 40px rgba(0, 0, 0, 0.18);
+
+  /* Typography Scale */
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, "Noto Sans Ethiopic", system-ui, sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, "Noto Sans Ethiopic", system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
-  --max-content-width: 1320px;
+  --max-content-width: 1280px;
 }
 
 @media (forced-colors: active) {
   :root {
     --color-focus: Highlight;
     --color-border: ButtonBorder;
+    --color-canvas: Canvas;
+    --color-surface: Canvas;
+    --color-ink: CanvasText;
   }
 }
 
@@ -32,9 +55,37 @@ body {
   background-color: var(--color-canvas);
   color: var(--color-ink);
   font-family: var(--font-body);
-  font-size: 1rem;
-  line-height: 1.6;
+  font-size: 17px;
+  line-height: 1.47059;
+  letter-spacing: -0.022em;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--color-ink);
+  font-weight: 600;
+  line-height: 1.15;
+  margin-top: 0;
+}
+
+h1 {
+  font-size: 44px;
+  letter-spacing: -0.015em;
+  margin-bottom: 0.5rem;
+}
+
+h2 {
+  font-size: 34px;
+  letter-spacing: -0.011em;
+  margin-bottom: 0.75rem;
+}
+
+h3 {
+  font-size: 24px;
+  letter-spacing: -0.008em;
+  margin-bottom: 0.5rem;
 }
 
 p {
@@ -44,86 +95,93 @@ p {
 }
 
 a {
-  color: var(--color-brand);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 2px;
+  color: var(--color-link);
+  text-decoration: none;
+  font-weight: 400;
+  transition: color 0.16s ease;
 }
 
 a:hover {
-  color: var(--color-brand-hover);
+  color: var(--color-link-hover);
+  text-decoration: underline;
 }
 
 a:focus-visible,
 button:focus-visible,
-input:focus-visible {
-  outline: 3px solid var(--color-focus);
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--color-focus);
   outline-offset: 2px;
 }
 
-/* Skip to Content */
+/* Skip to Content - Apple Clean Style */
 .skip-link {
   position: absolute;
   top: -60px;
-  left: 1rem;
+  left: 1.5rem;
   background: var(--color-brand);
-  color: #ffffff;
-  padding: 0.6rem 1.25rem;
+  color: #FFFFFF;
+  padding: 0.65rem 1.4rem;
   z-index: 9999;
   text-decoration: none;
-  font-weight: 600;
-  border-radius: 0 0 6px 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-  transition: top 0.15s ease-out;
+  font-weight: 500;
+  font-size: 14px;
+  border-radius: 0 0 12px 12px;
+  box-shadow: var(--shadow-elevated);
+  transition: top 0.2s cubic-bezier(0.4, 0, 0.6, 1);
 }
 
 .skip-link:focus {
   top: 0;
+  text-decoration: none;
 }
 
 /* Container */
 .site-container {
   max-width: var(--max-content-width);
   margin: 0 auto;
-  padding: 2rem 1.5rem 4rem 1.5rem;
+  padding: 1.5rem 1.5rem 4rem 1.5rem;
 }
 
 /* Site Header */
 header.site-header {
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border-subtle);
   padding-bottom: 1.25rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2.25rem;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
 }
 
-/* Clean Segmented Navigation */
+/* Apple Segmented Navigation Bar */
 .nav-segmented {
   display: flex;
-  gap: 0.25rem;
-  background: #F1F5F9;
-  padding: 0.25rem;
-  border-radius: 8px;
+  gap: 0.35rem;
+  background: var(--color-surface);
+  padding: 0.35rem;
+  border-radius: var(--radius-pill);
   flex-wrap: wrap;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-border-subtle);
 }
 
 .nav-link {
-  color: #334155;
+  color: var(--color-muted-ink);
   text-decoration: none;
   font-weight: 500;
-  font-size: 0.92rem;
-  padding: 0.45rem 0.95rem;
-  border-radius: 6px;
-  transition: background-color 0.12s ease, color 0.12s ease;
+  font-size: 14px;
+  padding: 0.5rem 1.15rem;
+  border-radius: var(--radius-pill);
+  transition: color 0.16s ease, background-color 0.16s ease, transform 0.08s ease;
   display: inline-flex;
   align-items: center;
   min-height: 38px;
 }
 
 .nav-link:hover {
-  background-color: rgba(11, 93, 78, 0.08);
-  color: var(--color-brand);
+  background-color: rgba(0, 0, 0, 0.04);
+  color: var(--color-ink);
+  text-decoration: none;
 }
 
 .nav-link:active {
@@ -131,26 +189,27 @@ header.site-header {
 }
 
 .nav-link[aria-current="page"] {
-  background-color: var(--color-brand);
-  color: #ffffff;
+  background-color: #FFFFFF;
+  color: var(--color-ink);
   font-weight: 600;
-  box-shadow: 0 1px 2px rgba(11, 93, 78, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
-/* Professional Buttons */
+/* Apple-style Buttons (980px Pill standard) */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.65rem 1.25rem;
-  border-radius: 6px;
-  font-weight: 600;
-  font-size: 0.92rem;
+  padding: 0.6rem 1.35rem;
+  border-radius: var(--radius-pill);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.4;
   cursor: pointer;
-  min-height: 42px;
+  min-height: 40px;
   text-decoration: none;
-  transition: transform 0.08s ease, background-color 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, transform 0.08s ease;
   border: 1px solid transparent;
 }
 
@@ -160,33 +219,38 @@ header.site-header {
 
 .btn-primary {
   background-color: var(--color-brand);
-  color: #ffffff;
-  box-shadow: 0 1px 2px rgba(11, 93, 78, 0.15);
+  color: #FFFFFF;
+  border-color: rgba(0, 0, 0, 0);
+  box-shadow: 0 1px 3px rgba(0, 113, 227, 0.25);
 }
 
 .btn-primary:hover {
   background-color: var(--color-brand-hover);
-  box-shadow: 0 2px 4px rgba(11, 93, 78, 0.25);
+  text-decoration: none;
 }
 
 .btn-outline {
-  background-color: var(--color-surface);
-  color: var(--color-brand);
-  border: 1.5px solid var(--color-brand);
+  background-color: transparent;
+  color: var(--color-link);
+  border: 1px solid var(--color-link);
 }
 
 .btn-outline:hover {
-  background-color: var(--color-brand-subtle);
+  background-color: var(--color-brand);
+  color: #FFFFFF;
+  border-color: var(--color-brand);
+  text-decoration: none;
 }
 
 .btn-secondary {
-  background-color: #F1F5F9;
-  color: #1E293B;
-  border: 1px solid #CBD5E1;
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  border: 1px solid var(--color-border);
 }
 
 .btn-secondary:hover {
-  background-color: #E2E8F0;
+  background-color: #EAEAEF;
+  text-decoration: none;
 }
 
 /* Badges */
@@ -194,55 +258,57 @@ header.site-header {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  padding: 0.25rem 0.65rem;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  font-weight: 600;
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 500;
   line-height: 1.2;
 }
 
 .badge-brand {
   background: var(--color-brand-subtle);
   color: var(--color-brand);
-  border: 1px solid #C4DCD5;
+  border: 1px solid #C8E1FF;
 }
 
 .badge-neutral {
-  background: #F1F5F9;
-  color: #334155;
-  border: 1px solid #CBD5E1;
+  background: var(--color-surface);
+  color: var(--color-muted-ink);
+  border: 1px solid var(--color-border-subtle);
 }
 
 .badge-success {
-  background: #ECFDF5;
-  color: #065F46;
-  border: 1px solid #A7F3D0;
+  background: #E8F8F0;
+  color: #128045;
+  border: 1px solid #B4E8CC;
 }
 
-/* Cards & Surfaces */
+/* Cards & Surfaces (Apple Rounded 16px Surface) */
 .card {
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-card);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-subtle);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card:hover {
-  border-color: #CBD5E1;
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-card);
 }
 
 /* Key Caps */
 kbd {
-  background-color: #F1F5F9;
-  border: 1px solid #CBD5E1;
-  border-bottom: 2px solid #94A3B8;
-  border-radius: 4px;
-  padding: 0.15rem 0.45rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-bottom: 2px solid #A1A1A6;
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
   font-family: var(--font-mono);
   font-size: 0.85em;
-  font-weight: 600;
-  color: #1E293B;
+  font-weight: 500;
+  color: var(--color-ink);
 }
 
 /* Accessibility utility */
