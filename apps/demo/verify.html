@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Certificate Verification — Abugida Media Kit</title>
+  <link rel="stylesheet" href="/src/styles/tokens.css">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <div class="site-container">
+    <header class="site-header">
+      <div>
+        <h1 style="margin: 0; font-size: 1.5rem; color: var(--color-brand);">Certificate Verification</h1>
+        <p style="margin: 0.25rem 0 0 0; color: var(--color-muted-ink); font-size: 0.9rem;">
+          Transparent, verifiable credentials for employers
+        </p>
+      </div>
+      <nav class="main-nav" aria-label="Main Navigation">
+        <ul>
+          <li><a href="/index.html">Home</a></li>
+          <li><a href="/lesson.html">Accessible Lesson</a></li>
+          <li><a href="/studio.html">Transcript Studio</a></li>
+          <li><a href="/verify.html" aria-current="page">Verify Certificate</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="main-content">
+      <section style="background: var(--color-surface); padding: 1.5rem; border: 1px solid var(--color-border); border-radius: 8px; max-width: 700px; margin: 0 auto;">
+        <h3>Credential Status</h3>
+        <p style="color: var(--color-muted-ink); font-size: 0.9rem;">
+          Verification lookup in bundled demonstration registry:
+        </p>
+
+        <div style="background: #E8F5E9; border-left: 4px solid #2E7D32; padding: 1rem; border-radius: 4px; margin: 1.5rem 0;">
+          <h4 style="margin: 0 0 0.5rem 0; color: #1B5E20;">✓ Demonstrated Credential Verified</h4>
+          <dl style="margin: 0; display: grid; grid-template-columns: 140px 1fr; gap: 0.5rem;">
+            <dt><strong>Credential ID:</strong></dt>
+            <dd><code>CERT-DB-2026-0042</code></dd>
+
+            <dt><strong>Recipient:</strong></dt>
+            <dd>Demonstration Learner</dd>
+
+            <dt><strong>Course:</strong></dt>
+            <dd>Digital Workplace Skills: Foundations</dd>
+
+            <dt><strong>Issuer:</strong></dt>
+            <dd>Savanna Learning Platform &bull; Digital Bridge</dd>
+
+            <dt><strong>Issue Date:</strong></dt>
+            <dd>2026-11-14 (ህዳር 5፣ 2019 ዓ.ም)</dd>
+          </dl>
+        </div>
+
+        <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+          <button id="btn-copy-cert" style="background: var(--color-brand); color: #fff; padding: 0.6rem 1.2rem; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; min-height: 44px;">
+            Copy Shareable Link
+          </button>
+          <span id="copy-status" style="font-size: 0.9rem; color: #2E7D32;" aria-live="polite"></span>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const btn = document.getElementById('btn-copy-cert');
+    const status = document.getElementById('copy-status');
+    if (btn && status) {
+      btn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(window.location.href);
+          status.textContent = 'Link copied to clipboard!';
+        } catch {
+          status.textContent = 'Please copy the browser URL directly.';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://abugida.et/schemas/lesson-manifest.schema.json",
+  "title": "LessonManifest",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "id",
+    "title",
+    "description",
+    "language",
+    "sources",
+    "captionTracks",
+    "transcript",
+    "documents",
+    "packages"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "enum": ["1.0.0"]
+    },
+    "id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "object",
+      "required": ["en", "am"],
+      "properties": {
+        "en": { "type": "string" },
+        "am": { "type": "string" }
+      }
+    },
+    "description": {
+      "type": "object",
+      "required": ["en", "am"],
+      "properties": {
+        "en": { "type": "string" },
+        "am": { "type": "string" }
+      }
+    },
+    "language": {
+      "type": "string",
+      "default": "en"
+    },
+    "durationSeconds": {
+      "type": "number"
+    },
+    "poster": {
+      "type": "object",
+      "required": ["src", "alt"],
+      "properties": {
+        "src": { "type": "string" },
+        "alt": {
+          "type": "object",
+          "properties": {
+            "en": { "type": "string" },
+            "am": { "type": "string" }
+          }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "src", "type"],
+        "properties": {
+          "id": { "type": "string" },
+          "kind": {
+            "type": "string",
+            "enum": ["main", "described", "sign", "audio-only"]
+          },
+          "src": { "type": "string" },
+          "type": { "type": "string" },
+          "sizeBytes": { "type": "integer" },
+          "describes": { "type": "string" }
+        }
+      }
+    },
+    "captionTracks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "language", "src", "label", "status"],
+        "properties": {
+          "id": { "type": "string" },
+          "language": { "type": "string" },
+          "src": { "type": "string" },
+          "label": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["draft", "reviewed"]
+          }
+        }
+      }
+    },
+    "transcript": {
+      "type": "object",
+      "required": ["src", "languages"],
+      "properties": {
+        "src": { "type": "string" },
+        "languages": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "documents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "format", "src", "title", "language"],
+        "properties": {
+          "id": { "type": "string" },
+          "format": {
+            "type": "string",
+            "enum": ["html", "pdf", "brf"]
+          },
+          "src": { "type": "string" },
+          "title": { "type": "string" },
+          "language": { "type": "string" },
+          "sizeBytes": { "type": "integer" },
+          "tagged": { "type": "boolean" }
+        }
+      }
+    },
+    "packages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "sizeBytes", "items"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": {
+            "type": "object",
+            "properties": {
+              "en": { "type": "string" },
+              "am": { "type": "string" }
+            }
+          },
+          "sizeBytes": { "type": "integer" },
+          "description": { "type": "string" },
+          "items": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": {
+            "type": "object",
+            "properties": {
+              "en": { "type": "string" },
+              "am": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "relatedJobIds": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

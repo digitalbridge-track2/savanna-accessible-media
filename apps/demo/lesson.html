@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson: Digital Workplace Skills — Abugida Media Kit</title>
+  <link rel="stylesheet" href="/src/styles/tokens.css">
+  <script type="module" src="/src/lesson.ts"></script>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <div class="site-container">
+    <header class="site-header">
+      <nav aria-label="Breadcrumb">
+        <ol style="display: flex; gap: 0.5rem; list-style: none; padding: 0; margin: 0; font-size: 0.9rem;">
+          <li><a href="/index.html">Home</a> &gt;</li>
+          <li><span aria-current="page">Digital Workplace Skills</span></li>
+        </ol>
+      </nav>
+      <div style="display: flex; gap: 0.5rem;">
+        <button id="lang-toggle-en" style="padding: 0.4rem 0.8rem; border-radius: 4px; border: 1px solid var(--color-border); background: var(--color-surface); cursor: pointer;" aria-pressed="true">English</button>
+        <button id="lang-toggle-am" style="padding: 0.4rem 0.8rem; border-radius: 4px; border: 1px solid var(--color-border); background: var(--color-surface); cursor: pointer;" aria-pressed="false">አማርኛ</button>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <h2 id="lesson-header">Digital Workplace Skills: Foundations</h2>
+      <p id="lesson-intro" style="color: var(--color-muted-ink); margin-bottom: 1.5rem;">
+        Master the essential tools and collaborative workflows for digital employment.
+      </p>
+
+      <!-- Level 1 Web Component: a11y-media-player -->
+      <a11y-media-player 
+        id="player"
+        manifest-src="/lessons/digital-workplace/lesson.json" 
+        locale="en">
+      </a11y-media-player>
+
+      <section style="margin-top: 3rem; padding: 1.5rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px;" aria-labelledby="heading-docs">
+        <h3 id="heading-docs">Accessible Lesson Documents</h3>
+        <p>Download study materials formatted for screen readers, low bandwidth, and offline study:</p>
+        <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.75rem;">
+          <li>
+            📄 <a href="/lessons/digital-workplace/documents/lesson.en.html" target="_blank">
+              <strong>Accessible HTML Document</strong> (Semantic HTML, 18 KB)
+            </a>
+          </li>
+          <li>
+            📑 <a href="/lessons/digital-workplace/documents/lesson.en.tagged.pdf" download>
+              <strong>Tagged Accessible PDF</strong> (Inspected tags, alternative text included, 142 KB)
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <section style="margin-top: 2rem; padding: 1.5rem; background: #E8F5E9; border: 1px solid #A5D6A7; border-radius: 8px;" aria-labelledby="heading-offline">
+        <h3 id="heading-offline" style="margin-top: 0; color: #1B5E20;">3G Low-Data Offline Study Pack</h3>
+        <p>Save mobile data and continue learning without internet access:</p>
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <strong>Light Audio + Text + HTML Pack</strong> &bull; <span>Measured Size: <strong>3.2 MB</strong></span>
+            <div style="font-size: 0.85rem; color: #2E7D32;">Includes compressed 32kbps audio lesson, semantic HTML, and full transcript.</div>
+          </div>
+          <button id="btn-download-pack" style="background: #1B5E20; color: #fff; padding: 0.6rem 1.2rem; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; min-height: 44px;">
+            Download 3G Pack (3.2 MB)
+          </button>
+        </div>
+        <div id="download-status" style="margin-top: 0.75rem; font-size: 0.9rem; display: none;" aria-live="polite"></div>
+      </section>
+
+      <section style="margin-top: 3rem;" aria-labelledby="heading-jobs">
+        <h3 id="heading-jobs">Career Gateway: Related Opportunities</h3>
+        <p style="color: var(--color-muted-ink);">
+          These opportunities offer accommodations matching this course's curriculum:
+        </p>
+
+        <div id="job-cards-container">
+          <!-- Rendered via custom element <a11y-job-card> -->
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

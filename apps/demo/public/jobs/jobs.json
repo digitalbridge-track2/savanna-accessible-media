@@ -1,0 +1,51 @@
+[
+  {
+    "id": "job-01",
+    "title": {
+      "en": "Junior Accessibility QA Analyst",
+      "am": "ጀማሪ የተደራሽነት የጥራት ቁጥጥር ተንታኝ"
+    },
+    "employer": "FinTech Ethiopia",
+    "location": {
+      "en": "Addis Ababa (Hybrid)",
+      "am": "አዲስ አበባ (በከፊል ከቤት)"
+    },
+    "workMode": "hybrid",
+    "description": {
+      "en": "Test mobile banking and web applications using NVDA, TalkBack, and keyboard navigation to ensure compliance with WCAG 2.2 AA standards.",
+      "am": "የሞባይል ባንኪንግ እና የድር መተግበሪያዎችን በNVDA፣ TalkBack እና በኪቦርድ በመጠቀም የWCAG 2.2 AA ተደራሽነትን ያረጋግጡ።"
+    },
+    "requiredSkills": ["skill-a11y-literacy"],
+    "helpfulSkills": ["skill-digital-collab"],
+    "applicationDeadline": "2026-12-01",
+    "applicationUrl": "https://example.et/jobs/a11y-qa",
+    "accommodations": [
+      {
+        "id": "acc-screenreader",
+        "label": {
+          "en": "Screen reader accessible workstations provided",
+          "am": "የስክሪን አንባቢ ድጋፍ ያላቸው የሥራ ኮምፒውተሮች ይቀርባሉ"
+        },
+        "source": "Employer Verified",
+        "verifiedDate": "2026-10-15"
+      },
+      {
+        "id": "acc-flexible-hours",
+        "label": {
+          "en": "Flexible transport and remote hours",
+          "am": "ተለዋዋጭ የትራንስፖርት እና የርቀት የሥራ ሰዓት"
+        },
+        "source": "Employer Verified",
+        "verifiedDate": "2026-10-15"
+      }
+    ],
+    "audioSummary": {
+      "src": "/jobs/audio/job-01-summary.mp3",
+      "language": "en",
+      "type": "audio/mp3",
+      "durationSeconds": 35,
+      "textEquivalent": "Junior Accessibility QA Analyst at FinTech Ethiopia. Addis Ababa hybrid role. Tasks include auditing web and mobile apps with NVDA and TalkBack. Employer provides accessible workstations and flexible hours."
+    },
+    "isDemonstrationData": true
+  }
+]

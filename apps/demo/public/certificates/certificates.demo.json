@@ -1,0 +1,16 @@
+[
+  {
+    "id": "CERT-DB-2026-0042",
+    "title": {
+      "en": "Digital Workplace Skills: Foundations",
+      "am": "የዲጂታል የሥራ ቦታ ክህሎቶች፡ መሠረታዊ"
+    },
+    "issuer": "Savanna Learning Platform (Digital Bridge)",
+    "issueDateISO": "2026-11-14",
+    "issueDateEthiopic": "ህዳር 5፣ 2019 ዓ.ም",
+    "canonicalVerificationUrl": "https://savanna.et/verify/CERT-DB-2026-0042",
+    "learnerDisplayName": "Demonstration Learner",
+    "skills": ["Digital Collaboration", "Accessibility Literacy"],
+    "isDemonstrationData": true
+  }
+]

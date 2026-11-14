@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transcript Studio — Abugida Media Kit</title>
+  <link rel="stylesheet" href="/src/styles/tokens.css">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <div class="site-container">
+    <header class="site-header">
+      <div>
+        <h1 style="margin: 0; font-size: 1.5rem; color: var(--color-brand);">Transcript Studio</h1>
+        <p style="margin: 0.25rem 0 0 0; color: var(--color-muted-ink); font-size: 0.9rem;">
+          Human-in-the-loop review for captions and audio description
+        </p>
+      </div>
+      <nav class="main-nav" aria-label="Main Navigation">
+        <ul>
+          <li><a href="/index.html">Home</a></li>
+          <li><a href="/lesson.html">Accessible Lesson</a></li>
+          <li><a href="/studio.html" aria-current="page">Transcript Studio</a></li>
+          <li><a href="/verify.html">Verify Certificate</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="main-content">
+      <section style="background: var(--color-surface); padding: 1.5rem; border: 1px solid var(--color-border); border-radius: 8px; margin-bottom: 2rem;">
+        <h3>Review Pipeline</h3>
+        <p>All ASR outputs remain flagged as <strong>Draft</strong> until verified by a human reviewer.</p>
+
+        <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem;">
+          <label for="sample-select"><strong>Select Sample:</strong></label>
+          <select id="sample-select" style="padding: 0.5rem; border-radius: 4px; border: 1px solid var(--color-border);">
+            <option value="digital-workplace">Digital Workplace Skills (Amharic & English)</option>
+          </select>
+          <button style="background: var(--color-brand); color: #fff; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; min-height: 44px;">
+            Load Job
+          </button>
+        </div>
+
+        <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+          <thead>
+            <tr style="text-align: left; border-bottom: 2px solid var(--color-border);">
+              <th style="padding: 0.5rem;">Time</th>
+              <th style="padding: 0.5rem;">Speaker</th>
+              <th style="padding: 0.5rem;">Draft ASR Text</th>
+              <th style="padding: 0.5rem;">Reviewed Text</th>
+              <th style="padding: 0.5rem;">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid var(--color-border);">
+              <td style="padding: 0.5rem;"><code>00:00 - 00:04</code></td>
+              <td style="padding: 0.5rem;">Instructor</td>
+              <td style="padding: 0.5rem;">እንኳን ወደዚህ የሥልጠና ፕሮግራም በደህና መጡ</td>
+              <td style="padding: 0.5rem;">
+                <input type="text" value="እንኳን ወደዚህ የሥልጠና ፕሮግራም በደህና መጡ" style="width: 100%; padding: 0.4rem; border: 1px solid var(--color-border); border-radius: 4px;" aria-label="Reviewed text segment 1">
+              </td>
+              <td style="padding: 0.5rem;"><span style="background: #E8F5E9; color: #1B5E20; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.85rem;">Reviewed</span></td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--color-border);">
+              <td style="padding: 0.5rem;"><code>00:04 - 00:08</code></td>
+              <td style="padding: 0.5rem;">Instructor</td>
+              <td style="padding: 0.5rem;">ዛሬ ስለ ዲጂታል የሥራ ቦታ ክህሎቶች እንማራለን</td>
+              <td style="padding: 0.5rem;">
+                <input type="text" value="ዛሬ ስለ ዲጂታል የሥራ ቦታ ክህሎቶች እንማራለን" style="width: 100%; padding: 0.4rem; border: 1px solid var(--color-border); border-radius: 4px;" aria-label="Reviewed text segment 2">
+              </td>
+              <td style="padding: 0.5rem;"><span style="background: #FFF8E1; color: #F57F17; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.85rem;">Draft</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+          <button style="background: var(--color-brand); color: #fff; padding: 0.6rem 1.2rem; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; min-height: 44px;">
+            Export WebVTT
+          </button>
+          <button style="background: var(--color-surface); color: var(--color-ink); border: 1px solid var(--color-border); padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; min-height: 44px;">
+            Export JSON
+          </button>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

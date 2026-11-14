@@ -1,0 +1,26 @@
+{
+  "name": "abugida-media-kit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Accessible media player, tagged documents, and career gateway for Savanna LMS and Ethiopian platforms",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run --workspace=apps/demo dev",
+    "build": "npm run --workspace=packages/lesson-schema build && npm run --workspace=packages/media-kit build && npm run --workspace=apps/demo build",
+    "lint": "eslint . --ext .ts,.js",
+    "typecheck": "npm run --workspace=packages/lesson-schema typecheck && npm run --workspace=packages/media-kit typecheck && npm run --workspace=apps/demo typecheck",
+    "validate:fixtures": "node packages/lesson-schema/dist/validate-cli.js",
+    "test": "npm run test:unit",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test tests/e2e",
+    "test:a11y": "playwright test tests/accessibility",
+    "api:dev": "python -m uvicorn app.main:app --app-dir services/transcript-api --reload --port 8000",
+    "api:test": "pytest services/transcript-api/tests"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}
