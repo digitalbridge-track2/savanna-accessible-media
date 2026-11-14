@@ -48,3 +48,10 @@ export function savePreferences(prefs: Partial<PlayerPreferences>): PlayerPrefer
     return { ...DEFAULT_PREFERENCES, ...prefs };
   }
 }
+
+export function resetPreferences(): PlayerPreferences {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch {}
+  return { ...DEFAULT_PREFERENCES };
+}

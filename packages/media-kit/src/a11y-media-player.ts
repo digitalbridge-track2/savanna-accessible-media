@@ -3,13 +3,14 @@ import {
   PlayerPreferences,
   loadPreferences,
   savePreferences,
+  resetPreferences,
   CaptionSize,
   CaptionTheme,
   ESLPosition,
   ESLSize,
 } from "./preferences/storage.js";
 import { parseVTT, VTTCueItem, getThemeStyles } from "./captions/caption-manager.js";
-import { MediaSyncController } from "./media/sync-controller.js";
+import { MediaSyncController, SignStatus } from "./media/sync-controller.js";
 import { TranscriptViewer, TranscriptSegmentData } from "./transcript/transcript-viewer.js";
 
 export class A11yMediaPlayer extends HTMLElement {
@@ -26,6 +27,7 @@ export class A11yMediaPlayer extends HTMLElement {
   private mainVideo!: HTMLVideoElement;
   private signVideo: HTMLVideoElement | null = null;
   private syncController!: MediaSyncController;
+  private pendingSeekTime: number | null = null;
 
   // Captions
   private currentCues: VTTCueItem[] = [];
@@ -51,6 +53,12 @@ export class A11yMediaPlayer extends HTMLElement {
     }
   }
 
+  disconnectedCallback() {
+    if (this.syncController) {
+      this.syncController.destroy();
+    }
+  }
+
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     if (oldValue !== newValue) {
       if (name === "locale") {
@@ -68,7 +76,7 @@ export class A11yMediaPlayer extends HTMLElement {
       if (!res.ok) throw new Error(`HTTP error ${res.status}`);
       const rawManifest: LessonManifest = await res.json();
 
-      // Resolve relative URLs in manifest against the manifest URL so embeds from external origins/domains work seamlessly
+      // Resolve relative URLs in manifest against the manifest URL
       let baseUrl: URL;
       try {
         baseUrl = new URL(src, window.location.href);
@@ -127,8 +135,8 @@ export class A11yMediaPlayer extends HTMLElement {
           const data = await res.json();
           const segments: TranscriptSegmentData[] = (data.segments || []).map((seg: any) => ({
             id: seg.id,
-            start: seg.start_ms ? seg.start_ms / 1000 : seg.start || 0,
-            end: seg.end_ms ? seg.end_ms / 1000 : seg.end || 0,
+            start: seg.start_ms !== undefined ? seg.start_ms / 1000 : seg.start || 0,
+            end: seg.end_ms !== undefined ? seg.end_ms / 1000 : seg.end || 0,
             speaker: seg.speaker,
             text: seg.text || seg.draft_text || "",
             visualDescription: seg.visual_description || seg.visualDescription,
@@ -184,6 +192,25 @@ export class A11yMediaPlayer extends HTMLElement {
     } else {
       this.captionOverlay.style.display = "none";
     }
+  }
+
+  private seekAndPlay(time: number) {
+    if (isNaN(this.mainVideo.duration) || this.mainVideo.readyState < 1) {
+      this.pendingSeekTime = time;
+      const onMeta = () => {
+        this.mainVideo.removeEventListener("loadedmetadata", onMeta);
+        this.mainVideo.currentTime = time;
+        this.mainVideo.play().catch(() => {});
+        this.pendingSeekTime = null;
+      };
+      this.mainVideo.addEventListener("loadedmetadata", onMeta);
+      return;
+    }
+
+    this.mainVideo.currentTime = time;
+    this.mainVideo.play().catch((err) => {
+      console.warn("Playback interrupted or prevented on seek:", err);
+    });
   }
 
   private renderError(message: string) {
@@ -246,7 +273,7 @@ export class A11yMediaPlayer extends HTMLElement {
           display: block;
         }
 
-        /* Ethiopian Sign Language (ESL) Window */
+        /* Ethiopian Sign Language (EthSL) Window */
         .esl-window {
           position: absolute;
           background: #111;
@@ -254,7 +281,8 @@ export class A11yMediaPlayer extends HTMLElement {
           border-radius: 6px;
           overflow: hidden;
           z-index: 20;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+          box-shadow: 0 4px 14px rgba(0,0,0,0.6);
+          touch-action: none;
           transition: width 0.2s ease, top 0.2s ease, left 0.2s ease, right 0.2s ease, bottom 0.2s ease;
         }
         .esl-window.pos-top-right { top: 16px; right: 16px; bottom: auto; left: auto; }
@@ -266,11 +294,41 @@ export class A11yMediaPlayer extends HTMLElement {
         .esl-window.size-medium { width: 30%; }
         .esl-window.size-large { width: 38%; }
 
+        .esl-drag-bar {
+          background: #1F2937;
+          color: #F9FAFB;
+          font-size: 0.75rem;
+          padding: 3px 8px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          cursor: move;
+          user-select: none;
+          border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        .esl-drag-bar:focus-visible {
+          outline: 2px solid var(--color-focus, #005FCC);
+        }
+
         video.sign-video {
           width: 100%;
           aspect-ratio: 16/9;
           display: block;
           object-fit: cover;
+        }
+
+        /* Status Badge for Secondary Sign Stream */
+        .sign-status-pill {
+          display: none;
+          position: absolute;
+          top: 8px;
+          left: 8px;
+          background: rgba(0,0,0,0.75);
+          color: #FFF;
+          font-size: 0.75rem;
+          padding: 2px 6px;
+          border-radius: 4px;
+          z-index: 25;
         }
 
         /* Captions overlay */
@@ -420,6 +478,38 @@ export class A11yMediaPlayer extends HTMLElement {
           min-width: 240px;
           min-height: 44px;
         }
+        .transcript-controls-row {
+          display: flex;
+          justify-content: flex-end;
+          margin-bottom: 0.75rem;
+        }
+        .btn-follow {
+          background: #F1F5F9;
+          border: 1px solid var(--color-border, #B7C2BB);
+          border-radius: 4px;
+          padding: 0.4rem 0.9rem;
+          font-size: 0.88rem;
+          font-weight: 600;
+          color: var(--color-ink, #14201B);
+          cursor: pointer;
+          min-height: 38px;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          transition: background 0.15s ease, border-color 0.15s ease;
+        }
+        .btn-follow:hover {
+          background: #E2E8F0;
+        }
+        .btn-follow[aria-pressed="true"] {
+          background: #DCFCE7;
+          border-color: #86EFAC;
+          color: #166534;
+        }
+        .btn-follow:focus-visible {
+          outline: 3px solid var(--color-focus, #005FCC);
+          outline-offset: 2px;
+        }
         .transcript-list {
           list-style: none;
           margin: 0;
@@ -465,6 +555,21 @@ export class A11yMediaPlayer extends HTMLElement {
           border-radius: 4px;
           margin-top: 0.25rem;
         }
+
+        /* 200% Zoom & Narrow Screen Reflow */
+        @media (max-width: 640px) {
+          .esl-window {
+            position: static !important;
+            width: 100% !important;
+            max-width: 320px;
+            margin: 1rem auto 0 auto;
+            border: 2px solid var(--color-border);
+            box-shadow: none;
+          }
+          .esl-drag-bar {
+            display: none !important;
+          }
+        }
       </style>
 
       <section class="player-component" aria-label="${title}">
@@ -479,12 +584,16 @@ export class A11yMediaPlayer extends HTMLElement {
               src="${mainSource ? mainSource.src : ""}">
             </video>
 
-            <!-- Movable & Resizable ESL Window -->
+            <!-- Movable & Resizable EthSL Window -->
             <div 
               class="esl-window pos-${this.prefs.eslPosition} size-${this.prefs.eslSize}" 
               id="esl-window" 
               style="display: ${this.prefs.eslVisible && signSource ? "block" : "none"};"
               aria-label="${isAm ? "የኢትዮጵያ የምልክት ቋንቋ መስኮት" : "Ethiopian Sign Language Window"}">
+              <div class="esl-drag-bar" id="esl-drag-handle" tabindex="0" role="button" aria-label="${isAm ? "የምልክት ቋንቋ መስኮት መጎተቻ" : "Sign language window drag handle"}">
+                <span>EthSL</span>
+                <span aria-hidden="true">✥</span>
+              </div>
               <video 
                 id="sign-video" 
                 class="sign-video" 
@@ -493,6 +602,7 @@ export class A11yMediaPlayer extends HTMLElement {
                 preload="metadata"
                 src="${signSource ? signSource.src : ""}">
               </video>
+              <div class="sign-status-pill" id="sign-status-indicator" role="status"></div>
             </div>
 
             <!-- Custom Captions Overlay -->
@@ -599,8 +709,11 @@ export class A11yMediaPlayer extends HTMLElement {
                 </select>
               </div>
 
-              <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
-                <button class="btn-ctrl" id="btn-close-prefs" style="background: var(--color-brand, #0B5D4E);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; flex-wrap: wrap; gap: 0.75rem;">
+                <button type="button" class="btn-ctrl" id="btn-reset-layout" style="background: #475569;">
+                  ↺ ${isAm ? "አቀማመጥን ዳግም አስጀምር" : "Reset Layout"}
+                </button>
+                <button type="button" class="btn-ctrl" id="btn-close-prefs" style="background: var(--color-brand, #0B5D4E);">
                   ${isAm ? "ተግብር እና ዝጋ" : "Save & Close"}
                 </button>
               </div>
@@ -628,6 +741,7 @@ export class A11yMediaPlayer extends HTMLElement {
 
     this.bindDOMElements();
     this.attachEventListeners();
+    this.setupESLDrag();
   }
 
   private bindDOMElements() {
@@ -635,15 +749,99 @@ export class A11yMediaPlayer extends HTMLElement {
     this.signVideo = this.shadow.getElementById("sign-video") as HTMLVideoElement;
     this.captionOverlay = this.shadow.getElementById("caption-overlay") as HTMLElement;
 
-    this.syncController = new MediaSyncController(this.mainVideo);
+    this.syncController = new MediaSyncController(this.mainVideo, {
+      driftThreshold: 0.25,
+      onSignStatusChange: (status: SignStatus) => {
+        const badge = this.shadow.getElementById("sign-status-indicator");
+        if (badge) {
+          if (status === "loading") {
+            badge.style.display = "inline-block";
+            badge.textContent = this.activeLocale === "am" ? "በመጫን ላይ..." : "Loading...";
+          } else if (status === "error") {
+            badge.style.display = "inline-block";
+            badge.textContent = this.activeLocale === "am" ? "ምልክት ቋንቋ አልተገኘም" : "Sign Unavailable";
+            badge.style.background = "#FEF2F2";
+            badge.style.color = "#991B1B";
+          } else {
+            badge.style.display = "none";
+          }
+        }
+      },
+    });
+
     if (this.signVideo) {
       this.syncController.setSignVideo(this.signVideo);
     }
 
     const transcriptTarget = this.shadow.getElementById("transcript-target") as HTMLElement;
-    this.transcriptViewer = new TranscriptViewer(transcriptTarget, (time) => {
-      this.mainVideo.currentTime = time;
+    this.transcriptViewer = new TranscriptViewer(transcriptTarget, {
+      locale: this.activeLocale,
+      onSeekAndPlay: (time) => {
+        this.seekAndPlay(time);
+      },
     });
+  }
+
+  private setupESLDrag() {
+    const eslWindow = this.shadow.getElementById("esl-window") as HTMLElement;
+    const dragHandle = this.shadow.getElementById("esl-drag-handle") as HTMLElement;
+    const viewport = this.shadow.querySelector(".video-viewport") as HTMLElement;
+    if (!eslWindow || !dragHandle || !viewport) return;
+
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let initialLeft = 0;
+    let initialTop = 0;
+
+    dragHandle.addEventListener("pointerdown", (e) => {
+      isDragging = true;
+      dragHandle.setPointerCapture(e.pointerId);
+      startX = e.clientX;
+      startY = e.clientY;
+
+      const rect = eslWindow.getBoundingClientRect();
+      const vpRect = viewport.getBoundingClientRect();
+      initialLeft = rect.left - vpRect.left;
+      initialTop = rect.top - vpRect.top;
+
+      eslWindow.style.left = `${initialLeft}px`;
+      eslWindow.style.top = `${initialTop}px`;
+      eslWindow.style.right = "auto";
+      eslWindow.style.bottom = "auto";
+      e.preventDefault();
+    });
+
+    dragHandle.addEventListener("pointermove", (e) => {
+      if (!isDragging) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+
+      const vpRect = viewport.getBoundingClientRect();
+      const winRect = eslWindow.getBoundingClientRect();
+
+      // Strict boundary clamping within video viewport
+      const maxLeft = Math.max(0, vpRect.width - winRect.width);
+      const maxTop = Math.max(0, vpRect.height - winRect.height);
+
+      const newLeft = Math.min(Math.max(0, initialLeft + dx), maxLeft);
+      const newTop = Math.min(Math.max(0, initialTop + dy), maxTop);
+
+      eslWindow.style.left = `${newLeft}px`;
+      eslWindow.style.top = `${newTop}px`;
+    });
+
+    const endDrag = (e: PointerEvent) => {
+      if (isDragging) {
+        isDragging = false;
+        try {
+          dragHandle.releasePointerCapture(e.pointerId);
+        } catch {}
+      }
+    };
+
+    dragHandle.addEventListener("pointerup", endDrag);
+    dragHandle.addEventListener("pointercancel", endDrag);
   }
 
   private attachEventListeners() {
@@ -748,6 +946,7 @@ export class A11yMediaPlayer extends HTMLElement {
     const btnPrefs = this.shadow.getElementById("btn-prefs");
     const prefsDialog = this.shadow.getElementById("prefs-dialog");
     const btnClosePrefs = this.shadow.getElementById("btn-close-prefs");
+    const btnResetLayout = this.shadow.getElementById("btn-reset-layout");
 
     btnPrefs?.addEventListener("click", () => {
       this.isPreferencesOpen = true;
@@ -759,6 +958,23 @@ export class A11yMediaPlayer extends HTMLElement {
       this.isPreferencesOpen = false;
       if (prefsDialog) prefsDialog.style.display = "none";
       btnPrefs?.focus();
+    });
+
+    // Reset Layout Button
+    btnResetLayout?.addEventListener("click", () => {
+      resetPreferences();
+      this.prefs = loadPreferences();
+      if (eslWindow) {
+        eslWindow.style.left = "";
+        eslWindow.style.top = "";
+        eslWindow.style.right = "";
+        eslWindow.style.bottom = "";
+        eslWindow.className = `esl-window pos-${this.prefs.eslPosition} size-${this.prefs.eslSize}`;
+      }
+      const selectPos = this.shadow.getElementById("select-esl-pos") as HTMLSelectElement;
+      const selectSize = this.shadow.getElementById("select-esl-size") as HTMLSelectElement;
+      if (selectPos) selectPos.value = this.prefs.eslPosition;
+      if (selectSize) selectSize.value = this.prefs.eslSize;
     });
 
     // Preference Form Inputs
@@ -785,6 +1001,10 @@ export class A11yMediaPlayer extends HTMLElement {
       this.prefs.eslPosition = (e.target as HTMLSelectElement).value as ESLPosition;
       savePreferences({ eslPosition: this.prefs.eslPosition });
       if (eslWindow) {
+        eslWindow.style.left = "";
+        eslWindow.style.top = "";
+        eslWindow.style.right = "";
+        eslWindow.style.bottom = "";
         eslWindow.className = `esl-window pos-${this.prefs.eslPosition} size-${this.prefs.eslSize}`;
       }
     });

@@ -1,9 +1,9 @@
-(function(d,u){typeof exports=="object"&&typeof module<"u"?u(exports):typeof define=="function"&&define.amd?define(["exports"],u):(d=typeof globalThis<"u"?globalThis:d||self,u(d.AbugidaMediaKit={}))})(this,function(d){"use strict";var K=Object.defineProperty;var W=(d,u,b)=>u in d?K(d,u,{enumerable:!0,configurable:!0,writable:!0,value:b}):d[u]=b;var c=(d,u,b)=>W(d,typeof u!="symbol"?u+"":u,b);const u="abugida_media_preferences",b={captionLanguage:"en",captionSize:"medium",captionTheme:"default",audioDescriptionEnabled:!1,eslVisible:!0,eslPosition:"bottom-right",eslSize:"medium",playbackRate:1};function E(){try{const l=localStorage.getItem(u);if(!l)return{...b};const a=JSON.parse(l);return{...b,...a}}catch{return{...b}}}function y(l){try{const e={...E(),...l};return localStorage.setItem(u,JSON.stringify(e)),e}catch{return{...b,...l}}}function L(l){const a=[],e=l.split(/\r?\n/);let t=0;for(;t<e.length&&!e[t].includes("-->");)t++;for(;t<e.length;){const i=e[t].trim();if(i.includes("-->")){const s=i.split("-->").map(o=>o.trim().split(" ")[0]);if(s.length>=2){const o=T(s[0]),n=T(s[1]);t++;const p=[];for(;t<e.length&&e[t].trim()!=="";)p.push(e[t].trim()),t++;p.length>0&&a.push({start:o,end:n,text:p.join(`
-`)})}}t++}return a}function T(l){const a=l.split(":");let e=0,t=0,i=0;return a.length===3?(e=parseFloat(a[0]),t=parseFloat(a[1]),i=parseFloat(a[2].replace(",","."))):a.length===2&&(t=parseFloat(a[0]),i=parseFloat(a[1].replace(",","."))),e*3600+t*60+i}function C(l,a){let e="18px";a==="small"&&(e="14px"),a==="large"&&(e="24px"),a==="xlarge"&&(e="32px");let t="#FFFFFF",i="rgba(0, 0, 0, 0.85)",s="none";return l==="yellow-black"?(t="#FFEB3B",i="#000000",s="2px solid #FFEB3B"):l==="white-black"?(t="#FFFFFF",i="#000000",s="2px solid #FFFFFF"):l==="black-yellow"&&(t="#000000",i="#FFEB3B",s="2px solid #000000"),`
+(function(p,f){typeof exports=="object"&&typeof module<"u"?f(exports):typeof define=="function"&&define.amd?define(["exports"],f):(p=typeof globalThis<"u"?globalThis:p||self,f(p.AbugidaMediaKit={}))})(this,function(p){"use strict";var Y=Object.defineProperty;var Q=(p,f,y)=>f in p?Y(p,f,{enumerable:!0,configurable:!0,writable:!0,value:y}):p[f]=y;var r=(p,f,y)=>Q(p,typeof f!="symbol"?f+"":f,y);const f="abugida_media_preferences",y={captionLanguage:"en",captionSize:"medium",captionTheme:"default",audioDescriptionEnabled:!1,eslVisible:!0,eslPosition:"bottom-right",eslSize:"medium",playbackRate:1};function L(){try{const h=localStorage.getItem(f);if(!h)return{...y};const s=JSON.parse(h);return{...y,...s}}catch{return{...y}}}function v(h){try{const e={...L(),...h};return localStorage.setItem(f,JSON.stringify(e)),e}catch{return{...y,...h}}}function V(){try{localStorage.removeItem(f)}catch{}return{...y}}function T(h){const s=[],e=h.split(/\r?\n/);let t=0;for(;t<e.length&&!e[t].includes("-->");)t++;for(;t<e.length;){const i=e[t].trim();if(i.includes("-->")){const a=i.split("-->").map(n=>n.trim().split(" ")[0]);if(a.length>=2){const n=B(a[0]),l=B(a[1]);t++;const d=[];for(;t<e.length&&e[t].trim()!=="";)d.push(e[t].trim()),t++;d.length>0&&s.push({start:n,end:l,text:d.join(`
+`)})}}t++}return s}function B(h){const s=h.split(":");let e=0,t=0,i=0;return s.length===3?(e=parseFloat(s[0]),t=parseFloat(s[1]),i=parseFloat(s[2].replace(",","."))):s.length===2&&(t=parseFloat(s[0]),i=parseFloat(s[1].replace(",","."))),e*3600+t*60+i}function D(h,s){let e="18px";s==="small"&&(e="14px"),s==="large"&&(e="24px"),s==="xlarge"&&(e="32px");let t="#FFFFFF",i="rgba(0, 0, 0, 0.85)",a="none";return h==="yellow-black"?(t="#FFEB3B",i="#000000",a="2px solid #FFEB3B"):h==="white-black"?(t="#FFFFFF",i="#000000",a="2px solid #FFFFFF"):h==="black-yellow"&&(t="#000000",i="#FFEB3B",a="2px solid #000000"),`
     font-size: ${e};
     color: ${t};
     background: ${i};
-    border: ${s};
+    border: ${a};
     line-height: 1.4;
     padding: 0.35rem 0.75rem;
     border-radius: 4px;
@@ -12,28 +12,43 @@
     text-align: center;
     box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     white-space: pre-line;
-  `}class V{constructor(a){c(this,"mainVideo");c(this,"signVideo",null);c(this,"driftThreshold",.25);c(this,"isSyncing",!1);this.mainVideo=a,this.setupMainListeners()}setSignVideo(a){this.signVideo=a,this.signVideo&&(this.signVideo.muted=!0,this.signVideo.playbackRate=this.mainVideo.playbackRate,this.signVideo.currentTime=this.mainVideo.currentTime,this.setupSignListeners())}setupMainListeners(){this.mainVideo.addEventListener("play",()=>{this.signVideo&&this.signVideo.paused&&this.signVideo.play().catch(()=>{})}),this.mainVideo.addEventListener("pause",()=>{this.signVideo&&!this.signVideo.paused&&this.signVideo.pause()}),this.mainVideo.addEventListener("seeking",()=>{this.signVideo&&(this.signVideo.currentTime=this.mainVideo.currentTime)}),this.mainVideo.addEventListener("ratechange",()=>{this.signVideo&&(this.signVideo.playbackRate=this.mainVideo.playbackRate)}),this.mainVideo.addEventListener("timeupdate",()=>{this.checkDrift()})}setupSignListeners(){this.signVideo&&this.signVideo.addEventListener("waiting",()=>{})}checkDrift(){if(!this.signVideo||this.isSyncing)return;Math.abs(this.mainVideo.currentTime-this.signVideo.currentTime)>this.driftThreshold&&(this.isSyncing=!0,this.signVideo.currentTime=this.mainVideo.currentTime,setTimeout(()=>{this.isSyncing=!1},50))}async switchSource(a){const e=!this.mainVideo.paused,t=this.mainVideo.currentTime,i=this.mainVideo.playbackRate;return this.mainVideo.src=a,this.mainVideo.load(),new Promise(s=>{const o=async()=>{if(this.mainVideo.removeEventListener("loadedmetadata",o),this.mainVideo.currentTime=t,this.mainVideo.playbackRate=i,e)try{await this.mainVideo.play()}catch{}s()};this.mainVideo.addEventListener("loadedmetadata",o)})}}class F{constructor(a,e){c(this,"segments",[]);c(this,"container");c(this,"onSeek");c(this,"currentActiveId",null);c(this,"searchQuery","");this.container=a,this.onSeek=e}setSegments(a){this.segments=a,this.render()}setSearchQuery(a){this.searchQuery=a.toLowerCase().trim(),this.render()}updateActiveTime(a){const e=this.segments.find(t=>a>=t.start&&a<=t.end);e&&e.id!==this.currentActiveId&&(this.currentActiveId=e.id,this.highlightSegment(e.id))}highlightSegment(a){const e=this.container.querySelector(".transcript-item.active");e&&e.classList.remove("active");const t=this.container.querySelector(`[data-segment-id="${a}"]`);t&&t.classList.add("active")}formatTime(a){const e=Math.floor(a/60),t=Math.floor(a%60);return`${e.toString().padStart(2,"0")}:${t.toString().padStart(2,"0")}`}render(){const a=this.searchQuery?this.segments.filter(e=>e.text.toLowerCase().includes(this.searchQuery)):this.segments;if(a.length===0){this.container.innerHTML='<p class="empty-msg">No transcript segments match your search.</p>';return}this.container.innerHTML=`
-      <ul class="transcript-list" role="list">
-        ${a.map(e=>{const t=this.formatTime(e.start);return`
-            <li class="transcript-item ${e.id===this.currentActiveId?"active":""}" data-segment-id="${e.id}">
-              <button 
-                type="button" 
-                class="btn-seek-time" 
-                data-time="${e.start}" 
-                aria-label="Play from ${t}">
-                ${t}
-              </button>
-              <div class="segment-content">
-                ${e.speaker?`<strong class="speaker-label">${e.speaker}:</strong>`:""}
-                <span class="segment-text">${this.escapeHtml(e.text)}</span>
-                ${e.visualDescription?`<div class="visual-desc" aria-label="Visual Description: ${this.escapeHtml(e.visualDescription)}">
-                        <em>[Visual: ${this.escapeHtml(e.visualDescription)}]</em>
-                       </div>`:""}
-              </div>
-            </li>
-          `}).join("")}
-      </ul>
-    `,this.container.querySelectorAll(".btn-seek-time").forEach(e=>{e.addEventListener("click",t=>{const i=parseFloat(t.currentTarget.dataset.time||"0");this.onSeek(i)})})}escapeHtml(a){return a.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}}class B extends HTMLElement{constructor(){super();c(this,"shadow");c(this,"manifest",null);c(this,"activeLocale","en");c(this,"prefs");c(this,"mainVideo");c(this,"signVideo",null);c(this,"syncController");c(this,"currentCues",[]);c(this,"captionOverlay");c(this,"transcriptViewer");c(this,"isPreferencesOpen",!1);this.shadow=this.attachShadow({mode:"open"}),this.prefs=E()}static get observedAttributes(){return["manifest-src","locale"]}connectedCallback(){this.activeLocale=this.getAttribute("locale")||"en";const e=this.getAttribute("manifest-src");e&&this.loadManifest(e)}attributeChangedCallback(e,t,i){t!==i&&(e==="locale"?(this.activeLocale=i||"en",this.updateLocaleStrings()):e==="manifest-src"&&this.loadManifest(i))}async loadManifest(e){try{const t=await fetch(e);if(!t.ok)throw new Error(`HTTP error ${t.status}`);const i=await t.json();let s;try{s=new URL(e,window.location.href)}catch{s=new URL(window.location.href)}const o=n=>{if(!n)return n;try{return new URL(n,s).href}catch{return n}};this.manifest={...i,poster:i.poster?{...i.poster,src:o(i.poster.src)}:void 0,sources:(i.sources||[]).map(n=>({...n,src:o(n.src)})),captionTracks:(i.captionTracks||[]).map(n=>({...n,src:o(n.src)})),transcript:i.transcript?{...i.transcript,src:o(i.transcript.src)}:i.transcript},this.render(),await this.initTracksAndTranscript()}catch(t){this.renderError(t instanceof Error?t.message:"Failed to load manifest")}}async initTracksAndTranscript(){var e;if(this.manifest&&(await this.loadCaptionTrack(this.prefs.captionLanguage),(e=this.manifest.transcript)!=null&&e.src))try{const t=await fetch(this.manifest.transcript.src);if(t.ok){const s=((await t.json()).segments||[]).map(o=>({id:o.id,start:o.start_ms?o.start_ms/1e3:o.start||0,end:o.end_ms?o.end_ms/1e3:o.end||0,speaker:o.speaker,text:o.text||o.draft_text||"",visualDescription:o.visual_description||o.visualDescription}));this.transcriptViewer.setSegments(s)}}catch(t){console.warn("Could not load external transcript file, using fallback cues",t)}}async loadCaptionTrack(e){if(!this.manifest||e==="off"){this.currentCues=[],this.updateCaptionDisplay();return}const t=this.manifest.captionTracks.find(i=>i.language===e);if(!t){this.currentCues=[],this.updateCaptionDisplay();return}try{const i=await fetch(t.src);if(i.ok){const s=await i.text();this.currentCues=L(s)}}catch{this.currentCues=[]}this.updateCaptionDisplay()}updateCaptionDisplay(){if(!this.captionOverlay||!this.mainVideo)return;if(this.prefs.captionLanguage==="off"||this.currentCues.length===0){this.captionOverlay.style.display="none";return}const e=this.mainVideo.currentTime,t=this.currentCues.find(i=>e>=i.start&&e<=i.end);t?(this.captionOverlay.style.display="block",this.captionOverlay.style.cssText=C(this.prefs.captionTheme,this.prefs.captionSize),this.captionOverlay.textContent=t.text):this.captionOverlay.style.display="none"}renderError(e){this.shadow.innerHTML=`
+  `}class P{constructor(s,e){r(this,"mainVideo");r(this,"signVideo",null);r(this,"driftThreshold");r(this,"isSyncing",!1);r(this,"onSignStatusChange");r(this,"mainListeners",{});r(this,"signListeners",{});this.mainVideo=s,this.driftThreshold=(e==null?void 0:e.driftThreshold)??.25,this.onSignStatusChange=e==null?void 0:e.onSignStatusChange,this.setupMainListeners()}setSignVideo(s){if(this.cleanupSignListeners(),this.signVideo=s,this.signVideo){if(this.signVideo.muted=!0,this.signVideo.playsInline=!0,this.signVideo.playbackRate=this.mainVideo.playbackRate,!isNaN(this.mainVideo.currentTime)&&this.mainVideo.currentTime>0)try{this.signVideo.currentTime=this.mainVideo.currentTime}catch{}this.setupSignListeners(),this.notifyStatus(this.signVideo.readyState>=2?"ready":"loading")}else this.notifyStatus("none")}notifyStatus(s){this.onSignStatusChange&&this.onSignStatusChange(s)}setupMainListeners(){this.mainListeners.play=()=>{this.signVideo&&this.signVideo.paused&&!this.mainVideo.paused&&this.signVideo.play().catch(()=>{})},this.mainListeners.pause=()=>{this.signVideo&&!this.signVideo.paused&&this.signVideo.pause()},this.mainListeners.seeking=()=>{this.signVideo&&!isNaN(this.mainVideo.currentTime)&&(this.signVideo.currentTime=this.mainVideo.currentTime)},this.mainListeners.seeked=()=>{this.signVideo&&!isNaN(this.mainVideo.currentTime)&&(this.signVideo.currentTime=this.mainVideo.currentTime,this.mainVideo.paused&&!this.signVideo.paused&&this.signVideo.pause())},this.mainListeners.ratechange=()=>{this.signVideo&&(this.signVideo.playbackRate=this.mainVideo.playbackRate)},this.mainListeners.timeupdate=()=>{this.checkDrift()},this.mainListeners.ended=()=>{this.signVideo&&!this.signVideo.paused&&this.signVideo.pause()};for(const[s,e]of Object.entries(this.mainListeners))this.mainVideo.addEventListener(s,e)}setupSignListeners(){if(this.signVideo){this.signListeners.waiting=()=>{this.notifyStatus("loading")},this.signListeners.canplay=()=>{this.notifyStatus("ready"),!this.mainVideo.paused&&this.signVideo&&this.signVideo.paused&&this.signVideo.play().catch(()=>{})},this.signListeners.playing=()=>{this.notifyStatus("ready"),this.mainVideo.paused&&this.signVideo&&!this.signVideo.paused&&this.signVideo.pause()},this.signListeners.error=()=>{console.warn("Secondary EthSL sign language video stream encountered an error."),this.notifyStatus("error")};for(const[s,e]of Object.entries(this.signListeners))this.signVideo.addEventListener(s,e)}}checkDrift(){if(!this.signVideo||this.isSyncing||this.signVideo.readyState<2)return;if(Math.abs(this.mainVideo.currentTime-this.signVideo.currentTime)>this.driftThreshold){this.isSyncing=!0;try{this.signVideo.currentTime=this.mainVideo.currentTime}catch{}setTimeout(()=>{this.isSyncing=!1},50)}}async switchSource(s){const e=!this.mainVideo.paused,t=this.mainVideo.currentTime,i=this.mainVideo.playbackRate;return this.mainVideo.src=s,this.mainVideo.load(),new Promise(a=>{const n=async()=>{if(this.mainVideo.removeEventListener("loadedmetadata",n),this.mainVideo.currentTime=t,this.mainVideo.playbackRate=i,e)try{await this.mainVideo.play()}catch{}if(this.signVideo){try{this.signVideo.currentTime=t}catch{}e?this.signVideo.play().catch(()=>{}):this.signVideo.pause()}a()};this.mainVideo.addEventListener("loadedmetadata",n)})}cleanupSignListeners(){if(this.signVideo)for(const[s,e]of Object.entries(this.signListeners))this.signVideo.removeEventListener(s,e);this.signListeners={}}destroy(){for(const[s,e]of Object.entries(this.mainListeners))this.mainVideo.removeEventListener(s,e);this.mainListeners={},this.cleanupSignListeners(),this.signVideo=null}}class A{constructor(s,e){r(this,"segments",[]);r(this,"container");r(this,"onSeekAndPlay");r(this,"currentActiveId",null);r(this,"searchQuery","");r(this,"isFollowing",!0);r(this,"userPausedFollowing",!1);r(this,"locale","en");r(this,"listElement",null);r(this,"followBtn",null);r(this,"statusElement",null);this.container=s,this.onSeekAndPlay=e.onSeekAndPlay,this.locale=e.locale||"en"}setLocale(s){this.locale!==s&&(this.locale=s,this.render())}setSegments(s){this.segments=s.map(e=>({...e,start:Number(e.start)||0,end:Number(e.end)||0})).sort((e,t)=>e.start-t.start),this.render()}setSearchQuery(s){this.searchQuery=s.toLowerCase().trim(),this.render()}getActiveSegment(s){return this.segments.length&&this.segments.find(e=>s>=e.start&&s<e.end)||null}updateActiveTime(s){const e=this.getActiveSegment(s),t=e?e.id:null;t!==this.currentActiveId&&(this.currentActiveId=t,this.highlightSegment(t),this.isFollowing&&t!==null&&this.scrollToActiveCue(t))}highlightSegment(s){if(!this.container)return;const e=this.container.querySelector(".transcript-item.active");if(e&&e.classList.remove("active"),s!==null){const t=this.container.querySelector(`[data-segment-id="${s}"]`);t&&t.classList.add("active")}}scrollToActiveCue(s){if(!this.listElement)return;const e=this.listElement.querySelector(`[data-segment-id="${s}"]`);if(!e)return;this.listElement.scrollTop;const t=this.listElement.clientHeight,i=e.offsetTop,a=e.clientHeight,n=i-t/2+a/2;this.listElement.scrollTo({top:Math.max(0,n),behavior:"smooth"})}setFollowingState(s,e=!1){if(this.isFollowing=s,e&&(this.userPausedFollowing=!s),this.followBtn){this.followBtn.setAttribute("aria-pressed",s?"true":"false");const t=this.locale==="am";s?(this.followBtn.textContent=t?"✓ በተከታታይ አንብብ":"✓ Follow Playback",this.followBtn.setAttribute("aria-label",t?"የጽሑፍ ግልባጭ ተከታትሎ ማንበብ በርቷል":"Follow playback active (Click to pause auto-scroll)")):(this.followBtn.textContent=t?"↻ ተከታትሎ ማንበብ ቀጥል":"↻ Resume Following",this.followBtn.setAttribute("aria-label",t?"ተከታትሎ ማንበብ ቆሟል፤ እንደገና ለማስጀመር ይጫኑ":"Following paused (Click to resume auto-scroll)"))}s&&this.currentActiveId!==null&&this.scrollToActiveCue(this.currentActiveId)}formatTime(s){const e=Math.floor(s/60),t=Math.floor(s%60);return`${e.toString().padStart(2,"0")}:${t.toString().padStart(2,"0")}`}render(){var t;const s=this.locale==="am",e=this.searchQuery?this.segments.filter(i=>i.text.toLowerCase().includes(this.searchQuery)||i.speaker&&i.speaker.toLowerCase().includes(this.searchQuery)||i.visualDescription&&i.visualDescription.toLowerCase().includes(this.searchQuery)):this.segments;if(this.container.innerHTML=`
+      <div class="transcript-controls-row">
+        <button 
+          type="button" 
+          id="btn-toggle-follow" 
+          class="btn-follow ${this.isFollowing?"active":""}" 
+          aria-pressed="${this.isFollowing?"true":"false"}"
+          aria-label="${this.isFollowing?s?"የጽሑፍ ግልባጭ ተከታትሎ ማንበብ በርቷል":"Follow playback active (Click to pause auto-scroll)":s?"ተከታትሎ ማንበብ ቆሟል፤ እንደገና ለማስጀመር ይጫኑ":"Following paused (Click to resume auto-scroll)"}">
+          ${this.isFollowing?s?"✓ በተከታታይ አንብብ":"✓ Follow Playback":s?"↻ ተከታትሎ ማንበብ ቀጥል":"↻ Resume Following"}
+        </button>
+      </div>
+
+      ${e.length===0?`<p class="empty-msg" role="status">
+              ${s?"ምንም የሚዛመድ የጽሑፍ ግልባጭ አልተገኘም።":"No transcript segments match your search."}
+            </p>`:`
+          <ul class="transcript-list" role="list" id="transcript-list-box" tabindex="0" aria-label="${s?"የጽሑፍ ግልባጭ ዝርዝር":"Transcript cues"}">
+            ${e.map(i=>{const a=this.formatTime(i.start),n=i.id===this.currentActiveId,l=s?`ከ ${a} ጀምሮ አጫውት`:`Play from ${a}`;return`
+                <li class="transcript-item ${n?"active":""}" data-segment-id="${i.id}">
+                  <button 
+                    type="button" 
+                    class="btn-seek-time" 
+                    data-time="${i.start}" 
+                    aria-label="${l}">
+                    ${a}
+                  </button>
+                  <div class="segment-content">
+                    ${i.speaker?`<strong class="speaker-label">${this.escapeHtml(i.speaker)}:</strong>`:""}
+                    <span class="segment-text">${this.escapeHtml(i.text)}</span>
+                    ${i.visualDescription?`<div class="visual-desc" aria-label="${s?"ምስላዊ ማብራሪያ":"Visual Description"}: ${this.escapeHtml(i.visualDescription)}">
+                            <em>[${s?"ምስላዊ":"Visual"}: ${this.escapeHtml(i.visualDescription)}]</em>
+                           </div>`:""}
+                  </div>
+                </li>
+              `}).join("")}
+          </ul>
+        `}
+    `,this.listElement=this.container.querySelector("#transcript-list-box"),this.followBtn=this.container.querySelector("#btn-toggle-follow"),(t=this.followBtn)==null||t.addEventListener("click",()=>{this.setFollowingState(!this.isFollowing,!0)}),this.listElement){const i=()=>{this.isFollowing&&this.setFollowingState(!1,!0)};this.listElement.addEventListener("wheel",i,{passive:!0}),this.listElement.addEventListener("touchmove",i,{passive:!0}),this.listElement.addEventListener("keydown",a=>{["ArrowUp","ArrowDown","PageUp","PageDown","Home","End"].includes(a.key)&&i()})}this.container.querySelectorAll(".btn-seek-time").forEach(i=>{i.addEventListener("click",a=>{const n=parseFloat(a.currentTarget.dataset.time||"0");this.onSeekAndPlay(n),a.currentTarget.focus()})})}escapeHtml(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}}class j extends HTMLElement{constructor(){super();r(this,"shadow");r(this,"manifest",null);r(this,"activeLocale","en");r(this,"prefs");r(this,"mainVideo");r(this,"signVideo",null);r(this,"syncController");r(this,"pendingSeekTime",null);r(this,"currentCues",[]);r(this,"captionOverlay");r(this,"transcriptViewer");r(this,"isPreferencesOpen",!1);this.shadow=this.attachShadow({mode:"open"}),this.prefs=L()}static get observedAttributes(){return["manifest-src","locale"]}connectedCallback(){this.activeLocale=this.getAttribute("locale")||"en";const e=this.getAttribute("manifest-src");e&&this.loadManifest(e)}disconnectedCallback(){this.syncController&&this.syncController.destroy()}attributeChangedCallback(e,t,i){t!==i&&(e==="locale"?(this.activeLocale=i||"en",this.updateLocaleStrings()):e==="manifest-src"&&this.loadManifest(i))}async loadManifest(e){try{const t=await fetch(e);if(!t.ok)throw new Error(`HTTP error ${t.status}`);const i=await t.json();let a;try{a=new URL(e,window.location.href)}catch{a=new URL(window.location.href)}const n=l=>{if(!l)return l;try{return new URL(l,a).href}catch{return l}};this.manifest={...i,poster:i.poster?{...i.poster,src:n(i.poster.src)}:void 0,sources:(i.sources||[]).map(l=>({...l,src:n(l.src)})),captionTracks:(i.captionTracks||[]).map(l=>({...l,src:n(l.src)})),transcript:i.transcript?{...i.transcript,src:n(i.transcript.src)}:i.transcript},this.render(),await this.initTracksAndTranscript()}catch(t){this.renderError(t instanceof Error?t.message:"Failed to load manifest")}}async initTracksAndTranscript(){var e;if(this.manifest&&(await this.loadCaptionTrack(this.prefs.captionLanguage),(e=this.manifest.transcript)!=null&&e.src))try{const t=await fetch(this.manifest.transcript.src);if(t.ok){const a=((await t.json()).segments||[]).map(n=>({id:n.id,start:n.start_ms!==void 0?n.start_ms/1e3:n.start||0,end:n.end_ms!==void 0?n.end_ms/1e3:n.end||0,speaker:n.speaker,text:n.text||n.draft_text||"",visualDescription:n.visual_description||n.visualDescription}));this.transcriptViewer.setSegments(a)}}catch(t){console.warn("Could not load external transcript file, using fallback cues",t)}}async loadCaptionTrack(e){if(!this.manifest||e==="off"){this.currentCues=[],this.updateCaptionDisplay();return}const t=this.manifest.captionTracks.find(i=>i.language===e);if(!t){this.currentCues=[],this.updateCaptionDisplay();return}try{const i=await fetch(t.src);if(i.ok){const a=await i.text();this.currentCues=T(a)}}catch{this.currentCues=[]}this.updateCaptionDisplay()}updateCaptionDisplay(){if(!this.captionOverlay||!this.mainVideo)return;if(this.prefs.captionLanguage==="off"||this.currentCues.length===0){this.captionOverlay.style.display="none";return}const e=this.mainVideo.currentTime,t=this.currentCues.find(i=>e>=i.start&&e<=i.end);t?(this.captionOverlay.style.display="block",this.captionOverlay.style.cssText=D(this.prefs.captionTheme,this.prefs.captionSize),this.captionOverlay.textContent=t.text):this.captionOverlay.style.display="none"}seekAndPlay(e){if(isNaN(this.mainVideo.duration)||this.mainVideo.readyState<1){this.pendingSeekTime=e;const t=()=>{this.mainVideo.removeEventListener("loadedmetadata",t),this.mainVideo.currentTime=e,this.mainVideo.play().catch(()=>{}),this.pendingSeekTime=null};this.mainVideo.addEventListener("loadedmetadata",t);return}this.mainVideo.currentTime=e,this.mainVideo.play().catch(t=>{console.warn("Playback interrupted or prevented on seek:",t)})}renderError(e){this.shadow.innerHTML=`
       <style>
         :host { display: block; font-family: system-ui, sans-serif; }
         .error-card {
@@ -47,7 +62,7 @@
       <div class="error-card" role="alert">
         <strong>Error:</strong> ${e}
       </div>
-    `}render(){var o,n,p,h;const e=this.activeLocale==="am",t=this.manifest?this.manifest.title[this.activeLocale]:"Media Player",i=(o=this.manifest)==null?void 0:o.sources.find(m=>m.kind==="main"),s=(n=this.manifest)==null?void 0:n.sources.find(m=>m.kind==="sign");this.shadow.innerHTML=`
+    `}render(){var n,l,d,u;const e=this.activeLocale==="am",t=this.manifest?this.manifest.title[this.activeLocale]:"Media Player",i=(n=this.manifest)==null?void 0:n.sources.find(m=>m.kind==="main"),a=(l=this.manifest)==null?void 0:l.sources.find(m=>m.kind==="sign");this.shadow.innerHTML=`
       <style>
         :host {
           display: block;
@@ -82,7 +97,7 @@
           display: block;
         }
 
-        /* Ethiopian Sign Language (ESL) Window */
+        /* Ethiopian Sign Language (EthSL) Window */
         .esl-window {
           position: absolute;
           background: #111;
@@ -90,7 +105,8 @@
           border-radius: 6px;
           overflow: hidden;
           z-index: 20;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+          box-shadow: 0 4px 14px rgba(0,0,0,0.6);
+          touch-action: none;
           transition: width 0.2s ease, top 0.2s ease, left 0.2s ease, right 0.2s ease, bottom 0.2s ease;
         }
         .esl-window.pos-top-right { top: 16px; right: 16px; bottom: auto; left: auto; }
@@ -102,11 +118,41 @@
         .esl-window.size-medium { width: 30%; }
         .esl-window.size-large { width: 38%; }
 
+        .esl-drag-bar {
+          background: #1F2937;
+          color: #F9FAFB;
+          font-size: 0.75rem;
+          padding: 3px 8px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          cursor: move;
+          user-select: none;
+          border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        .esl-drag-bar:focus-visible {
+          outline: 2px solid var(--color-focus, #005FCC);
+        }
+
         video.sign-video {
           width: 100%;
           aspect-ratio: 16/9;
           display: block;
           object-fit: cover;
+        }
+
+        /* Status Badge for Secondary Sign Stream */
+        .sign-status-pill {
+          display: none;
+          position: absolute;
+          top: 8px;
+          left: 8px;
+          background: rgba(0,0,0,0.75);
+          color: #FFF;
+          font-size: 0.75rem;
+          padding: 2px 6px;
+          border-radius: 4px;
+          z-index: 25;
         }
 
         /* Captions overlay */
@@ -256,6 +302,38 @@
           min-width: 240px;
           min-height: 44px;
         }
+        .transcript-controls-row {
+          display: flex;
+          justify-content: flex-end;
+          margin-bottom: 0.75rem;
+        }
+        .btn-follow {
+          background: #F1F5F9;
+          border: 1px solid var(--color-border, #B7C2BB);
+          border-radius: 4px;
+          padding: 0.4rem 0.9rem;
+          font-size: 0.88rem;
+          font-weight: 600;
+          color: var(--color-ink, #14201B);
+          cursor: pointer;
+          min-height: 38px;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          transition: background 0.15s ease, border-color 0.15s ease;
+        }
+        .btn-follow:hover {
+          background: #E2E8F0;
+        }
+        .btn-follow[aria-pressed="true"] {
+          background: #DCFCE7;
+          border-color: #86EFAC;
+          color: #166534;
+        }
+        .btn-follow:focus-visible {
+          outline: 3px solid var(--color-focus, #005FCC);
+          outline-offset: 2px;
+        }
         .transcript-list {
           list-style: none;
           margin: 0;
@@ -301,6 +379,21 @@
           border-radius: 4px;
           margin-top: 0.25rem;
         }
+
+        /* 200% Zoom & Narrow Screen Reflow */
+        @media (max-width: 640px) {
+          .esl-window {
+            position: static !important;
+            width: 100% !important;
+            max-width: 320px;
+            margin: 1rem auto 0 auto;
+            border: 2px solid var(--color-border);
+            box-shadow: none;
+          }
+          .esl-drag-bar {
+            display: none !important;
+          }
+        }
       </style>
 
       <section class="player-component" aria-label="${t}">
@@ -311,24 +404,29 @@
               class="main-video" 
               playsinline 
               preload="metadata"
-              poster="${((h=(p=this.manifest)==null?void 0:p.poster)==null?void 0:h.src)||""}"
+              poster="${((u=(d=this.manifest)==null?void 0:d.poster)==null?void 0:u.src)||""}"
               src="${i?i.src:""}">
             </video>
 
-            <!-- Movable & Resizable ESL Window -->
+            <!-- Movable & Resizable EthSL Window -->
             <div 
               class="esl-window pos-${this.prefs.eslPosition} size-${this.prefs.eslSize}" 
               id="esl-window" 
-              style="display: ${this.prefs.eslVisible&&s?"block":"none"};"
+              style="display: ${this.prefs.eslVisible&&a?"block":"none"};"
               aria-label="${e?"የኢትዮጵያ የምልክት ቋንቋ መስኮት":"Ethiopian Sign Language Window"}">
+              <div class="esl-drag-bar" id="esl-drag-handle" tabindex="0" role="button" aria-label="${e?"የምልክት ቋንቋ መስኮት መጎተቻ":"Sign language window drag handle"}">
+                <span>EthSL</span>
+                <span aria-hidden="true">✥</span>
+              </div>
               <video 
                 id="sign-video" 
                 class="sign-video" 
                 muted 
                 playsinline 
                 preload="metadata"
-                src="${s?s.src:""}">
+                src="${a?a.src:""}">
               </video>
+              <div class="sign-status-pill" id="sign-status-indicator" role="status"></div>
             </div>
 
             <!-- Custom Captions Overlay -->
@@ -435,8 +533,11 @@
                 </select>
               </div>
 
-              <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
-                <button class="btn-ctrl" id="btn-close-prefs" style="background: var(--color-brand, #0B5D4E);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; flex-wrap: wrap; gap: 0.75rem;">
+                <button type="button" class="btn-ctrl" id="btn-reset-layout" style="background: #475569;">
+                  ↺ ${e?"አቀማመጥን ዳግም አስጀምር":"Reset Layout"}
+                </button>
+                <button type="button" class="btn-ctrl" id="btn-close-prefs" style="background: var(--color-brand, #0B5D4E);">
                   ${e?"ተግብር እና ዝጋ":"Save & Close"}
                 </button>
               </div>
@@ -460,7 +561,7 @@
           <div id="transcript-target"></div>
         </section>
       </section>
-    `,this.bindDOMElements(),this.attachEventListeners()}bindDOMElements(){this.mainVideo=this.shadow.getElementById("main-video"),this.signVideo=this.shadow.getElementById("sign-video"),this.captionOverlay=this.shadow.getElementById("caption-overlay"),this.syncController=new V(this.mainVideo),this.signVideo&&this.syncController.setSignVideo(this.signVideo);const e=this.shadow.getElementById("transcript-target");this.transcriptViewer=new F(e,t=>{this.mainVideo.currentTime=t})}attachEventListeners(){var A,I,O,R,N,H,J;const e=this.shadow.getElementById("btn-play"),t=this.shadow.getElementById("play-icon"),i=this.shadow.getElementById("play-text"),s=this.shadow.getElementById("seek-scrubber"),o=this.shadow.getElementById("time-display"),n=()=>{this.mainVideo.paused?this.mainVideo.play():this.mainVideo.pause()};e&&e.addEventListener("click",n),this.mainVideo.addEventListener("play",()=>{t&&i&&(t.textContent="⏸",i.textContent=this.activeLocale==="am"?"አቁም":"Pause"),e==null||e.setAttribute("aria-label",this.activeLocale==="am"?"አቁም (Space)":"Pause (Space)")}),this.mainVideo.addEventListener("pause",()=>{t&&i&&(t.textContent="▶",i.textContent=this.activeLocale==="am"?"አጫውት":"Play"),e==null||e.setAttribute("aria-label",this.activeLocale==="am"?"አጫውት (Space)":"Play (Space)")}),this.mainVideo.addEventListener("timeupdate",()=>{const r=this.mainVideo.currentTime,w=this.mainVideo.duration||1;s&&!s.matches(":active")&&(s.value=(r/w*100).toFixed(1)),o&&(o.textContent=`${this.formatTime(r)} / ${this.formatTime(w)}`),this.updateCaptionDisplay(),this.transcriptViewer.updateActiveTime(r)}),s.addEventListener("input",()=>{const r=this.mainVideo.duration||1;this.mainVideo.currentTime=parseFloat(s.value)/100*r}),(A=this.shadow.getElementById("btn-rewind"))==null||A.addEventListener("click",()=>{this.mainVideo.currentTime=Math.max(0,this.mainVideo.currentTime-5)}),(I=this.shadow.getElementById("btn-forward"))==null||I.addEventListener("click",()=>{this.mainVideo.currentTime=Math.min(this.mainVideo.duration||1e3,this.mainVideo.currentTime+5)});const p=this.shadow.getElementById("btn-ad");p==null||p.addEventListener("click",async()=>{if(!this.manifest)return;this.prefs.audioDescriptionEnabled=!this.prefs.audioDescriptionEnabled,y({audioDescriptionEnabled:this.prefs.audioDescriptionEnabled}),p.setAttribute("aria-pressed",this.prefs.audioDescriptionEnabled?"true":"false");const r=this.prefs.audioDescriptionEnabled?"described":"main",w=this.manifest.sources.find($=>$.kind===r)||this.manifest.sources.find($=>$.kind==="main");w&&await this.syncController.switchSource(w.src)});const h=this.shadow.getElementById("btn-cc");h==null||h.addEventListener("click",async()=>{const r=["en","am","off"],w=(r.indexOf(this.prefs.captionLanguage)+1)%r.length;this.prefs.captionLanguage=r[w],y({captionLanguage:this.prefs.captionLanguage}),h.textContent=`CC (${this.prefs.captionLanguage.toUpperCase()})`,await this.loadCaptionTrack(this.prefs.captionLanguage)});const m=this.shadow.getElementById("btn-esl"),g=this.shadow.getElementById("esl-window");m==null||m.addEventListener("click",()=>{this.prefs.eslVisible=!this.prefs.eslVisible,y({eslVisible:this.prefs.eslVisible}),m.setAttribute("aria-pressed",this.prefs.eslVisible?"true":"false"),g&&(g.style.display=this.prefs.eslVisible?"block":"none")});const f=this.shadow.getElementById("btn-prefs"),v=this.shadow.getElementById("prefs-dialog"),x=this.shadow.getElementById("btn-close-prefs");f==null||f.addEventListener("click",()=>{var r;this.isPreferencesOpen=!0,v&&(v.style.display="flex"),(r=this.shadow.getElementById("select-cc-lang"))==null||r.focus()}),x==null||x.addEventListener("click",()=>{this.isPreferencesOpen=!1,v&&(v.style.display="none"),f==null||f.focus()}),(O=this.shadow.getElementById("select-cc-lang"))==null||O.addEventListener("change",async r=>{this.prefs.captionLanguage=r.target.value,y({captionLanguage:this.prefs.captionLanguage}),h&&(h.textContent=`CC (${this.prefs.captionLanguage.toUpperCase()})`),await this.loadCaptionTrack(this.prefs.captionLanguage)}),(R=this.shadow.getElementById("select-cc-size"))==null||R.addEventListener("change",r=>{this.prefs.captionSize=r.target.value,y({captionSize:this.prefs.captionSize}),this.updateCaptionDisplay()}),(N=this.shadow.getElementById("select-cc-theme"))==null||N.addEventListener("change",r=>{this.prefs.captionTheme=r.target.value,y({captionTheme:this.prefs.captionTheme}),this.updateCaptionDisplay()}),(H=this.shadow.getElementById("select-esl-pos"))==null||H.addEventListener("change",r=>{this.prefs.eslPosition=r.target.value,y({eslPosition:this.prefs.eslPosition}),g&&(g.className=`esl-window pos-${this.prefs.eslPosition} size-${this.prefs.eslSize}`)}),(J=this.shadow.getElementById("select-esl-size"))==null||J.addEventListener("change",r=>{this.prefs.eslSize=r.target.value,y({eslSize:this.prefs.eslSize}),g&&(g.className=`esl-window pos-${this.prefs.eslPosition} size-${this.prefs.eslSize}`)});const k=this.shadow.getElementById("transcript-search");k==null||k.addEventListener("input",()=>{this.transcriptViewer.setSearchQuery(k.value)});const S=this.shadow.getElementById("player-container");S==null||S.addEventListener("keydown",r=>{if(this.isPreferencesOpen){r.key==="Escape"&&(this.isPreferencesOpen=!1,v&&(v.style.display="none"),f==null||f.focus());return}if(!(r.target.tagName==="INPUT"||r.target.tagName==="SELECT"))switch(r.key){case" ":case"k":case"K":r.preventDefault(),n();break;case"j":case"J":case"ArrowLeft":r.preventDefault(),this.mainVideo.currentTime=Math.max(0,this.mainVideo.currentTime-5);break;case"l":case"L":case"ArrowRight":r.preventDefault(),this.mainVideo.currentTime=Math.min(this.mainVideo.duration||1e3,this.mainVideo.currentTime+5);break;case"m":case"M":r.preventDefault(),this.mainVideo.muted=!this.mainVideo.muted;break;case"c":case"C":r.preventDefault(),h==null||h.click();break;case"s":case"S":r.preventDefault(),m==null||m.click();break;case"d":case"D":r.preventDefault(),p==null||p.click();break;case"+":case"=":r.preventDefault(),this.cycleESLSize(1);break;case"-":case"_":r.preventDefault(),this.cycleESLSize(-1);break}})}cycleESLSize(e){const t=["small","medium","large"];let i=t.indexOf(this.prefs.eslSize)+e;i<0&&(i=0),i>=t.length&&(i=t.length-1),this.prefs.eslSize=t[i],y({eslSize:this.prefs.eslSize});const s=this.shadow.getElementById("esl-window");s&&(s.className=`esl-window pos-${this.prefs.eslPosition} size-${this.prefs.eslSize}`)}updateLocaleStrings(){this.render(),this.initTracksAndTranscript()}formatTime(e){const t=Math.floor(e/60),i=Math.floor(e%60);return`${t.toString().padStart(2,"0")}:${i.toString().padStart(2,"0")}`}}customElements.get("a11y-media-player")||customElements.define("a11y-media-player",B);const D=["መስከረም","ጥቅምት","ህዳር","ታኅሣሥ","ጥር","የካቲት","መጋቢት","ሚያዝያ","ግንቦት","ሰኔ","ሐምሌ","ነሐሴ","ጳጉሜ"];function j(l){const a=typeof l=="string"?new Date(l):l,e=a.getUTCFullYear(),t=a.getUTCMonth()+1,i=a.getUTCDate(),s=Math.floor((14-t)/12),o=e+4800-s,n=t+12*s-3,p=i+Math.floor((153*n+2)/5)+365*o+Math.floor(o/4)-Math.floor(o/100)+Math.floor(o/400)-32045,h=(p-1723856)%1461,m=h%365+365*Math.floor(h/1460),g=4*Math.floor((p-1723856)/1461)+Math.floor(h/365)-Math.floor(h/1460),f=Math.floor(m/30)+1,v=m%30+1,x=D[Math.min(f-1,12)];return{year:g,month:f,day:v,monthNameAmharic:x}}function P(l){const a=j(l),e=`${a.monthNameAmharic} ${a.day}፣ ${a.year} ዓ.ም`;return{iso:l,ethiopic:e,display:`${l} (${e})`}}class z extends HTMLElement{constructor(){super();c(this,"shadow");c(this,"job",null);c(this,"activeLocale","en");this.shadow=this.attachShadow({mode:"open"})}static get observedAttributes(){return["job-data","locale"]}connectedCallback(){this.activeLocale=this.getAttribute("locale")||"en";const e=this.getAttribute("job-data");if(e)try{this.job=JSON.parse(e)}catch{}this.render()}setJob(e){this.job=e,this.render()}attributeChangedCallback(e,t,i){if(t!==i){if(e==="locale")this.activeLocale=i||"en",this.render();else if(e==="job-data")try{this.job=JSON.parse(i),this.render()}catch{}}}render(){if(!this.job){this.shadow.innerHTML='<div class="job-placeholder">No job data supplied</div>';return}const e=this.activeLocale==="am",t=this.job.title[this.activeLocale]||this.job.title.en,i=this.job.location[this.activeLocale]||this.job.location.en,s=this.job.description[this.activeLocale]||this.job.description.en,o=this.job.applicationDeadline?P(this.job.applicationDeadline):null,n={"@context":"https://schema.org/","@type":"JobPosting",title:t,description:s,hiringOrganization:{"@type":"Organization",name:this.job.employer},jobLocation:{"@type":"Place",address:{"@type":"PostalAddress",addressLocality:i,addressCountry:"ET"}},validThrough:this.job.applicationDeadline||"2026-12-31"};this.shadow.innerHTML=`
+    `,this.bindDOMElements(),this.attachEventListeners(),this.setupESLDrag()}bindDOMElements(){this.mainVideo=this.shadow.getElementById("main-video"),this.signVideo=this.shadow.getElementById("sign-video"),this.captionOverlay=this.shadow.getElementById("caption-overlay"),this.syncController=new P(this.mainVideo,{driftThreshold:.25,onSignStatusChange:t=>{const i=this.shadow.getElementById("sign-status-indicator");i&&(t==="loading"?(i.style.display="inline-block",i.textContent=this.activeLocale==="am"?"በመጫን ላይ...":"Loading..."):t==="error"?(i.style.display="inline-block",i.textContent=this.activeLocale==="am"?"ምልክት ቋንቋ አልተገኘም":"Sign Unavailable",i.style.background="#FEF2F2",i.style.color="#991B1B"):i.style.display="none")}}),this.signVideo&&this.syncController.setSignVideo(this.signVideo);const e=this.shadow.getElementById("transcript-target");this.transcriptViewer=new A(e,{locale:this.activeLocale,onSeekAndPlay:t=>{this.seekAndPlay(t)}})}setupESLDrag(){const e=this.shadow.getElementById("esl-window"),t=this.shadow.getElementById("esl-drag-handle"),i=this.shadow.querySelector(".video-viewport");if(!e||!t||!i)return;let a=!1,n=0,l=0,d=0,u=0;t.addEventListener("pointerdown",c=>{a=!0,t.setPointerCapture(c.pointerId),n=c.clientX,l=c.clientY;const g=e.getBoundingClientRect(),b=i.getBoundingClientRect();d=g.left-b.left,u=g.top-b.top,e.style.left=`${d}px`,e.style.top=`${u}px`,e.style.right="auto",e.style.bottom="auto",c.preventDefault()}),t.addEventListener("pointermove",c=>{if(!a)return;const g=c.clientX-n,b=c.clientY-l,x=i.getBoundingClientRect(),S=e.getBoundingClientRect(),k=Math.max(0,x.width-S.width),E=Math.max(0,x.height-S.height),$=Math.min(Math.max(0,d+g),k),C=Math.min(Math.max(0,u+b),E);e.style.left=`${$}px`,e.style.top=`${C}px`});const m=c=>{if(a){a=!1;try{t.releasePointerCapture(c.pointerId)}catch{}}};t.addEventListener("pointerup",m),t.addEventListener("pointercancel",m)}attachEventListeners(){var $,C,R,H,U,J,_;const e=this.shadow.getElementById("btn-play"),t=this.shadow.getElementById("play-icon"),i=this.shadow.getElementById("play-text"),a=this.shadow.getElementById("seek-scrubber"),n=this.shadow.getElementById("time-display"),l=()=>{this.mainVideo.paused?this.mainVideo.play():this.mainVideo.pause()};e&&e.addEventListener("click",l),this.mainVideo.addEventListener("play",()=>{t&&i&&(t.textContent="⏸",i.textContent=this.activeLocale==="am"?"አቁም":"Pause"),e==null||e.setAttribute("aria-label",this.activeLocale==="am"?"አቁም (Space)":"Pause (Space)")}),this.mainVideo.addEventListener("pause",()=>{t&&i&&(t.textContent="▶",i.textContent=this.activeLocale==="am"?"አጫውት":"Play"),e==null||e.setAttribute("aria-label",this.activeLocale==="am"?"አጫውት (Space)":"Play (Space)")}),this.mainVideo.addEventListener("timeupdate",()=>{const o=this.mainVideo.currentTime,w=this.mainVideo.duration||1;a&&!a.matches(":active")&&(a.value=(o/w*100).toFixed(1)),n&&(n.textContent=`${this.formatTime(o)} / ${this.formatTime(w)}`),this.updateCaptionDisplay(),this.transcriptViewer.updateActiveTime(o)}),a.addEventListener("input",()=>{const o=this.mainVideo.duration||1;this.mainVideo.currentTime=parseFloat(a.value)/100*o}),($=this.shadow.getElementById("btn-rewind"))==null||$.addEventListener("click",()=>{this.mainVideo.currentTime=Math.max(0,this.mainVideo.currentTime-5)}),(C=this.shadow.getElementById("btn-forward"))==null||C.addEventListener("click",()=>{this.mainVideo.currentTime=Math.min(this.mainVideo.duration||1e3,this.mainVideo.currentTime+5)});const d=this.shadow.getElementById("btn-ad");d==null||d.addEventListener("click",async()=>{if(!this.manifest)return;this.prefs.audioDescriptionEnabled=!this.prefs.audioDescriptionEnabled,v({audioDescriptionEnabled:this.prefs.audioDescriptionEnabled}),d.setAttribute("aria-pressed",this.prefs.audioDescriptionEnabled?"true":"false");const o=this.prefs.audioDescriptionEnabled?"described":"main",w=this.manifest.sources.find(F=>F.kind===o)||this.manifest.sources.find(F=>F.kind==="main");w&&await this.syncController.switchSource(w.src)});const u=this.shadow.getElementById("btn-cc");u==null||u.addEventListener("click",async()=>{const o=["en","am","off"],w=(o.indexOf(this.prefs.captionLanguage)+1)%o.length;this.prefs.captionLanguage=o[w],v({captionLanguage:this.prefs.captionLanguage}),u.textContent=`CC (${this.prefs.captionLanguage.toUpperCase()})`,await this.loadCaptionTrack(this.prefs.captionLanguage)});const m=this.shadow.getElementById("btn-esl"),c=this.shadow.getElementById("esl-window");m==null||m.addEventListener("click",()=>{this.prefs.eslVisible=!this.prefs.eslVisible,v({eslVisible:this.prefs.eslVisible}),m.setAttribute("aria-pressed",this.prefs.eslVisible?"true":"false"),c&&(c.style.display=this.prefs.eslVisible?"block":"none")});const g=this.shadow.getElementById("btn-prefs"),b=this.shadow.getElementById("prefs-dialog"),x=this.shadow.getElementById("btn-close-prefs"),S=this.shadow.getElementById("btn-reset-layout");g==null||g.addEventListener("click",()=>{var o;this.isPreferencesOpen=!0,b&&(b.style.display="flex"),(o=this.shadow.getElementById("select-cc-lang"))==null||o.focus()}),x==null||x.addEventListener("click",()=>{this.isPreferencesOpen=!1,b&&(b.style.display="none"),g==null||g.focus()}),S==null||S.addEventListener("click",()=>{V(),this.prefs=L(),c&&(c.style.left="",c.style.top="",c.style.right="",c.style.bottom="",c.className=`esl-window pos-${this.prefs.eslPosition} size-${this.prefs.eslSize}`);const o=this.shadow.getElementById("select-esl-pos"),w=this.shadow.getElementById("select-esl-size");o&&(o.value=this.prefs.eslPosition),w&&(w.value=this.prefs.eslSize)}),(R=this.shadow.getElementById("select-cc-lang"))==null||R.addEventListener("change",async o=>{this.prefs.captionLanguage=o.target.value,v({captionLanguage:this.prefs.captionLanguage}),u&&(u.textContent=`CC (${this.prefs.captionLanguage.toUpperCase()})`),await this.loadCaptionTrack(this.prefs.captionLanguage)}),(H=this.shadow.getElementById("select-cc-size"))==null||H.addEventListener("change",o=>{this.prefs.captionSize=o.target.value,v({captionSize:this.prefs.captionSize}),this.updateCaptionDisplay()}),(U=this.shadow.getElementById("select-cc-theme"))==null||U.addEventListener("change",o=>{this.prefs.captionTheme=o.target.value,v({captionTheme:this.prefs.captionTheme}),this.updateCaptionDisplay()}),(J=this.shadow.getElementById("select-esl-pos"))==null||J.addEventListener("change",o=>{this.prefs.eslPosition=o.target.value,v({eslPosition:this.prefs.eslPosition}),c&&(c.style.left="",c.style.top="",c.style.right="",c.style.bottom="",c.className=`esl-window pos-${this.prefs.eslPosition} size-${this.prefs.eslSize}`)}),(_=this.shadow.getElementById("select-esl-size"))==null||_.addEventListener("change",o=>{this.prefs.eslSize=o.target.value,v({eslSize:this.prefs.eslSize}),c&&(c.className=`esl-window pos-${this.prefs.eslPosition} size-${this.prefs.eslSize}`)});const k=this.shadow.getElementById("transcript-search");k==null||k.addEventListener("input",()=>{this.transcriptViewer.setSearchQuery(k.value)});const E=this.shadow.getElementById("player-container");E==null||E.addEventListener("keydown",o=>{if(this.isPreferencesOpen){o.key==="Escape"&&(this.isPreferencesOpen=!1,b&&(b.style.display="none"),g==null||g.focus());return}if(!(o.target.tagName==="INPUT"||o.target.tagName==="SELECT"))switch(o.key){case" ":case"k":case"K":o.preventDefault(),l();break;case"j":case"J":case"ArrowLeft":o.preventDefault(),this.mainVideo.currentTime=Math.max(0,this.mainVideo.currentTime-5);break;case"l":case"L":case"ArrowRight":o.preventDefault(),this.mainVideo.currentTime=Math.min(this.mainVideo.duration||1e3,this.mainVideo.currentTime+5);break;case"m":case"M":o.preventDefault(),this.mainVideo.muted=!this.mainVideo.muted;break;case"c":case"C":o.preventDefault(),u==null||u.click();break;case"s":case"S":o.preventDefault(),m==null||m.click();break;case"d":case"D":o.preventDefault(),d==null||d.click();break;case"+":case"=":o.preventDefault(),this.cycleESLSize(1);break;case"-":case"_":o.preventDefault(),this.cycleESLSize(-1);break}})}cycleESLSize(e){const t=["small","medium","large"];let i=t.indexOf(this.prefs.eslSize)+e;i<0&&(i=0),i>=t.length&&(i=t.length-1),this.prefs.eslSize=t[i],v({eslSize:this.prefs.eslSize});const a=this.shadow.getElementById("esl-window");a&&(a.className=`esl-window pos-${this.prefs.eslPosition} size-${this.prefs.eslSize}`)}updateLocaleStrings(){this.render(),this.initTracksAndTranscript()}formatTime(e){const t=Math.floor(e/60),i=Math.floor(e%60);return`${t.toString().padStart(2,"0")}:${i.toString().padStart(2,"0")}`}}customElements.get("a11y-media-player")||customElements.define("a11y-media-player",j);const z=["መስከረም","ጥቅምት","ህዳር","ታኅሣሥ","ጥር","የካቲት","መጋቢት","ሚያዝያ","ግንቦት","ሰኔ","ሐምሌ","ነሐሴ","ጳጉሜ"];function M(h){const s=typeof h=="string"?new Date(h):h,e=s.getUTCFullYear(),t=s.getUTCMonth()+1,i=s.getUTCDate(),a=Math.floor((14-t)/12),n=e+4800-a,l=t+12*a-3,d=i+Math.floor((153*l+2)/5)+365*n+Math.floor(n/4)-Math.floor(n/100)+Math.floor(n/400)-32045,u=(d-1723856)%1461,m=u%365+365*Math.floor(u/1460),c=4*Math.floor((d-1723856)/1461)+Math.floor(u/365)-Math.floor(u/1460),g=Math.floor(m/30)+1,b=m%30+1,x=z[Math.min(g-1,12)];return{year:c,month:g,day:b,monthNameAmharic:x}}function I(h){const s=M(h),e=`${s.monthNameAmharic} ${s.day}፣ ${s.year} ዓ.ም`;return{iso:h,ethiopic:e,display:`${h} (${e})`}}class O extends HTMLElement{constructor(){super();r(this,"shadow");r(this,"job",null);r(this,"activeLocale","en");this.shadow=this.attachShadow({mode:"open"})}static get observedAttributes(){return["job-data","locale"]}connectedCallback(){this.activeLocale=this.getAttribute("locale")||"en";const e=this.getAttribute("job-data");if(e)try{this.job=JSON.parse(e)}catch{}this.render()}setJob(e){this.job=e,this.render()}attributeChangedCallback(e,t,i){if(t!==i){if(e==="locale")this.activeLocale=i||"en",this.render();else if(e==="job-data")try{this.job=JSON.parse(i),this.render()}catch{}}}render(){if(!this.job){this.shadow.innerHTML='<div class="job-placeholder">No job data supplied</div>';return}const e=this.activeLocale==="am",t=this.job.title[this.activeLocale]||this.job.title.en,i=this.job.location[this.activeLocale]||this.job.location.en,a=this.job.description[this.activeLocale]||this.job.description.en,n=this.job.applicationDeadline?I(this.job.applicationDeadline):null,l={"@context":"https://schema.org/","@type":"JobPosting",title:t,description:a,hiringOrganization:{"@type":"Organization",name:this.job.employer},jobLocation:{"@type":"Place",address:{"@type":"PostalAddress",addressLocality:i,addressCountry:"ET"}},validThrough:this.job.applicationDeadline||"2026-12-31"};this.shadow.innerHTML=`
       <style>
         :host {
           display: block;
@@ -597,7 +698,7 @@
 
       <!-- schema.org/JobPosting JSON-LD -->
       <script type="application/ld+json">
-        ${JSON.stringify(n)}
+        ${JSON.stringify(l)}
       <\/script>
 
       <article class="card" aria-labelledby="job-title-${this.job.id}">
@@ -607,7 +708,7 @@
             <span><strong>${this.job.employer}</strong></span> &bull;
             <span>${i}</span> &bull;
             <span>${this.job.workMode.toUpperCase()}</span>
-            ${o?` &bull; <span class="badge calendar" aria-label="Deadline: ${o.display}">📅 ${e?"የማመልከቻ ማብቂያ፦":"Deadline:"} ${o.display}</span>`:""}
+            ${n?` &bull; <span class="badge calendar" aria-label="Deadline: ${n.display}">📅 ${e?"የማመልከቻ ማብቂያ፦":"Deadline:"} ${n.display}</span>`:""}
           </div>
         </header>
 
@@ -626,17 +727,17 @@
           </div>
         </section>
 
-        <p>${s}</p>
+        <p>${a}</p>
 
         <!-- Transparent Accommodations -->
         <div>
           <strong id="acc-heading-${this.job.id}">${e?"የተረጋገጡ ማመቻቸቶች (Accommodations Offered):":"Employer-Provided Accommodations:"}</strong>
           <ul class="tags-list" aria-labelledby="acc-heading-${this.job.id}">
-            ${this.job.accommodations.map(p=>`
+            ${this.job.accommodations.map(d=>`
               <li class="badge accommodation">
                 <span aria-hidden="true">✓</span>
-                <span>${p.label[this.activeLocale]||p.label.en}</span>
-                <small style="opacity: 0.85;">(${p.source})</small>
+                <span>${d.label[this.activeLocale]||d.label.en}</span>
+                <small style="opacity: 0.85;">(${d.source})</small>
               </li>
             `).join("")}
           </ul>
@@ -655,5 +756,5 @@
           <span class="share-feedback" id="share-feedback" aria-live="polite"></span>
         </footer>
       </article>
-    `,this.attachShareHandler()}attachShareHandler(){const e=this.shadow.getElementById("btn-share-cert"),t=this.shadow.getElementById("share-feedback");!e||!t||e.addEventListener("click",async()=>{const i=`${window.location.origin}/verify.html?certId=CERT-DB-2026-0042`;if(navigator.share)try{await navigator.share({title:"Demonstrated Certificate — Savanna Platform",text:"Verified Certificate for Digital Workplace Skills: Foundations",url:i}),t.textContent=this.activeLocale==="am"?"ተጋርቷል!":"Link shared!";return}catch{}try{await navigator.clipboard.writeText(i),t.textContent=this.activeLocale==="am"?"የምስክር ወረቀት አገናኝ ተገልብጧል!":"Certificate link copied to clipboard!"}catch{t.textContent=i}})}}customElements.get("a11y-job-card")||customElements.define("a11y-job-card",z);const _="abugida-media",U=1;class M{constructor(){c(this,"db",null);c(this,"cacheName","abugida-offline-v1")}async init(){if(!this.db)return new Promise((a,e)=>{const t=indexedDB.open(_,U);t.onupgradeneeded=i=>{const s=i.target.result;s.objectStoreNames.contains("preferences")||s.createObjectStore("preferences"),s.objectStoreNames.contains("progress")||s.createObjectStore("progress",{keyPath:"lessonId"}),s.objectStoreNames.contains("packages")||s.createObjectStore("packages",{keyPath:"packageKey"})},t.onsuccess=i=>{this.db=i.target.result,a()},t.onerror=()=>{console.warn("IndexedDB unavailable, falling back to memory/localStorage"),a()}})}async saveProgress(a){if(await this.init(),!this.db){try{localStorage.setItem(`progress_${a.lessonId}`,JSON.stringify(a))}catch{}return}return new Promise(e=>{const t=this.db.transaction("progress","readwrite");t.objectStore("progress").put(a),t.oncomplete=()=>e(),t.onerror=()=>e()})}async getProgress(a){if(await this.init(),!this.db)try{const e=localStorage.getItem(`progress_${a}`);return e?JSON.parse(e):null}catch{return null}return new Promise(e=>{const s=this.db.transaction("progress","readonly").objectStore("progress").get(a);s.onsuccess=()=>e(s.result||null),s.onerror=()=>e(null)})}async downloadPackage(a,e,t,i,s){await this.init();const o=`${a}:${e}`;if(!("caches"in window))throw new Error("Cache Storage API is not supported in this browser.");try{const n=await caches.open(this.cacheName);let p=0;const h=i.length;for(const m of i){const g=await fetch(m);if(!g.ok)throw new Error(`Failed to fetch asset: ${m} (${g.status})`);await n.put(m,g.clone()),p++;const f=Math.round(p/h*100);s(f,p,h)}return await this.savePackageRecord({packageKey:o,lessonId:a,packageId:e,packageName:t,status:"ready",totalBytes:32e5,downloadedBytes:32e5,timestamp:Date.now()}),!0}catch(n){throw await this.savePackageRecord({packageKey:o,lessonId:a,packageId:e,packageName:t,status:"error",totalBytes:32e5,downloadedBytes:0,timestamp:Date.now(),error:n instanceof Error?n.message:"Download failed"}),n}}async isPackageReady(a,e){await this.init();const t=`${a}:${e}`,i=await this.getPackageRecord(t);return(i==null?void 0:i.status)==="ready"}async savePackageRecord(a){if(this.db)return new Promise(e=>{const t=this.db.transaction("packages","readwrite");t.objectStore("packages").put(a),t.oncomplete=()=>e(),t.onerror=()=>e()})}async getPackageRecord(a){return this.db?new Promise(e=>{const s=this.db.transaction("packages","readonly").objectStore("packages").get(a);s.onsuccess=()=>e(s.result||null),s.onerror=()=>e(null)}):null}}const q=new M;d.A11yJobCard=z,d.A11yMediaPlayer=B,d.DEFAULT_PREFERENCES=b,d.ETHIOPIC_MONTHS=D,d.MediaSyncController=V,d.OfflineStorageManager=M,d.TranscriptViewer=F,d.formatDualDate=P,d.getThemeStyles=C,d.loadPreferences=E,d.offlineStorage=q,d.parseVTT=L,d.savePreferences=y,d.toEthiopianDate=j,Object.defineProperty(d,Symbol.toStringTag,{value:"Module"})});
+    `,this.attachShareHandler()}attachShareHandler(){const e=this.shadow.getElementById("btn-share-cert"),t=this.shadow.getElementById("share-feedback");!e||!t||e.addEventListener("click",async()=>{const i=`${window.location.origin}/verify.html?certId=CERT-DB-2026-0042`;if(navigator.share)try{await navigator.share({title:"Demonstrated Certificate — Savanna Platform",text:"Verified Certificate for Digital Workplace Skills: Foundations",url:i}),t.textContent=this.activeLocale==="am"?"ተጋርቷል!":"Link shared!";return}catch{}try{await navigator.clipboard.writeText(i),t.textContent=this.activeLocale==="am"?"የምስክር ወረቀት አገናኝ ተገልብጧል!":"Certificate link copied to clipboard!"}catch{t.textContent=i}})}}customElements.get("a11y-job-card")||customElements.define("a11y-job-card",O);const q="abugida-media",K=1;class N{constructor(){r(this,"db",null);r(this,"cacheName","abugida-offline-v1")}async init(){if(!this.db)return new Promise((s,e)=>{const t=indexedDB.open(q,K);t.onupgradeneeded=i=>{const a=i.target.result;a.objectStoreNames.contains("preferences")||a.createObjectStore("preferences"),a.objectStoreNames.contains("progress")||a.createObjectStore("progress",{keyPath:"lessonId"}),a.objectStoreNames.contains("packages")||a.createObjectStore("packages",{keyPath:"packageKey"})},t.onsuccess=i=>{this.db=i.target.result,s()},t.onerror=()=>{console.warn("IndexedDB unavailable, falling back to memory/localStorage"),s()}})}async saveProgress(s){if(await this.init(),!this.db){try{localStorage.setItem(`progress_${s.lessonId}`,JSON.stringify(s))}catch{}return}return new Promise(e=>{const t=this.db.transaction("progress","readwrite");t.objectStore("progress").put(s),t.oncomplete=()=>e(),t.onerror=()=>e()})}async getProgress(s){if(await this.init(),!this.db)try{const e=localStorage.getItem(`progress_${s}`);return e?JSON.parse(e):null}catch{return null}return new Promise(e=>{const a=this.db.transaction("progress","readonly").objectStore("progress").get(s);a.onsuccess=()=>e(a.result||null),a.onerror=()=>e(null)})}async downloadPackage(s,e,t,i,a){await this.init();const n=`${s}:${e}`;if(!("caches"in window))throw new Error("Cache Storage API is not supported in this browser.");try{const l=await caches.open(this.cacheName);let d=0;const u=i.length;for(const m of i){const c=await fetch(m);if(!c.ok)throw new Error(`Failed to fetch asset: ${m} (${c.status})`);await l.put(m,c.clone()),d++;const g=Math.round(d/u*100);a(g,d,u)}return await this.savePackageRecord({packageKey:n,lessonId:s,packageId:e,packageName:t,status:"ready",totalBytes:32e5,downloadedBytes:32e5,timestamp:Date.now()}),!0}catch(l){throw await this.savePackageRecord({packageKey:n,lessonId:s,packageId:e,packageName:t,status:"error",totalBytes:32e5,downloadedBytes:0,timestamp:Date.now(),error:l instanceof Error?l.message:"Download failed"}),l}}async isPackageReady(s,e){await this.init();const t=`${s}:${e}`,i=await this.getPackageRecord(t);return(i==null?void 0:i.status)==="ready"}async savePackageRecord(s){if(this.db)return new Promise(e=>{const t=this.db.transaction("packages","readwrite");t.objectStore("packages").put(s),t.oncomplete=()=>e(),t.onerror=()=>e()})}async getPackageRecord(s){return this.db?new Promise(e=>{const a=this.db.transaction("packages","readonly").objectStore("packages").get(s);a.onsuccess=()=>e(a.result||null),a.onerror=()=>e(null)}):null}}const W=new N;p.A11yJobCard=O,p.A11yMediaPlayer=j,p.DEFAULT_PREFERENCES=y,p.ETHIOPIC_MONTHS=z,p.MediaSyncController=P,p.OfflineStorageManager=N,p.TranscriptViewer=A,p.formatDualDate=I,p.getThemeStyles=D,p.loadPreferences=L,p.offlineStorage=W,p.parseVTT=T,p.resetPreferences=V,p.savePreferences=v,p.toEthiopianDate=M,Object.defineProperty(p,Symbol.toStringTag,{value:"Module"})});
 //# sourceMappingURL=a11y-media-kit.umd.js.map
