@@ -1,5 +1,6 @@
 import "@abugida/media-kit";
 import { AccessibleJob } from "@abugida/lesson-schema";
+import { offlineStorage } from "@abugida/media-kit";
 
 let currentLocale: "en" | "am" = "en";
 
@@ -58,26 +59,71 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   loadJobs();
 
-  // 3G Offline pack downloader
-  const btnDownload = document.getElementById("btn-download-pack");
+  // Register service worker
+  if ("serviceWorker" in navigator) {
+    try {
+      await navigator.serviceWorker.register("/sw.js");
+    } catch (e) {
+      console.warn("Service worker registration failed", e);
+    }
+  }
+
+  // 3G Offline pack downloader with OfflineStorageManager
+  const btnDownload = document.getElementById("btn-download-pack") as HTMLButtonElement;
   const downloadStatus = document.getElementById("download-status");
+
+  // Check if already ready
+  const isReady = await offlineStorage.isPackageReady("digital-workplace-01", "pkg-3g-light");
+  if (isReady && downloadStatus) {
+    downloadStatus.style.display = "block";
+    downloadStatus.style.color = "#1B5E20";
+    downloadStatus.textContent = currentLocale === "am" 
+      ? "✓ ይህ ትምህርት በስልክዎ ላይ ተቀምጧል (ኢንተርኔት ሳይኖር መጠቀም ይችላሉ)።" 
+      : "✓ Lesson package is stored offline and ready for airplane mode.";
+    if (btnDownload) {
+      btnDownload.textContent = currentLocale === "am" ? "ዳግም አውርድ" : "Re-download Package";
+    }
+  }
+
   if (btnDownload && downloadStatus) {
     btnDownload.addEventListener("click", async () => {
       downloadStatus.style.display = "block";
-      downloadStatus.textContent = currentLocale === "am" ? "ማውረድ ተጀምሯል..." : "Downloading 3G offline pack...";
+      downloadStatus.style.color = "#0B5D4E";
+      btnDownload.disabled = true;
+
+      const assetsToCache = [
+        "/lessons/digital-workplace/lesson.json",
+        "/lessons/digital-workplace/captions.en.vtt",
+        "/lessons/digital-workplace/captions.am.vtt",
+        "/lessons/digital-workplace/transcript.en.json",
+        "/lessons/digital-workplace/documents/lesson.en.html",
+        "/jobs/jobs.json",
+        "/verify.html"
+      ];
 
       try {
-        if ("serviceWorker" in navigator) {
-          const reg = await navigator.serviceWorker.register("/sw.js");
-          await navigator.serviceWorker.ready;
-          downloadStatus.textContent = currentLocale === "am" 
-            ? "ፓኬጁ በተሳካ ሁኔታ ተቀምጧል! አሁን ኢንተርኔት ሳይኖር መጠቀም ይችላሉ።" 
-            : "Offline pack downloaded! You can now access this lesson in airplane mode.";
-        } else {
-          downloadStatus.textContent = "Offline storage unavailable in this browser.";
-        }
+        await offlineStorage.downloadPackage(
+          "digital-workplace-01",
+          "pkg-3g-light",
+          "3G Light Study Pack",
+          assetsToCache,
+          (pct) => {
+            downloadStatus.textContent = currentLocale === "am" 
+              ? `እያወረደ ነው... ${pct}%` 
+              : `Downloading 3G package... ${pct}%`;
+          }
+        );
+
+        downloadStatus.style.color = "#1B5E20";
+        downloadStatus.textContent = currentLocale === "am" 
+          ? "✓ ማውረድ ተጠናቋል! አሁን ኢንተርኔት አጥፍተው (Airplane Mode) መጠቀም ይችላሉ።" 
+          : "✓ Download complete! You can now disconnect or use Airplane Mode.";
+        btnDownload.disabled = false;
+        btnDownload.textContent = currentLocale === "am" ? "ዳግም አውርድ" : "Re-download Package";
       } catch (err) {
+        downloadStatus.style.color = "#D32F2F";
         downloadStatus.textContent = `Download failed: ${err instanceof Error ? err.message : "Error"}`;
+        btnDownload.disabled = false;
       }
     });
   }
