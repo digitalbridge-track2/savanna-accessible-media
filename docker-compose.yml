@@ -1,0 +1,28 @@
+services:
+  # Level 1: Static Web Component & Demo Application
+  demo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:80/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Level 2: Local FastAPI Transcription & OpenAPI Service
+  transcript-api:
+    build:
+      context: .
+      dockerfile: services/transcript-api/Dockerfile
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
