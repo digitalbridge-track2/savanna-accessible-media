@@ -5,7 +5,7 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
   const [copyMsg, setCopyMsg] = useState("");
   const isAm = locale === "am";
 
-  const dualDate = formatDualDate(new Date(2026, 10, 14));
+  const dualDate = formatDualDate("2026-11-14");
 
   const handleCopy = async () => {
     try {
@@ -40,7 +40,7 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
             background: "#E8F5E9",
             borderLeft: "5px solid #2E7D32",
             padding: "1.25rem",
-            borderRadius: "6px",
+            borderRadius: "8px",
             marginBottom: "1.5rem",
           }}
         >
@@ -71,7 +71,7 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
 
             <dt><strong>{isAm ? "የተሰጠበት ቀን:" : "Issue Date:"}</strong></dt>
             <dd>
-              <strong>{dualDate.formatted}</strong>
+              <strong>{dualDate.display}</strong>
             </dd>
           </dl>
         </div>

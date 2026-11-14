@@ -1,16 +1,25 @@
 import React, { useState, useRef, useEffect } from "react";
-import { AccessibleJob } from "@abugida/lesson-schema";
+import { AccessibleJob, LocalizedString } from "@abugida/lesson-schema";
 
 interface JobCardItemProps {
   job: AccessibleJob;
   locale: "en" | "am";
 }
 
+export function resolveLocalized(val: LocalizedString | string | undefined | null, locale: "en" | "am"): string {
+  if (!val) return "";
+  if (typeof val === "string") return val;
+  if (typeof val === "object") {
+    return val[locale] || val.en || val.am || "";
+  }
+  return String(val);
+}
+
 export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Stop audio playback when unmounting (e.g. navigating away)
+  // Safely cleanup audio playback on unmount
   useEffect(() => {
     return () => {
       if (audioRef.current) {
@@ -20,114 +29,159 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
     };
   }, []);
 
+  const audioSrc = job.audioSummary?.src;
+
   const toggleAudio = () => {
+    if (!audioSrc) return;
+
     if (!audioRef.current) {
-      if (!job.audioSummary?.audioSrc) return;
-      audioRef.current = new Audio(job.audioSummary.audioSrc);
+      audioRef.current = new Audio(audioSrc);
       audioRef.current.addEventListener("ended", () => setIsPlaying(false));
       audioRef.current.addEventListener("pause", () => setIsPlaying(false));
       audioRef.current.addEventListener("play", () => setIsPlaying(true));
+      audioRef.current.addEventListener("error", () => setIsPlaying(false));
     }
 
     if (isPlaying) {
       audioRef.current.pause();
     } else {
       audioRef.current.play().catch((err) => {
-        console.warn("Audio play prevented:", err);
+        console.warn("Audio playback prevented:", err);
         setIsPlaying(false);
       });
     }
   };
 
   const isAm = locale === "am";
-  const title = isAm && job.titleAm ? job.titleAm : job.title;
-  const employer = isAm && job.employerAm ? job.employerAm : job.employer;
-  const description = isAm && job.descriptionAm ? job.descriptionAm : job.description;
+  const title = resolveLocalized(job.title, locale);
+  const location = resolveLocalized(job.location, locale);
+  const description = resolveLocalized(job.description, locale);
+  const employer = typeof job.employer === "string" ? job.employer : resolveLocalized(job.employer, locale);
+
+  const accommodationsList = Array.isArray(job.accommodations) ? job.accommodations : [];
 
   return (
     <article
       className="card"
       style={{
-        marginBottom: "1.5rem",
+        marginBottom: "1.25rem",
         display: "flex",
         flexDirection: "column",
-        gap: "1rem",
+        gap: "0.85rem",
       }}
       aria-labelledby={`job-title-${job.id}`}
     >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "0.5rem" }}>
-        <div>
-          <h4 id={`job-title-${job.id}`} style={{ margin: "0 0 0.25rem 0", fontSize: "1.2rem", color: "var(--color-brand)" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+          flexWrap: "wrap",
+          gap: "0.75rem",
+        }}
+      >
+        <div style={{ flex: "1 1 300px" }}>
+          <h4
+            id={`job-title-${job.id}`}
+            style={{
+              margin: "0 0 0.35rem 0",
+              fontSize: "1.2rem",
+              fontWeight: 700,
+              color: "var(--color-brand)",
+            }}
+          >
             {title}
           </h4>
-          <p style={{ margin: 0, color: "var(--color-muted-ink)", fontWeight: 500 }}>
-            {employer} &bull; <span>{job.location}</span> ({job.jobLocationType})
+          <p style={{ margin: 0, color: "var(--color-muted-ink)", fontWeight: 500, fontSize: "0.95rem" }}>
+            <strong>{employer}</strong> &bull; <span>{location}</span>{" "}
+            {job.workMode && <span style={{ textTransform: "capitalize" }}>({job.workMode})</span>}
           </p>
         </div>
 
-        {job.audioSummary?.audioSrc && (
+        {audioSrc && (
           <button
             type="button"
             className="btn btn-outline"
             onClick={toggleAudio}
             aria-pressed={isPlaying}
             aria-label={`${isPlaying ? (isAm ? "አቁም" : "Pause") : (isAm ? "የድምፅ ማጠቃለያ አድምጥ" : "Listen to audio summary")} for ${title}`}
-            style={{ fontSize: "0.85rem", padding: "0.4rem 0.8rem", minHeight: "40px" }}
+            style={{
+              fontSize: "0.85rem",
+              padding: "0.4rem 0.85rem",
+              minHeight: "40px",
+              flexShrink: 0,
+            }}
           >
             {isPlaying ? "⏸ " + (isAm ? "አቁም" : "Pause Audio") : "🔊 " + (isAm ? "የድምፅ ማጠቃለያ" : "Audio Summary")}
           </button>
         )}
       </div>
 
-      <p style={{ margin: 0, lineHeight: 1.5, color: "var(--color-ink)" }}>
+      <p style={{ margin: 0, lineHeight: 1.6, color: "var(--color-ink)", fontSize: "0.98rem" }}>
         {description}
       </p>
 
       {/* Accommodations Disclosure */}
-      {job.accommodations && (
-        <div style={{ background: "#F4F7F5", padding: "0.85rem", borderRadius: "6px" }}>
-          <strong style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.5px", color: "var(--color-muted-ink)" }}>
-            {isAm ? "የተዘጋጁ ድጋፎች (Accommodations):" : "Verified Accommodations Provided:"}
+      {accommodationsList.length > 0 && (
+        <div
+          style={{
+            background: "#F4F7F5",
+            padding: "0.85rem 1rem",
+            borderRadius: "8px",
+            border: "1px solid var(--color-border-subtle)",
+          }}
+        >
+          <strong
+            style={{
+              fontSize: "0.82rem",
+              textTransform: "uppercase",
+              letterSpacing: "0.5px",
+              color: "var(--color-muted-ink)",
+              display: "block",
+              marginBottom: "0.5rem",
+            }}
+          >
+            {isAm ? "የተረጋገጡ ድጋፎች (Verified Accommodations):" : "Verified Accommodations Provided:"}
           </strong>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginTop: "0.5rem" }}>
-            {job.accommodations.screenReaderFriendly && (
-              <span className="badge badge-brand">
-                ✓ {isAm ? "ለስክሪን አንባቢ ምቹ" : "Screen Reader Friendly"}
-              </span>
-            )}
-            {job.accommodations.flexibleHours && (
-              <span className="badge badge-brand">
-                ✓ {isAm ? "ተለዋዋጭ የሥራ ሰዓት" : "Flexible Hours"}
-              </span>
-            )}
-            {job.accommodations.quietEnvironment && (
-              <span className="badge badge-brand">
-                ✓ {isAm ? "ጸጥ ያለ የሥራ ቦታ" : "Quiet Environment"}
-              </span>
-            )}
-            {job.accommodations.remoteAvailable && (
-              <span className="badge badge-brand">
-                ✓ {isAm ? "የርቀት ሥራ ዕድል" : "Remote Available"}
-              </span>
-            )}
-            {job.accommodations.additionalNotes && (
-              <span className="badge badge-accent">
-                ℹ {job.accommodations.additionalNotes}
-              </span>
-            )}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+            {accommodationsList.map((acc, index) => {
+              const label = resolveLocalized(acc.label, locale);
+              return (
+                <span key={acc.id || index} className="badge badge-brand">
+                  ✓ {label}
+                </span>
+              );
+            })}
           </div>
         </div>
       )}
 
-      {/* Structured data indicator */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.85rem", color: "var(--color-muted-ink)", paddingTop: "0.5rem", borderTop: "1px solid var(--color-border)" }}>
+      {/* Structured Microdata & Standards Indicator */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "0.5rem",
+          fontSize: "0.85rem",
+          color: "var(--color-muted-ink)",
+          paddingTop: "0.6rem",
+          borderTop: "1px solid var(--color-border-subtle)",
+        }}
+      >
         <span>
-          🏷️ <code>schema.org/JobPosting</code> JSON-LD
+          🏷️ <code>schema.org/JobPosting</code> JSON-LD verified
         </span>
-        {job.requiredCertificates && job.requiredCertificates.length > 0 && (
-          <span>
-            🎓 {isAm ? "የሚፈለግ ምስክር ወረቀት:" : "Matching Credential:"} <strong>{job.requiredCertificates[0]}</strong>
-          </span>
+        {job.applicationUrl && (
+          <a
+            href={job.applicationUrl}
+            target="_blank"
+            rel="noreferrer"
+            style={{ fontWeight: 600, color: "var(--color-brand)" }}
+          >
+            {isAm ? "ያመልክቱ (Apply) ↗" : "Apply Now ↗"}
+          </a>
         )}
       </div>
     </article>
