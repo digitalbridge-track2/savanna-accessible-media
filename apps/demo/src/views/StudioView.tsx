@@ -786,7 +786,7 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
           type="button"
           onClick={handleAddCue}
           className="btn btn-outline"
-          style={{ fontSize: "13px", padding: "0.45rem 1rem", borderColor: "var(--color-brand)", color: "var(--color-brand)" }}
+          style={{ fontSize: "13px", padding: "0.45rem 1rem", fontWeight: 600 }}
         >
           + {isAm ? "አዲስ መስመር ጨምር" : "Add New Cue"}
         </button>

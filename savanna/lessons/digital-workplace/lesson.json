@@ -116,5 +116,12 @@
       }
     }
   ],
+  "liveSession": {
+    "sessionTitle": {
+      "en": "Recorded Live Q&A and Lecture Replay",
+      "am": "የቀጥታ ጥያቄና መልስ እና ትምህርት ድጋሚ ማጫወቻ"
+    },
+    "chatSrc": "/lessons/digital-workplace/live-chat.json"
+  },
   "relatedJobIds": ["job-01", "job-02"]
 }

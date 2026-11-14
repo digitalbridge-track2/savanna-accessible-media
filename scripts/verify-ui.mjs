@@ -3,7 +3,8 @@ import fs from "node:fs";
 import http from "node:http";
 import WebSocket from "ws";
 
-const CHROME_PATH = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+const CHROME_PATH =
+  "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 const PORT = 9222;
 
 async function run() {
@@ -23,17 +24,22 @@ async function run() {
 
     // Get list of targets
     const versionRes = await new Promise((resolve, reject) => {
-      http.get(`http://127.0.0.1:${PORT}/json/list`, (res) => {
-        let data = "";
-        res.on("data", (c) => (data += c));
-        res.on("end", () => resolve(JSON.parse(data)));
-      }).on("error", reject);
+      http
+        .get(`http://127.0.0.1:${PORT}/json/list`, (res) => {
+          let data = "";
+          res.on("data", (c) => (data += c));
+          res.on("end", () => resolve(JSON.parse(data)));
+        })
+        .on("error", reject);
     });
 
     const pageTarget = versionRes.find((t) => t.type === "page");
     if (!pageTarget) throw new Error("No page target found");
 
-    console.log("Connecting to target WebSocket:", pageTarget.webSocketDebuggerUrl);
+    console.log(
+      "Connecting to target WebSocket:",
+      pageTarget.webSocketDebuggerUrl,
+    );
     const ws = new WebSocket(pageTarget.webSocketDebuggerUrl);
 
     await new Promise((resolve, reject) => {
@@ -92,7 +98,10 @@ async function run() {
       })()`,
       returnByValue: true,
     });
-    console.log("Layout check on /embed:", JSON.stringify(layoutEval.result.value, null, 2));
+    console.log(
+      "Layout check on /embed:",
+      JSON.stringify(layoutEval.result.value, null, 2),
+    );
 
     // Verify all 13 toolbar controls fit without horizontal scrolling
     const toolbarEval = await send("Runtime.evaluate", {
@@ -128,7 +137,10 @@ async function run() {
 
     // Take screenshot of side-by-side player in Live Embedded Instance
     const snap1 = await send("Page.captureScreenshot", { format: "png" });
-    fs.writeFileSync("evidence/embed-side-by-side.png", Buffer.from(snap1.data, "base64"));
+    fs.writeFileSync(
+      "evidence/embed-side-by-side.png",
+      Buffer.from(snap1.data, "base64"),
+    );
     console.log("Saved evidence/embed-side-by-side.png");
 
     // Check Icons: ESL badge, AD D))) icon, speed +/- icons
@@ -151,7 +163,10 @@ async function run() {
       })()`,
       returnByValue: true,
     });
-    console.log("Icons evaluation:", JSON.stringify(iconsEval.result.value, null, 2));
+    console.log(
+      "Icons evaluation:",
+      JSON.stringify(iconsEval.result.value, null, 2),
+    );
 
     // Open Preferences Dialog and inspect action buttons
     console.log("Clicking Settings icon (#btn-prefs)...");
@@ -181,11 +196,17 @@ async function run() {
       })()`,
       returnByValue: true,
     });
-    console.log("Settings Dialog check:", JSON.stringify(prefsEval.result.value, null, 2));
+    console.log(
+      "Settings Dialog check:",
+      JSON.stringify(prefsEval.result.value, null, 2),
+    );
 
     // Take screenshot of settings dialog showing wide, readable action buttons
     const snap2 = await send("Page.captureScreenshot", { format: "png" });
-    fs.writeFileSync("evidence/settings-modal-fixed.png", Buffer.from(snap2.data, "base64"));
+    fs.writeFileSync(
+      "evidence/settings-modal-fixed.png",
+      Buffer.from(snap2.data, "base64"),
+    );
     console.log("Saved evidence/settings-modal-fixed.png");
 
     // Close Preferences Dialog
@@ -215,7 +236,10 @@ async function run() {
       awaitPromise: true,
       returnByValue: true,
     });
-    console.log("Fullscreen Enter Result:", JSON.stringify(fsEnter.result.value, null, 2));
+    console.log(
+      "Fullscreen Enter Result:",
+      JSON.stringify(fsEnter.result.value, null, 2),
+    );
 
     // Second click to minimize / exit fullscreen
     const fsExit = await send("Runtime.evaluate", {
@@ -232,15 +256,65 @@ async function run() {
       awaitPromise: true,
       returnByValue: true,
     });
-    console.log("Fullscreen Minimize / Exit Result:", JSON.stringify(fsExit.result.value, null, 2));
+    console.log(
+      "Fullscreen Minimize / Exit Result:",
+      JSON.stringify(fsExit.result.value, null, 2),
+    );
 
     // Navigate to /lesson to verify full page integration
     console.log("Navigating to http://localhost:3000/lesson...");
     await send("Page.navigate", { url: "http://localhost:3000/lesson" });
     await new Promise((r) => setTimeout(r, 2000));
 
+    // Verify Lesson page components (Accessible Docs, 3G Pack, Career Gateway, Simulation Suite)
+    const lessonEval = await send("Runtime.evaluate", {
+      expression: `(() => {
+        // 1. Accessible Documents check
+        const docLinks = Array.from(document.querySelectorAll("#heading-docs + * a, a[href*='lesson.']")).map(a => a.getAttribute("href"));
+        const hasHtmlDoc = docLinks.some(h => h.includes("lesson.en.html") || h.includes("lesson.am.html"));
+        const hasPdfDoc = docLinks.some(h => h.includes("lesson.en.tagged.pdf"));
+
+        // 2. 3G Offline Study Pack check
+        const offlineHeading = document.getElementById("heading-offline");
+        const downloadPackBtn = Array.from(document.querySelectorAll("button")).find(b => b.textContent.includes("Download 3G Pack"));
+
+        // 3. Career Gateway check
+        const jobTitle = document.querySelector('[id^="job-title-"]');
+        const jobCardText = jobTitle ? jobTitle.closest("article").innerText : "";
+        const hasDuplicateHybrid = jobCardText.includes("(Hybrid) (Hybrid)");
+        const audioSummaryBtn = Array.from(document.querySelectorAll("button")).find(b => b.textContent.includes("Audio Summary"));
+        const textEquivalentDetails = document.querySelector("details");
+
+        // 4. Co-Designer 5-Pillar Simulation buttons
+        const simDeaf = Array.from(document.querySelectorAll("button")).find(b => b.textContent.includes("Deaf Journey"));
+        const simBlind = Array.from(document.querySelectorAll("button")).find(b => b.textContent.includes("Blind Journey"));
+        const simLiveChat = Array.from(document.querySelectorAll("button")).find(b => b.textContent.includes("Live Chat Replay"));
+
+        return {
+          hasHtmlDoc,
+          hasPdfDoc,
+          hasOfflinePack: Boolean(offlineHeading && downloadPackBtn),
+          hasJobCard: Boolean(jobTitle),
+          hasDuplicateHybrid,
+          hasAudioSummaryBtn: Boolean(audioSummaryBtn),
+          hasTextEquivalentDetails: Boolean(textEquivalentDetails),
+          hasSimDeaf: Boolean(simDeaf),
+          hasSimBlind: Boolean(simBlind),
+          hasSimLiveChat: Boolean(simLiveChat)
+        };
+      })()`,
+      returnByValue: true,
+    });
+    console.log(
+      "Lesson Page Evaluation:",
+      JSON.stringify(lessonEval.result.value, null, 2),
+    );
+
     const snap3 = await send("Page.captureScreenshot", { format: "png" });
-    fs.writeFileSync("evidence/lesson-side-by-side.png", Buffer.from(snap3.data, "base64"));
+    fs.writeFileSync(
+      "evidence/lesson-side-by-side.png",
+      Buffer.from(snap3.data, "base64"),
+    );
     console.log("Saved evidence/lesson-side-by-side.png");
 
     // Navigate to /studio to verify Transcript Studio features
@@ -248,63 +322,126 @@ async function run() {
     await send("Page.navigate", { url: "http://localhost:3000/studio" });
     await new Promise((r) => setTimeout(r, 2000));
 
-    // Test Transcript Studio toolbar buttons, speaker dropdown, and Add Cue
+    // Test Transcript Studio toolbar buttons, speaker dropdown, Add Cue, and Hover styling
     const studioEval = await send("Runtime.evaluate", {
       expression: `(async () => {
-        // Test + [music] button on first cue
+        const firstTextarea = document.querySelector('textarea[id^="reviewed-text-"]');
+        const origText = firstTextarea ? firstTextarea.value : "";
+
+        // 1. Check Hover styles of "+ Add New Cue" button to verify text doesn't turn invisible (blue on blue)
+        const addCueBtn = Array.from(document.querySelectorAll("button")).find(b => b.textContent.includes("Add New Cue"));
+        let addCueHoverColor = null;
+        let addCueHoverBg = null;
+        if (addCueBtn) {
+          // Force hover class / pseudo-state simulation
+          addCueBtn.dispatchEvent(new MouseEvent("mouseenter", { bubbles: true }));
+          addCueBtn.classList.add("hover-test");
+          const computed = window.getComputedStyle(addCueBtn);
+          addCueHoverColor = computed.color;
+          addCueHoverBg = computed.backgroundColor;
+        }
+
+        // 2. Test + [music] button on first cue
         const btnMusic = document.querySelector('button[aria-label*="Insert music tag"]');
         if (btnMusic) btnMusic.click();
+        const textAfterMusic = firstTextarea ? firstTextarea.value : "";
+        const musicAdded = textAfterMusic.includes("[music]");
 
-        // Test + [visual] button on first cue
+        // 3. Test + [visual] button on first cue
         const btnVisual = document.querySelector('button[aria-label*="Insert visual description tag"]');
         if (btnVisual) btnVisual.click();
+        const textAfterVisual = firstTextarea ? firstTextarea.value : "";
+        const visualAdded = textAfterVisual.includes("[visual description]");
 
-        // Test Speaker select change
+        // 4. Test Speaker select change
         const speakerSelect = document.querySelector('select[aria-label*="Speaker for cue 1"]');
         if (speakerSelect) {
           speakerSelect.value = "Narrator";
           speakerSelect.dispatchEvent(new Event("change", { bubbles: true }));
         }
 
-        // Test + (Narrator) button
+        // 5. Test + (Narrator) button
         const btnSpeaker = document.querySelector('button[aria-label*="Insert speaker prefix"]');
         if (btnSpeaker) btnSpeaker.click();
+        const textAfterSpeaker = firstTextarea ? firstTextarea.value : "";
+        const speakerAdded = textAfterSpeaker.includes("(Narrator)");
 
-        // Test + Add New Cue button
-        const addCueBtn = Array.from(document.querySelectorAll("button")).find(b => b.textContent.includes("Add New Cue"));
+        // 6. Test Clean button
+        const btnClean = document.querySelector('button[aria-label*="Clean formatting"]');
+        if (btnClean) btnClean.click();
+
+        // 7. Test Revert button
+        const btnRevert = document.querySelector('button[aria-label*="Revert to draft ASR"]');
+        if (btnRevert) btnRevert.click();
+        const textAfterRevert = firstTextarea ? firstTextarea.value : "";
+
+        // 8. Test + Add New Cue button
         const initialCards = document.querySelectorAll("article.card").length;
         if (addCueBtn) addCueBtn.click();
         await new Promise(r => setTimeout(r, 400));
         const afterAddCards = document.querySelectorAll("article.card").length;
 
-        // Test Publish to API button
+        // 9. Test Export Buttons
+        const exportVttBtn = Array.from(document.querySelectorAll("button")).find(b => b.textContent.includes("Export Reviewed WebVTT"));
+        const exportJsonBtn = Array.from(document.querySelectorAll("button")).find(b => b.textContent.includes("Export Transcript JSON"));
+        const exportBrfBtn = Array.from(document.querySelectorAll("button")).find(b => b.textContent.includes("Export Braille"));
+        if (exportBrfBtn) exportBrfBtn.click();
+
+        // 10. Test Publish to API button
         const pubBtn = Array.from(document.querySelectorAll("button")).find(b => b.textContent.includes("Publish to Lesson (API)"));
         if (pubBtn) pubBtn.click();
+        await new Promise(r => setTimeout(r, 1200));
+
+        const statusEl = Array.from(document.querySelectorAll('[role="status"]')).find(el => el.textContent.trim().length > 0);
+        const statusText = statusEl ? statusEl.textContent : "";
 
         return {
+          addCueBtnFound: Boolean(addCueBtn),
+          addCueHoverColor,
+          addCueHoverBg,
           musicClicked: Boolean(btnMusic),
+          musicAdded,
           visualClicked: Boolean(btnVisual),
+          visualAdded,
           speakerChanged: speakerSelect ? speakerSelect.value : null,
+          speakerAdded,
+          cleanClicked: Boolean(btnClean),
+          revertClicked: Boolean(btnRevert),
           initialCards,
           afterAddCards,
           addCueWorked: afterAddCards === initialCards + 1,
-          publishClicked: Boolean(pubBtn)
+          exportVttFound: Boolean(exportVttBtn),
+          exportJsonFound: Boolean(exportJsonBtn),
+          exportBrfFound: Boolean(exportBrfBtn),
+          publishClicked: Boolean(pubBtn),
+          publishStatusText: statusText,
+          publishedSuccessfully: statusText.includes("Port 8000") || statusText.includes("Successfully published")
         };
       })()`,
       awaitPromise: true,
       returnByValue: true,
     });
-    console.log("Transcript Studio Features Evaluation:", JSON.stringify(studioEval.result.value, null, 2));
+    console.log(
+      "Transcript Studio Features Evaluation:",
+      JSON.stringify(studioEval.result.value, null, 2),
+    );
 
     await new Promise((r) => setTimeout(r, 1200));
 
     const snapStudio = await send("Page.captureScreenshot", { format: "png" });
-    fs.writeFileSync("evidence/studio-verified.png", Buffer.from(snapStudio.data, "base64"));
+    fs.writeFileSync(
+      "evidence/studio-verified.png",
+      Buffer.from(snapStudio.data, "base64"),
+    );
     console.log("Saved evidence/studio-verified.png");
 
     // 4. Verify Certificate Credential Verification view (/verify)
-    console.log("Navigating to http://localhost:3000/verify?id=CERT-DB-2026-0042...");
-    await send("Page.navigate", { url: "http://localhost:3000/verify?id=CERT-DB-2026-0042" });
+    console.log(
+      "Navigating to http://localhost:3000/verify?id=CERT-DB-2026-0042...",
+    );
+    await send("Page.navigate", {
+      url: "http://localhost:3000/verify?id=CERT-DB-2026-0042",
+    });
     await new Promise((r) => setTimeout(r, 1500));
 
     const verifyEval = await send("Runtime.evaluate", {
@@ -324,10 +461,16 @@ async function run() {
       })()`,
       returnByValue: true,
     });
-    console.log("Certificate Verification Evaluation:", JSON.stringify(verifyEval.result.value, null, 2));
+    console.log(
+      "Certificate Verification Evaluation:",
+      JSON.stringify(verifyEval.result.value, null, 2),
+    );
 
     const snapVerify = await send("Page.captureScreenshot", { format: "png" });
-    fs.writeFileSync("evidence/verify-credential.png", Buffer.from(snapVerify.data, "base64"));
+    fs.writeFileSync(
+      "evidence/verify-credential.png",
+      Buffer.from(snapVerify.data, "base64"),
+    );
     console.log("Saved evidence/verify-credential.png");
 
     console.log("All automated UI verifications completed successfully!");

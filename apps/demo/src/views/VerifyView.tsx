@@ -38,6 +38,7 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
   const [activeId, setActiveId] = useState(getInitialId);
   const [certificates, setCertificates] = useState<DemoCertificate[]>(DEFAULT_REGISTRY);
   const [copyMsg, setCopyMsg] = useState("");
+  const [showOBv3, setShowOBv3] = useState(false);
   const isAm = locale === "am";
 
   useEffect(() => {
@@ -103,6 +104,54 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
 
     setCopyMsg(isAm ? "የማረጋገጫ ሊንኩ ተገልብጧል።" : "Verification link copied to clipboard.");
     setTimeout(() => setCopyMsg(""), 3500);
+  };
+
+  const getOBv3Payload = () => {
+    if (!matchedCert) return null;
+    return {
+      "@context": [
+        "https://www.w3.org/ns/credentials/v2",
+        "https://purl.imsglobal.org/spec/ob/v3p0/context-3.0.3.json"
+      ],
+      "id": `urn:uuid:db-${matchedCert.id.toLowerCase()}`,
+      "type": ["VerifiableCredential", "OpenBadgeCredential"],
+      "issuer": {
+        "id": "https://savanna.alxafrica.com/issuers/digital-bridge",
+        "type": ["Profile"],
+        "name": matchedCert.issuer,
+        "url": "https://savanna.alxafrica.com"
+      },
+      "validFrom": `${matchedCert.issueDateISO}T00:00:00Z`,
+      "name": matchedCert.title.en,
+      "credentialSubject": {
+        "id": "did:key:z6MkpTHR8VNsBxYAAWHut2Geadd9jSwuBV8xRoAnwWsdvktH",
+        "type": ["AchievementSubject"],
+        "name": matchedCert.learnerDisplayName,
+        "achievement": {
+          "id": `https://savanna.alxafrica.com/achievements/${matchedCert.id.toLowerCase()}`,
+          "type": ["Achievement"],
+          "name": matchedCert.title[locale] || matchedCert.title.en,
+          "description": "Demonstrated competencies in accessible digital workflows, WCAG 2.2 AA compliance, and cross-platform collaboration.",
+          "criteria": {
+            "narrative": "Successfully completed all interactive lesson evaluations, verified transcript review, and demonstrated assistive technology proficiency."
+          }
+        }
+      }
+    };
+  };
+
+  const handleDownloadOBv3 = () => {
+    const payload = getOBv3Payload();
+    if (!payload) return;
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/ld+json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${matchedCert?.id || "credential"}.openbadge.jsonld`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   const matchedCert = certificates.find(
@@ -242,31 +291,80 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
           </div>
         )}
 
-        {/* Shareable Link Button */}
+        {/* Actions: Shareable Link & Open Badges 3.0 W3C Standard Export */}
         {matchedCert && (
-          <div style={{ display: "flex", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
-            <button
-              type="button"
-              className="btn btn-outline"
-              onClick={handleCopy}
-              style={{ minHeight: "40px" }}
-            >
-              {isAm ? "የማረጋገጫ ሊንኩን ቅዳ" : "Copy Shareable Link"}
-            </button>
-            {copyMsg && (
-              <span
-                role="status"
+          <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+            <div style={{ display: "flex", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+              <button
+                type="button"
+                className="btn btn-outline"
+                onClick={handleCopy}
+                style={{ minHeight: "40px" }}
+              >
+                🔗 {isAm ? "የማረጋገጫ ሊንኩን ቅዳ" : "Copy Shareable Link"}
+              </button>
+
+              <button
+                type="button"
+                className="btn btn-outline"
+                onClick={() => setShowOBv3(!showOBv3)}
+                style={{ minHeight: "40px" }}
+                aria-expanded={showOBv3}
+              >
+                🎖️ {isAm ? "Open Badges 3.0 ሜታዳታ" : "Open Badges 3.0 (OBv3)"}
+              </button>
+
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleDownloadOBv3}
+                style={{ minHeight: "40px" }}
+              >
+                📥 {isAm ? "Open Badge አውርድ (.jsonld)" : "Download Open Badge (.jsonld)"}
+              </button>
+
+              {copyMsg && (
+                <span
+                  role="status"
+                  style={{
+                    fontSize: "13px",
+                    fontWeight: 500,
+                    color: "#128045",
+                    background: "#E8F8F0",
+                    padding: "0.35rem 0.85rem",
+                    borderRadius: "var(--radius-pill)",
+                  }}
+                >
+                  ✓ {copyMsg}
+                </span>
+              )}
+            </div>
+
+            {/* Level 3 Open Standard Inspector: W3C / 1EdTech Open Badges 3.0 */}
+            {showOBv3 && (
+              <div
                 style={{
+                  marginTop: "0.5rem",
+                  padding: "1.25rem",
+                  background: "#1E293B",
+                  color: "#F8FAFC",
+                  borderRadius: "var(--radius-card)",
                   fontSize: "13px",
-                  fontWeight: 500,
-                  color: "#128045",
-                  background: "#E8F8F0",
-                  padding: "0.35rem 0.85rem",
-                  borderRadius: "var(--radius-pill)",
+                  overflowX: "auto",
                 }}
               >
-                ✓ {copyMsg}
-              </span>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
+                  <strong style={{ color: "#38BDF8" }}>
+                    Level 3 Open Standard: 1EdTech / W3C Open Badges 3.0 (OBv3) Verifiable Credential
+                  </strong>
+                  <span style={{ fontSize: "11px", background: "rgba(56, 189, 248, 0.2)", color: "#38BDF8", padding: "2px 8px", borderRadius: "4px" }}>
+                    Standard JSON-LD
+                  </span>
+                </div>
+                <pre style={{ margin: 0, fontFamily: "var(--font-mono)", fontSize: "12px", lineHeight: 1.5 }}>
+                  {JSON.stringify(getOBv3Payload(), null, 2)}
+                </pre>
+              </div>
             )}
           </div>
         )}

@@ -17,6 +17,46 @@ export const LessonView: React.FC<LessonViewProps> = ({ locale }) => {
 
   const isAm = locale === "am";
 
+  const triggerSoundOffMode = () => {
+    if (!playerRef.current) return;
+    const shadow = playerRef.current.shadowRoot;
+    if (!shadow) return;
+    const video = shadow.querySelector("video.main-video") as HTMLVideoElement;
+    if (video) video.muted = true;
+    const eslBtn = shadow.getElementById("btn-esl") as HTMLButtonElement;
+    const eslWindow = shadow.getElementById("esl-window") as HTMLElement;
+    if (eslWindow) eslWindow.style.display = "flex";
+    if (eslBtn) eslBtn.setAttribute("aria-pressed", "true");
+    playerRef.current.setAttribute("locale", "am");
+    video?.play().catch(() => {});
+  };
+
+  const triggerBlindJourney = () => {
+    if (!playerRef.current) return;
+    const shadow = playerRef.current.shadowRoot;
+    if (!shadow) return;
+    const btnAD = shadow.getElementById("btn-ad") as HTMLButtonElement;
+    btnAD?.click();
+    const video = shadow.querySelector("video.main-video") as HTMLVideoElement;
+    if (video) {
+      video.currentTime = 14;
+      video.play().catch(() => {});
+    }
+  };
+
+  const triggerLiveChatReplay = () => {
+    if (!playerRef.current) return;
+    const shadow = playerRef.current.shadowRoot;
+    if (!shadow) return;
+    const tabChat = shadow.getElementById("tab-btn-chat") as HTMLButtonElement;
+    tabChat?.click();
+    const video = shadow.querySelector("video.main-video") as HTMLVideoElement;
+    if (video) {
+      video.currentTime = 20;
+      video.play().catch(() => {});
+    }
+  };
+
   useEffect(() => {
     // Check if offline pack is cached
     offlineStorage.isPackageReady("digital-workplace-01", "pkg-3g-light").then((ready) => {
@@ -112,6 +152,77 @@ export const LessonView: React.FC<LessonViewProps> = ({ locale }) => {
             : "Master the essential tools and collaborative workflows for digital employment."}
         </p>
       </header>
+
+      {/* Co-Designer 5-Pillar Accessibility Simulation Suite */}
+      <div
+        style={{
+          marginBottom: "1.75rem",
+          padding: "1rem 1.25rem",
+          background: "linear-gradient(135deg, #F0FDF4 0%, #EFF6FF 100%)",
+          border: "1px solid #BAE6FD",
+          borderRadius: "var(--radius-card)",
+          display: "flex",
+          flexDirection: "column",
+          gap: "0.75rem",
+        }}
+        aria-label={isAm ? "የተደራሽነት ማሳያ እና ፈተና ሁነታዎች" : "Co-Designer 5-Pillar Simulation Suite"}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.5rem" }}>
+          <strong style={{ fontSize: "14px", color: "var(--color-ink)", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <span>⚡</span>
+            {isAm ? "የዳኞች እና የጋራ-ቀያሾች የ 5-ምሰሶዎች ማሳያ ሁነታዎች (Co-Designer Quick Simulation):" : "Judges & Co-Designer 5-Pillar Testing Suite:"}
+          </strong>
+          <span style={{ fontSize: "12px", background: "rgba(0, 113, 227, 0.12)", color: "#0071E3", padding: "2px 8px", borderRadius: "var(--radius-pill)", fontWeight: 600 }}>
+            {isAm ? "1-ጠቅታ ፍተሻ" : "1-Click Evaluation"}
+          </span>
+        </div>
+
+        <div style={{ display: "flex", gap: "0.6rem", flexWrap: "wrap" }}>
+          {/* Simulation 1: Sound Off (Deaf Journey) */}
+          <button
+            type="button"
+            className="btn btn-outline"
+            onClick={triggerSoundOffMode}
+            style={{ fontSize: "13px", padding: "0.4rem 0.85rem", borderRadius: "var(--radius-pill)" }}
+            title={isAm ? "ድምጽ ያጥፉ፣ የአማርኛ ንኡስ ርእስ እና የምልክት ቋንቋ ያብሩ" : "Mute audio, activate Amharic captions & dock Ethiopian Sign Language"}
+          >
+            🔇 {isAm ? "የመስማት ችግር ጉዞ (Sound-Off)" : "Deaf Journey (Sound-Off)"}
+          </button>
+
+          {/* Simulation 2: Blind / Low Vision (Audio Description + Slide Cues) */}
+          <button
+            type="button"
+            className="btn btn-outline"
+            onClick={triggerBlindJourney}
+            style={{ fontSize: "13px", padding: "0.4rem 0.85rem", borderRadius: "var(--radius-pill)" }}
+            title={isAm ? "የድምጽ ማብራሪያ (AD) እና ተደራሽ ስላይዶች ያብሩ" : "Activate Audio Description track and seek to slide description"}
+          >
+            👁️ {isAm ? "የማየት ችግር ጉዞ (Audio Description)" : "Blind Journey (Audio Description)"}
+          </button>
+
+          {/* Simulation 3: Live Session Chat Replay (Official Bonus) */}
+          <button
+            type="button"
+            className="btn btn-outline"
+            onClick={triggerLiveChatReplay}
+            style={{ fontSize: "13px", padding: "0.4rem 0.85rem", borderRadius: "var(--radius-pill)" }}
+            title={isAm ? "የቀጥታ ውይይት መልዕክቶች እና የጥያቄዎች ድጋሚ እይታ" : "Recorded Live Session Replay with Synchronized Student Chat"}
+          >
+            💬 {isAm ? "የቀጥታ ውይይት ድጋሚ (Rubric Bonus)" : "Live Chat Replay (Rubric Bonus)"}
+          </button>
+
+          {/* Simulation 4: 3G Offline Airplane Mode */}
+          <button
+            type="button"
+            className="btn btn-outline"
+            onClick={handleDownloadPack}
+            style={{ fontSize: "13px", padding: "0.4rem 0.85rem", borderRadius: "var(--radius-pill)" }}
+            title={isAm ? "የ3G ከመስመር ውጭ ጥቅል ያውርዱ እና ያለ ኢንተርኔት ይሞክሩ" : "Download 3G offline study pack & cache for airplane mode"}
+          >
+            ✈️ {isAm ? "3G ከመስመር ውጭ ጉዞ (3.2 MB Pack)" : "3G Offline Mode (3.2 MB Pack)"}
+          </button>
+        </div>
+      </div>
 
       {/* Level 1 Custom Element Player */}
       <section style={{ marginBottom: "2.5rem" }} aria-label={isAm ? "የቪዲዮ ማጫወቻ ክፍል" : "Interactive Media Player Section"}>

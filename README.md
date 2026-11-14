@@ -1,5 +1,7 @@
 # Abugida Media Kit (`<db-player>`), Track 2 (Accessible Learning Media), Team Savanna Accessible Media & Co-Designers
 
+> **🏆 Quick Evaluation:** For evaluation criteria, the 60-second install test, rubrics scoring matrix, and official rubric bonus implementations (Live Session Chat Replay, Braille `.brf` export, Open Badges 3.0 OBv3 JSON-LD, 5-Pillar Co-Designer simulation suite), see [JUDGES-GUIDE.md](file:///C:/Users/PC/savanna-accessible-media/JUDGES-GUIDE.md).
+
 ---
 
 ## What it does

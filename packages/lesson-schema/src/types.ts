@@ -50,6 +50,21 @@ export interface LessonSkill {
   name: LocalizedString;
 }
 
+export interface LiveChatMessage {
+  id: string;
+  timestamp: number;
+  timeDisplay: string;
+  sender: string;
+  role: "instructor" | "student" | "ta";
+  message: LocalizedString;
+}
+
+export interface LiveSessionData {
+  sessionTitle: LocalizedString;
+  chatSrc?: string;
+  messages?: LiveChatMessage[];
+}
+
 export interface LessonManifest {
   schemaVersion: "1.0.0";
   id: string;
@@ -68,6 +83,7 @@ export interface LessonManifest {
   packages: OfflinePackage[];
   skills?: LessonSkill[];
   relatedJobIds?: string[];
+  liveSession?: LiveSessionData;
 }
 
 export interface JobAccommodation {

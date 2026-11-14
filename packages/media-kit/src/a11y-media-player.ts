@@ -13,6 +13,7 @@ import {
 import { parseVTT, VTTCueItem, getThemeStyles } from "./captions/caption-manager.js";
 import { MediaSyncController, SignStatus } from "./media/sync-controller.js";
 import { TranscriptViewer, TranscriptSegmentData } from "./transcript/transcript-viewer.js";
+import { LiveChatViewer, LiveChatMessageItem } from "./transcript/live-chat-viewer.js";
 
 const ICONS = {
   play: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>`,
@@ -54,8 +55,11 @@ export class A11yMediaPlayer extends HTMLElement {
   private currentCues: VTTCueItem[] = [];
   private captionOverlay!: HTMLElement;
 
-  // Transcript
+  // Transcript & Live Chat Replay
   private transcriptViewer!: TranscriptViewer;
+  private liveChatViewer!: LiveChatViewer;
+  private liveChatMessages: LiveChatMessageItem[] = [];
+  private activeLeftTab: "transcript" | "chat" = "transcript";
 
   // UI state
   private isPreferencesOpen = false;
@@ -180,7 +184,27 @@ export class A11yMediaPlayer extends HTMLElement {
               src: resolveUrl(rawManifest.transcript.src),
             }
           : rawManifest.transcript,
+        liveSession: rawManifest.liveSession
+          ? {
+              ...rawManifest.liveSession,
+              chatSrc: rawManifest.liveSession.chatSrc ? resolveUrl(rawManifest.liveSession.chatSrc) : undefined,
+            }
+          : undefined,
       };
+
+      if (this.manifest?.liveSession?.chatSrc) {
+        try {
+          const chatRes = await fetch(this.manifest.liveSession.chatSrc);
+          if (chatRes.ok) {
+            this.liveChatMessages = await chatRes.json();
+            if (this.liveChatViewer) {
+              this.liveChatViewer.setMessages(this.liveChatMessages);
+            }
+          }
+        } catch (chatErr) {
+          console.warn("Could not load live chat messages:", chatErr);
+        }
+      }
 
       this.render();
       await this.initTracksAndTranscript();
@@ -828,6 +852,77 @@ export class A11yMediaPlayer extends HTMLElement {
           overflow: hidden;
           background: #FFF;
         }
+        .left-panel-tabs {
+          display: flex;
+          background: #F1F5F9;
+          border-radius: 6px;
+          padding: 3px;
+          gap: 3px;
+          margin-bottom: 0.75rem;
+          user-select: none;
+          flex-shrink: 0;
+        }
+        .tab-btn {
+          flex: 1;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.35rem;
+          padding: 0.35rem 0.5rem;
+          font-size: 0.8rem;
+          font-weight: 600;
+          border: none;
+          background: transparent;
+          color: #475569;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+        }
+        .tab-btn:hover {
+          color: #0F172A;
+        }
+        .tab-btn.active {
+          background: #FFFFFF;
+          color: #0F172A;
+          box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+        .tab-btn:focus-visible {
+          outline: 2px solid var(--color-focus, #0071E3);
+          outline-offset: 1px;
+        }
+        .tab-badge {
+          background: #E2E8F0;
+          color: #0F172A;
+          font-size: 0.68rem;
+          font-weight: 700;
+          padding: 1px 6px;
+          border-radius: 980px;
+        }
+        .tab-btn.active .tab-badge {
+          background: #DBEAFE;
+          color: #1D4ED8;
+        }
+        .chat-replay-item:hover {
+          background: #F8FAFC !important;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+        .chat-replay-item:focus-visible {
+          outline: 2px solid var(--color-focus, #0071E3) !important;
+          outline-offset: 2px;
+        }
+        .live-chat-scroll-area {
+          flex: 1;
+          min-height: 0;
+          min-width: 0;
+          overflow-y: auto;
+        }
+        .live-chat-scroll-area::-webkit-scrollbar {
+          width: 6px;
+        }
+        .live-chat-scroll-area::-webkit-scrollbar-thumb {
+          background: rgba(0, 0, 0, 0.18);
+          border-radius: 980px;
+        }
         .transcript-title-row {
           display: flex;
           align-items: center;
@@ -1135,18 +1230,57 @@ export class A11yMediaPlayer extends HTMLElement {
               </div>
             </div>
 
-            <!-- Transcript Body Content -->
+            <!-- Transcript & Live Chat Replay Body Content -->
             <div class="transcript-body" id="transcript-body">
-              <div class="transcript-title-row">
-                <h3 class="transcript-title">${isAm ? "የትምህርቱ የጽሑፍ ግልባጭ" : "Transcript"}</h3>
-                <input 
-                  type="search" 
-                  id="transcript-search" 
-                  class="search-box" 
-                  placeholder="${isAm ? "በጽሑፉ ውስጥ ይፈልጉ..." : "Search transcript..."}" 
-                  aria-label="${isAm ? "በጽሑፉ ውስጥ ይፈልጉ" : "Search transcript"}">
+              <!-- Left Panel Segmented View Tabs (Transcript | Live Chat Replay) -->
+              <div class="left-panel-tabs" role="tablist" aria-label="${isAm ? "የትምህርት ይዘት እይታ" : "Session Content View"}">
+                <button 
+                  type="button" 
+                  class="tab-btn ${this.activeLeftTab === "transcript" ? "active" : ""}" 
+                  id="tab-btn-transcript" 
+                  role="tab" 
+                  aria-selected="${this.activeLeftTab === "transcript"}"
+                  aria-controls="transcript-view-panel">
+                  📄 ${isAm ? "የጽሑፍ ግልባጭ" : "Transcript"}
+                </button>
+                <button 
+                  type="button" 
+                  class="tab-btn ${this.activeLeftTab === "chat" ? "active" : ""}" 
+                  id="tab-btn-chat" 
+                  role="tab" 
+                  aria-selected="${this.activeLeftTab === "chat"}"
+                  aria-controls="live-chat-view-panel">
+                  💬 ${isAm ? "የቀጥታ ውይይት ድጋሚ" : "Live Chat Replay"} <span class="tab-badge" id="chat-count-badge">${this.liveChatMessages.length || 10}</span>
+                </button>
               </div>
-              <div id="transcript-target" class="transcript-scroll-area"></div>
+
+              <!-- View 1: Lesson Transcript -->
+              <div id="transcript-view-panel" style="display: ${this.activeLeftTab === "transcript" ? "flex" : "none"}; flex-direction: column; flex: 1; min-height: 0;">
+                <div class="transcript-title-row">
+                  <h3 class="transcript-title">${isAm ? "የትምህርቱ የጽሑፍ ግልባጭ" : "Transcript"}</h3>
+                  <input 
+                    type="search" 
+                    id="transcript-search" 
+                    class="search-box" 
+                    placeholder="${isAm ? "በጽሑፉ ውስጥ ይፈልጉ..." : "Search transcript..."}" 
+                    aria-label="${isAm ? "በጽሑፉ ውስጥ ይፈልጉ" : "Search transcript"}">
+                </div>
+                <div id="transcript-target" class="transcript-scroll-area"></div>
+              </div>
+
+              <!-- View 2: Recorded Live Session Chat Replay -->
+              <div id="live-chat-view-panel" style="display: ${this.activeLeftTab === "chat" ? "flex" : "none"}; flex-direction: column; flex: 1; min-height: 0;">
+                <div class="transcript-title-row">
+                  <h3 class="transcript-title">${isAm ? "የቀጥታ ውይይት ድጋሚ" : "Live Chat Replay"}</h3>
+                  <input 
+                    type="search" 
+                    id="live-chat-search" 
+                    class="search-box" 
+                    placeholder="${isAm ? "በውይይት ውስጥ ይፈልጉ..." : "Search chat questions..."}" 
+                    aria-label="${isAm ? "በቀጥታ ውይይት ውስጥ ይፈልጉ" : "Search live chat"}">
+                </div>
+                <div id="live-chat-target" class="live-chat-scroll-area"></div>
+              </div>
             </div>
 
             <!-- Resizing Handles (Corner 2D, Bottom Edge, Right Edge) -->
@@ -1461,6 +1595,7 @@ export class A11yMediaPlayer extends HTMLElement {
     }
 
     const transcriptTarget = this.shadow.getElementById("transcript-target") as HTMLElement;
+    const liveChatTarget = this.shadow.getElementById("live-chat-target") as HTMLElement;
     const autoScrollCb = this.shadow.getElementById("cb-auto-scroll") as HTMLInputElement;
 
     this.transcriptViewer = new TranscriptViewer(transcriptTarget, {
@@ -1474,6 +1609,18 @@ export class A11yMediaPlayer extends HTMLElement {
         }
       },
     });
+
+    if (liveChatTarget) {
+      this.liveChatViewer = new LiveChatViewer(liveChatTarget, {
+        locale: this.activeLocale,
+        onSeekAndPlay: (time) => {
+          this.seekAndPlay(time);
+        },
+      });
+      if (this.liveChatMessages.length) {
+        this.liveChatViewer.setMessages(this.liveChatMessages);
+      }
+    }
   }
 
   private setupWindowInteractions() {
@@ -2033,6 +2180,9 @@ export class A11yMediaPlayer extends HTMLElement {
       }
       this.updateCaptionDisplay();
       this.transcriptViewer.updateActiveTime(current);
+      if (this.liveChatViewer) {
+        this.liveChatViewer.updateTime(current);
+      }
 
       this.dispatchEvent(
         new CustomEvent("db-player:progress", {
@@ -2338,6 +2488,43 @@ export class A11yMediaPlayer extends HTMLElement {
       this.transcriptViewer.setSearchQuery(searchInput.value);
     });
 
+    // Live Chat Search
+    const liveChatSearch = this.shadow.getElementById("live-chat-search") as HTMLInputElement;
+    liveChatSearch?.addEventListener("input", () => {
+      if (this.liveChatViewer) {
+        this.liveChatViewer.setSearchQuery(liveChatSearch.value);
+      }
+    });
+
+    // Left Panel Tabs (Transcript | Live Chat Replay)
+    const tabTranscript = this.shadow.getElementById("tab-btn-transcript");
+    const tabChat = this.shadow.getElementById("tab-btn-chat");
+    const viewTranscript = this.shadow.getElementById("transcript-view-panel");
+    const viewChat = this.shadow.getElementById("live-chat-view-panel");
+
+    tabTranscript?.addEventListener("click", () => {
+      this.activeLeftTab = "transcript";
+      tabTranscript.classList.add("active");
+      tabTranscript.setAttribute("aria-selected", "true");
+      tabChat?.classList.remove("active");
+      tabChat?.setAttribute("aria-selected", "false");
+      if (viewTranscript) viewTranscript.style.display = "flex";
+      if (viewChat) viewChat.style.display = "none";
+    });
+
+    tabChat?.addEventListener("click", () => {
+      this.activeLeftTab = "chat";
+      tabChat.classList.add("active");
+      tabChat.setAttribute("aria-selected", "true");
+      tabTranscript?.classList.remove("active");
+      tabTranscript?.setAttribute("aria-selected", "false");
+      if (viewTranscript) viewTranscript.style.display = "none";
+      if (viewChat) viewChat.style.display = "flex";
+      if (this.liveChatViewer) {
+        this.liveChatViewer.updateTime(this.mainVideo.currentTime);
+      }
+    });
+
     // Scoped Keyboard Hotkeys
     const playerRoot = this.shadow.getElementById("player-container");
     playerRoot?.addEventListener("keydown", (e) => {
@@ -2433,6 +2620,10 @@ export class A11yMediaPlayer extends HTMLElement {
   private updateLocaleStrings() {
     this.render();
     this.initTracksAndTranscript();
+    if (this.liveChatViewer) {
+      this.liveChatViewer.setLocale(this.activeLocale);
+      this.liveChatViewer.setMessages(this.liveChatMessages);
+    }
   }
 
   private formatTime(seconds: number): string {

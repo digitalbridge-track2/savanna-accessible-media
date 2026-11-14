@@ -285,8 +285,6 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
               fontSize: "12px",
               padding: "0.35rem 0.85rem",
               textDecoration: "none",
-              color: "var(--color-brand)",
-              borderColor: "var(--color-brand)",
               fontWeight: 600,
             }}
           >
