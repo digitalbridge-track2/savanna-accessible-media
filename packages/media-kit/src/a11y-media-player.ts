@@ -36,7 +36,7 @@ const ICONS = {
 
 export class A11yMediaPlayer extends HTMLElement {
   static get observedAttributes() {
-    return ["manifest-src", "locale"];
+    return ["manifest-src", "locale", "lang", "src", "captions", "sign", "describe", "api"];
   }
 
   private shadow: ShadowRoot;
@@ -67,10 +67,12 @@ export class A11yMediaPlayer extends HTMLElement {
   }
 
   connectedCallback() {
-    this.activeLocale = (this.getAttribute("locale") as "en" | "am") || "en";
+    this.activeLocale = (this.getAttribute("lang") as "en" | "am") || (this.getAttribute("locale") as "en" | "am") || "en";
     const manifestSrc = this.getAttribute("manifest-src");
     if (manifestSrc) {
       this.loadManifest(manifestSrc);
+    } else if (this.getAttribute("src")) {
+      this.initFromAttributes();
     }
   }
 
@@ -82,13 +84,52 @@ export class A11yMediaPlayer extends HTMLElement {
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     if (oldValue !== newValue) {
-      if (name === "locale") {
+      if (name === "locale" || name === "lang") {
         this.activeLocale = (newValue as "en" | "am") || "en";
         this.updateLocaleStrings();
       } else if (name === "manifest-src") {
         this.loadManifest(newValue);
+      } else if (name === "src" || name === "captions" || name === "sign" || name === "describe") {
+        if (!this.getAttribute("manifest-src")) {
+          this.initFromAttributes();
+        }
       }
     }
+  }
+
+  private initFromAttributes() {
+    const src = this.getAttribute("src");
+    if (!src) return;
+    const lang = (this.getAttribute("lang") as "en" | "am") || (this.getAttribute("locale") as "en" | "am") || "en";
+    this.activeLocale = lang;
+    const captionsAttr = this.getAttribute("captions") || "";
+    const signAttr = this.getAttribute("sign");
+    const describeAttr = this.getAttribute("describe");
+
+    const captionTracks = captionsAttr.split(",").map((c) => c.trim()).filter(Boolean).map((cPath) => {
+      const isAm = cPath.includes(".am.") || cPath.endsWith("am.vtt") || cPath.includes("am");
+      return {
+        id: isAm ? "cap-am" : "cap-en",
+        language: isAm ? "am" : "en",
+        label: isAm ? "አማርኛ" : "English",
+        src: cPath,
+      };
+    });
+
+    this.manifest = {
+      id: "lesson-player",
+      version: "1.0.0",
+      title: { en: "Lesson Video", am: "የትምህርት ቪዲዮ" },
+      sources: [
+        { id: "main-video", kind: "main", src, mimeType: "video/mp4" },
+        ...(signAttr ? [{ id: "sign-video", kind: "sign" as const, src: signAttr, mimeType: "video/mp4" }] : []),
+      ],
+      captionTracks,
+      audioDescription: describeAttr ? { src: describeAttr } : undefined,
+    } as unknown as LessonManifest;
+
+    this.render();
+    this.initTracksAndTranscript();
   }
 
   private async loadManifest(src: string) {
@@ -1744,6 +1785,14 @@ export class A11yMediaPlayer extends HTMLElement {
       playBtn?.setAttribute("title", this.activeLocale === "am" ? "አጫውት (Space / K)" : "Play (Space / K)");
       bigPlayBtn?.classList.remove("is-hidden");
       if (stateDisplay) stateDisplay.textContent = this.activeLocale === "am" ? "ተጠናቋል" : "End of track";
+
+      this.dispatchEvent(
+        new CustomEvent("db-player:complete", {
+          bubbles: true,
+          composed: true,
+          detail: {},
+        })
+      );
     });
 
     // Restart Video to Beginning
@@ -1873,6 +1922,17 @@ export class A11yMediaPlayer extends HTMLElement {
       }
       this.updateCaptionDisplay();
       this.transcriptViewer.updateActiveTime(current);
+
+      this.dispatchEvent(
+        new CustomEvent("db-player:progress", {
+          bubbles: true,
+          composed: true,
+          detail: {
+            seconds: Math.floor(current),
+            percent: Math.round((current / duration) * 100),
+          },
+        })
+      );
     });
 
     scrubber.addEventListener("input", () => {
@@ -2203,4 +2263,7 @@ export class A11yMediaPlayer extends HTMLElement {
 
 if (!customElements.get("a11y-media-player")) {
   customElements.define("a11y-media-player", A11yMediaPlayer);
+}
+if (!customElements.get("db-player")) {
+  customElements.define("db-player", A11yMediaPlayer);
 }

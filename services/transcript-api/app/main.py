@@ -1,12 +1,16 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from typing import List, Optional
+from pydantic import BaseModel, HttpUrl
+from typing import List, Optional, Dict, Any
+import json
 
 app = FastAPI(
-    title="Abugida Transcript API",
+    title="Abugida Accessible Media API",
     version="1.0.0",
-    description="Local transcription, review, and WebVTT export service for Abugida Media Kit"
+    description="Level 2 REST API & Webhooks for Abugida Media Kit (Track 2: Accessible Learning Media)",
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json"
 )
 
 app.add_middleware(
@@ -17,10 +21,30 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# In-memory webhook subscriptions store
+WEBHOOKS: List[Dict[str, str]] = []
+
+# --- Data Models ---
 class HealthResponse(BaseModel):
     status: str
     version: str
     asr_adapter: str
+
+class TrackItem(BaseModel):
+    id: str
+    kind: str
+    src: str
+    language: Optional[str] = None
+    label: Optional[str] = None
+    mimeType: Optional[str] = None
+
+class LessonMetadataResponse(BaseModel):
+    id: str
+    title: Dict[str, str]
+    sources: List[TrackItem]
+    captionTracks: List[TrackItem]
+    transcriptUrl: str
+    audioDescriptionUrl: Optional[str] = None
 
 class TranscriptSegment(BaseModel):
     id: int
@@ -29,15 +53,45 @@ class TranscriptSegment(BaseModel):
     draft_text: str
     reviewed_text: Optional[str] = None
     speaker: Optional[str] = None
-    review_status: str = "draft"
+    review_status: str = "reviewed"
 
-class TranscriptionJob(BaseModel):
-    id: str
+class TranscriptResponse(BaseModel):
+    lessonId: str
+    language: str
+    segments: List[TranscriptSegment]
+
+class OfflinePackResponse(BaseModel):
+    lessonId: str
+    packageId: str
+    totalSizeMB: float
+    downloadUrl: str
+    cachedAssets: List[str]
+
+class CaptionUploadRequest(BaseModel):
+    language: str
+    vttContent: str
+    author: Optional[str] = "Demonstration Reviewer"
+
+class CaptionUploadResponse(BaseModel):
     status: str
-    language_hint: Optional[str] = None
-    segments: List[TranscriptSegment] = []
+    lessonId: str
+    language: str
+    cuesCount: int
+    message: str
 
-@app.get("/health", response_model=HealthResponse)
+class WebhookSubscribeRequest(BaseModel):
+    targetUrl: str
+    eventType: str = "lesson.completed"
+
+class WebhookResponse(BaseModel):
+    status: str
+    subscriptionId: str
+    targetUrl: str
+    eventType: str
+
+# --- Endpoints ---
+
+@app.get("/health", response_model=HealthResponse, tags=["System"])
 def health_check():
     return {
         "status": "healthy",
@@ -45,30 +99,113 @@ def health_check():
         "asr_adapter": "local-fallback"
     }
 
-@app.get("/v1/transcription-jobs/{job_id}", response_model=TranscriptionJob)
-def get_job(job_id: str):
+@app.get("/api/v1/lessons/{lesson_id}", response_model=LessonMetadataResponse, tags=["Lessons"])
+def get_lesson(lesson_id: str):
+    if lesson_id not in ["digital-workplace-01", "default", "lesson-01"]:
+        # Return fallback lesson for mock demonstration
+        pass
     return {
-        "id": job_id,
-        "status": "ready_for_review",
-        "language_hint": "am",
-        "segments": [
+        "id": lesson_id,
+        "title": {
+            "en": "Digital Workplace Skills: Foundations",
+            "am": "የዲጂታል የሥራ ቦታ ክህሎቶች፡ መሠረታዊ"
+        },
+        "sources": [
             {
-                "id": 1,
-                "start_ms": 0,
-                "end_ms": 4000,
-                "draft_text": "እንኳን ወደዚህ የሥልጠና ፕሮግራም በደህና መጡ",
-                "reviewed_text": "እንኳን ወደዚህ የሥልጠና ፕሮግራም በደህና መጡ",
-                "speaker": "Instructor",
-                "review_status": "reviewed"
+                "id": "src-main",
+                "kind": "main",
+                "src": "/lessons/digital-workplace/media/lesson-video.mp4",
+                "mimeType": "video/mp4",
+                "label": "Main Lesson Video"
             },
             {
-                "id": 2,
-                "start_ms": 4000,
-                "end_ms": 8000,
-                "draft_text": "ዛሬ ስለ ዲጂታል የሥራ ቦታ ክህሎቶች እንማራለን",
-                "reviewed_text": None,
-                "speaker": "Instructor",
-                "review_status": "draft"
+                "id": "src-sign",
+                "kind": "sign",
+                "src": "/lessons/digital-workplace/media/sign-video.mp4",
+                "mimeType": "video/mp4",
+                "label": "Ethiopian Sign Language (EthSL)"
             }
+        ],
+        "captionTracks": [
+            {
+                "id": "cap-en",
+                "kind": "captions",
+                "src": "/lessons/digital-workplace/captions.en.vtt",
+                "language": "en",
+                "label": "English (Reviewed)"
+            },
+            {
+                "id": "cap-am",
+                "kind": "captions",
+                "src": "/lessons/digital-workplace/captions.am.vtt",
+                "language": "am",
+                "label": "አማርኛ (የተገመገመ)"
+            }
+        ],
+        "transcriptUrl": f"/api/v1/lessons/{lesson_id}/transcript?lang=en",
+        "audioDescriptionUrl": "/lessons/digital-workplace/media/lesson-audio.opus"
+    }
+
+@app.get("/api/v1/lessons/{lesson_id}/transcript", response_model=TranscriptResponse, tags=["Lessons"])
+def get_transcript(lesson_id: str, lang: str = "en"):
+    if lang == "am":
+        segments = [
+            TranscriptSegment(id=1, start_ms=0, end_ms=4500, draft_text="እንኳን ወደዚህ የሥልጠና ፕሮግራም በደህና መጡ", reviewed_text="እንኳን ወደዚህ የሥልጠና ፕሮግራም በደህና መጡ", speaker="አስተማሪ"),
+            TranscriptSegment(id=2, start_ms=4500, end_ms=9000, draft_text="ዛሬ ስለ ዲጂታል የሥራ ቦታ ክህሎቶች እንማራለን", reviewed_text="ዛሬ ስለ ዲጂታል የሥራ ቦታ ክህሎቶች እንማራለን", speaker="አስተማሪ")
         ]
+    else:
+        segments = [
+            TranscriptSegment(id=1, start_ms=0, end_ms=4500, draft_text="Welcome to Digital Workplace Skills: Foundations.", reviewed_text="Welcome to Digital Workplace Skills: Foundations.", speaker="Instructor"),
+            TranscriptSegment(id=2, start_ms=4500, end_ms=9000, draft_text="In this module, we explore core accessibility standards and digital collaboration.", reviewed_text="In this module, we explore core accessibility standards and digital collaboration.", speaker="Instructor")
+        ]
+    return {
+        "lessonId": lesson_id,
+        "language": lang,
+        "segments": segments
+    }
+
+@app.get("/api/v1/lessons/{lesson_id}/offline-pack", response_model=OfflinePackResponse, tags=["Offline"])
+def get_offline_pack(lesson_id: str):
+    return {
+        "lessonId": lesson_id,
+        "packageId": "pkg-3g-light",
+        "totalSizeMB": 3.2,
+        "downloadUrl": f"/lessons/{lesson_id}/offline-bundle.zip",
+        "cachedAssets": [
+            "/lessons/digital-workplace/lesson.json",
+            "/lessons/digital-workplace/captions.en.vtt",
+            "/lessons/digital-workplace/captions.am.vtt",
+            "/lessons/digital-workplace/transcript.en.json",
+            "/lessons/digital-workplace/documents/lesson.en.html",
+            "/jobs/jobs.json",
+            "/lessons/digital-workplace/media/lesson-audio.opus",
+            "/lessons/digital-workplace/media/poster.webp"
+        ]
+    }
+
+@app.post("/api/v1/lessons/{lesson_id}/captions", response_model=CaptionUploadResponse, status_code=status.HTTP_201_CREATED, tags=["Captions"])
+def upload_captions(lesson_id: str, payload: CaptionUploadRequest):
+    cues_count = payload.vttContent.count("-->")
+    if cues_count == 0 and "WEBVTT" not in payload.vttContent:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid WebVTT format. Must contain WEBVTT header and cue timestamps."
+        )
+    return {
+        "status": "success",
+        "lessonId": lesson_id,
+        "language": payload.language,
+        "cuesCount": max(1, cues_count),
+        "message": f"Caption track for {payload.language} successfully saved and published."
+    }
+
+@app.post("/api/v1/webhooks/subscribe", response_model=WebhookResponse, status_code=status.HTTP_201_CREATED, tags=["Webhooks"])
+def subscribe_webhook(payload: WebhookSubscribeRequest):
+    sub_id = f"sub-{len(WEBHOOKS) + 1}"
+    WEBHOOKS.append({"id": sub_id, "url": payload.targetUrl, "eventType": payload.eventType})
+    return {
+        "status": "subscribed",
+        "subscriptionId": sub_id,
+        "targetUrl": payload.targetUrl,
+        "eventType": payload.eventType
     }

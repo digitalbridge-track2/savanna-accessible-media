@@ -1,5 +1,16 @@
 services:
-  # Level 1: Static Web Component & Demo Application
+  # Host Platform & Module Static Server (Hackathon Guide Section 10 Specification)
+  web:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./savanna:/usr/share/nginx/html:ro
+      - ./module:/usr/share/nginx/html/module:ro
+      - ./demo:/usr/share/nginx/html/demo:ro
+    restart: unless-stopped
+
+  # Interactive Hackathon Demo & Verification Application (React + Vite PWA)
   demo:
     build:
       context: .
@@ -13,8 +24,8 @@ services:
       timeout: 5s
       retries: 3
 
-  # Level 2: Local FastAPI Transcription & OpenAPI Service
-  transcript-api:
+  # Level 2: Local FastAPI Transcription & OpenAPI Service (/docs, /api/v1/...)
+  api:
     build:
       context: .
       dockerfile: services/transcript-api/Dockerfile

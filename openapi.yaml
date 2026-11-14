@@ -1,0 +1,232 @@
+openapi: 3.0.3
+info:
+  title: Abugida Accessible Media API
+  version: 1.0.0
+  description: Level 2 REST API & Webhooks for Abugida Media Kit (Track 2: Accessible Learning Media)
+servers:
+  - url: http://localhost:8000
+    description: Local Docker / FastAPI development service
+paths:
+  /health:
+    get:
+      summary: Service Health Check
+      tags:
+        - System
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: healthy
+                  version:
+                    type: string
+                    example: 1.0.0
+                  asr_adapter:
+                    type: string
+                    example: local-fallback
+
+  /api/v1/lessons/{lesson_id}:
+    get:
+      summary: Retrieve Lesson Metadata & Media Track Registry
+      tags:
+        - Lessons
+      parameters:
+        - name: lesson_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: digital-workplace-01
+      responses:
+        "200":
+          description: Lesson metadata with video, EthSL, and caption tracks
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  title:
+                    type: object
+                  sources:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/TrackItem"
+                  captionTracks:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/TrackItem"
+                  transcriptUrl:
+                    type: string
+                  audioDescriptionUrl:
+                    type: string
+
+  /api/v1/lessons/{lesson_id}/transcript:
+    get:
+      summary: Fetch Interactive Transcript Segments
+      tags:
+        - Lessons
+      parameters:
+        - name: lesson_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: lang
+          in: query
+          required: false
+          schema:
+            type: string
+            default: en
+            enum: [en, am]
+      responses:
+        "200":
+          description: Timestamped transcript segments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  lessonId:
+                    type: string
+                  language:
+                    type: string
+                  segments:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/TranscriptSegment"
+
+  /api/v1/lessons/{lesson_id}/offline-pack:
+    get:
+      summary: Query 3G Light Offline Study Package
+      tags:
+        - Offline
+      parameters:
+        - name: lesson_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Offline study bundle metadata
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  lessonId:
+                    type: string
+                  packageId:
+                    type: string
+                  totalSizeMB:
+                    type: number
+                  downloadUrl:
+                    type: string
+                  cachedAssets:
+                    type: array
+                    items:
+                      type: string
+
+  /api/v1/lessons/{lesson_id}/captions:
+    post:
+      summary: Upload or Correct WebVTT Caption Track
+      tags:
+        - Captions
+      parameters:
+        - name: lesson_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - language
+                - vttContent
+              properties:
+                language:
+                  type: string
+                  example: am
+                vttContent:
+                  type: string
+                  example: "WEBVTT\n\n00:00:00.000 --> 00:00:04.500\nእንኳን ወደዚህ የሥልጠና ፕሮግራም በደህና መጡ"
+                author:
+                  type: string
+                  example: Demonstration Reviewer
+      responses:
+        "201":
+          description: Caption track successfully created/updated
+        "400":
+          description: Invalid WebVTT syntax
+
+  /api/v1/webhooks/subscribe:
+    post:
+      summary: Register Host Webhook for Learning Events
+      tags:
+        - Webhooks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - targetUrl
+              properties:
+                targetUrl:
+                  type: string
+                  example: http://localhost:3000/api/webhooks/listener
+                eventType:
+                  type: string
+                  default: lesson.completed
+      responses:
+        "201":
+          description: Webhook registered successfully
+
+components:
+  schemas:
+    TrackItem:
+      type: object
+      properties:
+        id:
+          type: string
+        kind:
+          type: string
+          example: main
+        src:
+          type: string
+        language:
+          type: string
+        label:
+          type: string
+        mimeType:
+          type: string
+
+    TranscriptSegment:
+      type: object
+      properties:
+        id:
+          type: integer
+        start_ms:
+          type: integer
+        end_ms:
+          type: integer
+        draft_text:
+          type: string
+        reviewed_text:
+          type: string
+        speaker:
+          type: string
+        review_status:
+          type: string
