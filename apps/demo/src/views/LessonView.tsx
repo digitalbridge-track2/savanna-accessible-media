@@ -85,20 +85,6 @@ export const LessonView: React.FC<LessonViewProps> = ({ locale }) => {
 
   return (
     <div>
-      {/* Breadcrumb Navigation */}
-      <nav aria-label="Breadcrumb" style={{ marginBottom: "1.5rem" }}>
-        <ol style={{ display: "flex", gap: "0.5rem", listStyle: "none", padding: 0, margin: 0, fontSize: "0.92rem" }}>
-          <li>
-            <NavLink to="/">Home</NavLink> &gt;
-          </li>
-          <li>
-            <span aria-current="page" style={{ fontWeight: 600, color: "var(--color-brand)" }}>
-              {isAm ? "የዲጂታል የሥራ ቦታ ክህሎቶች" : "Digital Workplace Skills"}
-            </span>
-          </li>
-        </ol>
-      </nav>
-
       {/* Lesson Header */}
       <header style={{ marginBottom: "1.5rem" }}>
         <h2 style={{ fontSize: "1.8rem", color: "var(--color-brand)", margin: "0 0 0.5rem 0" }}>
