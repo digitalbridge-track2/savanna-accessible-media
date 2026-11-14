@@ -1,13 +1,8 @@
-const CACHE_NAME = "abugida-offline-v1";
+const CACHE_NAME = "abugida-offline-v2";
 
 const ESSENTIAL_SHELL = [
   "/",
   "/index.html",
-  "/lesson.html",
-  "/studio.html",
-  "/verify.html",
-  "/src/styles/tokens.css",
-  "/src/lesson.ts",
   "/lessons/digital-workplace/lesson.json",
   "/lessons/digital-workplace/captions.en.vtt",
   "/lessons/digital-workplace/captions.am.vtt",
@@ -20,7 +15,9 @@ const ESSENTIAL_SHELL = [
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ESSENTIAL_SHELL);
+      return cache.addAll(ESSENTIAL_SHELL).catch((err) => {
+        console.warn("Service worker cache.addAll non-critical warning:", err);
+      });
     })
   );
   self.skipWaiting();
@@ -40,28 +37,41 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
 
-  event.respondWith(
-    caches.match(event.request).then((cached) => {
-      if (cached) {
-        return cached;
-      }
-
-      return fetch(event.request)
+  // Network-first for navigation requests to ensure fresh HTML and no stuck state
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      fetch(event.request)
         .then((response) => {
-          if (!response || response.status !== 200 || response.type !== "basic") {
-            return response;
+          if (response && response.status === 200) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then((c) => c.put(event.request, copy));
           }
-          const responseToCache = response.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
           return response;
         })
         .catch(() => {
-          // Offline fallback
-          if (event.request.mode === "navigate") {
-            return caches.match("/lesson.html");
+          return caches.match(event.request).then((cached) => {
+            return cached || caches.match("/index.html");
+          });
+        })
+    );
+    return;
+  }
+
+  // Cache-first for static media and data assets
+  event.respondWith(
+    caches.match(event.request).then((cached) => {
+      if (cached) return cached;
+
+      return fetch(event.request)
+        .then((response) => {
+          if (response && response.status === 200) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then((c) => c.put(event.request, copy));
           }
+          return response;
+        })
+        .catch(() => {
+          return new Response("", { status: 408, statusText: "Offline" });
         });
     })
   );

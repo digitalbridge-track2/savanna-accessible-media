@@ -82,3 +82,132 @@ nav.main-nav ul {
   margin: 0;
   padding: 0;
 }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.nav-link {
+  color: var(--color-ink);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.nav-link:hover {
+  background-color: rgba(11, 93, 78, 0.08);
+  color: var(--color-brand);
+}
+
+.nav-link[aria-current="page"] {
+  background-color: var(--color-brand);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  min-height: 44px;
+  text-decoration: none;
+  transition: transform 0.08s ease, background-color 0.15s ease, border-color 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background-color: var(--color-brand);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-brand-hover);
+}
+
+.btn-outline {
+  background-color: var(--color-surface);
+  color: var(--color-brand);
+  border: 2px solid var(--color-brand);
+}
+
+.btn-outline:hover {
+  background-color: rgba(11, 93, 78, 0.08);
+}
+
+.btn-secondary {
+  background-color: #37474F;
+  color: #ffffff;
+}
+
+.btn-secondary:hover {
+  background-color: #263238;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.badge-brand {
+  background: #E0F2F1;
+  color: #004D40;
+}
+
+.badge-accent {
+  background: #FFF8E1;
+  color: #B78103;
+  border: 1px solid #FFE082;
+}
+
+.badge-success {
+  background: #E8F5E9;
+  color: #1B5E20;
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+kbd {
+  background-color: #ECEFF1;
+  border: 1px solid #CFD8DC;
+  border-bottom: 2px solid #90A4AE;
+  border-radius: 4px;
+  padding: 0.15rem 0.4rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.85em;
+  font-weight: 600;
+  color: #263238;
+}
