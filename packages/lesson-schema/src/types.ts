@@ -12,6 +12,8 @@ export interface MediaSource {
   type: string;
   sizeBytes?: number;
   describes?: string;
+  quality?: string;
+  label?: string;
 }
 
 export interface CaptionTrack {

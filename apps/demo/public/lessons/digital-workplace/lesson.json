@@ -24,7 +24,27 @@
       "kind": "main",
       "src": "/lessons/digital-workplace/media/lesson.mp4",
       "type": "video/mp4",
-      "sizeBytes": 14200000
+      "sizeBytes": 14200000,
+      "quality": "720p",
+      "label": "720p (HD)"
+    },
+    {
+      "id": "src-main-360p",
+      "kind": "main",
+      "src": "/lessons/digital-workplace/media/lesson-360p.mp4",
+      "type": "video/mp4",
+      "sizeBytes": 5800000,
+      "quality": "360p",
+      "label": "360p (SD)"
+    },
+    {
+      "id": "src-main-240p",
+      "kind": "main",
+      "src": "/lessons/digital-workplace/media/lesson-240p.mp4",
+      "type": "video/mp4",
+      "sizeBytes": 2400000,
+      "quality": "240p",
+      "label": "240p (Low Data)"
     },
     {
       "id": "src-ad",

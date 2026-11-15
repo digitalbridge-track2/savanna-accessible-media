@@ -8,6 +8,7 @@ import {
   CaptionTheme,
   ESLPosition,
   ESLSize,
+  VideoQuality,
   DEFAULT_PREFERENCES,
 } from "./preferences/storage.js";
 import { parseVTT, VTTCueItem, getThemeStyles } from "./captions/caption-manager.js";
@@ -35,6 +36,7 @@ const ICONS = {
   volumeUnmuted: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>`,
   volumeMuted: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>`,
   shortcuts: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm9 7H8v-2h8v2zm0-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2z"/></svg>`,
+  quality: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M19 4H5c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.89-2-2-2zm-8 11H9.5v-2h-2v2H6V9h1.5v2.5h2V9H11v6zm7-1c0 .55-.45 1-1 1h-4V9h4c.55 0 1 .45 1 1v4zm-1.5-3.5h-2v3h2v-3z"/></svg>`,
   lowData: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M4 18h2v3H4v-3zm4-4h2v7H8v-7zm4-4h2v11h-2v-11zm4-4h2v15h-2V6zm4-4h2v19h-2V2z"/></svg>`
 };
 
@@ -66,11 +68,15 @@ export class A11yMediaPlayer extends HTMLElement {
 
   // UI state
   private isPreferencesOpen = false;
+  private isQualityMenuOpen = false;
+  private currentQuality: VideoQuality = "auto";
+  private qualityToastTimer: number | null = null;
 
   constructor() {
     super();
     this.shadow = this.attachShadow({ mode: "open" });
     this.prefs = loadPreferences();
+    this.currentQuality = this.prefs.videoQuality || "auto";
   }
 
   private onCaptionsUpdated = () => {
@@ -351,11 +357,103 @@ export class A11yMediaPlayer extends HTMLElement {
     `;
   }
 
+  private resolveMainSource(quality: VideoQuality = this.currentQuality): string {
+    if (!this.manifest || !this.manifest.sources) return "";
+    const mainSources = this.manifest.sources.filter((s) => s.kind === "main");
+    if (!mainSources.length) return "";
+
+    if (quality === "auto") {
+      const conn = (navigator as unknown as { connection?: { effectiveType?: string; saveData?: boolean } }).connection;
+      if (conn?.saveData || conn?.effectiveType === "slow-2g" || conn?.effectiveType === "2g") {
+        const q240 = mainSources.find((s) => s.quality === "240p");
+        if (q240) return q240.src;
+      } else if (conn?.effectiveType === "3g") {
+        const q360 = mainSources.find((s) => s.quality === "360p");
+        if (q360) return q360.src;
+      }
+      const q720 = mainSources.find((s) => s.quality === "720p");
+      return q720 ? q720.src : mainSources[0].src;
+    }
+
+    const matched = mainSources.find((s) => s.quality === quality);
+    if (matched) return matched.src;
+    return mainSources[0].src;
+  }
+
+  private async applyQuality(quality: VideoQuality) {
+    this.currentQuality = quality;
+    this.prefs.videoQuality = quality;
+    savePreferences({ videoQuality: quality });
+
+    // Update button badge text
+    const badgeText = this.shadow.getElementById("quality-badge-text");
+    if (badgeText) {
+      badgeText.textContent = quality === "auto" ? "Auto" : quality;
+    }
+
+    // Update checkmarks in quality popover
+    const menuItems = this.shadow.querySelectorAll(".quality-menu-item");
+    menuItems.forEach((item) => {
+      const q = item.getAttribute("data-quality");
+      const isSelected = q === quality;
+      item.classList.toggle("selected", isSelected);
+      item.setAttribute("aria-checked", isSelected ? "true" : "false");
+      const checkEl = item.querySelector(".quality-check");
+      if (checkEl) checkEl.textContent = isSelected ? "✓" : "";
+    });
+
+    // Update select-video-quality dropdown in settings popover
+    const selectQuality = this.shadow.getElementById("select-video-quality") as HTMLSelectElement | null;
+    if (selectQuality && selectQuality.value !== quality) {
+      selectQuality.value = quality;
+    }
+
+    // Flash toast indicator
+    const toast = this.shadow.getElementById("quality-toast");
+    const toastText = this.shadow.getElementById("quality-toast-text");
+    if (toast && toastText) {
+      const isAm = this.activeLocale === "am";
+      const qLabel = quality === "auto"
+        ? (isAm ? "ጥራት፡ Auto (ተለዋዋጭ)" : "Quality: Auto (Adaptive)")
+        : `${isAm ? "ጥራት፡ " : "Quality: "}${quality}`;
+      toastText.textContent = `⚡ ${qLabel}`;
+      toast.style.display = "flex";
+      toast.style.opacity = "1";
+      if (this.qualityToastTimer) clearTimeout(this.qualityToastTimer);
+      this.qualityToastTimer = window.setTimeout(() => {
+        toast.style.opacity = "0";
+        setTimeout(() => {
+          if (toast.style.opacity === "0") toast.style.display = "none";
+        }, 300);
+      }, 2000);
+    }
+
+    // Switch video stream seamlessly
+    const newSrc = this.resolveMainSource(quality);
+    if (newSrc && this.mainVideo) {
+      if (!this.prefs.audioDescriptionEnabled) {
+        if (this.syncController) {
+          await this.syncController.switchSource(newSrc);
+        } else {
+          const wasPlaying = !this.mainVideo.paused;
+          const curTime = this.mainVideo.currentTime;
+          const curRate = this.mainVideo.playbackRate;
+          this.mainVideo.src = newSrc;
+          this.mainVideo.currentTime = curTime;
+          this.mainVideo.playbackRate = curRate;
+          if (wasPlaying) {
+            try { await this.mainVideo.play(); } catch {}
+          }
+        }
+      }
+    }
+  }
+
   private render() {
     const isAm = this.activeLocale === "am";
     const title = this.manifest ? this.manifest.title[this.activeLocale] : "Media Player";
 
-    const mainSource = this.manifest?.sources.find((s) => s.kind === "main");
+    const activeMainSrc = this.resolveMainSource(this.currentQuality);
     const signSource = this.manifest?.sources.find((s) => s.kind === "sign");
 
     const transWidth = this.prefs.transcriptWidth || DEFAULT_PREFERENCES.transcriptWidth || 260;
@@ -623,44 +721,164 @@ export class A11yMediaPlayer extends HTMLElement {
           outline-offset: 1px;
         }
 
-        /* 3G Audio-Only Real-Time Bandwidth Savings Banner */
-        .audio-only-banner {
+        /* Video Quality Popover Menu & Button */
+        .quality-popover {
+          position: absolute;
+          bottom: 58px;
+          right: 68px;
+          min-width: 170px;
+          background: rgba(24, 24, 27, 0.96);
+          color: #F8FAFC;
+          border-radius: 10px;
+          border: 1px solid rgba(255, 255, 255, 0.14);
+          box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 2px 10px rgba(0, 0, 0, 0.3);
+          backdrop-filter: blur(24px) saturate(180%);
+          -webkit-backdrop-filter: blur(24px) saturate(180%);
+          z-index: 125;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          padding: 6px 0;
+          box-sizing: border-box;
+          transform-origin: bottom right;
+          animation: appleFlyoutIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .quality-menu-header {
+          padding: 6px 14px 6px 14px;
+          font-size: 0.72rem;
+          font-weight: 700;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: #94A3B8;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          margin-bottom: 4px;
+          user-select: none;
+        }
+
+        .quality-menu-list {
+          display: flex;
+          flex-direction: column;
+          gap: 1px;
+        }
+
+        .quality-menu-item {
+          display: flex;
+          align-items: center;
+          width: 100%;
+          padding: 8px 14px;
+          background: transparent;
+          border: none;
+          color: #F1F5F9;
+          font-size: 0.88rem;
+          font-weight: 500;
+          cursor: pointer;
+          text-align: left;
+          gap: 8px;
+          transition: background 0.12s ease, color 0.12s ease;
+          box-sizing: border-box;
+        }
+
+        .quality-menu-item:hover {
+          background: rgba(255, 255, 255, 0.1);
+          color: #FFFFFF;
+        }
+
+        .quality-menu-item:focus-visible {
+          background: rgba(255, 255, 255, 0.15);
+          outline: 2px solid var(--color-focus, #0071E3);
+          outline-offset: -2px;
+        }
+
+        .quality-menu-item.selected {
+          font-weight: 700;
+          color: #FFFFFF;
+        }
+
+        .quality-check {
+          width: 18px;
+          color: #FFFFFF;
+          font-size: 0.95rem;
+          font-weight: 700;
+          display: inline-flex;
+          align-items: center;
+          justify-content: flex-start;
+          flex-shrink: 0;
+          margin-right: 6px;
+        }
+
+        .quality-name {
+          flex: 1 1 auto;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 6px;
+        }
+
+        .quality-tag {
+          font-size: 0.68rem;
+          font-weight: 700;
+          padding: 1px 5px;
+          border-radius: 4px;
+          background: rgba(255, 255, 255, 0.14);
+          color: #CBD5E1;
+          letter-spacing: 0.02em;
+        }
+
+        .btn-ctrl.btn-ctrl-quality {
+          width: auto !important;
+          min-width: 52px;
+          height: 30px;
+          padding: 0 6px !important;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 4px;
+          border-radius: 4px;
+        }
+        .quality-badge-text {
+          font-size: 0.72rem;
+          font-weight: 700;
+          padding: 2px 5px;
+          border-radius: 4px;
+          background: rgba(255, 255, 255, 0.16);
+          color: #FFFFFF;
+          line-height: 1;
+          letter-spacing: 0.02em;
+          border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .btn-ctrl-quality.is-active {
+          color: var(--color-brand, #38BDF8);
+          background: rgba(255, 255, 255, 0.22);
+        }
+
+        /* Quality Toast Pill (Subtle on-screen indicator) */
+        .quality-toast {
           position: absolute;
           top: 16px;
           left: 50%;
           transform: translateX(-50%);
-          background: rgba(15, 23, 42, 0.94);
+          background: rgba(15, 23, 42, 0.92);
           backdrop-filter: blur(16px);
           -webkit-backdrop-filter: blur(16px);
           border: 1px solid rgba(56, 189, 248, 0.4);
-          border-radius: 12px;
-          padding: 10px 18px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 4px;
-          z-index: 25;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-          pointer-events: none;
-          animation: fadeInBanner 0.25s ease-out;
-        }
-        @keyframes fadeInBanner {
-          from { opacity: 0; transform: translate(-50%, -8px); }
-          to { opacity: 1; transform: translate(-50%, 0); }
-        }
-        .audio-only-badge {
-          color: #38BDF8;
-          font-size: 0.82rem;
-          font-weight: 700;
-          letter-spacing: 0.02em;
+          border-radius: 999px;
+          padding: 6px 14px;
           display: flex;
           align-items: center;
           gap: 6px;
-        }
-        .audio-only-savings {
-          color: #A3E635;
-          font-size: 0.76rem;
+          z-index: 30;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+          pointer-events: none;
+          color: #F8FAFC;
+          font-size: 0.82rem;
           font-weight: 600;
+          animation: toastIn 0.2s ease-out;
+          transition: opacity 0.3s ease;
+        }
+        @keyframes toastIn {
+          from { opacity: 0; transform: translate(-50%, -6px); }
+          to { opacity: 1; transform: translate(-50%, 0); }
         }
 
         /* 1-Click Caption Contrast Presets */
@@ -1502,6 +1720,10 @@ export class A11yMediaPlayer extends HTMLElement {
             max-width: none;
             bottom: 56px;
           }
+          .quality-popover {
+            right: 16px;
+            bottom: 56px;
+          }
         }
 
         /* Keyboard Shortcuts Modal Dialog (Soft accessible scrim) */
@@ -1752,13 +1974,12 @@ export class A11yMediaPlayer extends HTMLElement {
                 playsinline 
                 preload="metadata"
                 poster="${this.manifest?.poster?.src || ""}"
-                src="${mainSource ? mainSource.src : ""}">
+                src="${activeMainSrc}">
               </video>
 
-              <!-- 3G Audio-Only Real-time Bandwidth Savings Banner -->
-              <div class="audio-only-banner" id="audio-only-banner" style="display: none;" role="status" aria-live="polite">
-                <div class="audio-only-badge">📶 ${isAm ? "3G ዝቅተኛ ዳታ ሁነታ ነቅቷል (32kbps Opus)" : "3G Low-Data Mode Active (32kbps Opus)"}</div>
-                <div class="audio-only-savings">⚡ ${isAm ? "99.2% ዳታ ተቆጥቧል (1.6 MB vs 205 MB)" : "99.2% Bandwidth Saved (1.6 MB vs 205 MB)"}</div>
+              <!-- Video Quality Toast Indicator -->
+              <div class="quality-toast" id="quality-toast" style="display: none;" role="status" aria-live="polite">
+                <span id="quality-toast-text">⚡ Quality: Auto</span>
               </div>
 
               <!-- Big Play Button Overlay -->
@@ -1848,8 +2069,9 @@ export class A11yMediaPlayer extends HTMLElement {
 
                 <!-- Right: Settings, Fullscreen, Volume -->
                 <div class="controls-cluster">
-                  <button class="btn-ctrl" id="btn-3g-audio" aria-pressed="false" aria-label="${isAm ? "3G ዝቅተኛ ዳታ የድምጽ ሁነታ" : "3G Low-Data Audio Mode"}" title="${isAm ? "3G ዝቅተኛ ዳታ የድምጽ ሁነታ (99.2% ዳታ ይቆጥቡ)" : "3G Low-Data Audio Mode (Save 99.2% bandwidth)"}">
-                    <span aria-hidden="true">${ICONS.lowData}</span>
+                  <button class="btn-ctrl btn-ctrl-quality" id="btn-quality" aria-expanded="false" aria-haspopup="menu" aria-label="${isAm ? "የቪዲዮ ጥራት" : "Video Quality"}" title="${isAm ? "የቪዲዮ ጥራት መቆጣጠሪያ (Auto / 720p / 360p / 240p)" : "Video Quality (Auto / 720p / 360p / 240p)"}">
+                    <span aria-hidden="true">${ICONS.quality}</span>
+                    <span class="quality-badge-text" id="quality-badge-text">${this.currentQuality === "auto" ? "Auto" : this.currentQuality}</span>
                   </button>
 
                   <button class="btn-ctrl" id="btn-shortcuts" aria-expanded="false" aria-label="${isAm ? "የኪቦርድ አቋራጮች (?)" : "Keyboard Shortcuts (?)"}" title="${isAm ? "የኪቦርድ አቋራጮች (?)" : "Keyboard Shortcuts (?)"}">
@@ -1878,6 +2100,34 @@ export class A11yMediaPlayer extends HTMLElement {
               </div>
             </div>
 
+            <!-- Video Quality Popover Menu (Aligned with standard media players) -->
+            <div 
+              class="quality-popover" 
+              id="quality-menu" 
+              style="display: none;" 
+              role="menu" 
+              aria-label="${isAm ? "የቪዲዮ ጥራት" : "Video Quality"}">
+              <div class="quality-menu-header">${isAm ? "የቪዲዮ ጥራት" : "QUALITY"}</div>
+              <div class="quality-menu-list">
+                <button type="button" class="quality-menu-item ${this.currentQuality === "auto" ? "selected" : ""}" data-quality="auto" role="menuitemradio" aria-checked="${this.currentQuality === "auto"}">
+                  <span class="quality-check" aria-hidden="true">${this.currentQuality === "auto" ? "✓" : ""}</span>
+                  <span class="quality-name">Auto</span>
+                </button>
+                <button type="button" class="quality-menu-item ${this.currentQuality === "720p" ? "selected" : ""}" data-quality="720p" role="menuitemradio" aria-checked="${this.currentQuality === "720p"}">
+                  <span class="quality-check" aria-hidden="true">${this.currentQuality === "720p" ? "✓" : ""}</span>
+                  <span class="quality-name">720p <span class="quality-tag">HD</span></span>
+                </button>
+                <button type="button" class="quality-menu-item ${this.currentQuality === "360p" ? "selected" : ""}" data-quality="360p" role="menuitemradio" aria-checked="${this.currentQuality === "360p"}">
+                  <span class="quality-check" aria-hidden="true">${this.currentQuality === "360p" ? "✓" : ""}</span>
+                  <span class="quality-name">360p <span class="quality-tag">SD</span></span>
+                </button>
+                <button type="button" class="quality-menu-item ${this.currentQuality === "240p" ? "selected" : ""}" data-quality="240p" role="menuitemradio" aria-checked="${this.currentQuality === "240p"}">
+                  <span class="quality-check" aria-hidden="true">${this.currentQuality === "240p" ? "✓" : ""}</span>
+                  <span class="quality-name">240p <span class="quality-tag">${isAm ? "ዝቅተኛ" : "Low Data"}</span></span>
+                </button>
+              </div>
+            </div>
+
             <!-- Accessibility & Layout Settings Popover (Flows smoothly from settings icon, zero dark scrim) -->
             <div 
               class="prefs-popover" 
@@ -1895,6 +2145,16 @@ export class A11yMediaPlayer extends HTMLElement {
               </div>
 
               <div class="popover-body">
+                <div class="form-row">
+                  <label for="select-video-quality">${isAm ? "የቪዲዮ ጥራት:" : "Video Quality:"}</label>
+                  <select id="select-video-quality">
+                    <option value="auto" ${this.currentQuality === "auto" ? "selected" : ""}>Auto (Adaptive)</option>
+                    <option value="720p" ${this.currentQuality === "720p" ? "selected" : ""}>720p (HD)</option>
+                    <option value="360p" ${this.currentQuality === "360p" ? "selected" : ""}>360p (SD - Standard)</option>
+                    <option value="240p" ${this.currentQuality === "240p" ? "selected" : ""}>240p (${isAm ? "ዝቅተኛ ዳታ" : "Low Data / 3G"})</option>
+                  </select>
+                </div>
+
                 <div class="form-row">
                   <label for="select-cc-lang">${isAm ? "የትርጉም ጽሑፍ ቋንቋ:" : "Caption Language:"}</label>
                   <select id="select-cc-lang">
@@ -2835,7 +3095,7 @@ export class A11yMediaPlayer extends HTMLElement {
       this.setAttribute("locale", newLocale);
     });
 
-    // Accessibility Preferences Popover Flyout (Smooth flow, zero dark scrim)
+    // Accessibility Preferences & Quality Popovers Flyout (Smooth flow, zero dark scrim)
     const btnPrefs = this.shadow.getElementById("btn-prefs");
     const btnTranscriptPrefs = this.shadow.getElementById("btn-transcript-prefs");
     const btnEslPrefs = this.shadow.getElementById("btn-esl-prefs");
@@ -2844,9 +3104,57 @@ export class A11yMediaPlayer extends HTMLElement {
     const btnDismissPrefs = this.shadow.getElementById("btn-dismiss-prefs");
     const btnResetLayout = this.shadow.getElementById("btn-reset-layout");
 
+    const btnQuality = this.shadow.getElementById("btn-quality");
+    const qualityMenu = this.shadow.getElementById("quality-menu");
+
+    const closeQualityMenu = () => {
+      if (!this.isQualityMenuOpen) return;
+      this.isQualityMenuOpen = false;
+      if (qualityMenu) qualityMenu.style.display = "none";
+      btnQuality?.classList.remove("is-active");
+      btnQuality?.setAttribute("aria-expanded", "false");
+    };
+
+    const openQualityMenu = () => {
+      closePrefs();
+      this.isQualityMenuOpen = true;
+      if (qualityMenu) qualityMenu.style.display = "flex";
+      btnQuality?.classList.add("is-active");
+      btnQuality?.setAttribute("aria-expanded", "true");
+      const activeItem = (this.shadow.querySelector(`.quality-menu-item[data-quality="${this.currentQuality}"]`) as HTMLElement)
+        || (this.shadow.querySelector(".quality-menu-item") as HTMLElement);
+      activeItem?.focus();
+    };
+
+    const toggleQualityMenu = () => {
+      if (this.isQualityMenuOpen) {
+        closeQualityMenu();
+      } else {
+        openQualityMenu();
+      }
+    };
+
+    btnQuality?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleQualityMenu();
+    });
+
+    const qualityBtns = this.shadow.querySelectorAll(".quality-menu-item");
+    qualityBtns.forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const q = btn.getAttribute("data-quality") as VideoQuality;
+        if (q) {
+          await this.applyQuality(q);
+          closeQualityMenu();
+          btnQuality?.focus();
+        }
+      });
+    });
+
     const ccLangSelect = this.shadow.getElementById("select-cc-lang") as HTMLSelectElement | null;
     const ccSizeSelect = this.shadow.getElementById("select-cc-size") as HTMLSelectElement | null;
     const ccThemeSelect = this.shadow.getElementById("select-cc-theme") as HTMLSelectElement | null;
+    const selectVideoQuality = this.shadow.getElementById("select-video-quality") as HTMLSelectElement | null;
     const toggleEslSelect = this.shadow.getElementById("toggle-esl-visibility") as HTMLSelectElement | null;
     const toggleTransSelect = this.shadow.getElementById("toggle-transcript-visibility") as HTMLSelectElement | null;
     const toggleAdSelect = this.shadow.getElementById("toggle-ad-enabled") as HTMLSelectElement | null;
@@ -2861,8 +3169,10 @@ export class A11yMediaPlayer extends HTMLElement {
     };
 
     const openPrefs = () => {
+      closeQualityMenu();
       this.isPreferencesOpen = true;
 
+      if (selectVideoQuality) selectVideoQuality.value = this.currentQuality;
       if (ccLangSelect) ccLangSelect.value = this.prefs.captionLanguage;
       if (ccSizeSelect) ccSizeSelect.value = this.prefs.captionSize;
       if (ccThemeSelect) ccThemeSelect.value = this.prefs.captionTheme;
@@ -2988,21 +3298,41 @@ export class A11yMediaPlayer extends HTMLElement {
       closePrefs();
     });
 
-    // Dismiss Popover When Clicking Outside
+    // Dismiss Popovers When Clicking Outside
     const handleOutsideClick = (e: MouseEvent) => {
-      if (!this.isPreferencesOpen) return;
       const path = e.composedPath();
-      if (
-        (prefsDialog && path.includes(prefsDialog)) ||
-        (btnPrefs && path.includes(btnPrefs)) ||
-        (btnTranscriptPrefs && path.includes(btnTranscriptPrefs)) ||
-        (btnEslPrefs && path.includes(btnEslPrefs))
-      ) {
-        return;
+      if (this.isPreferencesOpen) {
+        if (
+          (prefsDialog && path.includes(prefsDialog)) ||
+          (btnPrefs && path.includes(btnPrefs)) ||
+          (btnTranscriptPrefs && path.includes(btnTranscriptPrefs)) ||
+          (btnEslPrefs && path.includes(btnEslPrefs))
+        ) {
+          // Inside prefs
+        } else {
+          closePrefs();
+        }
       }
-      closePrefs();
+
+      if (this.isQualityMenuOpen) {
+        if (
+          (qualityMenu && path.includes(qualityMenu)) ||
+          (btnQuality && path.includes(btnQuality))
+        ) {
+          // Inside quality menu
+        } else {
+          closeQualityMenu();
+        }
+      }
     };
     window.addEventListener("pointerdown", handleOutsideClick);
+
+    // Live Quality dropdown inside Preferences
+    selectVideoQuality?.addEventListener("change", async () => {
+      if (selectVideoQuality.value !== this.currentQuality) {
+        await this.applyQuality(selectVideoQuality.value as VideoQuality);
+      }
+    });
 
     // Reset Layout Button (Restores side-by-side docked layout & default dimensions)
     btnResetLayout?.addEventListener("click", () => {
@@ -3013,9 +3343,13 @@ export class A11yMediaPlayer extends HTMLElement {
       const ccLangSelect = this.shadow.getElementById("select-cc-lang") as HTMLSelectElement | null;
       const ccSizeSelect = this.shadow.getElementById("select-cc-size") as HTMLSelectElement | null;
       const ccThemeSelect = this.shadow.getElementById("select-cc-theme") as HTMLSelectElement | null;
+      const selectVideoQuality = this.shadow.getElementById("select-video-quality") as HTMLSelectElement | null;
       const toggleEslSelect = this.shadow.getElementById("toggle-esl-visibility") as HTMLSelectElement | null;
       const toggleTransSelect = this.shadow.getElementById("toggle-transcript-visibility") as HTMLSelectElement | null;
       const toggleAdSelect = this.shadow.getElementById("toggle-ad-enabled") as HTMLSelectElement | null;
+
+      if (selectVideoQuality) selectVideoQuality.value = "auto";
+      this.applyQuality("auto");
 
       if (ccLangSelect) ccLangSelect.value = this.prefs.captionLanguage;
       if (ccSizeSelect) ccSizeSelect.value = this.prefs.captionSize;
@@ -3214,26 +3548,6 @@ export class A11yMediaPlayer extends HTMLElement {
       }
     });
 
-    // 3G Low-Data Audio Mode Toggle
-    let isLowData3G = false;
-    const btn3gAudio = this.shadow.getElementById("btn-3g-audio");
-    const audioOnlyBanner = this.shadow.getElementById("audio-only-banner");
-    btn3gAudio?.addEventListener("click", () => {
-      isLowData3G = !isLowData3G;
-      btn3gAudio.setAttribute("aria-pressed", isLowData3G ? "true" : "false");
-      btn3gAudio.classList.toggle("active", isLowData3G);
-      if (audioOnlyBanner) {
-        audioOnlyBanner.style.display = isLowData3G ? "flex" : "none";
-      }
-      if (this.mainVideo) {
-        if (isLowData3G) {
-          this.mainVideo.style.filter = "brightness(0.35) blur(6px)";
-        } else {
-          this.mainVideo.style.filter = "none";
-        }
-      }
-    });
-
     // Keyboard Shortcuts Cheat-Sheet Modal Dialog
     const dialogShortcuts = this.shadow.getElementById("dialog-shortcuts");
     const btnShortcuts = this.shadow.getElementById("btn-shortcuts");
@@ -3267,6 +3581,13 @@ export class A11yMediaPlayer extends HTMLElement {
     // Scoped Keyboard Hotkeys
     const playerRoot = this.shadow.getElementById("player-container");
     playerRoot?.addEventListener("keydown", (e) => {
+      if (this.isQualityMenuOpen) {
+        if (e.key === "Escape") {
+          closeQualityMenu();
+          btnQuality?.focus();
+        }
+        return;
+      }
       if (this.isPreferencesOpen) {
         if (e.key === "Escape") {
           closePrefs();

@@ -2,11 +2,13 @@ export type CaptionTheme = "default" | "yellow-black" | "white-black" | "black-y
 export type CaptionSize = "small" | "medium" | "large" | "xlarge";
 export type ESLPosition = "top-right" | "top-left" | "bottom-right" | "bottom-left";
 export type ESLSize = "small" | "medium" | "large";
+export type VideoQuality = "auto" | "720p" | "360p" | "240p";
 
 export interface PlayerPreferences {
   captionLanguage: string; // "off" | "en" | "am"
   captionSize: CaptionSize;
   captionTheme: CaptionTheme;
+  videoQuality?: VideoQuality;
   audioDescriptionEnabled: boolean;
   eslVisible: boolean;
   eslPosition: ESLPosition;
@@ -25,6 +27,7 @@ export const DEFAULT_PREFERENCES: PlayerPreferences = {
   captionLanguage: "en",
   captionSize: "medium",
   captionTheme: "default",
+  videoQuality: "auto",
   audioDescriptionEnabled: false,
   eslVisible: true,
   eslPosition: "bottom-right",

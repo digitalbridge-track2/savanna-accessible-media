@@ -74,7 +74,9 @@
           "src": { "type": "string" },
           "type": { "type": "string" },
           "sizeBytes": { "type": "integer" },
-          "describes": { "type": "string" }
+          "describes": { "type": "string" },
+          "quality": { "type": "string" },
+          "label": { "type": "string" }
         }
       }
     },
