@@ -502,7 +502,7 @@ export class A11yMediaPlayer extends HTMLElement {
         .header-controls {
           display: flex;
           align-items: center;
-          gap: 0.5rem;
+          gap: 0.65rem;
         }
         .auto-scroll-label {
           display: inline-flex;
@@ -515,15 +515,44 @@ export class A11yMediaPlayer extends HTMLElement {
           user-select: none;
           white-space: nowrap;
         }
-        .header-select {
-          background: #FFF;
-          color: #1E293B;
-          border: 1px solid #94A3B8;
-          border-radius: 4px;
-          font-size: 0.78rem;
-          padding: 2px 6px;
-          height: 26px;
+        .auto-scroll-label input[type="checkbox"] {
+          accent-color: var(--color-brand, #0071E3);
           cursor: pointer;
+        }
+        .header-select {
+          appearance: none;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          background-color: rgba(255, 255, 255, 0.12);
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23CBD5E1' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+          background-repeat: no-repeat;
+          background-position: right 8px center;
+          color: #F8F9FA;
+          border: 1px solid rgba(255, 255, 255, 0.22);
+          border-radius: 6px;
+          font-size: 0.8rem;
+          font-weight: 500;
+          font-family: inherit;
+          padding: 0 24px 0 10px;
+          height: 28px;
+          cursor: pointer;
+          transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+          outline: none;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+        }
+        .header-select:hover {
+          background-color: rgba(255, 255, 255, 0.2);
+          border-color: rgba(255, 255, 255, 0.38);
+        }
+        .header-select:focus-visible {
+          outline: 2px solid var(--color-focus, #0071E3);
+          outline-offset: 1px;
+          border-color: transparent;
+        }
+        .header-select option {
+          background: #23282E;
+          color: #F8F9FA;
+          padding: 6px 10px;
         }
 
         /* Bottom-Right Corner Resize Grip (Both Width & Height) */
