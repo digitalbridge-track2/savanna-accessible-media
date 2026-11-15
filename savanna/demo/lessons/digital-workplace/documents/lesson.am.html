@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="የዲጂታል የሥራ ቦታ ክህሎቶች፡ መሠረታዊ - ለስክሪን አንባቢ እና ከመስመር ውጭ ጥናት የተዘጋጀ ተደራሽ የትምህርት ማጠቃለያ።">
+  <title>የትምህርት ሰነድ፡ የዲጂታል የሥራ ቦታ ክህሎቶች መሠረታዊ (ክፍል 1)</title>
+  <style>
+    :root {
+      --color-brand: #0B5D4E;
+      --color-brand-light: #E8F5F1;
+      --color-text: #14201B;
+      --color-muted: #4B5563;
+      --color-border: #CBD5E1;
+      --color-surface: #FFFFFF;
+      --color-bg: #F8FAFC;
+      --color-focus: #005FCC;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: system-ui, -apple-system, "Noto Sans Ethiopic", "Segoe UI", Roboto, sans-serif;
+      line-height: 1.7;
+      color: var(--color-text);
+      background: var(--color-bg);
+      margin: 0;
+      padding: 0;
+    }
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 10px;
+      background: var(--color-focus);
+      color: #FFF;
+      padding: 8px 16px;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 4px;
+      z-index: 1000;
+      transition: top 0.2s;
+    }
+    .skip-link:focus {
+      top: 10px;
+    }
+    .container {
+      max-width: 840px;
+      margin: 2rem auto;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 2.5rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+    header {
+      border-bottom: 2px solid var(--color-brand);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    h1 {
+      font-size: 1.95rem;
+      color: var(--color-brand);
+      margin: 0 0 0.5rem 0;
+      line-height: 1.3;
+    }
+    .meta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      font-size: 0.95rem;
+      color: var(--color-muted);
+      margin-top: 0.5rem;
+    }
+    .badge {
+      display: inline-block;
+      background: var(--color-brand-light);
+      color: var(--color-brand);
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+    h2 {
+      font-size: 1.4rem;
+      color: var(--color-brand);
+      margin: 2rem 0 1rem 0;
+      padding-bottom: 0.35rem;
+      border-bottom: 1px solid #E2E8F0;
+    }
+    h3 {
+      font-size: 1.15rem;
+      color: #1E293B;
+      margin: 1.5rem 0 0.5rem 0;
+    }
+    p, ul, ol {
+      margin: 0 0 1.2rem 0;
+    }
+    ul, ol {
+      padding-left: 1.75rem;
+    }
+    li {
+      margin-bottom: 0.45rem;
+    }
+    .callout {
+      background: var(--color-brand-light);
+      border-left: 4px solid var(--color-brand);
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+    .callout strong {
+      color: var(--color-brand);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.95rem;
+    }
+    th, td {
+      border: 1px solid var(--color-border);
+      padding: 0.75rem 1rem;
+      text-align: left;
+    }
+    th {
+      background: #F1F5F9;
+      color: #0F172A;
+      font-weight: 600;
+    }
+    tr:nth-child(even) td {
+      background: #F8FAFC;
+    }
+    figure {
+      margin: 2rem 0;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 1.5rem;
+      background: #FAFAFA;
+      text-align: center;
+    }
+    figcaption {
+      font-size: 0.9rem;
+      color: var(--color-muted);
+      margin-top: 1rem;
+      text-align: left;
+      line-height: 1.5;
+    }
+    .diagram-box {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .step-card {
+      background: #FFF;
+      border: 2px solid var(--color-brand);
+      border-radius: 6px;
+      padding: 1rem;
+      width: 220px;
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .step-arrow {
+      font-size: 1.5rem;
+      color: var(--color-brand);
+      font-weight: bold;
+    }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--color-border);
+      font-size: 0.88rem;
+      color: var(--color-muted);
+      text-align: center;
+    }
+    @media print {
+      body { background: #FFF; }
+      .container { border: none; box-shadow: none; padding: 0; max-width: 100%; }
+      .skip-link { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">ወደ ዋናው ይዘት በቀጥታ ይለፉ</a>
+
+  <div class="container">
+    <header role="banner">
+      <span class="badge">የዲጂታል ብሪጅ ተደራሽ ሥርዓተ-ትምህርት · ክፍል 1</span>
+      <h1 id="handout-title">የዲጂታል የሥራ ቦታ ክህሎቶች፡ መሠረታዊ</h1>
+      <div class="meta-bar">
+        <span><strong>የትምህርት መለያ፡</strong> DB-DW-101</span>
+        <span><strong>ደረጃ፡</strong> WCAG 2.2 Level AA / PDF-UA የተረጋገጠ</span>
+        <span><strong>የንባብ ጊዜ፡</strong> 12 ደቂቃ</span>
+        <span><strong>የድምፅ ትምህርት፡</strong> 32 kbps Opus ቀላል የዳታ ፋይል</span>
+      </div>
+    </header>
+
+    <main id="main-content" role="main" aria-labelledby="handout-title">
+      <!-- ክፍል 1: አጠቃላይ እይታ እና ግቦች -->
+      <section aria-labelledby="heading-overview">
+        <h2 id="heading-overview">1. የክፍሉ አጠቃላይ እይታ እና የትምህርት ግቦች</h2>
+        <p>
+          እንኳን ወደ ዲጂታል የሥራ ቦታ ክህሎቶች መሠረታዊ ትምህርት በደህና መጡ። ይህ የትምህርት ሰነድ የማየት፣ የመስማት፣ የእንቅስቃሴ እና የመረዳት ልዩ ፍላጎት ላላቸው ተማሪዎች እንዲሁም በመላው ኢትዮጵያ በዝቅተኛ የ3G ኢንተርኔት አውታረ መረብ ለሚማሩ ዜጎች ተደራሽ ሆኖ የተዘጋጀ ነው።
+        </p>
+        <p>
+          ይህንን ማጠቃለያ ከቪዲዮ እና ድምፅ ትምህርቱ ጋር በማጣመር ሲያጠናቅቁ የሚከተሉትን ክህሎቶች ያገኛሉ፡
+        </p>
+        <ul>
+          <li><strong>ሁለንተናዊ የኪቦርድ አጠቃቀም፡</strong> ያለ አይጥ (Mouse) ኮምፒውተርን እና የሥራ መተግበሪያዎችን በብቃት መቆጣጠር።</li>
+          <li><strong>የስክሪን አንባቢ (Screen Reader) ትግበራ፡</strong> በኮምፒውተር ላይ NVDA እና በስማርትፎን ላይ TalkBack በመጠቀም የተዋቀሩ ሰነዶችን ማንበብ።</li>
+          <li><strong>ተደራሽ የሥራ ግንኙነት ሥርዓት፡</strong> የምስል አማራጭ ጽሑፍ (Alt Text) ማዘጋጀት፣ የውይይት ሥርዓት እና የርቀት የቡድን ሥራን ማከናወን።</li>
+          <li><strong>ከመስመር ውጭ (Offline) የመማር ስልት፡</strong> የኢንተርኔት ወይም የኤሌክትሪክ መቆራረጥ በሚያጋጥምበት ወቅት በ3G ጥቅል ትምህርትን መቀጠል።</li>
+        </ul>
+      </section>
+
+      <!-- ክፍል 2: የኪቦርድ መቆጣጠሪያዎች ሰንጠረዥ -->
+      <section aria-labelledby="heading-keyboard">
+        <h2 id="heading-keyboard">2. የቪዲዮ ማጫወቻ ሁለንተናዊ የኪቦርድ አቋራጮች</h2>
+        <p>
+          በሳቫና ተደራሽ የሚዲያ ማጫወቻ ላይ የተካተቱት የኪቦርድ ቁልፎች ዓለም አቀፍ የ <em>WCAG 2.2 Guideline 2.1</em> ደንብን የሚያሟሉ እና በቀላሉ በአንድ እጅ የሚነኩ ናቸው።
+        </p>
+
+        <table aria-label="የተደራሽ ማጫወቻ የኪቦርድ ቁልፎች ሰንጠረዥ">
+          <thead>
+            <tr>
+              <th scope="col" style="width: 25%;">የኪቦርድ ቁልፍ</th>
+              <th scope="col" style="width: 35%;">የሚሠራው ተግባር</th>
+              <th scope="col" style="width: 40%;">የተደራሽነት ጥቅም</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><kbd>Space</kbd> ወይም <kbd>k</kbd></td>
+              <td>አጫውት / አቁም (Play / Pause)</td>
+              <td>ስክሪን አንባቢን ሳያስተጓጉል ዋና ማጫወቻውን መቆጣጠሪያ።</td>
+            </tr>
+            <tr>
+              <td><kbd>j</kbd> / <kbd>l</kbd></td>
+              <td>ወደኋላ / ወደፊት 10 ሰከንድ ዝለል</td>
+              <td>አስፈላጊ ነጥቦችን መልሶ ለማዳመጥ እና ለመከታተል።</td>
+            </tr>
+            <tr>
+              <td><kbd>0</kbd> ወይም <kbd>Home</kbd></td>
+              <td>ከመጀመሪያው ጀምር (Restart)</td>
+              <td>ትምህርቱን በቀጥታ ወደ 00:00 መመለሻ።</td>
+            </tr>
+            <tr>
+              <td><kbd>c</kbd></td>
+              <td>የትርጉም ጽሑፍ ቀይር (አማርኛ &bull; እንግሊዝኛ &bull; አጥፋ)</td>
+              <td>ለመስማት የተሳናቸው ተማሪዎች የተመሳሰለ ጽሑፍ።</td>
+            </tr>
+            <tr>
+              <td><kbd>s</kbd></td>
+              <td>የኢትዮጵያ የምልክት ቋንቋ (ESL)</td>
+              <td>የምልክት ቋንቋ ተርጓሚ መስኮትን ለመክፈት እና ለመዝጋት።</td>
+            </tr>
+            <tr>
+              <td><kbd>v</kbd></td>
+              <td>የድምፅ ማብራሪያ (Audio Description)</td>
+              <td>በማያ ገጹ ላይ የሚታዩ ምስላዊ ክስተቶችን በድምፅ ማብራሪያ።</td>
+            </tr>
+            <tr>
+              <td><kbd>m</kbd></td>
+              <td>ድምፅ አጥፋ / ክፈት (Mute)</td>
+              <td>ፈጣን የድምፅ መቆጣጠሪያ።</td>
+            </tr>
+            <tr>
+              <td><kbd>&gt;</kbd> / <kbd>&lt;</kbd></td>
+              <td>የማጫወቻ ፍጥነት ጨምር / ቀንስ</td>
+              <td>እንደ ተማሪው የመረዳት ፍላጎት ከ 0.75x እስከ 2x ማስተካከያ።</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ክፍል 3: ተደራሽ የሥራ ሂደት -->
+      <section aria-labelledby="heading-workflow">
+        <h2 id="heading-workflow">3. አካታች የቡድን ግምገማ እና የይዘት ማረጋገጫ ሂደት</h2>
+        <p>
+          በዘመናዊ የሥራ ቦታዎች ማንኛውም ሰነድ፣ ኮድ ወይም መልእክት ለተጠቃሚ ከመሰራጨቱ በፊት ከተለያዩ ባለድርሻ አካላት ጋር ተደራሽነቱ ይገመገማል።
+        </p>
+
+        <figure>
+          <div class="diagram-box" role="img" aria-label="ሦስት ተከታታይ ደረጃዎችን የሚያሳይ ንድፍ፡ ደረጃ 1 የረቂቅ ሰነድ ዝግጅት፣ ደረጃ 2 በአካል ጉዳተኛ የትብብር አባላት የሚደረግ ግምገማ፣ ደረጃ 3 የተረጋገጠ የመጨረሻ ህትመት።">
+            <div class="step-card">
+              <span class="badge">ደረጃ 1</span>
+              <div>የረቂቅ ሰነድ ዝግጅት</div>
+              <small style="display:block; color:var(--color-muted); font-weight:normal; margin-top:4px;">ሲማንቲክ HTML፣ የንፅፅር ደረጃ &gt; 4.5:1</small>
+            </div>
+            <div class="step-arrow">&rarr;</div>
+            <div class="step-card">
+              <span class="badge">ደረጃ 2</span>
+              <div>የትብብር አባላት ግምገማ</div>
+              <small style="display:block; color:var(--color-muted); font-weight:normal; margin-top:4px;">በNVDA/TalkBack እና በምልክት ቋንቋ ማረጋገጥ</small>
+            </div>
+            <div class="step-arrow">&rarr;</div>
+            <div class="step-card">
+              <span class="badge">ደረጃ 3</span>
+              <div>የተረጋገጠ ህትመት</div>
+              <small style="display:block; color:var(--color-muted); font-weight:normal; margin-top:4px;">የOpen Badges 3.0 ተረጋጋጭ ዲጂታል ማስረጃ</small>
+            </div>
+          </div>
+          <figcaption>
+            <strong>ንድፍ 1.1: አካታች የዲጂታል ትብብር ዑደት።</strong> ከረቂቅ ጀምሮ እስከ ተባባሪ አባላት ግምገማ እና ይፋዊ ህትመት። ሁሉም ደረጃዎች አማራጭ ጽሑፍ እና ግልጽ አርእስቶችን ይጠይቃሉ።
+          </figcaption>
+        </figure>
+
+        <div class="callout">
+          <strong>ዋና የሥራ ቦታ መርህ፡</strong> ማንኛውንም ስእል ወይም ቻርት ያለ አማራጭ ጽሑፍ (Alt Text) አያጋሩ። በምስሉ ላይ የሚገኘውን ቁልፍ መረጃ በጽሑፍ በመግለጽ ስክሪን አንባቢ የሚጠቀሙ የሥራ ባልደረቦች በእኩል ደረጃ እንዲሳተፉ ያድርጉ።
+        </div>
+      </section>
+
+      <!-- ክፍል 4: የ 3G ከመስመር ውጭ የጥናት ሥርዓት -->
+      <section aria-labelledby="heading-offline">
+        <h2 id="heading-offline">4. የ 3G ዝቅተኛ ዳታ ከመስመር ውጭ የመማሪያ ስልት</h2>
+        <p>
+          የቪዲዮ ትምህርቶች በአንድ ትምህርት ከ 200 ሜጋባይት በላይ ዳታ ሊወስዱ ይችላሉ። ይህንን ችግር ለመቅረፍ የእኛ ሥርዓት <strong>3.2 ሜጋባይት የጥናት ጥቅል</strong> ያቀርባል፡
+        </p>
+        <ol>
+          <li><strong>32 kbps Opus የድምፅ ትምህርት፡</strong> የቪዲዮውን ድምፅ በከፍተኛ ጥራት እና በትንሽ መጠን ያቀርባል።</li>
+          <li><strong>የተመሳሰለ የጽሑፍ ትርጉም (WebVTT)፡</strong> በጣም አነስተኛ ዳታ የሚወስድ (ከ 2 ኪሎባይት በታች) የጽሑፍ አማራጭ።</li>
+          <li><strong>ቀላል ተደራሽ ሰነድ፡</strong> ይህ የHTML ፋይል እና ታግ የተደረገበት ፒዲኤፍ (PDF) ያለ ኢንተርኔት ይነበባሉ።</li>
+          <li><strong>ሰርቪስ ወርከር (Service Worker) መሸጎጫ፡</strong> አንዴ ከወረደ በኋላ ሙሉውን ትምህርት ያለ ኢንተርኔት መማር ይቻላል።</li>
+        </ol>
+      </section>
+
+      <!-- ክፍል 5: ራስን መገምገሚያ ጥያቄዎች -->
+      <section aria-labelledby="heading-review">
+        <h2 id="heading-review">5. የክፍሉ ራስን መገምገሚያ ጥያቄዎች</h2>
+        <p>
+          ለተግባራዊ ፈተናው ለመዘጋጀት የሚከተሉትን ጥያቄዎች ይከልሱ፡
+        </p>
+        <ul>
+          <li><em>ጥያቄ 1:</em> ስክሪን አንባቢ የሚጠቀም ተማሪ ማጫወቻውን ሳያቆም 10 ሰከንድ ወደኋላ ለመመለስ የትኛውን ቁልፍ ይጫናል? <strong>መልስ፡ የ <kbd>j</kbd> ቁልፍን ይጫናል።</strong></li>
+          <li><em>ጥያቄ 2:</em> ለምን ሲማንቲክ HTML ከተራ ጽሑፍ ይመረጣል? <strong>መልስ፡ ሲማንቲክ ታጎች የስክሪን አንባቢዎች በቀላሉ አርእስቶችን ለይተው እንዲያነቡ የተዋቀረ ቅርጽ ስለሚሰጡ።</strong></li>
+          <li><em>ጥያቄ 3:</em> ድርብ የኢትዮጵያ እና የግሪጎሪያን የቀን አቆጣጠር የሥራ ዕድልን እንዴት ይረዳል? <strong>መልስ፡ በሀገር ውስጥ (2018 ዓ.ም.) እና በዓለም አቀፍ የርቀት ቀጣሪዎች (2026 G.C.) መካከል ግልጽ የቀን ማረጋገጫ ስለሚሰጥ።</strong></li>
+        </ul>
+      </section>
+    </main>
+
+    <footer role="contentinfo">
+      <p>&copy; 2026 ዲጂታል ብሪጅ &bull; ሳቫና ተደራሽ ሚዲያ ፕሮጀክት። መብቱ በሕግ የተጠበቀ ነው።</p>
+      <p>በWCAG 2.2 Level AA እና በOpen Badges 3.0 ዓለም አቀፍ ደረጃዎች መሠረት የታተመ።</p>
+    </footer>
+  </div>
+</body>
+</html>

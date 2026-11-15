@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "digital-workplace-01",
+  "title": {
+    "en": "Digital Workplace Skills: Foundations",
+    "am": "የዲጂታል የሥራ ቦታ ክህሎቶች፡ መሠረታዊ"
+  },
+  "description": {
+    "en": "Essential practices, tools, and accessibility patterns for the modern workplace.",
+    "am": "ለዘመናዊ የሥራ ቦታ አስፈላጊ አሠራሮች፣ መሣሪያዎች እና የተደራሽነት ቅጦች።"
+  },
+  "language": "en",
+  "durationSeconds": 180,
+  "poster": {
+    "src": "/lessons/digital-workplace/media/poster.webp",
+    "alt": {
+      "en": "Digital Workplace Skills presentation slide",
+      "am": "የዲጂታል የሥራ ቦታ ክህሎቶች ገለጻ ስላይድ"
+    }
+  },
+  "sources": [
+    {
+      "id": "src-main",
+      "kind": "main",
+      "src": "/lessons/digital-workplace/media/lesson.mp4",
+      "type": "video/mp4",
+      "sizeBytes": 14200000
+    },
+    {
+      "id": "src-ad",
+      "kind": "described",
+      "src": "/lessons/digital-workplace/media/lesson-ad.mp4",
+      "type": "video/mp4",
+      "sizeBytes": 14500000,
+      "describes": "src-main"
+    },
+    {
+      "id": "src-sign",
+      "kind": "sign",
+      "src": "/lessons/digital-workplace/media/lesson-esl.mp4",
+      "type": "video/mp4",
+      "sizeBytes": 8500000
+    },
+    {
+      "id": "src-audio-3g",
+      "kind": "audio-only",
+      "src": "/lessons/digital-workplace/media/lesson-audio.opus",
+      "type": "audio/opus",
+      "sizeBytes": 840000
+    }
+  ],
+  "captionTracks": [
+    {
+      "id": "cap-en",
+      "language": "en",
+      "src": "/lessons/digital-workplace/captions.en.vtt",
+      "label": "English (Reviewed)",
+      "status": "reviewed"
+    },
+    {
+      "id": "cap-am",
+      "language": "am",
+      "src": "/lessons/digital-workplace/captions.am.vtt",
+      "label": "አማርኛ (የተገመገመ)",
+      "status": "reviewed"
+    }
+  ],
+  "transcript": {
+    "src": "/lessons/digital-workplace/transcript.en.json",
+    "languages": ["en", "am"]
+  },
+  "documents": [
+    {
+      "id": "doc-html-en",
+      "format": "html",
+      "src": "/lessons/digital-workplace/documents/lesson.en.html",
+      "title": "Digital Workplace Foundations (Accessible HTML)",
+      "language": "en",
+      "sizeBytes": 18400
+    },
+    {
+      "id": "doc-pdf-en",
+      "format": "pdf",
+      "src": "/lessons/digital-workplace/documents/lesson.en.tagged.pdf",
+      "title": "Digital Workplace Foundations (Tagged PDF)",
+      "language": "en",
+      "sizeBytes": 145000,
+      "tagged": true
+    }
+  ],
+  "packages": [
+    {
+      "id": "pkg-3g-light",
+      "name": {
+        "en": "3G Light Study Pack",
+        "am": "ቀላል የ3ጂ የትምህርት ጥቅል"
+      },
+      "sizeBytes": 3200000,
+      "description": "Audio, accessible HTML document, and complete transcript.",
+      "items": ["src-audio-3g", "doc-html-en", "cap-en", "cap-am"]
+    }
+  ],
+  "skills": [
+    {
+      "id": "skill-digital-collab",
+      "name": {
+        "en": "Digital Collaboration",
+        "am": "የዲጂታል ትብብር"
+      }
+    },
+    {
+      "id": "skill-a11y-literacy",
+      "name": {
+        "en": "Accessibility Literacy",
+        "am": "የተደራሽነት ግንዛቤ"
+      }
+    }
+  ],
+  "liveSession": {
+    "sessionTitle": {
+      "en": "Recorded Live Q&A and Lecture Replay",
+      "am": "የቀጥታ ጥያቄና መልስ እና ትምህርት ድጋሚ ማጫወቻ"
+    },
+    "chatSrc": "/lessons/digital-workplace/live-chat.json"
+  },
+  "relatedJobIds": ["job-01", "job-02"]
+}

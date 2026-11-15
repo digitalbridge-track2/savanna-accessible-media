@@ -8,9 +8,23 @@
     "issuer": "Savanna Learning Platform (Digital Bridge)",
     "issueDateISO": "2026-11-14",
     "issueDateEthiopic": "ህዳር 5፣ 2019 ዓ.ም",
-    "canonicalVerificationUrl": "https://savanna.et/verify/CERT-DB-2026-0042",
+    "canonicalVerificationUrl": "https://savanna.alxafrica.com/verify?id=CERT-DB-2026-0042",
     "learnerDisplayName": "Demonstration Learner",
-    "skills": ["Digital Collaboration", "Accessibility Literacy"],
+    "skills": ["Digital Collaboration", "Accessibility Literacy", "Ethiopian Sign Language Basics"],
+    "isDemonstrationData": true
+  },
+  {
+    "id": "CERT-DB-2026-0088",
+    "title": {
+      "en": "Inclusive Media & Assistive Technology Specialist",
+      "am": "አሳታፊ ሚዲያ እና አጋዥ ቴክኖሎጂ ስፔሻሊስት"
+    },
+    "issuer": "Savanna Learning Platform (Digital Bridge)",
+    "issueDateISO": "2026-11-14",
+    "issueDateEthiopic": "ህዳር 5፣ 2019 ዓ.ም",
+    "canonicalVerificationUrl": "https://savanna.alxafrica.com/verify?id=CERT-DB-2026-0088",
+    "learnerDisplayName": "Abebe Bikila (Specialist Track)",
+    "skills": ["WCAG 2.2 AAA Audit", "WebVTT Synchronized Captions", "Assistive UX Co-Design"],
     "isDemonstrationData": true
   }
 ]

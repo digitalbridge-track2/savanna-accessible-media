@@ -1,0 +1,112 @@
+[
+  {
+    "id": "chat-01",
+    "timestamp": 4,
+    "timeDisplay": "00:04",
+    "sender": "Abebe (Learner)",
+    "role": "student",
+    "message": {
+      "en": "Good morning! Can everyone hear the instructor clearly?",
+      "am": "እንደምን አደራችሁ! የትምህርቱ ድምፅ በደንብ ይሰማል?"
+    }
+  },
+  {
+    "id": "chat-02",
+    "timestamp": 12,
+    "timeDisplay": "00:12",
+    "sender": "Instructor Tigist",
+    "role": "instructor",
+    "message": {
+      "en": "Welcome everyone to Digital Workplace Skills. Turn on captions if you are on a low-bandwidth or noisy connection.",
+      "am": "እንኳን ወደ ዲጂታል የሥራ ቦታ ክህሎቶች በደህና መጣችሁ። ድምጽ ካልተሰማችሁ የትርጉም ጽሑፉን (CC) አብሩ።"
+    }
+  },
+  {
+    "id": "chat-03",
+    "timestamp": 25,
+    "timeDisplay": "00:25",
+    "sender": "Selamawit (Addis Ababa)",
+    "role": "student",
+    "message": {
+      "en": "Is Ethiopian Sign Language (EthSL) available for this session?",
+      "am": "የኢትዮጵያ የምልክት ቋንቋ (EthSL) ይገኛል በዚህ ክፍል?"
+    }
+  },
+  {
+    "id": "chat-04",
+    "timestamp": 35,
+    "timeDisplay": "00:35",
+    "sender": "Instructor Tigist",
+    "role": "instructor",
+    "message": {
+      "en": "Yes! Click the ESL button in the toolbar to open the synchronized sign-language window.",
+      "am": "አዎ! በመሳሪያ አሞሌው ላይ ያለውን 'ESL' ቁልፍ ተጭነው የተመሳሰለውን የምልክት ቋንቋ መስኮት ይክፈቱ።"
+    }
+  },
+  {
+    "id": "chat-05",
+    "timestamp": 55,
+    "timeDisplay": "00:55",
+    "sender": "Yohannes K.",
+    "role": "student",
+    "message": {
+      "en": "What accessibility standard are we following for web applications?",
+      "am": "ለድር መተግበሪያዎች ምን ዓይነት የተደራሽነት ደረጃ ነው የምንከተለው?"
+    }
+  },
+  {
+    "id": "chat-06",
+    "timestamp": 72,
+    "timeDisplay": "01:12",
+    "sender": "Instructor Tigist",
+    "role": "instructor",
+    "message": {
+      "en": "We target WCAG 2.2 Level AA compliance, covering keyboard access, color contrast, and screen readers.",
+      "am": "የምንከተለው የ WCAG 2.2 Level AA ደረጃ ሲሆን የኪቦርድ አጠቃቀም፣ የቀለም ንፅፅር እና የስክሪን አንባቢዎችን ያካትታል።"
+    }
+  },
+  {
+    "id": "chat-07",
+    "timestamp": 105,
+    "timeDisplay": "01:45",
+    "sender": "Marta T.",
+    "role": "student",
+    "message": {
+      "en": "Can I download this course material to study without internet on my 3G phone?",
+      "am": "ይህን የትምህርት ቁሳቁስ በ 3G ስልኬ ያለ ኢንተርኔት ለማጥናት ማውረድ እችላለሁ?"
+    }
+  },
+  {
+    "id": "chat-08",
+    "timestamp": 120,
+    "timeDisplay": "02:00",
+    "sender": "Instructor Tigist",
+    "role": "instructor",
+    "message": {
+      "en": "Yes! Download the 3G Low-Data Offline Study Pack below the player. It includes compressed audio, full transcript, and HTML notes.",
+      "am": "አዎ! ከማጫወቻው በታች ያለውን የ3G ከመስመር ውጭ ጥቅል ያውርዱ። የተጨመቀ ኦዲዮ፣ ሙሉ ጽሑፍ እና የHTML ማስታወሻዎችን ይዟል።"
+    }
+  },
+  {
+    "id": "chat-09",
+    "timestamp": 150,
+    "timeDisplay": "02:30",
+    "sender": "Biniyam (Learner)",
+    "role": "student",
+    "message": {
+      "en": "Where do we find the related job opportunities and certificates?",
+      "am": "ተዛማጅ የሥራ ዕድሎችን እና የምስክር ወረቀቶችን የት እናገኛለን?"
+    }
+  },
+  {
+    "id": "chat-10",
+    "timestamp": 165,
+    "timeDisplay": "02:45",
+    "sender": "Instructor Tigist",
+    "role": "instructor",
+    "message": {
+      "en": "Scroll down to the Career Gateway section to see vetted disability-inclusive jobs and verify your certificate link.",
+      "am": "ወደ ታች በማውረድ በሙያ መግቢያ በር ክፍል የተረጋገጡ አካል ጉዳተኞችን የሚያካትቱ ሥራዎችን እና የምስክር ወረቀትዎን ማረጋገጥ ይችላሉ።"
+    }
+  }
+]

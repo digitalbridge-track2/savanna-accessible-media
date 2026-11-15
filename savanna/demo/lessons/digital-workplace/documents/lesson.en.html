@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Digital Workplace Skills: Foundations - Accessible study handout designed for screen readers and offline learning.">
+  <title>Lesson Handout: Digital Workplace Skills Foundations (Module 1)</title>
+  <style>
+    :root {
+      --color-brand: #0B5D4E;
+      --color-brand-light: #E8F5F1;
+      --color-text: #14201B;
+      --color-muted: #4B5563;
+      --color-border: #CBD5E1;
+      --color-surface: #FFFFFF;
+      --color-bg: #F8FAFC;
+      --color-focus: #005FCC;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.65;
+      color: var(--color-text);
+      background: var(--color-bg);
+      margin: 0;
+      padding: 0;
+    }
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 10px;
+      background: var(--color-focus);
+      color: #FFF;
+      padding: 8px 16px;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 4px;
+      z-index: 1000;
+      transition: top 0.2s;
+    }
+    .skip-link:focus {
+      top: 10px;
+    }
+    .container {
+      max-width: 840px;
+      margin: 2rem auto;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 2.5rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+    header {
+      border-bottom: 2px solid var(--color-brand);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    h1 {
+      font-size: 2rem;
+      color: var(--color-brand);
+      margin: 0 0 0.5rem 0;
+      line-height: 1.25;
+    }
+    .meta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      font-size: 0.95rem;
+      color: var(--color-muted);
+      margin-top: 0.5rem;
+    }
+    .badge {
+      display: inline-block;
+      background: var(--color-brand-light);
+      color: var(--color-brand);
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    h2 {
+      font-size: 1.45rem;
+      color: var(--color-brand);
+      margin: 2rem 0 1rem 0;
+      padding-bottom: 0.35rem;
+      border-bottom: 1px solid #E2E8F0;
+    }
+    h3 {
+      font-size: 1.15rem;
+      color: #1E293B;
+      margin: 1.5rem 0 0.5rem 0;
+    }
+    p, ul, ol {
+      margin: 0 0 1.2rem 0;
+    }
+    ul, ol {
+      padding-left: 1.75rem;
+    }
+    li {
+      margin-bottom: 0.4rem;
+    }
+    .callout {
+      background: var(--color-brand-light);
+      border-left: 4px solid var(--color-brand);
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+    .callout strong {
+      color: var(--color-brand);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.95rem;
+    }
+    th, td {
+      border: 1px solid var(--color-border);
+      padding: 0.75rem 1rem;
+      text-align: left;
+    }
+    th {
+      background: #F1F5F9;
+      color: #0F172A;
+      font-weight: 600;
+    }
+    tr:nth-child(even) td {
+      background: #F8FAFC;
+    }
+    figure {
+      margin: 2rem 0;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 1.5rem;
+      background: #FAFAFA;
+      text-align: center;
+    }
+    figcaption {
+      font-size: 0.9rem;
+      color: var(--color-muted);
+      margin-top: 1rem;
+      text-align: left;
+      line-height: 1.5;
+    }
+    .diagram-box {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .step-card {
+      background: #FFF;
+      border: 2px solid var(--color-brand);
+      border-radius: 6px;
+      padding: 1rem;
+      width: 220px;
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .step-arrow {
+      font-size: 1.5rem;
+      color: var(--color-brand);
+      font-weight: bold;
+    }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--color-border);
+      font-size: 0.88rem;
+      color: var(--color-muted);
+      text-align: center;
+    }
+    @media print {
+      body { background: #FFF; }
+      .container { border: none; box-shadow: none; padding: 0; max-width: 100%; }
+      .skip-link { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main accessible content</a>
+
+  <div class="container">
+    <header role="banner">
+      <span class="badge">Digital Bridge Accessible Curriculum · Module 1</span>
+      <h1 id="handout-title">Digital Workplace Skills: Foundations</h1>
+      <div class="meta-bar">
+        <span><strong>Course ID:</strong> DB-DW-101</span>
+        <span><strong>Standard:</strong> WCAG 2.2 Level AA / PDF-UA Conformance</span>
+        <span><strong>Estimated Reading Time:</strong> 12 Minutes</span>
+        <span><strong>Audio Companion:</strong> 32 kbps Opus Low-Data Stream</span>
+      </div>
+    </header>
+
+    <main id="main-content" role="main" aria-labelledby="handout-title">
+      <!-- Section 1: Overview & Learning Outcomes -->
+      <section aria-labelledby="heading-overview">
+        <h2 id="heading-overview">1. Module Overview & Learning Outcomes</h2>
+        <p>
+          Welcome to the foundation module of the Digital Workplace Skills program. This course is specially engineered for learners with diverse visual, hearing, motor, and cognitive abilities, as well as learners in low-connectivity 3G mobile environments across Ethiopia.
+        </p>
+        <p>
+          By completing this study handout alongside the interactive media lesson, you will master:
+        </p>
+        <ul>
+          <li><strong>Universal Keyboard Navigation:</strong> Operating distributed digital work tools without a mouse.</li>
+          <li><strong>Screen Reader Interaction:</strong> Utilizing NVDA on desktop and TalkBack on Android to navigate structured documents and data portals.</li>
+          <li><strong>Accessible Remote Collaboration:</strong> Composing descriptive alternative text, thread etiquette, and asynchronous status communication.</li>
+          <li><strong>Offline Learning Strategy:</strong> Utilizing compressed 3G study packages to continue training during power or network outages.</li>
+        </ul>
+      </section>
+
+      <!-- Section 2: Universal Keyboard Command System -->
+      <section aria-labelledby="heading-keyboard">
+        <h2 id="heading-keyboard">2. Universal Media Player Keyboard Shortcuts</h2>
+        <p>
+          The Savanna Accessible Media Player embedded in your learning management system implements single-key and modifier-free controls conforming to <em>WCAG 2.2 Guideline 2.1 (Keyboard Accessible)</em>.
+        </p>
+
+        <table aria-label="Accessible Player Keyboard Controls Reference Table">
+          <thead>
+            <tr>
+              <th scope="col" style="width: 25%;">Keyboard Key</th>
+              <th scope="col" style="width: 35%;">Action Triggered</th>
+              <th scope="col" style="width: 40%;">Accessibility Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><kbd>Space</kbd> or <kbd>k</kbd></td>
+              <td>Toggle Play / Pause</td>
+              <td>Primary playback control with zero focus drift.</td>
+            </tr>
+            <tr>
+              <td><kbd>j</kbd> / <kbd>l</kbd></td>
+              <td>Seek Backward / Forward 10s</td>
+              <td>Efficient review of technical and instructional phrases.</td>
+            </tr>
+            <tr>
+              <td><kbd>0</kbd> or <kbd>Home</kbd></td>
+              <td>Restart Lesson</td>
+              <td>Instantly return to the lesson beginning.</td>
+            </tr>
+            <tr>
+              <td><kbd>c</kbd></td>
+              <td>Cycle Captions (EN &bull; AM &bull; Off)</td>
+              <td>Dual-language synchronized text for Deaf learners.</td>
+            </tr>
+            <tr>
+              <td><kbd>s</kbd></td>
+              <td>Toggle Ethiopian Sign Language (ESL)</td>
+              <td>Dock or float secondary EthSL signer window.</td>
+            </tr>
+            <tr>
+              <td><kbd>v</kbd></td>
+              <td>Audio Description (AD) Stream</td>
+              <td>Spoken descriptions of on-screen visual demonstrations.</td>
+            </tr>
+            <tr>
+              <td><kbd>m</kbd></td>
+              <td>Mute / Unmute Audio</td>
+              <td>Immediate volume cut for distraction-free study.</td>
+            </tr>
+            <tr>
+              <td><kbd>&gt;</kbd> / <kbd>&lt;</kbd></td>
+              <td>Increase / Decrease Speed (0.75x - 2x)</td>
+              <td>Pace pacing for comprehension and cognitive needs.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Section 3: Accessible Workflow Architecture -->
+      <section aria-labelledby="heading-workflow">
+        <h2 id="heading-workflow">3. Accessible Feedback & Verification Workflow</h2>
+        <p>
+          In modern inclusive workplaces, peer review and co-design validation occur before code, documentation, or marketing assets are published.
+        </p>
+
+        <figure>
+          <div class="diagram-box" role="img" aria-label="Flowchart depicting three successive phases: Phase 1 Draft Proposal with WCAG Check, Phase 2 Co-Designer Review by Blind and Deaf Evaluators, and Phase 3 Production Release with Verifiable Credential.">
+            <div class="step-card">
+              <span class="badge">Phase 1</span>
+              <div>Draft Proposal</div>
+              <small style="display:block; color:var(--color-muted); font-weight:normal; margin-top:4px;">Semantic HTML, ARIA tags, color contrast &gt; 4.5:1</small>
+            </div>
+            <div class="step-arrow">&rarr;</div>
+            <div class="step-card">
+              <span class="badge">Phase 2</span>
+              <div>Co-Designer Review</div>
+              <small style="display:block; color:var(--color-muted); font-weight:normal; margin-top:4px;">NVDA/TalkBack verification, sign language clarity check</small>
+            </div>
+            <div class="step-arrow">&rarr;</div>
+            <div class="step-card">
+              <span class="badge">Phase 3</span>
+              <div>Production Release</div>
+              <small style="display:block; color:var(--color-muted); font-weight:normal; margin-top:4px;">Open Badges 3.0 verifiable credential issued</small>
+            </div>
+          </div>
+          <figcaption>
+            <strong>Figure 1.1: Inclusive Digital Collaboration Cycle.</strong> From initial drafting to multi-ability co-designer review and final publication. All stages require verified text alternatives and screen-reader navigable headings.
+          </figcaption>
+        </figure>
+
+        <div class="callout">
+          <strong>Key Workplace Takeaway:</strong> Never share an image, spreadsheet graph, or interface mockup without accompanying alternative text. If a screenshot contains crucial text or data, transcribe that text in the message body so colleagues using screen readers can participate equally.
+        </div>
+      </section>
+
+      <!-- Section 4: Low-Bandwidth & 3G Offline Study Protocol -->
+      <section aria-labelledby="heading-offline">
+        <h2 id="heading-offline">4. Low-Bandwidth 3G Study Protocol</h2>
+        <p>
+          High-definition streaming video can consume upwards of 200 MB per lesson, which can be prohibitive on prepaid Ethiopian mobile data packages. Our architecture provides a compressed <strong>3.2 MB Study Package</strong>:
+        </p>
+        <ol>
+          <li><strong>32 kbps Opus Audio Track:</strong> Captures crystal-clear speech at a fraction of the bitrate of video.</li>
+          <li><strong>Interactive WebVTT Captions:</strong> Provides text synchronization with minimal byte overhead (&lt; 2 KB).</li>
+          <li><strong>Standalone Semantic Document:</strong> This lightweight HTML file and its companion tagged PDF allow reading without network latency.</li>
+          <li><strong>Service Worker Cache:</strong> Once downloaded, the entire module can be studied in airplane mode.</li>
+        </ol>
+      </section>
+
+      <!-- Section 5: Review & Knowledge Check -->
+      <section aria-labelledby="heading-review">
+        <h2 id="heading-review">5. Module Self-Assessment</h2>
+        <p>
+          Review these questions to prepare for the Level 2 practical evaluation:
+        </p>
+        <ul>
+          <li><em>Question 1:</em> What key combination allows a screen reader user to quickly jump back 10 seconds without disrupting playback? <strong>Answer: Press the <kbd>j</kbd> key.</strong></li>
+          <li><em>Question 2:</em> Why is semantic HTML preferred over plain text or generic &lt;div&gt; tags for course handouts? <strong>Answer: Semantic tags establish a structured hierarchy that screen reader headings and landmarks can announce directly.</strong></li>
+          <li><em>Question 3:</em> How does the dual Ethiopian-Gregorian calendar format assist local employment compliance? <strong>Answer: It ensures date transparency across Ethiopian government fiscal systems (e.g., 2018 E.C.) and international remote partners (2026 G.C.).</strong></li>
+        </ul>
+      </section>
+    </main>
+
+    <footer role="contentinfo">
+      <p>&copy; 2026 Digital Bridge &bull; Savanna Accessible Media Initiative. All rights reserved.</p>
+      <p>Published in accordance with WCAG 2.2 Level AA and Open Badges 3.0 Standards.</p>
+    </footer>
+  </div>
+</body>
+</html>
