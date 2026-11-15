@@ -227,7 +227,12 @@ html[data-theme="dark-high-contrast"] {
   --scrollbar-thumb-hover: rgba(255, 255, 255, 0.45);
 }
 
-html[data-theme="dark-high-contrast"] .btn-primary {
+html[data-theme="dark-high-contrast"] .btn-primary,
+html[data-theme="dark-high-contrast"] a.btn-primary,
+html[data-theme="dark-high-contrast"] .btn-primary:hover,
+html[data-theme="dark-high-contrast"] a.btn-primary:hover,
+html[data-theme="dark-high-contrast"] .btn-primary:focus-visible,
+html[data-theme="dark-high-contrast"] a.btn-primary:focus-visible {
   color: #000000 !important;
   font-weight: 600 !important;
 }
@@ -477,45 +482,66 @@ header.site-header {
   border: 1px solid transparent;
 }
 
+.btn:hover,
+a.btn:hover {
+  text-decoration: none !important;
+}
+
 .btn:active {
   transform: scale(0.98);
 }
 
-.btn-primary {
+.btn-primary,
+a.btn-primary {
   background-color: var(--color-brand);
-  color: #FFFFFF;
+  color: #FFFFFF !important;
   border-color: rgba(0, 0, 0, 0);
   box-shadow: 0 1px 3px rgba(0, 113, 227, 0.25);
+  text-decoration: none !important;
 }
 
-.btn-primary:hover {
-  background-color: var(--color-brand-hover);
-  text-decoration: none;
+.btn-primary:hover,
+a.btn-primary:hover,
+.btn-primary:focus-visible,
+a.btn-primary:focus-visible,
+.btn-primary:active,
+a.btn-primary:active {
+  background-color: var(--color-brand-hover) !important;
+  color: #FFFFFF !important;
+  text-decoration: none !important;
 }
 
-.btn-outline {
+.btn-outline,
+a.btn-outline {
   background-color: transparent;
   color: var(--color-link);
   border: 1px solid var(--color-link);
+  text-decoration: none !important;
 }
 
 .btn-outline:hover,
-.btn-outline:focus-visible {
+a.btn-outline:hover,
+.btn-outline:focus-visible,
+a.btn-outline:focus-visible {
   background-color: var(--color-brand) !important;
   color: #FFFFFF !important;
   border-color: var(--color-brand) !important;
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
-.btn-secondary {
+.btn-secondary,
+a.btn-secondary {
   background-color: var(--color-surface);
   color: var(--color-ink);
   border: 1px solid var(--color-border);
+  text-decoration: none !important;
 }
 
-.btn-secondary:hover {
+.btn-secondary:hover,
+a.btn-secondary:hover {
   background-color: var(--color-brand-subtle);
-  text-decoration: none;
+  color: var(--color-brand) !important;
+  text-decoration: none !important;
 }
 
 /* Badges */
