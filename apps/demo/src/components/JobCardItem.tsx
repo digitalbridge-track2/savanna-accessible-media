@@ -63,6 +63,7 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
   return (
     <article
       className="card"
+      data-read-aloud="card"
       style={{
         marginBottom: "1.25rem",
         display: "flex",

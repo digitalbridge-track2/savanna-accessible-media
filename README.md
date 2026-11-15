@@ -26,6 +26,12 @@
    * **Axe-core Audit:** **0 critical, 0 serious issues** (`npm run test:a11y`).
    * **WCAG 2.2 Level AA:** Comprehensive conformance statement in [`evidence/WCAG-2.2-AA-CONFORMANCE.md`](file:///evidence/WCAG-2.2-AA-CONFORMANCE.md).
 
+4. **Page-Level Read-Aloud Mode:**
+   * Hover (700 ms) and keyboard-focus reading with independent toggles, one active utterance, and repeat protection.
+   * Smart speech for headings, paragraphs, lists, links, buttons, forms, tables, meaningful images, and cards.
+   * Accessible control panel with play/pause/resume/stop/repeat, speed/pitch/volume, voice selection, visible status, and `Alt/Option + Shift + R`.
+   * English and Amharic support; Amharic is skipped honestly when no suitable voice is installed.
+
 ---
 
 ## 🚀 Quick Start (60-Minute Judge & Evaluator Setup)
@@ -75,6 +81,19 @@ npm run test:a11y
 # Run complete test suite
 npm test
 ```
+
+---
+
+## 🔊 Read-Aloud Mode
+
+The React demo includes a page-level read-aloud feature built on the native Web Speech API. It reads content on hover after a short delay or when the user reaches it with the keyboard, and provides an accessible panel for enabling/disabling triggers, controlling playback, and choosing rate, pitch, volume, and voice.
+
+* **Shortcut:** `Alt` or `Option` + `Shift` + `R` toggles read-aloud.
+* **Languages:** English and Amharic. Amharic text is never read with an unsuitable English voice; if no Amharic voice is installed, the feature says so instead.
+* **No new dependencies:** only browser speech synthesis and existing React app code.
+* **No autoplay:** the page is never read on load, and speech stops on route change or when the page is hidden.
+
+Implementation notes, the complete file list, browser/voice limitations, and the manual test checklist are in [`evidence/read-aloud.md`](evidence/read-aloud.md).
 
 ---
 

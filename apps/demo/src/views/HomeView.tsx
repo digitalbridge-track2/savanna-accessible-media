@@ -84,7 +84,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
             gap: "1.25rem",
           }}
         >
-          <div className="card" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <div className="card" data-read-aloud="card" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <div>
               <span className="badge badge-brand" style={{ marginBottom: "0.75rem" }}>Level 1 Drop-in</span>
               <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "1.15rem", color: "var(--color-brand)" }}>
@@ -107,7 +107,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
             </div>
           </div>
 
-          <div className="card" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <div className="card" data-read-aloud="card" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <div>
               <span className="badge badge-accent" style={{ marginBottom: "0.75rem" }}>Level 2 Pipeline</span>
               <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "1.15rem", color: "var(--color-brand)" }}>
@@ -132,7 +132,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
             </div>
           </div>
 
-          <div className="card" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <div className="card" data-read-aloud="card" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <div>
               <span className="badge badge-success" style={{ marginBottom: "0.75rem" }}>Level 3 Verified</span>
               <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "1.15rem", color: "var(--color-brand)" }}>
