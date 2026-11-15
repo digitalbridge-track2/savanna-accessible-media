@@ -417,9 +417,10 @@ export class A11yMediaPlayer extends HTMLElement {
         /* Window Panels */
         .window-panel {
           position: relative;
-          background: #FFF;
-          border: 1px solid #CBD5E1;
+          background: var(--color-surface-elevated, #FFF);
+          border: 1px solid var(--color-border, #CBD5E1);
           border-radius: 6px;
+          color: var(--color-ink, inherit);
           box-shadow: 0 4px 14px rgba(0,0,0,0.1);
           display: flex;
           flex-direction: column;
@@ -899,11 +900,13 @@ export class A11yMediaPlayer extends HTMLElement {
           flex-direction: column;
           padding: 0.85rem 1rem 1rem 1rem;
           overflow: hidden;
-          background: #FFF;
+          background: var(--color-surface-elevated, #FFF);
+          color: var(--color-ink, #0F172A);
         }
         .left-panel-tabs {
           display: flex;
-          background: #F1F5F9;
+          background: var(--color-surface, #F1F5F9);
+          border: 1px solid var(--color-border-subtle, transparent);
           border-radius: 6px;
           padding: 3px;
           gap: 3px;
@@ -922,17 +925,17 @@ export class A11yMediaPlayer extends HTMLElement {
           font-weight: 600;
           border: none;
           background: transparent;
-          color: #475569;
+          color: var(--color-muted-ink, #475569);
           border-radius: 4px;
           cursor: pointer;
           transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
         }
         .tab-btn:hover {
-          color: #0F172A;
+          color: var(--color-ink, #0F172A);
         }
         .tab-btn.active {
-          background: #FFFFFF;
-          color: #0F172A;
+          background: var(--color-surface-elevated, #FFFFFF);
+          color: var(--color-ink, #0F172A);
           box-shadow: 0 1px 4px rgba(0,0,0,0.08);
         }
         .tab-btn:focus-visible {
@@ -985,11 +988,13 @@ export class A11yMediaPlayer extends HTMLElement {
           margin: 0;
           font-size: 1.15rem;
           font-weight: 700;
-          color: #0F172A;
+          color: var(--color-ink, #0F172A);
         }
         .search-box {
           padding: 0.45rem 0.75rem;
-          border: 1px solid #CBD5E1;
+          background: var(--color-surface-elevated, #FFF);
+          color: var(--color-ink, #0F172A);
+          border: 1px solid var(--color-border, #CBD5E1);
           border-radius: 4px;
           font-size: 0.88rem;
           min-width: 180px;
@@ -1062,13 +1067,13 @@ export class A11yMediaPlayer extends HTMLElement {
           margin-bottom: 0.5rem;
         }
         .btn-follow {
-          background: #F1F5F9;
-          border: 1px solid #CBD5E1;
+          background: var(--color-surface, #F1F5F9);
+          border: 1px solid var(--color-border, #CBD5E1);
           border-radius: 4px;
           padding: 0.35rem 0.75rem;
           font-size: 0.82rem;
           font-weight: 600;
-          color: #1E293B;
+          color: var(--color-ink, #1E293B);
           cursor: pointer;
           min-height: 34px;
           display: inline-flex;
@@ -1076,9 +1081,9 @@ export class A11yMediaPlayer extends HTMLElement {
           gap: 0.35rem;
         }
         .btn-follow[aria-pressed="true"] {
-          background: #DCFCE7;
-          border-color: #86EFAC;
-          color: #166534;
+          background: var(--color-brand-subtle, #DCFCE7);
+          border-color: var(--color-brand, #86EFAC);
+          color: var(--color-brand, #166534);
         }
         .transcript-list {
           list-style: none;
@@ -1095,17 +1100,18 @@ export class A11yMediaPlayer extends HTMLElement {
           padding: 0.5rem 0.65rem;
           border-radius: 4px;
           border: 1px solid transparent;
+          color: var(--color-ink, inherit);
         }
         .transcript-item:hover {
-          background: #F8FAFC;
+          background: var(--color-surface, #F8FAFC);
         }
         .transcript-item.active {
-          background: #F0FDF4;
-          border-color: #86EFAC;
+          background: var(--color-brand-subtle, #F0FDF4);
+          border-color: var(--color-brand, #86EFAC);
         }
         .btn-seek-time {
-          background: #F8FAFC;
-          border: 1px solid #CBD5E1;
+          background: var(--color-surface, #F8FAFC);
+          border: 1px solid var(--color-border, #CBD5E1);
           color: var(--color-brand, #0B5D4E);
           padding: 0.2rem 0.5rem;
           border-radius: 4px;

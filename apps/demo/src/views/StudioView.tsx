@@ -817,9 +817,9 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
               style={{
                 padding: "1.5rem",
                 borderRadius: "var(--radius-card)",
-                background: isPlayingThis ? "#F0F7FF" : "#FFFFFF",
+                background: isPlayingThis ? "var(--color-brand-subtle)" : "var(--color-surface-elevated)",
                 border: isPlayingThis ? "2px solid var(--color-brand)" : "1px solid var(--color-border)",
-                boxShadow: isPlayingThis ? "0 8px 24px rgba(0, 113, 227, 0.12)" : "var(--shadow-card)",
+                boxShadow: isPlayingThis ? "0 8px 24px var(--color-brand-subtle)" : "var(--shadow-card)",
                 transition: "all 0.2s cubic-bezier(0.4, 0, 0.6, 1)",
               }}
               aria-label={`Cue ${idx + 1}`}
@@ -935,7 +935,7 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                         type="button"
                         onClick={() => handleNudgeTime(seg.id, -0.2)}
                         title="Nudge earlier by 0.2s"
-                        style={{ padding: "0.25rem 0.5rem", border: "1px solid var(--color-border)", borderRadius: "4px", background: "#FFFFFF", cursor: "pointer", fontSize: "11px" }}
+                        style={{ padding: "0.25rem 0.5rem", border: "1px solid var(--color-border)", borderRadius: "4px", background: "var(--color-surface-elevated)", color: "var(--color-ink)", cursor: "pointer", fontSize: "11px" }}
                         aria-label={`Nudge cue ${idx + 1} earlier by 0.2 seconds`}
                       >
                         −0.2s
@@ -944,7 +944,7 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                         type="button"
                         onClick={() => handleNudgeTime(seg.id, 0.2)}
                         title="Nudge later by 0.2s"
-                        style={{ padding: "0.25rem 0.5rem", border: "1px solid var(--color-border)", borderRadius: "4px", background: "#FFFFFF", cursor: "pointer", fontSize: "11px" }}
+                        style={{ padding: "0.25rem 0.5rem", border: "1px solid var(--color-border)", borderRadius: "4px", background: "var(--color-surface-elevated)", color: "var(--color-ink)", cursor: "pointer", fontSize: "11px" }}
                         aria-label={`Nudge cue ${idx + 1} later by 0.2 seconds`}
                       >
                         +0.2s
@@ -977,7 +977,7 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                       border: "1px solid var(--color-border)",
                       borderRadius: "var(--radius-pill)",
                       fontSize: "12px",
-                      background: "#FFFFFF",
+                      background: "var(--color-surface-elevated)",
                       color: "var(--color-ink)",
                       cursor: "pointer",
                     }}
@@ -1141,7 +1141,7 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                           fontSize: "11px",
                           border: "1px solid var(--color-border)",
                           borderRadius: "var(--radius-pill)",
-                          background: "#FFFFFF",
+                          background: "var(--color-surface-elevated)",
                           color: "var(--color-ink)",
                           cursor: "pointer",
                           fontWeight: 500,
@@ -1159,7 +1159,7 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                           fontSize: "11px",
                           border: "1px solid var(--color-border)",
                           borderRadius: "var(--radius-pill)",
-                          background: "#FFFFFF",
+                          background: "var(--color-surface-elevated)",
                           color: "var(--color-ink)",
                           cursor: "pointer",
                           fontWeight: 500,
@@ -1177,7 +1177,7 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                           fontSize: "11px",
                           border: "1px solid var(--color-border)",
                           borderRadius: "var(--radius-pill)",
-                          background: "#FFFFFF",
+                          background: "var(--color-surface-elevated)",
                           color: "var(--color-ink)",
                           cursor: "pointer",
                           fontWeight: 500,
@@ -1195,7 +1195,7 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                           fontSize: "11px",
                           border: "1px solid var(--color-border)",
                           borderRadius: "var(--radius-pill)",
-                          background: "#FFFFFF",
+                          background: "var(--color-surface-elevated)",
                           color: "var(--color-ink)",
                           cursor: "pointer",
                           fontWeight: 500,
@@ -1213,7 +1213,7 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                           fontSize: "11px",
                           border: "1px solid var(--color-border)",
                           borderRadius: "var(--radius-pill)",
-                          background: "#FFFFFF",
+                          background: "var(--color-surface-elevated)",
                           color: "var(--color-muted-ink)",
                           cursor: "pointer",
                         }}
@@ -1240,7 +1240,7 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                       lineHeight: "1.6",
                       fontFamily: "var(--font-body)",
                       color: "var(--color-ink)",
-                      background: "#FFFFFF",
+                      background: "var(--color-surface-elevated)",
                       resize: "vertical",
                       whiteSpace: "pre-wrap",
                       wordBreak: "break-word",
@@ -1341,9 +1341,9 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
             style={{
               padding: "0.6rem 1.25rem",
               fontSize: "14px",
-              background: "#34C759",
-              color: "#FFFFFF",
-              border: "none",
+              background: "var(--color-success-bg, #34C759)",
+              color: "var(--color-success-ink, #FFFFFF)",
+              border: "1px solid var(--color-success-border, transparent)",
               fontWeight: 600,
               cursor: isPublishing ? "wait" : "pointer",
               display: "inline-flex",
@@ -1361,8 +1361,9 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
             style={{
               marginTop: "1.25rem",
               padding: "0.75rem 1.25rem",
-              background: statusMsg.includes("አልተገኘም") || statusMsg.includes("offline") || statusMsg.includes("unreachable") ? "#FFF3CD" : "#E8F8F0",
-              color: statusMsg.includes("አልተገኘም") || statusMsg.includes("offline") || statusMsg.includes("unreachable") ? "#856404" : "#128045",
+              background: statusMsg.includes("አልተገኘም") || statusMsg.includes("offline") || statusMsg.includes("unreachable") ? "var(--color-alert-bg)" : "var(--color-success-bg)",
+              color: statusMsg.includes("አልተገኘም") || statusMsg.includes("offline") || statusMsg.includes("unreachable") ? "var(--color-alert-ink)" : "var(--color-success-ink)",
+              border: statusMsg.includes("አልተገኘም") || statusMsg.includes("offline") || statusMsg.includes("unreachable") ? "1px solid var(--color-alert-border)" : "1px solid var(--color-success-border)",
               borderRadius: "var(--radius-pill)",
               fontWeight: 600,
               fontSize: "13px",

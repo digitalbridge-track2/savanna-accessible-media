@@ -4,6 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Transcript Studio — Abugida Media Kit</title>
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('abugida-theme');
+        if (savedTheme) {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+      } catch (e) {}
+    })();
+  </script>
   <link rel="stylesheet" href="/src/styles/tokens.css">
   <script type="module" src="/src/main.tsx"></script>
 </head>

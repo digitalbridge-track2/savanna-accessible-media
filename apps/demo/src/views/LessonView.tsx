@@ -156,7 +156,7 @@ export const LessonView: React.FC<LessonViewProps> = ({ locale }) => {
               alignItems: "center",
               justifyContent: "space-between",
               padding: "1rem 1.25rem",
-              background: "#FFFFFF",
+              background: "var(--color-surface-elevated)",
               borderRadius: "12px",
               border: "1px solid var(--color-border-subtle)",
               boxShadow: "var(--shadow-subtle)",
@@ -213,7 +213,7 @@ export const LessonView: React.FC<LessonViewProps> = ({ locale }) => {
               alignItems: "center",
               justifyContent: "space-between",
               padding: "1rem 1.25rem",
-              background: "#FFFFFF",
+              background: "var(--color-surface-elevated)",
               borderRadius: "12px",
               border: "1px solid var(--color-border-subtle)",
               boxShadow: "var(--shadow-subtle)",
@@ -268,7 +268,7 @@ export const LessonView: React.FC<LessonViewProps> = ({ locale }) => {
         className="card"
         style={{
           marginBottom: "2.5rem",
-          background: "#FFFFFF",
+          background: "var(--color-surface-elevated)",
           border: "1px solid var(--color-border-subtle)",
           borderRadius: "var(--radius-card)",
           padding: "1.5rem 1.75rem",

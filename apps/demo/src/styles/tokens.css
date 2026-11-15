@@ -1,4 +1,10 @@
-:root {
+/* =========================================================================
+   Universal Adaptive Color Vision & Theme System (Abugida / Savanna LMS)
+   ========================================================================= */
+
+/* 1. Default Apple Light (Standard Trichromatic Baseline) */
+:root,
+html[data-theme="apple-light"] {
   /* Apple.com Light Design System Tokens */
   --color-canvas: #FFFFFF;
   --color-surface: #F5F5F7;
@@ -16,6 +22,21 @@
   --color-link: #0066CC;
   --color-link-hover: #004499;
   --color-focus: #0071E3;
+  --color-accent: #F2C14E;
+
+  /* Status Tokens */
+  --color-success-bg: #E8F8F0;
+  --color-success-ink: #128045;
+  --color-success-border: #B4E8CC;
+
+  --color-alert-bg: #FFF5F5;
+  --color-alert-ink: #D70015;
+  --color-alert-border: #FFD2D2;
+
+  --header-bg: rgba(255, 255, 255, 0.85);
+  --header-border: #E5E5EA;
+  --scrollbar-thumb: rgba(0, 0, 0, 0.18);
+  --scrollbar-thumb-hover: rgba(0, 0, 0, 0.35);
 
   /* Radii Family (Apple 980px pill default, 16px cards) */
   --radius-pill: 980px;
@@ -40,6 +61,175 @@
   --duration-fast: 160ms;
   --duration-normal: 240ms;
   --duration-smooth: 320ms;
+}
+
+/* 2. Deuteranopia & Protanopia (Red-Green Deficient Safe — Okabe-Ito & Wong Scientific Palette) */
+html[data-theme="deuteranopia-protanopia"] {
+  --color-canvas: #FFFFFF;
+  --color-surface: #F1F5F9;
+  --color-surface-elevated: #FFFFFF;
+  --color-ink: #0F172A;
+  --color-muted-ink: #475569;
+  --color-border: #CBD5E1;
+  --color-border-subtle: #E2E8F0;
+
+  /* Pure Cobalt Blue + Saffron Amber replacing Red-Green confusion */
+  --color-brand: #0052CC;
+  --color-brand-hover: #0747A6;
+  --color-brand-active: #003884;
+  --color-brand-subtle: #EFF6FF;
+  --color-link: #0052CC;
+  --color-link-hover: #0747A6;
+  --color-focus: #0052CC;
+  --color-accent: #D97706;
+
+  /* Electric Cerulean replacing ambiguous green */
+  --color-success-bg: #E0F2FE;
+  --color-success-ink: #0284C7;
+  --color-success-border: #BAE6FD;
+
+  /* Royal Violet replacing dark black/red confusion */
+  --color-alert-bg: #F3E8FF;
+  --color-alert-ink: #6D28D9;
+  --color-alert-border: #DDD6FE;
+
+  --header-bg: rgba(255, 255, 255, 0.92);
+  --header-border: #CBD5E1;
+  --scrollbar-thumb: rgba(15, 23, 42, 0.25);
+  --scrollbar-thumb-hover: rgba(15, 23, 42, 0.45);
+}
+
+/* 3. Tritanopia (Blue-Yellow Deficient Safe) */
+html[data-theme="tritanopia"] {
+  --color-canvas: #FFFFFF;
+  --color-surface: #F8FAFC;
+  --color-surface-elevated: #FFFFFF;
+  --color-ink: #111827;
+  --color-muted-ink: #4B5563;
+  --color-border: #D1D5DB;
+  --color-border-subtle: #E5E7EB;
+
+  /* Deep Pine Teal & Rich Crimson Coral replacing Blue-Yellow confusion */
+  --color-brand: #0F766E;
+  --color-brand-hover: #0D9488;
+  --color-brand-active: #115E59;
+  --color-brand-subtle: #F0FDFA;
+  --color-link: #0F766E;
+  --color-link-hover: #115E59;
+  --color-focus: #0F766E;
+  --color-accent: #BE123C;
+
+  /* Deep Emerald Green */
+  --color-success-bg: #ECFDF5;
+  --color-success-ink: #059669;
+  --color-success-border: #A7F3D0;
+
+  /* Vivid Crimson Coral */
+  --color-alert-bg: #FFF1F2;
+  --color-alert-ink: #BE123C;
+  --color-alert-border: #FECDD3;
+
+  --header-bg: rgba(255, 255, 255, 0.92);
+  --header-border: #D1D5DB;
+  --scrollbar-thumb: rgba(17, 24, 39, 0.25);
+  --scrollbar-thumb-hover: rgba(17, 24, 39, 0.45);
+}
+
+/* 4. Monochrome High Contrast (Achromatopsia / Zero-Color / Low Vision) */
+html[data-theme="monochrome-high-contrast"] {
+  --color-canvas: #FFFFFF;
+  --color-surface: #F4F4F6;
+  --color-surface-elevated: #FFFFFF;
+  --color-ink: #000000;
+  --color-muted-ink: #222222;
+  --color-border: #000000;
+  --color-border-subtle: #333333;
+
+  /* Pure Stark Luminance Contrast (21:1) */
+  --color-brand: #000000;
+  --color-brand-hover: #222222;
+  --color-brand-active: #444444;
+  --color-brand-subtle: #EAEAEA;
+  --color-link: #000000;
+  --color-link-hover: #222222;
+  --color-focus: #000000;
+  --color-accent: #000000;
+
+  --color-success-bg: #FFFFFF;
+  --color-success-ink: #000000;
+  --color-success-border: #000000;
+
+  --color-alert-bg: #000000;
+  --color-alert-ink: #FFFFFF;
+  --color-alert-border: #000000;
+
+  --header-bg: #FFFFFF;
+  --header-border: #000000;
+  --scrollbar-thumb: #000000;
+  --scrollbar-thumb-hover: #333333;
+}
+
+html[data-theme="monochrome-high-contrast"] a {
+  text-decoration: underline !important;
+  text-underline-offset: 3px !important;
+  text-decoration-thickness: 1.5px !important;
+}
+
+html[data-theme="monochrome-high-contrast"] .card,
+html[data-theme="monochrome-high-contrast"] section.card {
+  border: 2px solid #000000 !important;
+}
+
+html[data-theme="monochrome-high-contrast"] .btn {
+  border: 2px solid #000000 !important;
+}
+
+html[data-theme="monochrome-high-contrast"] .nav-segmented {
+  border: 2px solid #000000 !important;
+}
+
+html[data-theme="monochrome-high-contrast"] .badge {
+  border: 1.5px solid #000000 !important;
+  font-weight: 600 !important;
+}
+
+/* 5. Dark High Contrast (OLED Pitch Dark / Low-Vision Night) */
+html[data-theme="dark-high-contrast"] {
+  --color-canvas: #090C10;
+  --color-surface: #161B22;
+  --color-surface-elevated: #21262D;
+  --color-ink: #F0F6FC;
+  --color-muted-ink: #8B949E;
+  --color-border: #30363D;
+  --color-border-subtle: #21262D;
+
+  /* Bright Accessible Amber Gold + Electric Cyan (12+:1 contrast) */
+  --color-brand: #F59E0B;
+  --color-brand-hover: #D97706;
+  --color-brand-active: #B45309;
+  --color-brand-subtle: rgba(245, 158, 11, 0.15);
+  --color-link: #38BDF8;
+  --color-link-hover: #7DD3FC;
+  --color-focus: #F59E0B;
+  --color-accent: #38BDF8;
+
+  --color-success-bg: rgba(56, 189, 248, 0.15);
+  --color-success-ink: #38BDF8;
+  --color-success-border: rgba(56, 189, 248, 0.4);
+
+  --color-alert-bg: rgba(248, 113, 113, 0.15);
+  --color-alert-ink: #F87171;
+  --color-alert-border: rgba(248, 113, 113, 0.4);
+
+  --header-bg: rgba(9, 12, 16, 0.90);
+  --header-border: #30363D;
+  --scrollbar-thumb: rgba(255, 255, 255, 0.25);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.45);
+}
+
+html[data-theme="dark-high-contrast"] .btn-primary {
+  color: #000000 !important;
+  font-weight: 600 !important;
 }
 
 /* Reduced Motion Override for Accessibility */
@@ -93,6 +283,7 @@ body {
   letter-spacing: -0.022em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--duration-normal) var(--ease-apple), color var(--duration-normal) var(--ease-apple);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -184,13 +375,14 @@ header.site-header {
   z-index: 100;
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
-  background: rgba(255, 255, 255, 0.85);
-  border-bottom: 1px solid var(--color-border-subtle);
+  background: var(--header-bg, rgba(255, 255, 255, 0.85));
+  border-bottom: 1px solid var(--header-border, var(--color-border-subtle));
   padding: 1.25rem 0 1.25rem 0;
   margin-bottom: 2.75rem;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  transition: background-color var(--duration-normal) var(--ease-apple), border-color var(--duration-normal) var(--ease-apple);
 }
 
 /* Apple Responsive Layout Breakpoints (834px / 735px) */
@@ -234,6 +426,7 @@ header.site-header {
   border-radius: var(--radius-pill);
   flex-wrap: wrap;
   border: 1px solid var(--color-border-subtle);
+  transition: background-color var(--duration-normal) var(--ease-apple), border-color var(--duration-normal) var(--ease-apple);
 }
 
 .nav-link {
@@ -250,7 +443,7 @@ header.site-header {
 }
 
 .nav-link:hover {
-  background-color: rgba(0, 0, 0, 0.04);
+  background-color: var(--color-brand-subtle);
   color: var(--color-ink);
   text-decoration: none;
 }
@@ -260,7 +453,7 @@ header.site-header {
 }
 
 .nav-link[aria-current="page"] {
-  background-color: #FFFFFF;
+  background-color: var(--color-surface-elevated, #FFFFFF);
   color: var(--color-ink);
   font-weight: 600;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
@@ -321,7 +514,7 @@ header.site-header {
 }
 
 .btn-secondary:hover {
-  background-color: #EAEAEF;
+  background-color: var(--color-brand-subtle);
   text-decoration: none;
 }
 
@@ -340,7 +533,7 @@ header.site-header {
 .badge-brand {
   background: var(--color-brand-subtle);
   color: var(--color-brand);
-  border: 1px solid #C8E1FF;
+  border: 1px solid var(--color-border);
 }
 
 .badge-neutral {
@@ -350,9 +543,16 @@ header.site-header {
 }
 
 .badge-success {
-  background: #E8F8F0;
-  color: #128045;
-  border: 1px solid #B4E8CC;
+  background: var(--color-success-bg, #E8F8F0);
+  color: var(--color-success-ink, #128045);
+  border: 1px solid var(--color-success-border, #B4E8CC);
+}
+
+.badge-alert,
+.badge-error {
+  background: var(--color-alert-bg, #FFF5F5);
+  color: var(--color-alert-ink, #D70015);
+  border: 1px solid var(--color-alert-border, #FFD2D2);
 }
 
 /* Cards & Surfaces (Apple Rounded 16px Surface) */
@@ -362,7 +562,7 @@ header.site-header {
   border-radius: var(--radius-card);
   padding: 1.75rem;
   box-shadow: var(--shadow-subtle);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 .card:hover {
@@ -374,7 +574,7 @@ header.site-header {
 kbd {
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-bottom: 2px solid #A1A1A6;
+  border-bottom: 2px solid var(--color-muted-ink);
   border-radius: 6px;
   padding: 0.2rem 0.5rem;
   font-family: var(--font-mono);
@@ -405,9 +605,9 @@ kbd {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.18);
+  background: var(--scrollbar-thumb, rgba(0, 0, 0, 0.18));
   border-radius: var(--radius-pill);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.35);
+  background: var(--scrollbar-thumb-hover, rgba(0, 0, 0, 0.35));
 }

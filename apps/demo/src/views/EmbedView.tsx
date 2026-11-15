@@ -444,7 +444,7 @@ import "@abugida/media-kit";
       {/* Integration Capabilities & Live Interactive Stage Navigator */}
       <section
         style={{
-          background: "#FFFFFF",
+          background: "var(--color-surface-elevated)",
           border: "1px solid var(--color-border-subtle)",
           borderRadius: "var(--radius-card)",
           padding: "2rem",

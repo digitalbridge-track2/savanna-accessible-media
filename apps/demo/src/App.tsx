@@ -6,6 +6,7 @@ import { LessonView } from "./views/LessonView";
 import { StudioView } from "./views/StudioView";
 import { VerifyView } from "./views/VerifyView";
 import { EmbedView } from "./views/EmbedView";
+import { ThemePicker } from "./components/ThemePicker";
 
 // Error Boundary to prevent any blank or white screens
 export class ErrorBoundary extends React.Component<
@@ -155,7 +156,7 @@ export const AppContent: React.FC = () => {
                   padding: "0.35rem 0.95rem",
                   border: "none",
                   borderRadius: "var(--radius-pill)",
-                  background: locale === "en" ? "#FFFFFF" : "transparent",
+                  background: locale === "en" ? "var(--color-surface-elevated, #FFFFFF)" : "transparent",
                   color: locale === "en" ? "var(--color-ink)" : "var(--color-muted-ink)",
                   fontWeight: locale === "en" ? 600 : 500,
                   fontSize: "13px",
@@ -175,7 +176,7 @@ export const AppContent: React.FC = () => {
                   padding: "0.35rem 0.95rem",
                   border: "none",
                   borderRadius: "var(--radius-pill)",
-                  background: locale === "am" ? "#FFFFFF" : "transparent",
+                  background: locale === "am" ? "var(--color-surface-elevated, #FFFFFF)" : "transparent",
                   color: locale === "am" ? "var(--color-ink)" : "var(--color-muted-ink)",
                   fontWeight: locale === "am" ? 600 : 500,
                   fontSize: "13px",
@@ -189,6 +190,9 @@ export const AppContent: React.FC = () => {
                 አማርኛ
               </button>
             </div>
+
+            {/* Universal Color Vision Theme Changer */}
+            <ThemePicker locale={locale} />
           </div>
         </div>
 

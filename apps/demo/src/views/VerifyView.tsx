@@ -414,7 +414,7 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
               borderRadius: "var(--radius-pill)",
               fontSize: "14px",
               outline: "none",
-              background: "#FFFFFF",
+              background: "var(--color-surface-elevated, #FFFFFF)",
               color: "var(--color-ink)",
               fontFamily: "var(--font-mono)",
             }}
@@ -503,11 +503,11 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
           <div
             role="alert"
             style={{
-              background: "#FFF5F5",
-              border: "1px solid #FFD2D2",
+              background: "var(--color-alert-bg)",
+              border: "1px solid var(--color-alert-border)",
               padding: "1.25rem 1.5rem",
               borderRadius: "var(--radius-card)",
-              color: "#D70015",
+              color: "var(--color-alert-ink)",
               marginBottom: "1.5rem",
             }}
           >
@@ -528,7 +528,7 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
           <section
             aria-labelledby="permalink-heading"
             style={{
-              background: "#F9FAFB",
+              background: "var(--color-surface)",
               border: "1px solid var(--color-border-subtle)",
               borderRadius: "var(--radius-card)",
               padding: "1.25rem 1.5rem",
@@ -560,13 +560,13 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                 onClick={(e) => (e.target as HTMLInputElement).select()}
                 style={{
                   flex: "1 1 280px",
-                  background: "#FFFFFF",
+                  background: "var(--color-surface-elevated, #FFFFFF)",
                   border: "1px solid var(--color-border)",
                   borderRadius: "8px",
                   padding: "0.45rem 0.85rem",
                   fontSize: "12.5px",
                   fontFamily: "var(--font-mono)",
-                  color: "#1F2328",
+                  color: "var(--color-ink)",
                   outline: "none",
                 }}
                 aria-label={isAm ? "የማረጋገጫ ቋሚ አድራሻ" : "Canonical Verification Permalink"}

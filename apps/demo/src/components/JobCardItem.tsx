@@ -185,11 +185,12 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
                 style={{
                   fontSize: "11px",
                   padding: "0.15rem 0.55rem",
-                  background: "#F1F5F9",
-                  color: "#475569",
+                  background: "var(--color-surface)",
+                  color: "var(--color-muted-ink)",
                   borderRadius: "var(--radius-pill)",
                   textTransform: "capitalize",
                   fontWeight: 600,
+                  border: "1px solid var(--color-border-subtle)",
                 }}
               >
                 {job.workMode}
@@ -262,7 +263,7 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
       {job.audioSummary?.textEquivalent && (
         <details
           style={{
-            background: "#FFFFFF",
+            background: "var(--color-surface-elevated)",
             padding: "0.6rem 0.85rem",
             borderRadius: "var(--radius-sm)",
             fontSize: "13px",

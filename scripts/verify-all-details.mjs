@@ -1,28 +1,35 @@
-import WebSocket from "ws";
-import http from "node:http";
-import fs from "node:fs";
 import { spawn } from "node:child_process";
+import fs from "node:fs";
+import http from "node:http";
+import WebSocket from "ws";
 
 async function verifyAll() {
-  console.log("Starting comprehensive UI and feature verification on http://localhost:3000/lesson...");
+  console.log(
+    "Starting comprehensive UI and feature verification on http://localhost:3000/lesson...",
+  );
 
-  const chrome = spawn("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe", [
-    "--headless=new",
-    "--remote-debugging-port=9227",
-    "--window-size=1280,960",
-    "--disable-gpu",
-    "--no-sandbox",
-    "about:blank"
-  ]);
+  const chrome = spawn(
+    "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    [
+      "--headless=new",
+      "--remote-debugging-port=9227",
+      "--window-size=1280,960",
+      "--disable-gpu",
+      "--no-sandbox",
+      "about:blank",
+    ],
+  );
 
   try {
     await new Promise((r) => setTimeout(r, 1500));
     const targets = await new Promise((res, rej) => {
-      http.get("http://127.0.0.1:9227/json/list", (r) => {
-        let d = "";
-        r.on("data", (c) => (d += c));
-        r.on("end", () => res(JSON.parse(d)));
-      }).on("error", rej);
+      http
+        .get("http://127.0.0.1:9227/json/list", (r) => {
+          let d = "";
+          r.on("data", (c) => (d += c));
+          r.on("end", () => res(JSON.parse(d)));
+        })
+        .on("error", rej);
     });
 
     const page = targets.find((t) => t.type === "page");
@@ -82,17 +89,23 @@ async function verifyAll() {
           distanceMuteToRightEdge: Math.round(rRect.right - mRect.right)
         };
       })()`,
-      returnByValue: true
+      returnByValue: true,
     });
-    console.log("Player Check Results:", JSON.stringify(playerCheck.result.value, null, 2));
+    console.log(
+      "Player Check Results:",
+      JSON.stringify(playerCheck.result.value, null, 2),
+    );
 
     // Take screenshot of player controls
     await send("Runtime.evaluate", {
-      expression: `document.querySelector("a11y-media-player").scrollIntoView({ behavior: "instant", block: "center" })`
+      expression: `document.querySelector("a11y-media-player").scrollIntoView({ behavior: "instant", block: "center" })`,
     });
     await new Promise((r) => setTimeout(r, 600));
     const snapPlayer = await send("Page.captureScreenshot", { format: "png" });
-    fs.writeFileSync("evidence/verified-player-controls.png", Buffer.from(snapPlayer.data, "base64"));
+    fs.writeFileSync(
+      "evidence/verified-player-controls.png",
+      Buffer.from(snapPlayer.data, "base64"),
+    );
     console.log("Saved evidence/verified-player-controls.png");
 
     // 2. Verify Feature 1: Accessible Lesson Documents
@@ -108,9 +121,12 @@ async function verifyAll() {
           parentText: a.parentElement.textContent.replace(/\\s+/g, " ").trim()
         }));
       })()`,
-      returnByValue: true
+      returnByValue: true,
     });
-    console.log("Docs Check Results:", JSON.stringify(docsCheck.result.value, null, 2));
+    console.log(
+      "Docs Check Results:",
+      JSON.stringify(docsCheck.result.value, null, 2),
+    );
 
     // 3. Verify Feature 2: 3G Low-Data Offline Study Pack
     console.log("\n--- Checking Feature 2: 3G Low-Data Offline Study Pack ---");
@@ -124,14 +140,17 @@ async function verifyAll() {
           sectionText: sec.textContent.replace(/\\s+/g, " ").trim()
         };
       })()`,
-      returnByValue: true
+      returnByValue: true,
     });
-    console.log("3G Pack Before Click:", JSON.stringify(offlineCheckBefore.result.value, null, 2));
+    console.log(
+      "3G Pack Before Click:",
+      JSON.stringify(offlineCheckBefore.result.value, null, 2),
+    );
 
     // Click Download 3G Pack button
     console.log("Clicking Download 3G Pack button...");
     await send("Runtime.evaluate", {
-      expression: `document.querySelector("section[aria-labelledby='heading-offline'] button").click()`
+      expression: `document.querySelector("section[aria-labelledby='heading-offline'] button").click()`,
     });
     await new Promise((r) => setTimeout(r, 1000));
 
@@ -145,12 +164,17 @@ async function verifyAll() {
           notificationMsg: msg?.textContent.trim()
         };
       })()`,
-      returnByValue: true
+      returnByValue: true,
     });
-    console.log("3G Pack After Click:", JSON.stringify(offlineCheckAfter.result.value, null, 2));
+    console.log(
+      "3G Pack After Click:",
+      JSON.stringify(offlineCheckAfter.result.value, null, 2),
+    );
 
     // 4. Verify Feature 3: Strategic Career Pathways Callout on Lesson View
-    console.log("\n--- Checking Feature 3: Strategic Career Pathways Callout ---");
+    console.log(
+      "\n--- Checking Feature 3: Strategic Career Pathways Callout ---",
+    );
     const pathwayCheck = await send("Runtime.evaluate", {
       expression: `(() => {
         const sec = document.querySelector("section[aria-labelledby='heading-career-pathway']");
@@ -162,9 +186,12 @@ async function verifyAll() {
           linkText: sec.querySelector("a")?.textContent.trim()
         };
       })()`,
-      returnByValue: true
+      returnByValue: true,
     });
-    console.log("Career Pathway Callout:", JSON.stringify(pathwayCheck.result.value, null, 2));
+    console.log(
+      "Career Pathway Callout:",
+      JSON.stringify(pathwayCheck.result.value, null, 2),
+    );
 
     // 5. Navigate to Home View (Career Gateway) to test Job Card Item
     console.log("\n--- Checking Feature 3b: Career Gateway on Home View ---");
@@ -192,14 +219,17 @@ async function verifyAll() {
           detailsText
         };
       })()`,
-      returnByValue: true
+      returnByValue: true,
     });
-    console.log("Job Card Results on Career Gateway:", JSON.stringify(jobCheck.result.value, null, 2));
+    console.log(
+      "Job Card Results on Career Gateway:",
+      JSON.stringify(jobCheck.result.value, null, 2),
+    );
 
     // Test Audio Summary Play/Pause Toggle
     console.log("Testing Audio Summary button click on Career Gateway...");
     await send("Runtime.evaluate", {
-      expression: `document.querySelector("#job-cards-container article.card button").click()`
+      expression: `document.querySelector("#job-cards-container article.card button").click()`,
     });
     await new Promise((r) => setTimeout(r, 600));
 
@@ -211,19 +241,24 @@ async function verifyAll() {
           ariaPressed: audioBtn?.getAttribute("aria-pressed")
         };
       })()`,
-      returnByValue: true
+      returnByValue: true,
     });
-    console.log("Audio Button Toggle on Career Gateway:", JSON.stringify(audioCheckAfter.result.value, null, 2));
+    console.log(
+      "Audio Button Toggle on Career Gateway:",
+      JSON.stringify(audioCheckAfter.result.value, null, 2),
+    );
 
     // Take screenshot of Career Gateway on Home View
     await send("Runtime.evaluate", {
-      expression: `document.querySelector("section[aria-labelledby='heading-career-preview']").scrollIntoView({ behavior: "instant", block: "center" })`
+      expression: `document.querySelector("section[aria-labelledby='heading-career-preview']").scrollIntoView({ behavior: "instant", block: "center" })`,
     });
     await new Promise((r) => setTimeout(r, 600));
     const snapJobs = await send("Page.captureScreenshot", { format: "png" });
-    fs.writeFileSync("evidence/verified-career-gateway.png", Buffer.from(snapJobs.data, "base64"));
+    fs.writeFileSync(
+      "evidence/verified-career-gateway.png",
+      Buffer.from(snapJobs.data, "base64"),
+    );
     console.log("Saved evidence/verified-career-gateway.png");
-
   } finally {
     chrome.kill();
   }

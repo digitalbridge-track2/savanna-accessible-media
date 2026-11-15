@@ -360,3 +360,27 @@ export const IconShare: React.FC<IconProps> = ({ size = 16, className = "", styl
   </svg>
 );
 
+export const IconPalette: React.FC<IconProps> = ({ size = 16, className = "", style, ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    className={className}
+    style={{ verticalAlign: "-0.15em", flexShrink: 0, ...style }}
+    {...props}
+  >
+    <circle cx="13.5" cy="6.5" r=".5" fill="currentColor" />
+    <circle cx="17.5" cy="10.5" r=".5" fill="currentColor" />
+    <circle cx="8.5" cy="7.5" r=".5" fill="currentColor" />
+    <circle cx="6.5" cy="12.5" r=".5" fill="currentColor" />
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c1.38 0 2.5-1.12 2.5-2.5 0-.61-.23-1.21-.64-1.67-.08-.1-.13-.22-.13-.33 0-.28.22-.5.5-.5H16c3.31 0 6-2.69 6-6 0-4.97-4.48-9-10-9z" />
+  </svg>
+);
+
+

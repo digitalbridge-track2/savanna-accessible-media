@@ -16,7 +16,9 @@ test("Integration Test Suite: 3-Tier Architecture Verification", async (t) => {
 
     // 2. If Docker demo container is up on port 3000, verify HTTP serving
     try {
-      const res = await fetch("http://localhost:3000/dist/a11y-media-kit.umd.js");
+      const res = await fetch("http://localhost:3000/dist/a11y-media-kit.umd.js", {
+        signal: AbortSignal.timeout(1000),
+      });
       if (res.ok) {
         const text = await res.text();
         assert.ok(text.includes("a11y-media-player"), "Bundle must register a11y-media-player custom element");
@@ -30,13 +32,17 @@ test("Integration Test Suite: 3-Tier Architecture Verification", async (t) => {
   await t.test("Level 2 Integration: FastAPI transcription & health endpoints", async () => {
     // Test API connectivity (if container/service is running on port 8000)
     try {
-      const healthRes = await fetch("http://localhost:8000/health");
+      const healthRes = await fetch("http://localhost:8000/health", {
+        signal: AbortSignal.timeout(1000),
+      });
       assert.equal(healthRes.status, 200, "API health check must return HTTP 200");
       const healthData = await healthRes.json();
       assert.equal(healthData.status, "healthy");
       assert.equal(healthData.asr_adapter, "local-fallback");
 
-      const jobRes = await fetch("http://localhost:8000/v1/transcription-jobs/job-eval-001");
+      const jobRes = await fetch("http://localhost:8000/v1/transcription-jobs/job-eval-001", {
+        signal: AbortSignal.timeout(1000),
+      });
       assert.equal(jobRes.status, 200, "Transcription job endpoint must return HTTP 200");
       const jobData = await jobRes.json();
       assert.equal(jobData.status, "ready_for_review");
