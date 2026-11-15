@@ -344,9 +344,9 @@
 
         /* Center Main Player Panel - Balanced Horizontal Cinema Proportion */
         .main-player-panel {
-          flex: 1 1 540px;
-          min-width: 320px;
-          max-width: 680px;
+          flex: 2 1 680px;
+          min-width: 360px;
+          max-width: 820px;
           width: 100%;
           background: #111417;
           border-radius: 8px;
@@ -517,10 +517,10 @@
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 3px 6px;
-          gap: 2px;
+          padding: 4px 8px;
+          gap: 4px;
           flex-wrap: nowrap;
-          overflow-x: auto;
+          overflow-x: visible;
         }
         .controls-cluster {
           display: flex;

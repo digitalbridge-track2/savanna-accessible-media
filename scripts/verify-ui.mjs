@@ -288,11 +288,6 @@ async function run() {
         const audioSummaryBtn = Array.from(document.querySelectorAll("button")).find(b => b.textContent.includes("Audio Summary"));
         const textEquivalentDetails = document.querySelector("details");
 
-        // 4. Co-Designer 5-Pillar Simulation buttons
-        const simDeaf = Array.from(document.querySelectorAll("button")).find(b => b.textContent.includes("Deaf Journey"));
-        const simBlind = Array.from(document.querySelectorAll("button")).find(b => b.textContent.includes("Blind Journey"));
-        const simLiveChat = Array.from(document.querySelectorAll("button")).find(b => b.textContent.includes("Live Chat Replay"));
-
         return {
           hasHtmlDoc,
           hasPdfDoc,
@@ -300,10 +295,7 @@ async function run() {
           hasJobCard: Boolean(jobTitle),
           hasDuplicateHybrid,
           hasAudioSummaryBtn: Boolean(audioSummaryBtn),
-          hasTextEquivalentDetails: Boolean(textEquivalentDetails),
-          hasSimDeaf: Boolean(simDeaf),
-          hasSimBlind: Boolean(simBlind),
-          hasSimLiveChat: Boolean(simLiveChat)
+          hasTextEquivalentDetails: Boolean(textEquivalentDetails)
         };
       })()`,
       returnByValue: true,

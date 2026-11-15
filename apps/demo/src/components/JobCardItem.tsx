@@ -96,7 +96,10 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
   const employer = typeof job.employer === "string" ? job.employer : resolveLocalized(job.employer, locale);
 
   // Clean location string to avoid duplicate parenthetical like "(Hybrid) (Hybrid)"
-  const cleanLocation = location.replace(/\s*\([^)]*\)\s*$/, "").trim();
+  const cleanLocation = location
+    .replace(/\s*\(\s*(hybrid|remote|on-site|የቀን|የርቀት|ሃይብሪድ)\s*\)\s*/gi, "")
+    .replace(/\s*\([^)]*\)\s*$/, "")
+    .trim();
 
   const accommodationsList = Array.isArray(job.accommodations) ? job.accommodations : [];
 

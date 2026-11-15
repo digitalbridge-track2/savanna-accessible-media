@@ -1,6 +1,6 @@
 # Abugida Media Kit (`<db-player>`), Track 2 (Accessible Learning Media), Team Savanna Accessible Media & Co-Designers
 
-> **🏆 Quick Evaluation:** For evaluation criteria, the 60-second install test, rubrics scoring matrix, and official rubric bonus implementations (Live Session Chat Replay, Braille `.brf` export, Open Badges 3.0 OBv3 JSON-LD, 5-Pillar Co-Designer simulation suite), see [JUDGES-GUIDE.md](file:///C:/Users/PC/savanna-accessible-media/JUDGES-GUIDE.md).
+> **🏆 Quick Evaluation:** For evaluation criteria, the 60-second install test, rubrics scoring matrix, and official rubric bonus implementations (Live Session Chat Replay, Braille `.brf` export, Open Badges 3.0 OBv3 JSON-LD), see [JUDGES-GUIDE.md](file:///C:/Users/PC/savanna-accessible-media/JUDGES-GUIDE.md).
 
 ---
 
@@ -224,7 +224,6 @@ The certificate verification system at `/verify?id=CERT-DB-2026-0042` verifies d
 * ✅ **Level 3 Open Standard #2 (Open Badges 3.0):** 1EdTech / W3C Open Badges 3.0 (OBv3) Verifiable Credential standard metadata inspector and `.jsonld` export on `/verify`.
 * ✅ **Official Rubric Bonus (Slide 9):** Braille (`.brf`) export pipeline in Transcript Studio.
 * ✅ **Official Rubric Bonus (Slide 9):** Recorded Live-Session Replay Viewer with synchronized chat log and jump-to-timestamp seeking.
-* ✅ **Co-Designer 5-Pillar Simulation Suite:** 1-click evaluation bar on `/lesson` (Sound-Off Deaf Journey, Blind Journey, Live Chat Replay, 3G Offline Mode).
 
 ### Not finished / Current limitations (Honest Engineering Disclosures):
 Per Hackathon Technical Guide Section 5 (*"The caption pipeline: judge your pipeline on the corrected result, and say honestly in the README what quality you measured"*) and Section 11 (*"Finished and not finished (be honest)"*):

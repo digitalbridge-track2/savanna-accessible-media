@@ -31,16 +31,14 @@ npm run dev
 ### Pillar 1: Works for the People It Is For (30 Points)
 *Primary Goal: Co-designer tasks completed unaided.*
 1. **Deaf & Hard-of-Hearing Learner Journey:**
-   - Navigate to `/lesson`. Click **🔇 Deaf Journey (Sound-Off)** in the Quick Simulation bar.
-   - Video mutes, reviewed Amharic captions render cleanly, and the **Ethiopian Sign Language (EthSL)** window docks alongside the video.
-   - Move or resize the sign window using arrow keys (no drag-only traps).
+   - Navigate to `/lesson`. Press `M` to mute (or click `Mute`), click `CC` (or press `C`) for reviewed Amharic captions, and click `ESL` for the **Ethiopian Sign Language (EthSL)** window docked alongside the video.
+   - Move or resize the sign window using keyboard buttons or mouse (no drag-only traps).
 2. **Blind & Low-Vision Learner Journey:**
-   - Click **👁️ Blind Journey (Audio Description)**.
-   - Dedicated `[D)))]` button activates the human-reviewed audio-described track (`lesson-ad.mp4`).
-   - Transcript includes inline visual descriptions (`[Visual: Slide Title...]`) and timestamp seeking (`Play from mm:ss`).
+   - Dedicated `D)))` button activates the human-reviewed audio-described soundtrack.
+   - Transcript includes inline visual descriptions (`[visual description]`) and timestamp seeking (`Play from mm:ss`).
    - Download the genuine **Tagged Accessible PDF** (`lesson.en.tagged.pdf`) with verified tag tree and alt text.
 3. **Low-Bandwidth & 3G Offline Learner Journey:**
-   - Click **✈️ 3G Offline Mode**. Download the measured **3.2 MB Study Pack** (`offline-bundle.zip`).
+   - Scroll to the 3G Study Pack section. Download the measured **3.2 MB Study Pack** (`offline-bundle.zip`).
    - Turn off Wi-Fi / enable airplane mode and reload: the lesson and audio play offline via CacheStorage & Service Worker.
 
 ---
@@ -100,7 +98,7 @@ npm run dev
 1. **Braille Export (`.brf`):**
    - In Transcript Studio (`/studio`), click **"Export Braille (.brf)"** to generate standard Braille Ready Format files for refreshable Braille displays.
 2. **Recorded Live-Session Replay with Synchronized Chat Log:**
-   - In the player, click the **"💬 Live Chat Replay"** tab (or the Quick Simulation button).
+   - In the player, click the **"💬 Live Chat Replay"** tab in the left panel.
    - Watch student questions and instructor responses appear and highlight synchronously with the video timeline.
    - Click any chat question to jump the video directly to that discussion point!
 3. **Open Badges 3.0 (OBv3) Verifiable Credential:**
