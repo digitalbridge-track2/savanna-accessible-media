@@ -2,7 +2,7 @@ export type CaptionTheme = "default" | "yellow-black" | "white-black" | "black-y
 export type CaptionSize = "small" | "medium" | "large" | "xlarge";
 export type ESLPosition = "top-right" | "top-left" | "bottom-right" | "bottom-left";
 export type ESLSize = "small" | "medium" | "large";
-export type VideoQuality = "auto" | "720p" | "360p" | "240p";
+export type VideoQuality = "auto" | "1080p" | "720p" | "480p" | "360p" | "240p" | (string & {});
 
 export interface PlayerPreferences {
   captionLanguage: string; // "off" | "en" | "am"

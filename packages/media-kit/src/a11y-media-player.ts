@@ -445,6 +445,56 @@ export class A11yMediaPlayer extends HTMLElement {
     `;
   }
 
+  private getAvailableQualities(): Array<{ quality: string; label: string; tag?: string }> {
+    if (!this.manifest || !this.manifest.sources) {
+      return [
+        { quality: "1080p", label: "1080p (Full HD)", tag: "FHD" },
+        { quality: "720p", label: "720p (HD)", tag: "HD" },
+        { quality: "480p", label: "480p (Standard)", tag: "SD" },
+        { quality: "360p", label: "360p (SD)", tag: "SD" },
+        { quality: "240p", label: "240p (Low Data)", tag: "Low Data" },
+      ];
+    }
+
+    const mainSources = this.manifest.sources.filter((s) => s.kind === "main" && s.quality);
+    if (!mainSources.length) {
+      return [
+        { quality: "1080p", label: "1080p (Full HD)", tag: "FHD" },
+        { quality: "720p", label: "720p (HD)", tag: "HD" },
+        { quality: "480p", label: "480p (Standard)", tag: "SD" },
+        { quality: "360p", label: "360p (SD)", tag: "SD" },
+        { quality: "240p", label: "240p (Low Data)", tag: "Low Data" },
+      ];
+    }
+
+    const parseRes = (q: string) => {
+      const match = q.match(/(\d+)/);
+      return match ? parseInt(match[1], 10) : 0;
+    };
+
+    const sorted = [...mainSources].sort((a, b) => {
+      return parseRes(b.quality || "") - parseRes(a.quality || "");
+    });
+
+    const isAm = this.activeLocale === "am";
+
+    return sorted.map((s) => {
+      const q = s.quality || "";
+      let tag = "";
+      if (q === "1080p" || parseRes(q) >= 1080) tag = "FHD";
+      else if (q === "720p" || parseRes(q) >= 720) tag = "HD";
+      else if (q === "480p" || q === "360p") tag = "SD";
+      else if (q === "240p" || parseRes(q) <= 240) tag = isAm ? "ዝቅተኛ" : "Low Data";
+      else tag = s.label || "";
+
+      return {
+        quality: q,
+        label: s.label || q,
+        tag,
+      };
+    });
+  }
+
   private resolveMainSource(quality: VideoQuality = this.currentQuality): string {
     if (!this.manifest || !this.manifest.sources) return "";
     const mainSources = this.manifest.sources.filter((s) => s.kind === "main");
@@ -456,9 +506,11 @@ export class A11yMediaPlayer extends HTMLElement {
         const q240 = mainSources.find((s) => s.quality === "240p");
         if (q240) return q240.src;
       } else if (conn?.effectiveType === "3g") {
-        const q360 = mainSources.find((s) => s.quality === "360p");
+        const q360 = mainSources.find((s) => s.quality === "360p") || mainSources.find((s) => s.quality === "480p");
         if (q360) return q360.src;
       }
+      const q1080 = mainSources.find((s) => s.quality === "1080p");
+      if (q1080) return q1080.src;
       const q720 = mainSources.find((s) => s.quality === "720p");
       return q720 ? q720.src : mainSources[0].src;
     }
@@ -2204,18 +2256,12 @@ export class A11yMediaPlayer extends HTMLElement {
                   <span class="quality-check" aria-hidden="true">${this.currentQuality === "auto" ? "✓" : ""}</span>
                   <span class="quality-name">Auto</span>
                 </button>
-                <button type="button" class="quality-menu-item ${this.currentQuality === "720p" ? "selected" : ""}" data-quality="720p" role="menuitemradio" aria-checked="${this.currentQuality === "720p"}">
-                  <span class="quality-check" aria-hidden="true">${this.currentQuality === "720p" ? "✓" : ""}</span>
-                  <span class="quality-name">720p <span class="quality-tag">HD</span></span>
+                ${this.getAvailableQualities().map((q) => `
+                <button type="button" class="quality-menu-item ${this.currentQuality === q.quality ? "selected" : ""}" data-quality="${q.quality}" role="menuitemradio" aria-checked="${this.currentQuality === q.quality}">
+                  <span class="quality-check" aria-hidden="true">${this.currentQuality === q.quality ? "✓" : ""}</span>
+                  <span class="quality-name">${q.quality} ${q.tag ? `<span class="quality-tag">${q.tag}</span>` : ""}</span>
                 </button>
-                <button type="button" class="quality-menu-item ${this.currentQuality === "360p" ? "selected" : ""}" data-quality="360p" role="menuitemradio" aria-checked="${this.currentQuality === "360p"}">
-                  <span class="quality-check" aria-hidden="true">${this.currentQuality === "360p" ? "✓" : ""}</span>
-                  <span class="quality-name">360p <span class="quality-tag">SD</span></span>
-                </button>
-                <button type="button" class="quality-menu-item ${this.currentQuality === "240p" ? "selected" : ""}" data-quality="240p" role="menuitemradio" aria-checked="${this.currentQuality === "240p"}">
-                  <span class="quality-check" aria-hidden="true">${this.currentQuality === "240p" ? "✓" : ""}</span>
-                  <span class="quality-name">240p <span class="quality-tag">${isAm ? "ዝቅተኛ" : "Low Data"}</span></span>
-                </button>
+                `).join("")}
               </div>
             </div>
 
@@ -2240,9 +2286,9 @@ export class A11yMediaPlayer extends HTMLElement {
                   <label for="select-video-quality">${isAm ? "የቪዲዮ ጥራት:" : "Video Quality:"}</label>
                   <select id="select-video-quality">
                     <option value="auto" ${this.currentQuality === "auto" ? "selected" : ""}>Auto (Adaptive)</option>
-                    <option value="720p" ${this.currentQuality === "720p" ? "selected" : ""}>720p (HD)</option>
-                    <option value="360p" ${this.currentQuality === "360p" ? "selected" : ""}>360p (SD - Standard)</option>
-                    <option value="240p" ${this.currentQuality === "240p" ? "selected" : ""}>240p (${isAm ? "ዝቅተኛ ዳታ" : "Low Data / 3G"})</option>
+                    ${this.getAvailableQualities().map((q) => `
+                    <option value="${q.quality}" ${this.currentQuality === q.quality ? "selected" : ""}>${q.label}</option>
+                    `).join("")}
                   </select>
                 </div>
 
