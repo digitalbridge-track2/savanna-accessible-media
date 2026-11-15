@@ -127,7 +127,10 @@ async function run() {
       })()`,
       returnByValue: true,
     });
-    console.log("Toolbar controls visibility check:", JSON.stringify(toolbarEval.result.value, null, 2));
+    console.log(
+      "Toolbar controls visibility check:",
+      JSON.stringify(toolbarEval.result.value, null, 2),
+    );
 
     // Scroll down to the Live Embedded Instance
     await send("Runtime.evaluate", {
