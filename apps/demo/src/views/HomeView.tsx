@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AccessibleJob } from "@abugida/lesson-schema";
 import { NavLink } from "../router";
 import { JobCardItem } from "../components/JobCardItem";
+import { IconExternal } from "../components/Icons";
 
 interface HomeViewProps {
   locale: "en" | "am";
@@ -145,9 +146,10 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
                 target="_blank"
                 rel="noreferrer"
                 className="btn btn-outline"
-                style={{ fontSize: "14px", padding: "0.5rem 1rem", minHeight: "38px", width: "100%" }}
+                style={{ fontSize: "14px", padding: "0.5rem 1rem", minHeight: "38px", width: "100%", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "0.45rem" }}
               >
-                OpenAPI Swagger (/docs) ↗
+                <span>OpenAPI Swagger (/docs)</span>
+                <IconExternal size={13} />
               </a>
             </div>
           </div>

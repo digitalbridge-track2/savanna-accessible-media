@@ -1,4 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
+import {
+  IconPlay,
+  IconSquare,
+  IconFolder,
+  IconCheck,
+  IconCircleDot,
+  IconClose,
+  IconCopy,
+  IconCloudUpload,
+} from "../components/Icons";
 
 export interface StudioSegment {
   id: number;
@@ -675,9 +685,9 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
             aria-label={playingSegmentId !== null ? (isAm ? "ድምፅ አቁም" : "Stop Audio") : (isAm ? "ሙሉ ትምህርት አጫውት" : "Play Lesson Audio")}
           >
             {playingSegmentId !== null ? (
-              <><span>⏹</span> {isAm ? "አቁም" : "Stop Audio"}</>
+              <><IconSquare size={13} /> <span>{isAm ? "አቁም" : "Stop Audio"}</span></>
             ) : (
-              <><span>▶</span> {isAm ? "ኦዲዮ አጫውት" : "Play Audio"}</>
+              <><IconPlay size={13} /> <span>{isAm ? "ኦዲዮ አጫውት" : "Play Audio"}</span></>
             )}
           </button>
 
@@ -776,9 +786,10 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
             type="button"
             onClick={() => fileInputRef.current?.click()}
             className="btn btn-outline"
-            style={{ fontSize: "13px", padding: "0.45rem 0.95rem" }}
+            style={{ fontSize: "13px", padding: "0.45rem 0.95rem", display: "inline-flex", alignItems: "center", gap: "0.45rem" }}
           >
-            📂 {isAm ? "WebVTT ፋይል አስገባ (.vtt)" : "Import WebVTT File"}
+            <IconFolder size={15} />
+            <span>{isAm ? "WebVTT ፋይል አስገባ (.vtt)" : "Import WebVTT File"}</span>
           </button>
         </div>
 
@@ -859,7 +870,11 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                     }}
                     aria-label={`${isPlayingThis ? "Stop" : "Play"} snippet for cue ${idx + 1} from ${formatTime(seg.start)} to ${formatTime(seg.end)}`}
                   >
-                    {isPlayingThis ? "⏹ Stop" : "▶ Play Snippet"}
+                    {isPlayingThis ? (
+                      <><IconSquare size={12} /> <span>Stop</span></>
+                    ) : (
+                      <><IconPlay size={12} /> <span>Play Snippet</span></>
+                    )}
                   </button>
 
                   {/* Timing Inputs with Nudge Controls */}
@@ -991,7 +1006,17 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                     }}
                     aria-label={`Toggle reviewed status for cue ${idx + 1}`}
                   >
-                    {seg.status === "reviewed" ? (isAm ? "✓ የተረጋገጠ" : "✓ Human Reviewed") : (isAm ? "● ረቂቅ ASR" : "● Draft ASR")}
+                    {seg.status === "reviewed" ? (
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
+                        <IconCheck size={13} />
+                        <span>{isAm ? "የተረጋገጠ" : "Human Reviewed"}</span>
+                      </span>
+                    ) : (
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
+                        <IconCircleDot size={11} />
+                        <span>{isAm ? "ረቂቅ ASR" : "Draft ASR"}</span>
+                      </span>
+                    )}
                   </button>
 
                   <button
@@ -1004,12 +1029,14 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                       color: "#8E8E93",
                       cursor: "pointer",
                       padding: "0.35rem 0.5rem",
-                      fontSize: "14px",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
                       borderRadius: "4px",
                     }}
                     aria-label={`Delete cue ${idx + 1}`}
                   >
-                    ✕
+                    <IconClose size={13} />
                   </button>
                 </div>
               </div>
@@ -1042,6 +1069,7 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                       <button
                         type="button"
                         onClick={() => handleCopyDraft(seg.id)}
+                        aria-label={`Copy draft ASR text to editor for cue ${idx + 1}`}
                         style={{
                           background: "transparent",
                           border: "none",
@@ -1050,10 +1078,13 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                           fontWeight: 600,
                           cursor: "pointer",
                           padding: 0,
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "0.35rem",
                         }}
-                        aria-label={`Copy draft ASR text to editor for cue ${idx + 1}`}
                       >
-                        📋 {isAm ? "ወደ አርታዒ ቅዳ" : "Copy to Editor"}
+                        <IconCopy size={13} />
+                        <span>{isAm ? "ወደ አርታዒ ቅዳ" : "Copy to Editor"}</span>
                       </button>
                     </div>
 
@@ -1241,8 +1272,9 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                           ℹ {isAm ? "ረጅም መስመር (በስክሪን ላይ ሊከፈል ይችላል)" : "Long cue (will wrap on screen)"}
                         </span>
                       ) : (
-                        <span style={{ color: "#34C759" }}>
-                          ✓ {isAm ? "ምርጥ ርዝመት" : "Optimal length"}
+                        <span style={{ color: "#34C759", display: "inline-flex", alignItems: "center", gap: "0.25rem" }}>
+                          <IconCheck size={12} />
+                          <span>{isAm ? "ምርጥ ርዝመት" : "Optimal length"}</span>
                         </span>
                       )}
                     </span>
@@ -1314,9 +1346,13 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
               border: "none",
               fontWeight: 600,
               cursor: isPublishing ? "wait" : "pointer",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.5rem",
             }}
           >
-            🚀 {isPublishing ? (isAm ? "እየታተመ..." : "Publishing...") : (isAm ? "ወደ Level 2 API ላክ" : "Publish to Lesson (API)")}
+            <IconCloudUpload size={16} />
+            <span>{isPublishing ? (isAm ? "እየታተመ..." : "Publishing...") : (isAm ? "ወደ Level 2 API ላክ" : "Publish to Lesson (API)")}</span>
           </button>
         </div>
 

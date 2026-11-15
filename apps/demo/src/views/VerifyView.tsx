@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { formatDualDate } from "@abugida/media-kit";
+import { IconCheck, IconAlert, IconLink, IconBadge, IconDownload } from "../components/Icons";
 
 interface DemoCertificate {
   id: string;
@@ -233,8 +234,9 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.85rem", flexWrap: "wrap", gap: "0.5rem" }}>
-              <h4 style={{ margin: 0, color: "#128045", fontSize: "1.15rem", fontWeight: 600 }}>
-                ✓ {isAm ? "የተረጋገጠ ትክክለኛ ምስክር ወረቀት" : "Demonstrated Credential Verified"}
+              <h4 style={{ margin: 0, color: "#128045", fontSize: "1.15rem", fontWeight: 600, display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+                <IconCheck size={20} />
+                <span>{isAm ? "የተረጋገጠ ትክክለኛ ምስክር ወረቀት" : "Demonstrated Credential Verified"}</span>
               </h4>
               <span className="badge badge-success" style={{ borderRadius: "var(--radius-pill)" }}>
                 {isAm ? "ትክክለኛ" : "Verified"}
@@ -280,8 +282,9 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
               marginBottom: "1.5rem",
             }}
           >
-            <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "1.05rem", fontWeight: 600 }}>
-              ⚠ {isAm ? "የምስክር ወረቀቱ አልተገኘም" : "Credential not found"}
+            <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "1.05rem", fontWeight: 600, display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+              <IconAlert size={18} />
+              <span>{isAm ? "የምስክር ወረቀቱ አልተገኘም" : "Credential not found"}</span>
             </h4>
             <p style={{ margin: 0, fontSize: "14px" }}>
               {isAm
@@ -299,28 +302,31 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                 type="button"
                 className="btn btn-outline"
                 onClick={handleCopy}
-                style={{ minHeight: "40px" }}
+                style={{ minHeight: "40px", display: "inline-flex", alignItems: "center", gap: "0.45rem" }}
               >
-                🔗 {isAm ? "የማረጋገጫ ሊንኩን ቅዳ" : "Copy Shareable Link"}
+                <IconLink size={15} />
+                <span>{isAm ? "የማረጋገጫ ሊንኩን ቅዳ" : "Copy Shareable Link"}</span>
               </button>
 
               <button
                 type="button"
                 className="btn btn-outline"
                 onClick={() => setShowOBv3(!showOBv3)}
-                style={{ minHeight: "40px" }}
+                style={{ minHeight: "40px", display: "inline-flex", alignItems: "center", gap: "0.45rem" }}
                 aria-expanded={showOBv3}
               >
-                🎖️ {isAm ? "Open Badges 3.0 ሜታዳታ" : "Open Badges 3.0 (OBv3)"}
+                <IconBadge size={16} />
+                <span>{isAm ? "Open Badges 3.0 ሜታዳታ" : "Open Badges 3.0 (OBv3)"}</span>
               </button>
 
               <button
                 type="button"
                 className="btn btn-primary"
                 onClick={handleDownloadOBv3}
-                style={{ minHeight: "40px" }}
+                style={{ minHeight: "40px", display: "inline-flex", alignItems: "center", gap: "0.45rem" }}
               >
-                📥 {isAm ? "Open Badge አውርድ (.jsonld)" : "Download Open Badge (.jsonld)"}
+                <IconDownload size={16} />
+                <span>{isAm ? "Open Badge አውርድ (.jsonld)" : "Download Open Badge (.jsonld)"}</span>
               </button>
 
               {copyMsg && (
@@ -333,9 +339,13 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                     background: "#E8F8F0",
                     padding: "0.35rem 0.85rem",
                     borderRadius: "var(--radius-pill)",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.35rem",
                   }}
                 >
-                  ✓ {copyMsg}
+                  <IconCheck size={14} />
+                  <span>{copyMsg}</span>
                 </span>
               )}
             </div>

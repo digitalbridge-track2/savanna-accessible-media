@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { AccessibleJob, LocalizedString } from "@abugida/lesson-schema";
+import { IconPlay, IconPause, IconCheck } from "./Icons";
 
 interface JobCardItemProps {
   job: AccessibleJob;
@@ -212,11 +213,11 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
           >
             {isPlaying ? (
               <>
-                <span aria-hidden="true">❚❚</span> {isAm ? "አቁም" : "Pause"}
+                <IconPause size={14} style={{ marginRight: "0.35rem" }} /> {isAm ? "አቁም" : "Pause"}
               </>
             ) : (
               <>
-                <span aria-hidden="true">▶</span> {isAm ? "የድምፅ ማጠቃለያ" : "Audio Summary"}
+                <IconPlay size={14} style={{ marginRight: "0.35rem" }} /> {isAm ? "የድምፅ ማጠቃለያ" : "Audio Summary"}
               </>
             )}
           </button>
@@ -248,8 +249,9 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
                 key={idx}
                 className="badge badge-brand"
                 title={`Disability Accommodation Disclosure: ${resolveLocalized(acc.label, locale)}`}
+                style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem" }}
               >
-                ✓ {resolveLocalized(acc.label, locale)}
+                <IconCheck size={12} /> {resolveLocalized(acc.label, locale)}
               </span>
             ))}
           </div>

@@ -393,6 +393,26 @@ export class A11yMediaPlayer extends HTMLElement {
           width: 100%;
           box-sizing: border-box;
         }
+        @media (max-width: 1120px) {
+          .player-stage {
+            flex-wrap: wrap;
+          }
+          .main-player-panel {
+            min-width: 100% !important;
+            max-width: 100% !important;
+            order: 1;
+          }
+          #transcript-view-panel {
+            order: 2;
+            flex: 1 1 320px;
+            max-width: 100%;
+          }
+          #sign-view-panel {
+            order: 3;
+            flex: 1 1 260px;
+            max-width: 100%;
+          }
+        }
 
         /* Window Panels */
         .window-panel {
@@ -581,9 +601,9 @@ export class A11yMediaPlayer extends HTMLElement {
 
         /* Center Main Player Panel - Balanced Horizontal Cinema Proportion */
         .main-player-panel {
-          flex: 2 1 680px;
-          min-width: 360px;
-          max-width: 820px;
+          flex: 3 1 760px;
+          min-width: 480px;
+          max-width: 980px;
           width: 100%;
           background: #111417;
           border-radius: 8px;
@@ -754,15 +774,15 @@ export class A11yMediaPlayer extends HTMLElement {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 4px 8px;
-          gap: 4px;
+          padding: 4px 6px;
+          gap: 2px;
           flex-wrap: nowrap;
           overflow-x: visible;
         }
         .controls-cluster {
           display: flex;
           align-items: center;
-          gap: 2px;
+          gap: 1px;
         }
         .btn-ctrl {
           background: transparent;
@@ -770,10 +790,10 @@ export class A11yMediaPlayer extends HTMLElement {
           border: 1px solid transparent;
           border-radius: 4px;
           padding: 0;
-          width: 32px;
-          height: 32px;
-          min-width: 32px;
-          min-height: 32px;
+          width: 30px;
+          height: 30px;
+          min-width: 30px;
+          min-height: 30px;
           cursor: pointer;
           display: inline-flex;
           align-items: center;
@@ -796,15 +816,15 @@ export class A11yMediaPlayer extends HTMLElement {
           border-bottom: 2px solid var(--color-accent, #F2C14E);
         }
         #btn-esl {
-          width: 36px;
-          min-width: 36px;
+          width: 34px;
+          min-width: 34px;
         }
         .ctrl-divider {
           display: inline-block;
           width: 1px;
           height: 18px;
           background: rgba(255, 255, 255, 0.22);
-          margin: 0 3px;
+          margin: 0 2px;
           flex-shrink: 0;
         }
         .status-strip {

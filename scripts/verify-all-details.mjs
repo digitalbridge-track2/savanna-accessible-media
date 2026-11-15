@@ -149,17 +149,37 @@ async function verifyAll() {
     });
     console.log("3G Pack After Click:", JSON.stringify(offlineCheckAfter.result.value, null, 2));
 
-    // 4. Verify Feature 3: Career Gateway Job Card Item
-    console.log("\n--- Checking Feature 3: Career Gateway Job Card ---");
+    // 4. Verify Feature 3: Strategic Career Pathways Callout on Lesson View
+    console.log("\n--- Checking Feature 3: Strategic Career Pathways Callout ---");
+    const pathwayCheck = await send("Runtime.evaluate", {
+      expression: `(() => {
+        const sec = document.querySelector("section[aria-labelledby='heading-career-pathway']");
+        if (!sec) return { error: "No pathway card found" };
+        return {
+          title: sec.querySelector("h3")?.textContent.trim(),
+          desc: sec.querySelector("p")?.textContent.trim(),
+          linkHref: sec.querySelector("a")?.getAttribute("href"),
+          linkText: sec.querySelector("a")?.textContent.trim()
+        };
+      })()`,
+      returnByValue: true
+    });
+    console.log("Career Pathway Callout:", JSON.stringify(pathwayCheck.result.value, null, 2));
+
+    // 5. Navigate to Home View (Career Gateway) to test Job Card Item
+    console.log("\n--- Checking Feature 3b: Career Gateway on Home View ---");
+    await send("Page.navigate", { url: "http://localhost:3000/" });
+    await new Promise((r) => setTimeout(r, 1200));
+
     const jobCheck = await send("Runtime.evaluate", {
       expression: `(() => {
-        const jobCard = document.querySelector("section[aria-labelledby='heading-lesson-jobs'] article.card");
+        const jobCard = document.querySelector("#job-cards-container article.card");
         if (!jobCard) return { error: "No job card found" };
         const title = jobCard.querySelector("h4")?.textContent.trim();
         const metaLine = jobCard.querySelector("p")?.textContent.replace(/\\s+/g, " ").trim();
         const badge = jobCard.querySelector(".badge")?.textContent.trim();
         const audioBtn = jobCard.querySelector("button");
-        const accommodations = Array.from(jobCard.querySelectorAll("li")).map(li => li.textContent.replace(/\\s+/g, " ").trim());
+        const accommodations = Array.from(jobCard.querySelectorAll(".badge-brand")).map(b => b.textContent.replace(/\\s+/g, " ").trim());
         const detailsText = jobCard.querySelector("details")?.textContent.replace(/\\s+/g, " ").trim();
 
         return {
@@ -174,18 +194,18 @@ async function verifyAll() {
       })()`,
       returnByValue: true
     });
-    console.log("Job Card Results:", JSON.stringify(jobCheck.result.value, null, 2));
+    console.log("Job Card Results on Career Gateway:", JSON.stringify(jobCheck.result.value, null, 2));
 
     // Test Audio Summary Play/Pause Toggle
-    console.log("Testing Audio Summary button click...");
+    console.log("Testing Audio Summary button click on Career Gateway...");
     await send("Runtime.evaluate", {
-      expression: `document.querySelector("section[aria-labelledby='heading-lesson-jobs'] article.card button").click()`
+      expression: `document.querySelector("#job-cards-container article.card button").click()`
     });
-    await new Promise((r) => setTimeout(r, 500));
+    await new Promise((r) => setTimeout(r, 600));
 
     const audioCheckAfter = await send("Runtime.evaluate", {
       expression: `(() => {
-        const audioBtn = document.querySelector("section[aria-labelledby='heading-lesson-jobs'] article.card button");
+        const audioBtn = document.querySelector("#job-cards-container article.card button");
         return {
           audioBtnTextAfterClick: audioBtn?.textContent.replace(/\\s+/g, " ").trim(),
           ariaPressed: audioBtn?.getAttribute("aria-pressed")
@@ -193,11 +213,11 @@ async function verifyAll() {
       })()`,
       returnByValue: true
     });
-    console.log("Audio Button Toggle:", JSON.stringify(audioCheckAfter.result.value, null, 2));
+    console.log("Audio Button Toggle on Career Gateway:", JSON.stringify(audioCheckAfter.result.value, null, 2));
 
-    // Take screenshot of Career Gateway and Documents
+    // Take screenshot of Career Gateway on Home View
     await send("Runtime.evaluate", {
-      expression: `document.querySelector("section[aria-labelledby='heading-lesson-jobs']").scrollIntoView({ behavior: "instant", block: "center" })`
+      expression: `document.querySelector("section[aria-labelledby='heading-career-preview']").scrollIntoView({ behavior: "instant", block: "center" })`
     });
     await new Promise((r) => setTimeout(r, 600));
     const snapJobs = await send("Page.captureScreenshot", { format: "png" });
