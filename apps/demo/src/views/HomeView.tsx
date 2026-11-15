@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
 import { AccessibleJob } from "@abugida/lesson-schema";
+import React, { useEffect, useState } from "react";
+import { IconExternal } from "../components/Icons";
+import { JobCardItem } from "../components/JobCardItem";
 import { SupportedLocale, getTranslation } from "@abugida/media-kit";
 import { NavLink } from "../router";
-import { JobCardItem } from "../components/JobCardItem";
-import { IconExternal } from "../components/Icons";
 
 interface HomeViewProps {
   locale: SupportedLocale;
@@ -190,7 +190,14 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
           {t.heroDesc}
         </p>
 
-        <div style={{ display: "flex", gap: "0.85rem", flexWrap: "wrap", alignItems: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "0.85rem",
+            flexWrap: "wrap",
+            alignItems: "center",
+          }}
+        >
           <NavLink to="/lesson" className="btn btn-primary">
             {t.openLesson}
           </NavLink>
@@ -204,7 +211,10 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
       </section>
 
       {/* Adoption Levels Grid */}
-      <section style={{ marginBottom: "4rem" }} aria-labelledby="heading-adoption">
+      <section
+        style={{ marginBottom: "4rem" }}
+        aria-labelledby="heading-adoption"
+      >
         <h3
           id="heading-adoption"
           style={{
@@ -226,15 +236,43 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
           }}
         >
           {/* Level 1 */}
-          <div className="card" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <div
+            className="card"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
             <div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "0.75rem",
+                }}
+              >
                 <span className="badge badge-brand">Level 1</span>
               </div>
-              <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "1.15rem", color: "var(--color-ink)", fontWeight: 600 }}>
+              <h4
+                style={{
+                  margin: "0 0 0.5rem 0",
+                  fontSize: "1.15rem",
+                  color: "var(--color-ink)",
+                  fontWeight: 600,
+                }}
+              >
                 {t.l1Title}
               </h4>
-              <p style={{ margin: 0, fontSize: "14px", color: "var(--color-muted-ink)", lineHeight: 1.55 }}>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "14px",
+                  color: "var(--color-muted-ink)",
+                  lineHeight: 1.55,
+                }}
+              >
                 {t.l1Desc}
               </p>
             </div>
@@ -242,7 +280,12 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
               <NavLink
                 to="/embed"
                 className="btn btn-outline"
-                style={{ fontSize: "14px", padding: "0.5rem 1rem", minHeight: "38px", width: "100%" }}
+                style={{
+                  fontSize: "14px",
+                  padding: "0.5rem 1rem",
+                  minHeight: "38px",
+                  width: "100%",
+                }}
               >
                 {t.l1Btn}
               </NavLink>
@@ -250,9 +293,23 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
           </div>
 
           {/* Level 2 */}
-          <div className="card" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <div
+            className="card"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
             <div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "0.75rem",
+                }}
+              >
                 <span className="badge badge-brand">Level 2</span>
                 {apiOnline !== null && (
                   <span className={`badge ${apiOnline ? "badge-success" : "badge-neutral"}`}>
@@ -263,7 +320,14 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
               <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "1.15rem", color: "var(--color-ink)", fontWeight: 600 }}>
                 {t.l2Title}
               </h4>
-              <p style={{ margin: 0, fontSize: "14px", color: "var(--color-muted-ink)", lineHeight: 1.55 }}>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "14px",
+                  color: "var(--color-muted-ink)",
+                  lineHeight: 1.55,
+                }}
+              >
                 {t.l2Desc}
               </p>
             </div>
@@ -273,7 +337,16 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
                 target="_blank"
                 rel="noreferrer"
                 className="btn btn-outline"
-                style={{ fontSize: "14px", padding: "0.5rem 1rem", minHeight: "38px", width: "100%", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "0.45rem" }}
+                style={{
+                  fontSize: "14px",
+                  padding: "0.5rem 1rem",
+                  minHeight: "38px",
+                  width: "100%",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "0.45rem",
+                }}
               >
                 <span>OpenAPI Swagger (/docs)</span>
                 <IconExternal size={13} />
@@ -282,15 +355,36 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
           </div>
 
           {/* Level 3 */}
-          <div className="card" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <div
+            className="card"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
             <div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "0.75rem",
+                }}
+              >
                 <span className="badge badge-brand">Level 3</span>
               </div>
               <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "1.15rem", color: "var(--color-ink)", fontWeight: 600 }}>
                 {t.l3Title}
               </h4>
-              <p style={{ margin: 0, fontSize: "14px", color: "var(--color-muted-ink)", lineHeight: 1.55 }}>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "14px",
+                  color: "var(--color-muted-ink)",
+                  lineHeight: 1.55,
+                }}
+              >
                 {t.l3Desc}
               </p>
             </div>
@@ -298,7 +392,12 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
               <NavLink
                 to="/verify"
                 className="btn btn-outline"
-                style={{ fontSize: "14px", padding: "0.5rem 1rem", minHeight: "38px", width: "100%" }}
+                style={{
+                  fontSize: "14px",
+                  padding: "0.5rem 1rem",
+                  minHeight: "38px",
+                  width: "100%",
+                }}
               >
                 {t.l3Btn}
               </NavLink>
@@ -308,7 +407,10 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
       </section>
 
       {/* Career Gateway Section */}
-      <section style={{ marginBottom: "3.5rem" }} aria-labelledby="heading-career-preview">
+      <section
+        style={{ marginBottom: "3.5rem" }}
+        aria-labelledby="heading-career-preview"
+      >
         <div
           style={{
             display: "flex",
@@ -332,13 +434,17 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
             >
               {t.careerHeading}
             </h3>
-            <p style={{ margin: 0, color: "var(--color-muted-ink)", fontSize: "14px" }}>
+            <p
+              style={{
+                margin: 0,
+                color: "var(--color-muted-ink)",
+                fontSize: "14px",
+              }}
+            >
               {t.careerDesc}
             </p>
           </div>
-          <span className="badge badge-success">
-            WCAG 1.4.10 Reflow Tested
-          </span>
+          <span className="badge badge-success">WCAG 1.4.10 Reflow Tested</span>
         </div>
 
         <div id="job-cards-container">
