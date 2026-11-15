@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { formatDualDate } from "@abugida/media-kit";
+import { generateQRSVG } from "../utils/qr-code";
 import {
   IconCheck,
   IconAlert,
@@ -165,6 +166,20 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
 
   const dualDate = matchedCert ? formatDualDate(matchedCert.issueDateISO) : null;
   const canonicalUrl = getCanonicalShareableUrl(activeId);
+  const qrSvgString = matchedCert ? generateQRSVG(canonicalUrl, 140) : "";
+
+  const handleDownloadQR = () => {
+    if (!qrSvgString) return;
+    const blob = new Blob([qrSvgString], { type: "image/svg+xml;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `credential-qr-${activeId}.svg`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
   // Injects Schema.org EducationalOccupationalCredential JSON-LD structured data into <head>
   useEffect(() => {
@@ -626,6 +641,56 @@ export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                 <span>{copyMsg}</span>
               </div>
             )}
+
+            {/* Instant Mobile QR Code Verification Drawer */}
+            <div
+              style={{
+                marginTop: "1.25rem",
+                padding: "1rem",
+                background: "var(--color-surface-elevated, #FFFFFF)",
+                border: "1px solid var(--color-border-subtle)",
+                borderRadius: "10px",
+                display: "flex",
+                alignItems: "center",
+                gap: "1.25rem",
+                flexWrap: "wrap",
+              }}
+            >
+              <div
+                style={{
+                  background: "#FFFFFF",
+                  padding: "8px",
+                  borderRadius: "8px",
+                  border: "1px solid #E2E8F0",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
+                }}
+                dangerouslySetInnerHTML={{ __html: qrSvgString }}
+                aria-label={isAm ? "የሞባይል ማረጋገጫ QR ኮድ" : "Mobile Verification QR Code"}
+              />
+              <div style={{ flex: "1 1 240px" }}>
+                <h5 style={{ margin: "0 0 0.25rem 0", fontSize: "14px", fontWeight: 600, color: "var(--color-ink)" }}>
+                  📱 {isAm ? "በስማርትፎን ካሜራ በቀጥታ ያረጋግጡ" : "Scan to Verify on Mobile"}
+                </h5>
+                <p style={{ margin: "0 0 0.75rem 0", fontSize: "13px", color: "var(--color-muted-ink)", lineHeight: 1.4 }}>
+                  {isAm
+                    ? "ቀጣሪዎች ወይም ገምጋሚዎች የስልካቸውን ካሜራ በመጠቀም ይህንን የ QR ኮድ ስካን በማድረግ የማረጋገጫ ገጹን በቀጥታ መክፈት ይችላሉ።"
+                    : "Employers and admissions officers can scan this QR code with any smartphone camera to instantly load the official cryptographic verification record."}
+                </p>
+                <button
+                  type="button"
+                  className="btn btn-outline"
+                  onClick={handleDownloadQR}
+                  style={{ fontSize: "12px", padding: "0.35rem 0.85rem", minHeight: "32px", display: "inline-flex", alignItems: "center", gap: "0.35rem" }}
+                  aria-label={isAm ? "የ QR ኮድ SVG አውርድ" : "Download QR Code SVG"}
+                >
+                  <IconDownload size={13} />
+                  <span>{isAm ? "QR ኮድ አውርድ (SVG)" : "Download QR Code (SVG)"}</span>
+                </button>
+              </div>
+            </div>
           </section>
         )}
 

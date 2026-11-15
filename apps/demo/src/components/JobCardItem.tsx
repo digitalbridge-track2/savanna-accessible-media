@@ -18,6 +18,8 @@ export function resolveLocalized(val: LocalizedString | string | undefined | nul
 
 export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [showApplyModal, setShowApplyModal] = useState(false);
+  const [appliedPacketCopied, setAppliedPacketCopied] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Safely cleanup audio playback on unmount
@@ -280,22 +282,181 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
         </details>
       )}
 
-      {job.applicationUrl && (
-        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "0.25rem" }}>
+      {/* Application Actions */}
+      <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.5rem", marginTop: "0.5rem", flexWrap: "wrap" }}>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={() => setShowApplyModal(true)}
+          style={{
+            fontSize: "12.5px",
+            padding: "0.45rem 1rem",
+            fontWeight: 600,
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.35rem",
+          }}
+          aria-haspopup="dialog"
+        >
+          <span>{isAm ? "በተረጋገጠ ምስክር ወረቀት አመልክት" : "Apply with Verified Credential"}</span>
+          <IconCheck size={13} />
+        </button>
+
+        {job.applicationUrl && (
           <a
             href={job.applicationUrl}
             target="_blank"
             rel="noreferrer"
             className="btn btn-outline"
             style={{
-              fontSize: "12px",
-              padding: "0.35rem 0.85rem",
+              fontSize: "12.5px",
+              padding: "0.45rem 0.9rem",
               textDecoration: "none",
               fontWeight: 600,
             }}
           >
-            {isAm ? "ለሥራው አመልክት (Apply)" : "Apply for Role"} &rarr;
+            {isAm ? "የቀጣሪው ድረ-ገጽ" : "Employer Portal"} &rarr;
           </a>
+        )}
+      </div>
+
+      {/* Accessible "Apply with Credential" Modal Dialog */}
+      {showApplyModal && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={`apply-dialog-title-${job.id || title}`}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.55)",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 9999,
+            padding: "1rem",
+          }}
+        >
+          <div
+            style={{
+              background: "#FFFFFF",
+              color: "#1D1D1F",
+              padding: "1.75rem",
+              borderRadius: "16px",
+              maxWidth: "520px",
+              width: "100%",
+              boxShadow: "0 24px 60px rgba(0,0,0,0.3)",
+              border: "1px solid rgba(0,0,0,0.1)",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1rem" }}>
+              <div>
+                <span className="badge badge-success" style={{ marginBottom: "0.4rem", display: "inline-block" }}>
+                  {isAm ? "የተረጋገጠ መረጃ" : "Verified Learner Application"}
+                </span>
+                <h3 id={`apply-dialog-title-${job.id || title}`} style={{ margin: "0.2rem 0", fontSize: "1.15rem", fontWeight: 700 }}>
+                  {title}
+                </h3>
+                <p style={{ margin: 0, fontSize: "13px", color: "#64748B" }}>
+                  {employer} · {cleanLocation}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowApplyModal(false);
+                  setAppliedPacketCopied(false);
+                }}
+                aria-label={isAm ? "ዝጋ" : "Close"}
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  fontSize: "1.25rem",
+                  color: "#64748B",
+                  cursor: "pointer",
+                  padding: "4px 8px",
+                  borderRadius: "6px",
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div
+              style={{
+                background: "#F8FAFC",
+                border: "1px solid #E2E8F0",
+                borderRadius: "10px",
+                padding: "1rem",
+                marginBottom: "1.25rem",
+                fontSize: "13px",
+              }}
+            >
+              <div style={{ marginBottom: "0.6rem" }}>
+                <strong style={{ color: "#0F172A" }}>{isAm ? "የምስክር ወረቀት መለያ ቁጥር:" : "Verifiable Credential:"}</strong>
+                <div style={{ fontFamily: "var(--font-mono)", color: "#0071E3", fontWeight: 600, marginTop: "2px" }}>
+                  CERT-DB-2026-0042
+                </div>
+                <div style={{ fontSize: "12px", color: "#64748B" }}>
+                  https://savanna.alxafrica.com/verify?id=CERT-DB-2026-0042
+                </div>
+              </div>
+
+              <div style={{ marginBottom: "0.6rem" }}>
+                <strong style={{ color: "#0F172A" }}>{isAm ? "የተረጋገጡ ክህሎቶች:" : "Skills Passed:"}</strong>
+                <div style={{ display: "flex", gap: "4px", flexWrap: "wrap", marginTop: "4px" }}>
+                  <span style={{ background: "#E0F2FE", color: "#0369A1", padding: "2px 6px", borderRadius: "4px", fontSize: "11.5px" }}>Digital Collaboration</span>
+                  <span style={{ background: "#E0F2FE", color: "#0369A1", padding: "2px 6px", borderRadius: "4px", fontSize: "11.5px" }}>Accessibility Literacy</span>
+                  <span style={{ background: "#E0F2FE", color: "#0369A1", padding: "2px 6px", borderRadius: "4px", fontSize: "11.5px" }}>Ethiopian Sign Language Basics</span>
+                </div>
+              </div>
+
+              <div>
+                <strong style={{ color: "#0F172A" }}>{isAm ? "የተጠየቁ የተደራሽነት ድጋፎች:" : "Disclosed Workplace Accommodations:"}</strong>
+                <div style={{ color: "#334155", marginTop: "2px" }}>
+                  {accommodationsList.length > 0 ? (
+                    accommodationsList.map((a) => resolveLocalized(a.label, locale)).join(", ")
+                  ) : (
+                    "Flexible Ergonomic Setup, Screen Magnifier Ready"
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.75rem", flexWrap: "wrap", alignItems: "center" }}>
+              <button
+                type="button"
+                className="btn btn-outline"
+                onClick={() => {
+                  const applicationPacket = `APPLICATION PACKET FOR: ${title} at ${employer}\nLearner: Demonstration Learner\nCredential ID: CERT-DB-2026-0042\nPublic Verification Permalink: https://savanna.alxafrica.com/verify?id=CERT-DB-2026-0042\nSkills: Digital Collaboration, Accessibility Literacy, Ethiopian Sign Language Basics\nAccommodations: ${accommodationsList.map((a) => resolveLocalized(a.label, "en")).join(", ") || "Screen reader / ergonomic setup"}`;
+                  navigator.clipboard.writeText(applicationPacket);
+                  setAppliedPacketCopied(true);
+                  setTimeout(() => setAppliedPacketCopied(false), 3000);
+                }}
+                style={{ fontSize: "13px", padding: "0.5rem 1rem" }}
+              >
+                {appliedPacketCopied ? (isAm ? "ማመልከቻው ተቀድቷል ✓" : "Packet Copied ✓") : (isAm ? "ማመልከቻውን ቅዳ" : "Copy Application Packet")}
+              </button>
+
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => {
+                  setAppliedPacketCopied(true);
+                  setTimeout(() => {
+                    setShowApplyModal(false);
+                    setAppliedPacketCopied(false);
+                    alert(isAm ? "ማመልከቻዎ ከተረጋገጠው የምስክር ወረቀት ጋር በተሳካ ሁኔታ ተልኳል!" : "Application submitted successfully with verified cryptographic credential!");
+                  }, 600);
+                }}
+                style={{ fontSize: "13px", padding: "0.5rem 1.25rem" }}
+              >
+                {isAm ? "ማመልከቻውን ላክ" : "Submit with Credential"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </article>

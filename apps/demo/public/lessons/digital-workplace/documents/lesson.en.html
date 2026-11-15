@@ -285,6 +285,16 @@
         </p>
 
         <figure>
+          <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
+            <button
+              type="button"
+              id="btn-speak-diagram"
+              onclick="speakDiagramDescription('en')"
+              style="background: #0071E3; color: #FFFFFF; border: none; border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;"
+              aria-label="Listen to Diagram Audio Description (Figure 1.1 flowchart)">
+              🔊 Listen to Diagram Audio Description
+            </button>
+          </div>
           <div class="diagram-box" role="img" aria-label="Flowchart depicting three successive phases: Phase 1 Draft Proposal with WCAG Check, Phase 2 Co-Designer Review by Blind and Deaf Evaluators, and Phase 3 Production Release with Verifiable Credential.">
             <div class="step-card">
               <span class="badge">Phase 1</span>
@@ -306,6 +316,9 @@
           </div>
           <figcaption>
             <strong>Figure 1.1: Inclusive Digital Collaboration Cycle.</strong> From initial drafting to multi-ability co-designer review and final publication. All stages require verified text alternatives and screen-reader navigable headings.
+            <div style="margin-top: 8px; padding: 8px 12px; background: rgba(0, 113, 227, 0.08); border-left: 3px solid #0071E3; border-radius: 4px; font-size: 12.5px;">
+              <strong>Tactile Graphics Reproduction Note:</strong> For blind learners using swell-form microcapsule paper or tactile graphics embossers (e.g., Tiger / Index Everest), emboss three horizontal 4cm rounded rectangles connected by 1.5mm raised arrows left-to-right, labeled in Unified English Braille (UEB) or Ethiopian Braille Grade 1 as <code>⠠⠏⠓⠁⠎⠑ ⠼⠁</code>, <code>⠠⠏⠓⠁⠎⠑ ⠼⠃</code>, and <code>⠠⠏⠓⠁⠎⠑ ⠼⠉</code>.
+            </div>
           </figcaption>
         </figure>
 
@@ -347,5 +360,25 @@
       <p>Published in accordance with WCAG 2.2 Level AA and Open Badges 3.0 Standards.</p>
     </footer>
   </div>
+
+  <script>
+    function speakDiagramDescription(locale) {
+      if (!('speechSynthesis' in window)) {
+        alert("Audio narration is not supported in this browser. Please refer to the text description below the figure.");
+        return;
+      }
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+        return;
+      }
+      var text = locale === 'am' 
+        ? "የስዕል አንድ ነጥብ አንድ የድምፅ ማብራሪያ፡ ይህ የፍሰት ሰንጠረዥ ሶስት ደረጃዎችን ያሳያል። ደረጃ አንድ፡ ረቂቅ የውሳኔ ሃሳብ ከ WCAG ፍተሻ ጋር። ደረጃ ሁለት፡ ዓይነ ስውራን እና መስማት የተሳናቸው ገምጋሚዎች የሚያደርጉት ጥምር ግምገማ። ደረጃ ሶስት፡ የተረጋገጠ ዲጂታል ምስክር ወረቀት ያለው ይፋዊ ህትመት።"
+        : "Audio description for Figure 1.1: Flowchart illustrating three successive phases of the Inclusive Digital Collaboration Cycle. Phase 1 is Draft Proposal with WCAG check and semantic HTML. Phase 2 is Co-Designer Review conducted by blind and deaf evaluators using NVDA, TalkBack, and sign language clarity audits. Phase 3 is Production Release accompanied by an Open Badges 3.0 verifiable credential.";
+      var utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = locale === 'am' ? 'am-ET' : 'en-US';
+      utterance.rate = 0.95;
+      window.speechSynthesis.speak(utterance);
+    }
+  </script>
 </body>
 </html>

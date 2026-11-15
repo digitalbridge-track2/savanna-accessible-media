@@ -54,6 +54,10 @@ export class TranscriptViewer {
     this.render();
   }
 
+  getSegments(): TranscriptSegmentData[] {
+    return [...this.segments];
+  }
+
   setSearchQuery(query: string) {
     this.searchQuery = query.toLowerCase().trim();
     this.render();

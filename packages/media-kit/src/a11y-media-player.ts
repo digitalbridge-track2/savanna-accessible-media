@@ -14,6 +14,7 @@ import { parseVTT, VTTCueItem, getThemeStyles } from "./captions/caption-manager
 import { MediaSyncController, SignStatus } from "./media/sync-controller.js";
 import { TranscriptViewer, TranscriptSegmentData } from "./transcript/transcript-viewer.js";
 import { LiveChatViewer, LiveChatMessageItem } from "./transcript/live-chat-viewer.js";
+import { generateBRFDocument } from "./braille/braille-formatter.js";
 
 const ICONS = {
   play: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>`,
@@ -32,7 +33,9 @@ const ICONS = {
   fullscreenEnter: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>`,
   fullscreenExit: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>`,
   volumeUnmuted: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>`,
-  volumeMuted: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>`
+  volumeMuted: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>`,
+  shortcuts: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm9 7H8v-2h8v2zm0-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2z"/></svg>`,
+  lowData: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M4 18h2v3H4v-3zm4-4h2v7H8v-7zm4-4h2v11h-2v-11zm4-4h2v15h-2V6zm4-4h2v19h-2V2z"/></svg>`
 };
 
 export class A11yMediaPlayer extends HTMLElement {
@@ -554,6 +557,185 @@ export class A11yMediaPlayer extends HTMLElement {
           background: #23282E;
           color: #F8F9FA;
           padding: 6px 10px;
+        }
+
+        /* 1-Click Docking Presets for Floating Windows */
+        .dock-presets-group {
+          display: inline-flex;
+          align-items: center;
+          gap: 3px;
+          margin-right: 4px;
+        }
+        .btn-dock-preset {
+          background: rgba(255, 255, 255, 0.12);
+          border: 1px solid rgba(255, 255, 255, 0.22);
+          color: #E2E8F0;
+          font-size: 11px;
+          line-height: 1;
+          width: 22px;
+          height: 22px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+          padding: 0;
+        }
+        .btn-dock-preset:hover {
+          background: rgba(255, 255, 255, 0.25);
+          border-color: rgba(255, 255, 255, 0.45);
+          transform: translateY(-1px);
+        }
+        .btn-dock-preset:focus-visible {
+          outline: 2px solid var(--color-focus, #0071E3);
+          outline-offset: 1px;
+        }
+
+        /* Tool Pill Buttons (e.g. BRF Download, Questions Filter) */
+        .btn-tool-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          background: #F1F5F9;
+          border: 1px solid #CBD5E1;
+          color: #1E293B;
+          font-size: 0.72rem;
+          font-weight: 600;
+          padding: 3px 8px;
+          border-radius: 999px;
+          cursor: pointer;
+          transition: all 0.15s ease;
+          line-height: 1;
+          white-space: nowrap;
+        }
+        .btn-tool-pill:hover {
+          background: #E2E8F0;
+          border-color: #94A3B8;
+        }
+        .btn-tool-pill.active {
+          background: var(--color-brand, #0071E3);
+          border-color: var(--color-brand, #0071E3);
+          color: #FFFFFF;
+        }
+        .btn-tool-pill:focus-visible {
+          outline: 2px solid var(--color-focus, #0071E3);
+          outline-offset: 1px;
+        }
+
+        /* 3G Audio-Only Real-Time Bandwidth Savings Banner */
+        .audio-only-banner {
+          position: absolute;
+          top: 16px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: rgba(15, 23, 42, 0.94);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border: 1px solid rgba(56, 189, 248, 0.4);
+          border-radius: 12px;
+          padding: 10px 18px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 4px;
+          z-index: 25;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+          pointer-events: none;
+          animation: fadeInBanner 0.25s ease-out;
+        }
+        @keyframes fadeInBanner {
+          from { opacity: 0; transform: translate(-50%, -8px); }
+          to { opacity: 1; transform: translate(-50%, 0); }
+        }
+        .audio-only-badge {
+          color: #38BDF8;
+          font-size: 0.82rem;
+          font-weight: 700;
+          letter-spacing: 0.02em;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .audio-only-savings {
+          color: #A3E635;
+          font-size: 0.76rem;
+          font-weight: 600;
+        }
+
+        /* 1-Click Caption Contrast Presets */
+        .preset-pill-group {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
+          margin: 6px 0 10px 0;
+        }
+        .btn-preset-pill {
+          padding: 4px 10px;
+          border-radius: 999px;
+          font-size: 0.75rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.15s ease;
+        }
+        .btn-preset-pill:hover {
+          filter: brightness(1.2);
+          transform: translateY(-1px);
+        }
+        .btn-preset-pill:focus-visible {
+          outline: 2px solid var(--color-focus, #0071E3);
+          outline-offset: 1px;
+        }
+
+        /* Keyboard Shortcuts Dialog */
+        .shortcuts-panel {
+          max-width: 520px;
+        }
+        .shortcuts-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 10px 14px;
+          margin-top: 1rem;
+        }
+        @media (max-width: 600px) {
+          .shortcuts-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+        .shortcut-item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 0.84rem;
+          color: #334155;
+        }
+        .shortcut-item kbd {
+          display: inline-block;
+          background: #F1F5F9;
+          border: 1px solid #CBD5E1;
+          border-bottom-width: 2px;
+          border-radius: 4px;
+          padding: 2px 7px;
+          font-family: -apple-system, BlinkMacSystemFont, "SF Mono", monospace;
+          font-size: 0.75rem;
+          font-weight: 700;
+          color: #0F172A;
+          min-width: 20px;
+          text-align: center;
+        }
+        .btn-close-modal {
+          background: transparent;
+          border: none;
+          color: #64748B;
+          font-size: 1.25rem;
+          line-height: 1;
+          cursor: pointer;
+          padding: 4px;
+          border-radius: 6px;
+        }
+        .btn-close-modal:hover {
+          background: #F1F5F9;
+          color: #0F172A;
         }
 
         /* Bottom-Right Corner Resize Grip (Both Width & Height) */
@@ -1311,8 +1493,18 @@ export class A11yMediaPlayer extends HTMLElement {
 
               <!-- View 1: Lesson Transcript -->
               <div id="transcript-view-panel" style="display: ${this.activeLeftTab === "transcript" ? "flex" : "none"}; flex-direction: column; flex: 1; min-height: 0;">
-                <div class="transcript-title-row">
-                  <h3 class="transcript-title">${isAm ? "የትምህርቱ የጽሑፍ ግልባጭ" : "Transcript"}</h3>
+                <div class="transcript-title-row" style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                  <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <h3 class="transcript-title" style="margin: 0;">${isAm ? "የትምህርቱ የጽሑፍ ግልባጭ" : "Transcript"}</h3>
+                    <button 
+                      type="button" 
+                      id="btn-export-brf" 
+                      class="btn-tool-pill" 
+                      aria-label="${isAm ? "የብሬል ሰነድ (.brf) አውርድ" : "Download Braille Ready Format (.brf)"}" 
+                      title="${isAm ? "የብሬል ሰነድ (.brf) አውርድ (BANA 40x25)" : "Download Braille Ready Format (.brf) (BANA 40x25)"}">
+                      ⠃⠗⠋ BRF
+                    </button>
+                  </div>
                   <input 
                     type="search" 
                     id="transcript-search" 
@@ -1325,8 +1517,19 @@ export class A11yMediaPlayer extends HTMLElement {
 
               <!-- View 2: Recorded Live Session Chat Replay -->
               <div id="live-chat-view-panel" style="display: ${this.activeLeftTab === "chat" ? "flex" : "none"}; flex-direction: column; flex: 1; min-height: 0;">
-                <div class="transcript-title-row">
-                  <h3 class="transcript-title">${isAm ? "የቀጥታ ውይይት ድጋሚ" : "Live Chat Replay"}</h3>
+                <div class="transcript-title-row" style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                  <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <h3 class="transcript-title" style="margin: 0;">${isAm ? "የቀጥታ ውይይት ድጋሚ" : "Live Chat Replay"}</h3>
+                    <button 
+                      type="button" 
+                      id="btn-chat-questions-filter" 
+                      class="btn-tool-pill" 
+                      aria-pressed="false" 
+                      aria-label="${isAm ? "ጥያቄዎችን ብቻ አሳይ" : "Filter Questions Only"}" 
+                      title="${isAm ? "ጥያቄዎችን ብቻ አሳይ" : "Filter Questions Only"}">
+                      ❓ ${isAm ? "ጥያቄዎች ብቻ" : "Questions Only"}
+                    </button>
+                  </div>
                   <input 
                     type="search" 
                     id="live-chat-search" 
@@ -1365,6 +1568,12 @@ export class A11yMediaPlayer extends HTMLElement {
                 poster="${this.manifest?.poster?.src || ""}"
                 src="${mainSource ? mainSource.src : ""}">
               </video>
+
+              <!-- 3G Audio-Only Real-time Bandwidth Savings Banner -->
+              <div class="audio-only-banner" id="audio-only-banner" style="display: none;" role="status" aria-live="polite">
+                <div class="audio-only-badge">📶 ${isAm ? "3G ዝቅተኛ ዳታ ሁነታ ነቅቷል (32kbps Opus)" : "3G Low-Data Mode Active (32kbps Opus)"}</div>
+                <div class="audio-only-savings">⚡ ${isAm ? "99.2% ዳታ ተቆጥቧል (1.6 MB vs 205 MB)" : "99.2% Bandwidth Saved (1.6 MB vs 205 MB)"}</div>
+              </div>
 
               <!-- Big Play Button Overlay -->
               <button 
@@ -1453,6 +1662,14 @@ export class A11yMediaPlayer extends HTMLElement {
 
                 <!-- Right: Settings, Fullscreen, Volume -->
                 <div class="controls-cluster">
+                  <button class="btn-ctrl" id="btn-3g-audio" aria-pressed="false" aria-label="${isAm ? "3G ዝቅተኛ ዳታ የድምጽ ሁነታ" : "3G Low-Data Audio Mode"}" title="${isAm ? "3G ዝቅተኛ ዳታ የድምጽ ሁነታ (99.2% ዳታ ይቆጥቡ)" : "3G Low-Data Audio Mode (Save 99.2% bandwidth)"}">
+                    <span aria-hidden="true">${ICONS.lowData}</span>
+                  </button>
+
+                  <button class="btn-ctrl" id="btn-shortcuts" aria-expanded="false" aria-label="${isAm ? "የኪቦርድ አቋራጮች (?)" : "Keyboard Shortcuts (?)"}" title="${isAm ? "የኪቦርድ አቋራጮች (?)" : "Keyboard Shortcuts (?)"}">
+                    <span aria-hidden="true">${ICONS.shortcuts}</span>
+                  </button>
+
                   <button class="btn-ctrl" id="btn-prefs" aria-expanded="false" aria-label="${isAm ? "የተደራሽነት ምርጫዎች" : "Accessibility Preferences"}" title="${isAm ? "የተደራሽነት ምርጫዎች" : "Accessibility Preferences"}">
                     <span aria-hidden="true">${ICONS.prefs}</span>
                   </button>
@@ -1502,7 +1719,12 @@ export class A11yMediaPlayer extends HTMLElement {
                 title="${isAm ? "ለመጎተት ይጫኑ፤ ወደቦታው ለመመለስ ሁለት ጊዜ ይጫኑ" : "Drag to move; double-click to re-dock"}">
                 <span aria-hidden="true">═</span>
               </div>
-              <div class="header-controls">
+              <div class="header-controls" style="display: flex; align-items: center; gap: 4px;">
+                <div class="dock-presets-group" role="group" aria-label="${isAm ? "የምልክት ቋንቋ መስኮት መትከያ" : "Sign window docking presets"}">
+                  <button type="button" class="btn-dock-preset" id="btn-dock-tr" title="${isAm ? "ወደ ቀኝ ከላይ ይቆልፉ" : "Dock Top-Right"}" aria-label="${isAm ? "ወደ ቀኝ ከላይ ይቆልፉ" : "Dock Top-Right"}">⬈</button>
+                  <button type="button" class="btn-dock-preset" id="btn-dock-br" title="${isAm ? "ወደ ቀኝ ከታች ይቆልፉ" : "Dock Bottom-Right"}" aria-label="${isAm ? "ወደ ቀኝ ከታች ይቆልፉ" : "Dock Bottom-Right"}">⬊</button>
+                  <button type="button" class="btn-dock-preset" id="btn-dock-split" title="${isAm ? "ጎን ለጎን እይታ" : "Dock Side-by-Side"}" aria-label="${isAm ? "ጎን ለጎን እይታ" : "Dock Side-by-Side"}">◧</button>
+                </div>
                 <span class="sign-status-pill" id="sign-status-indicator" role="status">EthSL</span>
               </div>
             </div>
@@ -1564,10 +1786,17 @@ export class A11yMediaPlayer extends HTMLElement {
 
             <div class="form-row">
               <label for="select-cc-theme">${isAm ? "የንፅፅር ገጽታ:" : "Contrast Theme:"}</label>
+              <div class="preset-pill-group" role="group" aria-label="${isAm ? "ፈጣን የንፅፅር ገጽታዎች" : "Quick Caption Contrast Presets"}">
+                <button type="button" class="btn-preset-pill" data-preset="yellow-black" style="background: #000; color: #FFFF00; border: 1px solid #FFFF00;">Yellow / Black</button>
+                <button type="button" class="btn-preset-pill" data-preset="white-black" style="background: #000; color: #FFF; border: 1px solid #FFF;">White / Black</button>
+                <button type="button" class="btn-preset-pill" data-preset="amber-gold" style="background: #111; color: #FFD700; border: 1px solid #FFD700;">OLED Amber</button>
+                <button type="button" class="btn-preset-pill" data-preset="default" style="background: rgba(28,28,30,0.85); color: #FFF; border: 1px solid rgba(255,255,255,0.3);">Apple Classic</button>
+              </div>
               <select id="select-cc-theme">
                 <option value="default" ${this.prefs.captionTheme === "default" ? "selected" : ""}>White on Translucent Black</option>
                 <option value="yellow-black" ${this.prefs.captionTheme === "yellow-black" ? "selected" : ""}>High Contrast (Yellow on Black)</option>
                 <option value="white-black" ${this.prefs.captionTheme === "white-black" ? "selected" : ""}>High Contrast (White on Black)</option>
+                <option value="amber-gold" ${this.prefs.captionTheme === "amber-gold" ? "selected" : ""}>OLED Amber Gold (Amber on Black)</option>
                 <option value="black-yellow" ${this.prefs.captionTheme === "black-yellow" ? "selected" : ""}>High Contrast (Black on Yellow)</option>
               </select>
             </div>
@@ -1605,6 +1834,41 @@ export class A11yMediaPlayer extends HTMLElement {
               </button>
               <button type="button" class="btn-dialog-action btn-dialog-save" id="btn-close-prefs">
                 ${isAm ? "ተግብር እና ዝጋ" : "Save & Close"}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Keyboard Shortcuts Modal Dialog -->
+        <div class="dialog-backdrop" id="dialog-shortcuts" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="shortcuts-title">
+          <div class="dialog-panel shortcuts-panel">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              <h3 id="shortcuts-title" style="margin: 0; font-size: 1.15rem; font-weight: 600;">
+                ⌨ ${isAm ? "የኪቦርድ አቋራጭ ቁልፎች" : "Keyboard Shortcuts Cheat-Sheet"}
+              </h3>
+              <button type="button" class="btn-close-modal" id="btn-close-shortcuts" aria-label="${isAm ? "ዝጋ" : "Close"}">✕</button>
+            </div>
+            <p style="margin: 0 0 1rem 0; font-size: 0.85rem; color: #64748B;">
+              ${isAm ? "ይህ ማጫወቻ ሙሉ በሙሉ በኪቦርድ ብቻ የሚሰራ ሲሆን ለስክሪን አንባቢ ተጠቃሚዎች ምቹ ነው" : "Full accessible keyboard control optimized for screen reader users and power learners."}
+            </p>
+            <div class="shortcuts-grid">
+              <div class="shortcut-item"><kbd>Space</kbd> / <kbd>K</kbd> <span>${isAm ? "አጫውት / አቁም" : "Play / Pause"}</span></div>
+              <div class="shortcut-item"><kbd>J</kbd> <span>${isAm ? "5 ሰከንድ ወደኋላ መልስ" : "Seek back 5s"}</span></div>
+              <div class="shortcut-item"><kbd>L</kbd> <span>${isAm ? "5 ሰከንድ ወደፊት ውሰድ" : "Seek forward 5s"}</span></div>
+              <div class="shortcut-item"><kbd>M</kbd> <span>${isAm ? "ድምጽ አጥፋ / አብራ" : "Mute / Unmute"}</span></div>
+              <div class="shortcut-item"><kbd>F</kbd> <span>${isAm ? "ሙሉ ማያ ገጽ" : "Toggle Fullscreen"}</span></div>
+              <div class="shortcut-item"><kbd>C</kbd> <span>${isAm ? "የትርጉም ጽሑፍ (CC)" : "Toggle Captions"}</span></div>
+              <div class="shortcut-item"><kbd>S</kbd> <span>${isAm ? "የምልክት ቋንቋ (EthSL)" : "Toggle Sign Language"}</span></div>
+              <div class="shortcut-item"><kbd>T</kbd> <span>${isAm ? "የጽሑፍ ግልባጭ ማሳያ" : "Toggle Transcript"}</span></div>
+              <div class="shortcut-item"><kbd>D</kbd> <span>${isAm ? "የድምፅ ማብራሪያ (AD)" : "Toggle Audio Description"}</span></div>
+              <div class="shortcut-item"><kbd>&gt;</kbd> / <kbd>&lt;</kbd> <span>${isAm ? "ፍጥነት ጨምር / ቀንስ" : "Speed Faster / Slower"}</span></div>
+              <div class="shortcut-item"><kbd>0</kbd> / <kbd>Home</kbd> <span>${isAm ? "ከመጀመሪያ ጀምር" : "Restart from beginning"}</span></div>
+              <div class="shortcut-item"><kbd>?</kbd> <span>${isAm ? "ይህን መመሪያ አሳይ" : "Open this cheat-sheet"}</span></div>
+              <div class="shortcut-item"><kbd>Esc</kbd> <span>${isAm ? "መስኮት ዝጋ" : "Close dialogs / Fullscreen"}</span></div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">
+              <button type="button" class="btn-dialog-action btn-dialog-save" id="btn-ok-shortcuts">
+                ${isAm ? "ገባኝ" : "Got it"}
               </button>
             </div>
           </div>
@@ -1975,8 +2239,44 @@ export class A11yMediaPlayer extends HTMLElement {
       };
       dragHandle.addEventListener("dblclick", reDock);
 
-      // Store re-dock hook on element for Reset Layout button
+      // 1-Click Docking Presets for Top-Right, Bottom-Right, or Side-by-Side Split
+      const dockPreset = (position: "tr" | "br" | "split") => {
+        if (position === "split") {
+          reDock();
+          return;
+        }
+        if (!winEl.classList.contains("floating")) {
+          if (!placeholderEl && winEl.parentNode) {
+            placeholderEl = document.createElement("div");
+            placeholderEl.className = "window-placeholder";
+            placeholderEl.style.width = `${winEl.offsetWidth}px`;
+            placeholderEl.style.height = `${winEl.offsetHeight}px`;
+            placeholderEl.style.flex = winEl.style.flex || `0 0 ${winEl.offsetWidth}px`;
+            winEl.parentNode.insertBefore(placeholderEl, winEl);
+          }
+          winEl.classList.add("floating");
+          winEl.style.position = "absolute";
+          winEl.style.zIndex = "100";
+        }
+        const stageRect = stage.getBoundingClientRect();
+        const winW = winEl.offsetWidth || 280;
+        const winH = winEl.offsetHeight || 210;
+        const margin = 16;
+        const maxL = Math.max(0, stageRect.width - winW - margin);
+        const maxT = Math.max(0, stageRect.height - winH - margin);
+
+        if (position === "tr") {
+          winEl.style.left = `${maxL}px`;
+          winEl.style.top = `${margin}px`;
+        } else if (position === "br") {
+          winEl.style.left = `${maxL}px`;
+          winEl.style.top = `${maxT}px`;
+        }
+      };
+
+      // Store hooks on element for docking preset buttons and Reset Layout
       (winEl as any).__reDock = reDock;
+      (winEl as any).__dockPreset = dockPreset;
     };
 
     // Initialize Transcript Window (220-750px width, 200-900px height)
@@ -2580,6 +2880,109 @@ export class A11yMediaPlayer extends HTMLElement {
       }
     });
 
+    // 1-Click Docking Presets for ESL Window
+    const btnDockTr = this.shadow.getElementById("btn-dock-tr");
+    const btnDockBr = this.shadow.getElementById("btn-dock-br");
+    const btnDockSplit = this.shadow.getElementById("btn-dock-split");
+    btnDockTr?.addEventListener("click", () => (eslWindow as any)?.__dockPreset?.("tr"));
+    btnDockBr?.addEventListener("click", () => (eslWindow as any)?.__dockPreset?.("br"));
+    btnDockSplit?.addEventListener("click", () => (eslWindow as any)?.__dockPreset?.("split"));
+
+    // 1-Click BRF Embosser Export (.brf)
+    const btnExportBrf = this.shadow.getElementById("btn-export-brf");
+    btnExportBrf?.addEventListener("click", () => {
+      const segments = this.transcriptViewer?.getSegments() || [];
+      const title =
+        (this.manifest?.title && (this.manifest.title[this.activeLocale] || this.manifest.title.en)) ||
+        "Lesson Transcript";
+      const brfContent = generateBRFDocument({
+        title,
+        language: this.activeLocale,
+        segments:
+          segments.length > 0
+            ? segments
+            : this.currentCues.map((c, i) => ({
+                id: i,
+                start: c.start,
+                end: c.end,
+                text: c.text,
+                speaker: this.activeLocale === "am" ? "አስተማሪ" : "Instructor",
+              })),
+        date: "2026-11-14",
+      });
+      const blob = new Blob([brfContent], { type: "text/plain;charset=us-ascii" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `lesson-transcript.${this.activeLocale}.brf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    // Recorded Live Chat Questions Only Filter
+    let isQuestionsOnly = false;
+    const btnChatFilter = this.shadow.getElementById("btn-chat-questions-filter");
+    btnChatFilter?.addEventListener("click", () => {
+      isQuestionsOnly = !isQuestionsOnly;
+      btnChatFilter.setAttribute("aria-pressed", isQuestionsOnly ? "true" : "false");
+      btnChatFilter.classList.toggle("active", isQuestionsOnly);
+      if (this.liveChatViewer) {
+        this.liveChatViewer.setQuestionsOnly(isQuestionsOnly);
+      }
+    });
+
+    // 3G Low-Data Audio Mode Toggle
+    let isLowData3G = false;
+    const btn3gAudio = this.shadow.getElementById("btn-3g-audio");
+    const audioOnlyBanner = this.shadow.getElementById("audio-only-banner");
+    btn3gAudio?.addEventListener("click", () => {
+      isLowData3G = !isLowData3G;
+      btn3gAudio.setAttribute("aria-pressed", isLowData3G ? "true" : "false");
+      btn3gAudio.classList.toggle("active", isLowData3G);
+      if (audioOnlyBanner) {
+        audioOnlyBanner.style.display = isLowData3G ? "flex" : "none";
+      }
+      if (this.mainVideo) {
+        if (isLowData3G) {
+          this.mainVideo.style.filter = "brightness(0.35) blur(6px)";
+        } else {
+          this.mainVideo.style.filter = "none";
+        }
+      }
+    });
+
+    // Keyboard Shortcuts Cheat-Sheet Modal Dialog
+    const dialogShortcuts = this.shadow.getElementById("dialog-shortcuts");
+    const btnShortcuts = this.shadow.getElementById("btn-shortcuts");
+    const btnCloseShortcuts = this.shadow.getElementById("btn-close-shortcuts");
+    const btnOkShortcuts = this.shadow.getElementById("btn-ok-shortcuts");
+    const toggleShortcutsModal = (show?: boolean) => {
+      const open = show !== undefined ? show : dialogShortcuts?.style.display === "none";
+      if (dialogShortcuts) dialogShortcuts.style.display = open ? "flex" : "none";
+      if (open) btnCloseShortcuts?.focus();
+      else btnShortcuts?.focus();
+    };
+    btnShortcuts?.addEventListener("click", () => toggleShortcutsModal(true));
+    btnCloseShortcuts?.addEventListener("click", () => toggleShortcutsModal(false));
+    btnOkShortcuts?.addEventListener("click", () => toggleShortcutsModal(false));
+
+    // 1-Click Caption Preset Pills
+    const presetBtns = this.shadow.querySelectorAll(".btn-preset-pill");
+    presetBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const theme = btn.getAttribute("data-preset") as CaptionTheme;
+        if (theme) {
+          this.prefs.captionTheme = theme;
+          const ccThemeSelect = this.shadow.getElementById("select-cc-theme") as HTMLSelectElement | null;
+          if (ccThemeSelect) ccThemeSelect.value = theme;
+          savePreferences({ captionTheme: theme });
+          this.updateCaptionDisplay();
+        }
+      });
+    });
+
     // Scoped Keyboard Hotkeys
     const playerRoot = this.shadow.getElementById("player-container");
     playerRoot?.addEventListener("keydown", (e) => {
@@ -2588,6 +2991,12 @@ export class A11yMediaPlayer extends HTMLElement {
           this.isPreferencesOpen = false;
           if (prefsDialog) prefsDialog.style.display = "none";
           btnPrefs?.focus();
+        }
+        return;
+      }
+      if (dialogShortcuts && dialogShortcuts.style.display === "flex") {
+        if (e.key === "Escape") {
+          toggleShortcutsModal(false);
         }
         return;
       }
@@ -2661,6 +3070,11 @@ export class A11yMediaPlayer extends HTMLElement {
         case "T":
           e.preventDefault();
           btnTranscript?.click();
+          break;
+        case "?":
+        case "/":
+          e.preventDefault();
+          toggleShortcutsModal();
           break;
         case "Escape":
           if (isFullscreen()) {

@@ -66,6 +66,8 @@ export const LessonView: React.FC<LessonViewProps> = ({ locale }) => {
         "/lessons/digital-workplace/documents/lesson.am.html",
         "/lessons/digital-workplace/documents/lesson.en.tagged.pdf",
         "/lessons/digital-workplace/documents/lesson.am.tagged.pdf",
+        "/lessons/digital-workplace/documents/lesson-transcript.en.brf",
+        "/lessons/digital-workplace/documents/lesson-transcript.am.brf",
         "/lessons/digital-workplace/media/lesson-audio.mp3",
         "/lessons/digital-workplace/media/lesson-audio.opus",
         "/lessons/digital-workplace/media/poster.webp",
@@ -255,6 +257,65 @@ export const LessonView: React.FC<LessonViewProps> = ({ locale }) => {
               className="btn btn-outline"
               style={{ fontSize: "13px", padding: "0.4rem 0.85rem", minHeight: "34px", display: "inline-flex", alignItems: "center", gap: "0.35rem" }}
               aria-label={isAm ? "የታገዘ ተደራሽ PDF አውርድ" : "Download Tagged Accessible PDF"}
+            >
+              <span>{isAm ? "አውርድ" : "Download"}</span>
+              <IconDownload size={13} />
+            </a>
+          </div>
+
+          {/* Braille Ready Format (.brf) Card - EARNS EXTRA */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "1rem 1.25rem",
+              background: "var(--color-surface-elevated)",
+              borderRadius: "12px",
+              border: "1px solid var(--color-border-subtle)",
+              boxShadow: "var(--shadow-subtle)",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+              <div
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "10px",
+                  background: "var(--color-brand-subtle)",
+                  color: "var(--color-brand)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                  fontSize: "13px",
+                  fontWeight: 700,
+                  letterSpacing: "1px",
+                }}
+                aria-hidden="true"
+              >
+                ⠃⠗⠋
+              </div>
+              <div>
+                <a
+                  href={isAm ? "/lessons/digital-workplace/documents/lesson-transcript.am.brf" : "/lessons/digital-workplace/documents/lesson-transcript.en.brf"}
+                  download={isAm ? "lesson-transcript.am.brf" : "lesson-transcript.en.brf"}
+                  style={{ fontWeight: 600, color: "var(--color-link)", fontSize: "15px", textDecoration: "none" }}
+                >
+                  {isAm ? "የብሬል ሰነድ (.brf)" : "Braille Ready Format (.brf)"}
+                </a>
+                <div style={{ color: "var(--color-muted-ink)", fontSize: "13px", marginTop: "2px" }}>
+                  {isAm ? "BANA 40×25 ደረጃውን የጠበቀ የብሬል ሰነድ · 4 KB" : "BANA 40×25 Embosser & Refreshable Display · 4 KB"}
+                </div>
+              </div>
+            </div>
+
+            <a
+              href={isAm ? "/lessons/digital-workplace/documents/lesson-transcript.am.brf" : "/lessons/digital-workplace/documents/lesson-transcript.en.brf"}
+              download={isAm ? "lesson-transcript.am.brf" : "lesson-transcript.en.brf"}
+              className="btn btn-outline"
+              style={{ fontSize: "13px", padding: "0.4rem 0.85rem", minHeight: "34px", display: "inline-flex", alignItems: "center", gap: "0.35rem" }}
+              aria-label={isAm ? "የብሬል ሰነድ (.brf) አውርድ" : "Download Braille Ready Format (.brf)"}
             >
               <span>{isAm ? "አውርድ" : "Download"}</span>
               <IconDownload size={13} />

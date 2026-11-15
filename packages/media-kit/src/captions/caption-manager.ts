@@ -84,6 +84,10 @@ export function getThemeStyles(theme: CaptionTheme, size: CaptionSize): string {
     color = "#000000";
     background = "#FFEB3B";
     border = "2px solid #000000";
+  } else if (theme === "amber-gold") {
+    color = "#FFD700";
+    background = "#000000";
+    border = "2px solid #FFD700";
   }
 
   return `

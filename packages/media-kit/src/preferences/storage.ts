@@ -1,4 +1,4 @@
-export type CaptionTheme = "default" | "yellow-black" | "white-black" | "black-yellow";
+export type CaptionTheme = "default" | "yellow-black" | "white-black" | "black-yellow" | "amber-gold";
 export type CaptionSize = "small" | "medium" | "large" | "xlarge";
 export type ESLPosition = "top-right" | "top-left" | "bottom-right" | "bottom-left";
 export type ESLSize = "small" | "medium" | "large";

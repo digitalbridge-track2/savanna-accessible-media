@@ -284,6 +284,16 @@
         </p>
 
         <figure>
+          <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
+            <button
+              type="button"
+              id="btn-speak-diagram"
+              onclick="speakDiagramDescription('am')"
+              style="background: #0071E3; color: #FFFFFF; border: none; border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;"
+              aria-label="የንድፉን የድምፅ ማብራሪያ አድምጥ (ንድፍ 1.1)">
+              🔊 የንድፉን የድምፅ ማብራሪያ አድምጥ
+            </button>
+          </div>
           <div class="diagram-box" role="img" aria-label="ሦስት ተከታታይ ደረጃዎችን የሚያሳይ ንድፍ፡ ደረጃ 1 የረቂቅ ሰነድ ዝግጅት፣ ደረጃ 2 በአካል ጉዳተኛ የትብብር አባላት የሚደረግ ግምገማ፣ ደረጃ 3 የተረጋገጠ የመጨረሻ ህትመት።">
             <div class="step-card">
               <span class="badge">ደረጃ 1</span>
@@ -305,6 +315,9 @@
           </div>
           <figcaption>
             <strong>ንድፍ 1.1: አካታች የዲጂታል ትብብር ዑደት።</strong> ከረቂቅ ጀምሮ እስከ ተባባሪ አባላት ግምገማ እና ይፋዊ ህትመት። ሁሉም ደረጃዎች አማራጭ ጽሑፍ እና ግልጽ አርእስቶችን ይጠይቃሉ።
+            <div style="margin-top: 8px; padding: 8px 12px; background: rgba(0, 113, 227, 0.08); border-left: 3px solid #0071E3; border-radius: 4px; font-size: 12.5px;">
+              <strong>የታክታይል (የዳሰሳ) ማባዣ ማስታወሻ፡</strong> በሙቀት አብጣሪ ወረቀት (Swell paper) ወይም በታክታይል ኢምቦሰር ለሚጠቀሙ ዓይነ ስውራን ተማሪዎች፣ ሦስት አግድም 4 ሳ.ሜ አራት ማዕዘኖችን ከግራ ወደ ቀኝ በተነሱ ቀስቶች አገናኝተው ያትሙ። በኢትዮጵያ የብሬል ፊደላት <code>⠠⠏⠓⠁⠎⠑ ⠼⠁</code> (ደረጃ 1)፣ <code>⠠⠏⠓⠁⠎⠑ ⠼⠃</code> (ደረጃ 2) እና <code>⠠⠏⠓⠁⠎⠑ ⠼⠉</code> (ደረጃ 3) ተብለው ይሰየማሉ።
+            </div>
           </figcaption>
         </figure>
 
@@ -346,5 +359,25 @@
       <p>በWCAG 2.2 Level AA እና በOpen Badges 3.0 ዓለም አቀፍ ደረጃዎች መሠረት የታተመ።</p>
     </footer>
   </div>
+
+  <script>
+    function speakDiagramDescription(locale) {
+      if (!('speechSynthesis' in window)) {
+        alert("የድምፅ ንባብ በዚህ ብሮውዘር አይደገፍም። እባክዎ ከስዕሉ በታች ያለውን ጽሑፍ ይመልከቱ።");
+        return;
+      }
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+        return;
+      }
+      var text = locale === 'am' 
+        ? "የስዕል አንድ ነጥብ አንድ የድምፅ ማብራሪያ፡ ይህ የፍሰት ሰንጠረዥ ሶስት ደረጃዎችን ያሳያል። ደረጃ አንድ፡ ረቂቅ የውሳኔ ሃሳብ ከ WCAG ፍተሻ ጋር። ደረጃ ሁለት፡ ዓይነ ስውራን እና መስማት የተሳናቸው ገምጋሚዎች የሚያደርጉት ጥምር ግምገማ። ደረጃ ሶስት፡ የተረጋገጠ ዲጂታል ምስክር ወረቀት ያለው ይፋዊ ህትመት።"
+        : "Audio description for Figure 1.1: Flowchart illustrating three successive phases of the Inclusive Digital Collaboration Cycle. Phase 1 is Draft Proposal with WCAG check and semantic HTML. Phase 2 is Co-Designer Review conducted by blind and deaf evaluators using NVDA, TalkBack, and sign language clarity audits. Phase 3 is Production Release accompanied by an Open Badges 3.0 verifiable credential.";
+      var utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = locale === 'am' ? 'am-ET' : 'en-US';
+      utterance.rate = 0.95;
+      window.speechSynthesis.speak(utterance);
+    }
+  </script>
 </body>
 </html>

@@ -20,6 +20,7 @@ export class LiveChatViewer {
   private currentTime = 0;
   private searchQuery = "";
   private isAutoScroll = true;
+  private isQuestionsOnly = false;
   private listElement: HTMLElement | null = null;
   private currentActiveId: string | null = null;
 
@@ -44,6 +45,13 @@ export class LiveChatViewer {
   setSearchQuery(query: string) {
     this.searchQuery = query.toLowerCase().trim();
     this.render();
+  }
+
+  setQuestionsOnly(enabled: boolean) {
+    if (this.isQuestionsOnly !== enabled) {
+      this.isQuestionsOnly = enabled;
+      this.render();
+    }
   }
 
   setAutoScroll(enabled: boolean) {
@@ -110,6 +118,9 @@ export class LiveChatViewer {
     }
 
     const filtered = this.messages.filter((m) => {
+      const isQuestion = m.message.en.includes("?") || m.message.am.includes("?") || m.message.am.includes("፧");
+      if (this.isQuestionsOnly && !isQuestion) return false;
+
       if (!this.searchQuery) return true;
       const text = (isAm ? m.message.am : m.message.en).toLowerCase();
       const sender = m.sender.toLowerCase();
@@ -123,13 +134,35 @@ export class LiveChatViewer {
             const isDelivered = m.timestamp <= this.currentTime;
             const isLatest = m.id === this.currentActiveId;
             const isInstructor = m.role === "instructor";
+            const isTA = m.role === "ta";
+            const isQuestion = m.message.en.includes("?") || m.message.am.includes("?") || m.message.am.includes("፧");
+            
             const roleLabel = isInstructor
-              ? isAm
-                ? "አስተማሪ"
-                : "Instructor"
-              : isAm
-              ? "ተማሪ"
-              : "Student";
+              ? (isAm ? "አስተማሪ" : "Instructor")
+              : isTA
+              ? (isAm ? "ረዳት" : "TA")
+              : (isAm ? "ተማሪ" : "Student");
+            
+            const roleBg = isInstructor
+              ? "rgba(0, 113, 227, 0.12)"
+              : isTA
+              ? "rgba(16, 185, 129, 0.14)"
+              : "var(--color-surface, #F1F5F9)";
+            
+            const roleColor = isInstructor
+              ? "var(--color-brand, #0071E3)"
+              : isTA
+              ? "#059669"
+              : "var(--color-muted-ink, #475569)";
+
+            const borderAccent = isLatest
+              ? "var(--color-brand, #0071E3)"
+              : isInstructor
+              ? "#0071E3"
+              : isTA
+              ? "#10B981"
+              : "var(--color-border, #CBD5E1)";
+
             const msgContent = isAm ? m.message.am : m.message.en;
             const seekLabel = isAm
               ? `ወደ ${m.timeDisplay} ይዝለሉ እና የ ${m.sender} ጥያቄ ያዳምጡ`
@@ -149,25 +182,27 @@ export class LiveChatViewer {
                   flex-direction: column;
                   padding: 0.65rem 0.85rem;
                   border-radius: 6px;
-                  background: ${isLatest ? "#EFF6FF" : isInstructor ? "#F8FAFC" : "#FFFFFF"};
-                  border: 1px solid ${isLatest ? "#93C5FD" : "#E2E8F0"};
-                  border-left: 3.5px solid ${isLatest ? "#0071E3" : isInstructor ? "#10B981" : "#94A3B8"};
+                  background: ${isLatest ? "var(--color-brand-subtle, #EFF6FF)" : "var(--color-surface-elevated, #FFFFFF)"};
+                  border: 1px solid var(--color-border-subtle, #E2E8F0);
+                  border-left: 3.5px solid ${borderAccent};
+                  color: var(--color-ink, inherit);
                   cursor: pointer;
                   transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
                   opacity: ${isDelivered ? "1" : "0.55"};
                 ">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem; gap: 0.5rem;">
-                  <div style="display: flex; align-items: center; gap: 0.4rem;">
-                    <span style="font-weight: 600; font-size: 0.82rem; color: #0F172A;">${m.sender}</span>
+                  <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
+                    <span style="font-weight: 600; font-size: 0.82rem; color: var(--color-ink, #0F172A);">${m.sender}</span>
                     <span style="
                       font-size: 0.68rem;
                       font-weight: 700;
                       text-transform: uppercase;
-                      padding: 1px 5px;
+                      padding: 1px 6px;
                       border-radius: 4px;
-                      background: ${isInstructor ? "#D1FAE5" : "#E2E8F0"};
-                      color: ${isInstructor ? "#065F46" : "#475569"};
+                      background: ${roleBg};
+                      color: ${roleColor};
                     ">${roleLabel}</span>
+                    ${isQuestion ? `<span style="font-size: 0.68rem; font-weight: 600; background: rgba(217, 119, 6, 0.15); color: #B45309; padding: 1px 5px; border-radius: 4px;">❓ ${isAm ? "ጥያቄ" : "Question"}</span>` : ""}
                   </div>
                   <span 
                     class="btn-chat-timestamp" 
@@ -175,16 +210,16 @@ export class LiveChatViewer {
                       font-family: monospace;
                       font-size: 0.75rem;
                       font-weight: 600;
-                      color: #0071E3;
-                      background: #F0F6FF;
+                      color: var(--color-brand, #0071E3);
+                      background: var(--color-surface, #F0F6FF);
                       padding: 2px 6px;
                       border-radius: 4px;
-                      border: 1px solid #BFDBFE;
+                      border: 1px solid var(--color-border, #BFDBFE);
                     ">
                     ▶ ${m.timeDisplay}
                   </span>
                 </div>
-                <div style="font-size: 0.85rem; line-height: 1.45; color: #334155;">
+                <div style="font-size: 0.85rem; line-height: 1.45; color: var(--color-ink, #334155);">
                   ${msgContent}
                 </div>
               </li>
