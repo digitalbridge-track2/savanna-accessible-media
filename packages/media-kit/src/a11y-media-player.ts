@@ -71,6 +71,8 @@ export class A11yMediaPlayer extends HTMLElement {
   private isPreferencesOpen = false;
   private isQualityMenuOpen = false;
   private isShortcutsOpen = false;
+  private activePopover: "quality" | "shortcuts" | "prefs" | null = null;
+  private onOutsidePointerDown: ((e: PointerEvent) => void) | null = null;
   private isAudioMode = false;
   private currentQuality: VideoQuality = "auto";
   private qualityToastTimer: number | null = null;
@@ -99,6 +101,10 @@ export class A11yMediaPlayer extends HTMLElement {
 
   disconnectedCallback() {
     window.removeEventListener("db-player:captions-updated", this.onCaptionsUpdated);
+    if (this.onOutsidePointerDown) {
+      window.removeEventListener("pointerdown", this.onOutsidePointerDown);
+      this.onOutsidePointerDown = null;
+    }
     if (this.syncController) {
       this.syncController.destroy();
     }
@@ -3527,38 +3533,98 @@ export class A11yMediaPlayer extends HTMLElement {
     const btnCloseShortcuts = this.shadow.getElementById("btn-close-shortcuts");
     const btnOkShortcuts = this.shadow.getElementById("btn-ok-shortcuts");
 
-    const closeQualityMenu = () => {
-      if (!this.isQualityMenuOpen) return;
-      this.isQualityMenuOpen = false;
+    const ccLangSelect = this.shadow.getElementById("select-cc-lang") as HTMLSelectElement | null;
+    const ccSizeSelect = this.shadow.getElementById("select-cc-size") as HTMLSelectElement | null;
+    const ccThemeSelect = this.shadow.getElementById("select-cc-theme") as HTMLSelectElement | null;
+    const selectVideoQuality = this.shadow.getElementById("select-video-quality") as HTMLSelectElement | null;
+    const toggleEslSelect = this.shadow.getElementById("toggle-esl-visibility") as HTMLSelectElement | null;
+    const toggleTransSelect = this.shadow.getElementById("toggle-transcript-visibility") as HTMLSelectElement | null;
+    const toggleAdSelect = this.shadow.getElementById("toggle-ad-enabled") as HTMLSelectElement | null;
+
+    // Unified Popover Controller: Guarantee strictly one open at a time, seamless 2-way toggle
+    const closeAllPopovers = () => {
       if (qualityMenu) qualityMenu.style.display = "none";
+      if (dialogShortcuts) dialogShortcuts.style.display = "none";
+      if (prefsDialog) prefsDialog.style.display = "none";
+
       btnQuality?.classList.remove("is-active");
       btnQuality?.setAttribute("aria-expanded", "false");
+
+      btnShortcuts?.classList.remove("is-active");
+      btnShortcuts?.setAttribute("aria-expanded", "false");
+
+      btnPrefs?.classList.remove("is-active");
+      btnPrefs?.setAttribute("aria-expanded", "false");
+
+      this.activePopover = null;
+      this.isQualityMenuOpen = false;
+      this.isPreferencesOpen = false;
+      this.isShortcutsOpen = false;
     };
 
-    const openQualityMenu = () => {
-      closePrefs();
-      closeShortcuts();
-      this.isQualityMenuOpen = true;
-      if (qualityMenu) qualityMenu.style.display = "flex";
-      btnQuality?.classList.add("is-active");
-      btnQuality?.setAttribute("aria-expanded", "true");
-      const activeItem = (this.shadow.querySelector(`.quality-menu-item[data-quality="${this.currentQuality}"]`) as HTMLElement)
-        || (this.shadow.querySelector(".quality-menu-item") as HTMLElement);
-      activeItem?.focus();
-    };
+    const openPopover = (which: "quality" | "shortcuts" | "prefs") => {
+      // 1. Unconditionally dismiss any currently active popover (guarantees zero overlap)
+      closeAllPopovers();
 
-    const toggleQualityMenu = () => {
-      if (this.isQualityMenuOpen) {
-        closeQualityMenu();
-      } else {
-        openQualityMenu();
+      // 2. Open only the requested popover
+      if (which === "quality") {
+        this.activePopover = "quality";
+        this.isQualityMenuOpen = true;
+        if (qualityMenu) qualityMenu.style.display = "flex";
+        btnQuality?.classList.add("is-active");
+        btnQuality?.setAttribute("aria-expanded", "true");
+        const activeItem = (this.shadow.querySelector(`.quality-menu-item[data-quality="${this.currentQuality}"]`) as HTMLElement)
+          || (this.shadow.querySelector(".quality-menu-item") as HTMLElement);
+        activeItem?.focus();
+      } else if (which === "shortcuts") {
+        this.activePopover = "shortcuts";
+        this.isShortcutsOpen = true;
+        if (dialogShortcuts) dialogShortcuts.style.display = "flex";
+        btnShortcuts?.classList.add("is-active");
+        btnShortcuts?.setAttribute("aria-expanded", "true");
+        btnCloseShortcuts?.focus();
+      } else if (which === "prefs") {
+        this.activePopover = "prefs";
+        this.isPreferencesOpen = true;
+
+        if (selectVideoQuality) selectVideoQuality.value = this.currentQuality;
+        if (ccLangSelect) ccLangSelect.value = this.prefs.captionLanguage;
+        if (ccSizeSelect) ccSizeSelect.value = this.prefs.captionSize;
+        if (ccThemeSelect) ccThemeSelect.value = this.prefs.captionTheme;
+        if (toggleEslSelect) toggleEslSelect.value = this.prefs.eslVisible ? "show" : "hide";
+        if (toggleTransSelect) toggleTransSelect.value = this.prefs.transcriptVisible !== false ? "show" : "hide";
+        if (toggleAdSelect) toggleAdSelect.value = this.prefs.audioDescriptionEnabled ? "on" : "off";
+
+        if (prefsDialog) prefsDialog.style.display = "flex";
+        btnPrefs?.classList.add("is-active");
+        btnPrefs?.setAttribute("aria-expanded", "true");
+        ccLangSelect?.focus();
       }
     };
+
+    const togglePopover = (which: "quality" | "shortcuts" | "prefs") => {
+      if (this.activePopover === which) {
+        closeAllPopovers();
+      } else {
+        openPopover(which);
+      }
+    };
+
+    // Prevent pointerdown on buttons and inside popovers from bubbling to the outside-click listener
+    const stopBubble = (e: Event) => e.stopPropagation();
+    btnQuality?.addEventListener("pointerdown", stopBubble);
+    btnShortcuts?.addEventListener("pointerdown", stopBubble);
+    btnPrefs?.addEventListener("pointerdown", stopBubble);
+    btnTranscriptPrefs?.addEventListener("pointerdown", stopBubble);
+    btnEslPrefs?.addEventListener("pointerdown", stopBubble);
+    qualityMenu?.addEventListener("pointerdown", stopBubble);
+    dialogShortcuts?.addEventListener("pointerdown", stopBubble);
+    prefsDialog?.addEventListener("pointerdown", stopBubble);
 
     btnQuality?.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
-      toggleQualityMenu();
+      togglePopover("quality");
     });
 
     const qualityBtns = this.shadow.querySelectorAll(".quality-menu-item");
@@ -3568,116 +3634,47 @@ export class A11yMediaPlayer extends HTMLElement {
         e.stopPropagation();
         const q = btn.getAttribute("data-quality") as VideoQuality;
         if (q) {
-          closeQualityMenu();
+          closeAllPopovers();
           btnQuality?.focus();
           this.applyQuality(q).catch((err) => console.warn("Quality apply error:", err));
         }
       });
     });
 
-    const ccLangSelect = this.shadow.getElementById("select-cc-lang") as HTMLSelectElement | null;
-    const ccSizeSelect = this.shadow.getElementById("select-cc-size") as HTMLSelectElement | null;
-    const ccThemeSelect = this.shadow.getElementById("select-cc-theme") as HTMLSelectElement | null;
-    const selectVideoQuality = this.shadow.getElementById("select-video-quality") as HTMLSelectElement | null;
-    const toggleEslSelect = this.shadow.getElementById("toggle-esl-visibility") as HTMLSelectElement | null;
-    const toggleTransSelect = this.shadow.getElementById("toggle-transcript-visibility") as HTMLSelectElement | null;
-    const toggleAdSelect = this.shadow.getElementById("toggle-ad-enabled") as HTMLSelectElement | null;
-
-    const closePrefs = () => {
-      if (!this.isPreferencesOpen) return;
-      this.isPreferencesOpen = false;
-      if (prefsDialog) prefsDialog.style.display = "none";
-      btnPrefs?.classList.remove("is-active");
-      btnPrefs?.setAttribute("aria-expanded", "false");
-    };
-
-    const openPrefs = () => {
-      closeQualityMenu();
-      closeShortcuts();
-      this.isPreferencesOpen = true;
-
-      if (selectVideoQuality) selectVideoQuality.value = this.currentQuality;
-      if (ccLangSelect) ccLangSelect.value = this.prefs.captionLanguage;
-      if (ccSizeSelect) ccSizeSelect.value = this.prefs.captionSize;
-      if (ccThemeSelect) ccThemeSelect.value = this.prefs.captionTheme;
-      if (toggleEslSelect) toggleEslSelect.value = this.prefs.eslVisible ? "show" : "hide";
-      if (toggleTransSelect) toggleTransSelect.value = this.prefs.transcriptVisible !== false ? "show" : "hide";
-      if (toggleAdSelect) toggleAdSelect.value = this.prefs.audioDescriptionEnabled ? "on" : "off";
-
-      if (prefsDialog) prefsDialog.style.display = "flex";
-      btnPrefs?.classList.add("is-active");
-      btnPrefs?.setAttribute("aria-expanded", "true");
-      ccLangSelect?.focus();
-    };
-
-    const togglePrefs = () => {
-      if (this.isPreferencesOpen) {
-        closePrefs();
-      } else {
-        openPrefs();
-      }
-    };
-
     btnPrefs?.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
-      togglePrefs();
+      togglePopover("prefs");
     });
     btnTranscriptPrefs?.addEventListener("click", (e) => {
       e.stopPropagation();
-      openPrefs();
+      openPopover("prefs");
     });
     btnEslPrefs?.addEventListener("click", (e) => {
       e.stopPropagation();
-      openPrefs();
+      openPopover("prefs");
     });
     btnDismissPrefs?.addEventListener("click", (e) => {
       e.stopPropagation();
-      closePrefs();
+      closeAllPopovers();
       btnPrefs?.focus();
     });
-
-    const closeShortcuts = () => {
-      if (!this.isShortcutsOpen) return;
-      this.isShortcutsOpen = false;
-      if (dialogShortcuts) dialogShortcuts.style.display = "none";
-      btnShortcuts?.classList.remove("is-active");
-      btnShortcuts?.setAttribute("aria-expanded", "false");
-    };
-
-    const openShortcuts = () => {
-      closeQualityMenu();
-      closePrefs();
-      this.isShortcutsOpen = true;
-      if (dialogShortcuts) dialogShortcuts.style.display = "flex";
-      btnShortcuts?.classList.add("is-active");
-      btnShortcuts?.setAttribute("aria-expanded", "true");
-      btnCloseShortcuts?.focus();
-    };
-
-    const toggleShortcuts = () => {
-      if (this.isShortcutsOpen) {
-        closeShortcuts();
-      } else {
-        openShortcuts();
-      }
-    };
 
     btnShortcuts?.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
-      toggleShortcuts();
+      togglePopover("shortcuts");
     });
     btnCloseShortcuts?.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
-      closeShortcuts();
+      closeAllPopovers();
       btnShortcuts?.focus();
     });
     btnOkShortcuts?.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
-      closeShortcuts();
+      closeAllPopovers();
       btnShortcuts?.focus();
     });
 
@@ -3777,33 +3774,32 @@ export class A11yMediaPlayer extends HTMLElement {
         if (btnAD) btnAD.setAttribute("aria-pressed", isAd ? "true" : "false");
       }
 
-      closePrefs();
+      closeAllPopovers();
+      btnPrefs?.focus();
     });
 
     // Dismiss Popovers When Clicking Outside
-    const handleOutsideClick = (e: MouseEvent) => {
+    if (this.onOutsidePointerDown) {
+      window.removeEventListener("pointerdown", this.onOutsidePointerDown);
+    }
+    this.onOutsidePointerDown = (e: PointerEvent) => {
+      if (this.activePopover === null) return;
       const path = e.composedPath();
-      const isInside = (el: HTMLElement | null) => el && (path.includes(el) || el.contains(e.target as Node));
+      const isInside = (el: HTMLElement | null) => el && path.includes(el);
+      const activeEl =
+        this.activePopover === "quality" ? qualityMenu :
+        this.activePopover === "shortcuts" ? dialogShortcuts :
+        prefsDialog;
+      const activeBtn =
+        this.activePopover === "quality" ? btnQuality :
+        this.activePopover === "shortcuts" ? btnShortcuts :
+        btnPrefs;
 
-      if (this.isPreferencesOpen) {
-        if (!isInside(prefsDialog) && !isInside(btnPrefs) && !isInside(btnTranscriptPrefs) && !isInside(btnEslPrefs)) {
-          closePrefs();
-        }
-      }
-
-      if (this.isQualityMenuOpen) {
-        if (!isInside(qualityMenu) && !isInside(btnQuality)) {
-          closeQualityMenu();
-        }
-      }
-
-      if (this.isShortcutsOpen) {
-        if (!isInside(dialogShortcuts) && !isInside(btnShortcuts)) {
-          closeShortcuts();
-        }
+      if (!isInside(activeEl) && !isInside(activeBtn)) {
+        closeAllPopovers();
       }
     };
-    window.addEventListener("pointerdown", handleOutsideClick);
+    window.addEventListener("pointerdown", this.onOutsidePointerDown);
 
     // Live Quality dropdown inside Preferences
     selectVideoQuality?.addEventListener("change", async () => {
@@ -4051,19 +4047,12 @@ export class A11yMediaPlayer extends HTMLElement {
     const playerRoot = this.shadow.getElementById("player-container");
     playerRoot?.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
-        if (this.isQualityMenuOpen) {
-          closeQualityMenu();
-          btnQuality?.focus();
-          return;
-        }
-        if (this.isShortcutsOpen) {
-          closeShortcuts();
-          btnShortcuts?.focus();
-          return;
-        }
-        if (this.isPreferencesOpen) {
-          closePrefs();
-          btnPrefs?.focus();
+        if (this.activePopover !== null) {
+          const prev = this.activePopover;
+          closeAllPopovers();
+          if (prev === "quality") btnQuality?.focus();
+          else if (prev === "shortcuts") btnShortcuts?.focus();
+          else if (prev === "prefs") btnPrefs?.focus();
           return;
         }
       }
@@ -4141,7 +4130,7 @@ export class A11yMediaPlayer extends HTMLElement {
         case "?":
         case "/":
           e.preventDefault();
-          toggleShortcuts();
+          togglePopover("shortcuts");
           break;
         case "Escape":
           if (isFullscreen()) {

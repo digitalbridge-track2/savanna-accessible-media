@@ -1,7 +1,7 @@
-var tt = Object.defineProperty;
-var it = (f, a, e) => a in f ? tt(f, a, { enumerable: !0, configurable: !0, writable: !0, value: e }) : f[a] = e;
-var m = (f, a, e) => it(f, typeof a != "symbol" ? a + "" : a, e);
-const Ve = "abugida_media_preferences", P = {
+var Ge = Object.defineProperty;
+var Je = (f, a, e) => a in f ? Ge(f, a, { enumerable: !0, configurable: !0, writable: !0, value: e }) : f[a] = e;
+var g = (f, a, e) => Je(f, typeof a != "symbol" ? a + "" : a, e);
+const Ve = "abugida_media_preferences", H = {
   captionLanguage: "en",
   captionSize: "medium",
   captionTheme: "default",
@@ -17,32 +17,32 @@ const Ve = "abugida_media_preferences", P = {
   eslWidth: 240,
   eslHeight: 180
 };
-function De() {
+function Ce() {
   try {
     const f = localStorage.getItem(Ve);
-    if (!f) return { ...P };
+    if (!f) return { ...H };
     const a = JSON.parse(f);
-    return { ...P, ...a };
+    return { ...H, ...a };
   } catch {
-    return { ...P };
+    return { ...H };
   }
 }
 function T(f) {
   try {
-    const e = { ...De(), ...f };
+    const e = { ...Ce(), ...f };
     return localStorage.setItem(Ve, JSON.stringify(e)), e;
   } catch {
-    return { ...P, ...f };
+    return { ...H, ...f };
   }
 }
-function at() {
+function Xe() {
   try {
     localStorage.removeItem(Ve);
   } catch {
   }
-  return { ...P };
+  return { ...H };
 }
-function Qe(f) {
+function Oe(f) {
   const a = [], e = f.split(/\r?\n/);
   let i = 0;
   for (; i < e.length && !e[i].includes("-->"); )
@@ -52,14 +52,14 @@ function Qe(f) {
     if (t.includes("-->")) {
       const s = t.split("-->").map((r) => r.trim().split(" ")[0]);
       if (s.length >= 2) {
-        const r = Ne(s[0]), d = Ne(s[1]);
+        const r = Ne(s[0]), c = Ne(s[1]);
         i++;
         const n = [];
         for (; i < e.length && e[i].trim() !== ""; )
           n.push(e[i].trim()), i++;
         n.length > 0 && a.push({
           start: r,
-          end: d,
+          end: c,
           text: n.join(`
 `)
         });
@@ -74,7 +74,7 @@ function Ne(f) {
   let e = 0, i = 0, t = 0;
   return a.length === 3 ? (e = parseFloat(a[0]), i = parseFloat(a[1]), t = parseFloat(a[2].replace(",", "."))) : a.length === 2 && (i = parseFloat(a[0]), t = parseFloat(a[1].replace(",", "."))), e * 3600 + i * 60 + t;
 }
-function st(f, a) {
+function Ye(f, a) {
   let e = "18px";
   a === "small" && (e = "14px"), a === "large" && (e = "24px"), a === "xlarge" && (e = "32px");
   let i = "#FFFFFF", t = "rgba(0, 0, 0, 0.85)", s = "none";
@@ -93,16 +93,16 @@ function st(f, a) {
     white-space: pre-line;
   `;
 }
-class ot {
+class Ze {
   constructor(a, e) {
-    m(this, "mainVideo");
-    m(this, "signVideo", null);
-    m(this, "driftThreshold");
-    m(this, "isSyncing", !1);
-    m(this, "onSignStatusChange");
+    g(this, "mainVideo");
+    g(this, "signVideo", null);
+    g(this, "driftThreshold");
+    g(this, "isSyncing", !1);
+    g(this, "onSignStatusChange");
     // Stored listener references for clean teardown
-    m(this, "mainListeners", {});
-    m(this, "signListeners", {});
+    g(this, "mainListeners", {});
+    g(this, "signListeners", {});
     this.mainVideo = a, this.driftThreshold = (e == null ? void 0 : e.driftThreshold) ?? 0.25, this.onSignStatusChange = e == null ? void 0 : e.onSignStatusChange, this.setupMainListeners();
   }
   setSignVideo(a) {
@@ -176,9 +176,9 @@ class ot {
     const e = !this.mainVideo.paused, i = isNaN(this.mainVideo.currentTime) ? 0 : this.mainVideo.currentTime, t = this.mainVideo.playbackRate || 1;
     return this.mainVideo.src = a, this.mainVideo.load(), new Promise((s) => {
       let r = !1;
-      const d = async () => {
+      const c = async () => {
         if (!r) {
-          r = !0, this.mainVideo.removeEventListener("loadedmetadata", d), this.mainVideo.removeEventListener("canplay", d), this.mainVideo.removeEventListener("error", d), clearTimeout(n);
+          r = !0, this.mainVideo.removeEventListener("loadedmetadata", c), this.mainVideo.removeEventListener("canplay", c), this.mainVideo.removeEventListener("error", c), clearTimeout(n);
           try {
             if (!isNaN(i) && i > 0 && (this.mainVideo.currentTime = i), this.mainVideo.playbackRate = t, e && await this.mainVideo.play().catch(() => {
             }), this.signVideo) {
@@ -194,8 +194,8 @@ class ot {
           }
           s();
         }
-      }, n = setTimeout(d, 600);
-      this.mainVideo.addEventListener("loadedmetadata", d), this.mainVideo.addEventListener("canplay", d), this.mainVideo.addEventListener("error", d);
+      }, n = setTimeout(c, 600);
+      this.mainVideo.addEventListener("loadedmetadata", c), this.mainVideo.addEventListener("canplay", c), this.mainVideo.addEventListener("error", c);
     });
   }
   cleanupSignListeners() {
@@ -210,20 +210,20 @@ class ot {
     this.mainListeners = {}, this.cleanupSignListeners(), this.signVideo = null;
   }
 }
-class rt {
+class et {
   constructor(a, e) {
-    m(this, "segments", []);
-    m(this, "container");
-    m(this, "onSeekAndPlay");
-    m(this, "onFollowChange");
-    m(this, "currentActiveId", null);
-    m(this, "searchQuery", "");
-    m(this, "isFollowing", !0);
-    m(this, "userPausedFollowing", !1);
-    m(this, "locale", "en");
-    m(this, "listElement", null);
-    m(this, "followBtn", null);
-    m(this, "statusElement", null);
+    g(this, "segments", []);
+    g(this, "container");
+    g(this, "onSeekAndPlay");
+    g(this, "onFollowChange");
+    g(this, "currentActiveId", null);
+    g(this, "searchQuery", "");
+    g(this, "isFollowing", !0);
+    g(this, "userPausedFollowing", !1);
+    g(this, "locale", "en");
+    g(this, "listElement", null);
+    g(this, "followBtn", null);
+    g(this, "statusElement", null);
     this.container = a, this.onSeekAndPlay = e.onSeekAndPlay, this.onFollowChange = e.onFollowChange, this.locale = e.locale || "en";
   }
   setLocale(a) {
@@ -312,14 +312,14 @@ class rt {
             </p>` : `
           <ul class="transcript-list" role="list" id="transcript-list-box" tabindex="0" aria-label="${a ? "የጽሑፍ ግልባጭ ዝርዝር" : "Transcript cues"}">
             ${e.map((t) => {
-      const s = this.formatTime(t.start), r = t.id === this.currentActiveId, d = a ? `ከ ${s} ጀምሮ አጫውት` : `Play from ${s}`;
+      const s = this.formatTime(t.start), r = t.id === this.currentActiveId, c = a ? `ከ ${s} ጀምሮ አጫውት` : `Play from ${s}`;
       return `
                 <li class="transcript-item ${r ? "active" : ""}" data-segment-id="${t.id}">
                   <button 
                     type="button" 
                     class="btn-seek-time" 
                     data-time="${t.start}" 
-                    aria-label="${d}">
+                    aria-label="${c}">
                     ${s}
                   </button>
                   <div class="segment-content">
@@ -355,18 +355,18 @@ class rt {
     return a.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
   }
 }
-class nt {
+class tt {
   constructor(a, e) {
-    m(this, "container");
-    m(this, "messages", []);
-    m(this, "locale", "en");
-    m(this, "onSeekAndPlay");
-    m(this, "currentTime", 0);
-    m(this, "searchQuery", "");
-    m(this, "isAutoScroll", !0);
-    m(this, "isQuestionsOnly", !1);
-    m(this, "listElement", null);
-    m(this, "currentActiveId", null);
+    g(this, "container");
+    g(this, "messages", []);
+    g(this, "locale", "en");
+    g(this, "onSeekAndPlay");
+    g(this, "currentTime", 0);
+    g(this, "searchQuery", "");
+    g(this, "isAutoScroll", !0);
+    g(this, "isQuestionsOnly", !1);
+    g(this, "listElement", null);
+    g(this, "currentActiveId", null);
     this.container = a, this.locale = e.locale || "en", this.onSeekAndPlay = e.onSeekAndPlay;
   }
   setLocale(a) {
@@ -415,13 +415,13 @@ class nt {
       const s = t.message.en.includes("?") || t.message.am.includes("?") || t.message.am.includes("፧");
       if (this.isQuestionsOnly && !s) return !1;
       if (!this.searchQuery) return !0;
-      const r = (a ? t.message.am : t.message.en).toLowerCase(), d = t.sender.toLowerCase();
-      return r.includes(this.searchQuery) || d.includes(this.searchQuery);
+      const r = (a ? t.message.am : t.message.en).toLowerCase(), c = t.sender.toLowerCase();
+      return r.includes(this.searchQuery) || c.includes(this.searchQuery);
     });
     this.container.innerHTML = `
       <ol class="chat-replay-list" role="list" aria-label="${a ? "የቀጥታ ትምህርት ውይይት መልዕክቶች" : "Recorded live session chat messages"}" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.65rem;">
         ${e.map((t) => {
-      const s = t.timestamp <= this.currentTime, r = t.id === this.currentActiveId, d = t.role === "instructor", n = t.role === "ta", c = t.message.en.includes("?") || t.message.am.includes("?") || t.message.am.includes("፧"), b = d ? a ? "አስተማሪ" : "Instructor" : n ? a ? "ረዳት" : "TA" : a ? "ተማሪ" : "Student", l = d ? "rgba(0, 113, 227, 0.12)" : n ? "rgba(16, 185, 129, 0.14)" : "var(--color-surface, #F1F5F9)", E = d ? "var(--color-brand, #0071E3)" : n ? "#059669" : "var(--color-muted-ink, #475569)", v = r ? "var(--color-brand, #0071E3)" : d ? "#0071E3" : n ? "#10B981" : "var(--color-border, #CBD5E1)", y = a ? t.message.am : t.message.en, g = a ? `ወደ ${t.timeDisplay} ይዝለሉ እና የ ${t.sender} ጥያቄ ያዳምጡ` : `Jump to ${t.timeDisplay} to hear discussion with ${t.sender}`;
+      const s = t.timestamp <= this.currentTime, r = t.id === this.currentActiveId, c = t.role === "instructor", n = t.role === "ta", d = t.message.en.includes("?") || t.message.am.includes("?") || t.message.am.includes("፧"), b = c ? a ? "አስተማሪ" : "Instructor" : n ? a ? "ረዳት" : "TA" : a ? "ተማሪ" : "Student", l = c ? "rgba(0, 113, 227, 0.12)" : n ? "rgba(16, 185, 129, 0.14)" : "var(--color-surface, #F1F5F9)", E = c ? "var(--color-brand, #0071E3)" : n ? "#059669" : "var(--color-muted-ink, #475569)", v = r ? "var(--color-brand, #0071E3)" : c ? "#0071E3" : n ? "#10B981" : "var(--color-border, #CBD5E1)", y = a ? t.message.am : t.message.en, h = a ? `ወደ ${t.timeDisplay} ይዝለሉ እና የ ${t.sender} ጥያቄ ያዳምጡ` : `Jump to ${t.timeDisplay} to hear discussion with ${t.sender}`;
       return `
               <li 
                 class="chat-replay-item ${s ? "is-delivered" : "is-future"} ${r ? "is-active-latest" : ""}"
@@ -429,8 +429,8 @@ class nt {
                 data-timestamp="${t.timestamp}"
                 tabindex="0"
                 role="button"
-                aria-label="${g}"
-                title="${g}"
+                aria-label="${h}"
+                title="${h}"
                 style="
                   display: flex;
                   flex-direction: column;
@@ -456,7 +456,7 @@ class nt {
                       background: ${l};
                       color: ${E};
                     ">${b}</span>
-                    ${c ? `<span style="font-size: 0.68rem; font-weight: 600; background: rgba(217, 119, 6, 0.15); color: #B45309; padding: 1px 5px; border-radius: 4px;">❓ ${a ? "ጥያቄ" : "Question"}</span>` : ""}
+                    ${d ? `<span style="font-size: 0.68rem; font-weight: 600; background: rgba(217, 119, 6, 0.15); color: #B45309; padding: 1px 5px; border-radius: 4px;">❓ ${a ? "ጥያቄ" : "Question"}</span>` : ""}
                   </div>
                   <span 
                     class="btn-chat-timestamp" 
@@ -484,8 +484,8 @@ class nt {
       const s = Number(t.getAttribute("data-timestamp") || "0"), r = () => {
         this.onSeekAndPlay(s);
       };
-      t.addEventListener("click", r), t.addEventListener("keydown", (d) => {
-        const n = d;
+      t.addEventListener("click", r), t.addEventListener("keydown", (c) => {
+        const n = c;
         (n.key === "Enter" || n.key === " ") && (n.preventDefault(), r());
       });
     });
@@ -531,7 +531,7 @@ const We = {
   '"': "⠦",
   "'": "⠄",
   "/": "⠌"
-}, Ke = {
+}, Qe = {
   // ሀ (h)
   ሀ: "⠓⠁",
   ሁ: "⠓⠥",
@@ -846,12 +846,12 @@ const We = {
   "፱": "⠼⠊",
   "፲": "⠼⠚"
 };
-function Ue(f) {
+function Ke(f) {
   let a = "";
   for (let e = 0; e < f.length; e++) {
     const i = f[e];
-    if (Ke[i]) {
-      a += Ke[i];
+    if (Qe[i]) {
+      a += Qe[i];
       continue;
     }
     const t = i.toLowerCase();
@@ -870,13 +870,13 @@ function Ue(f) {
   }
   return a;
 }
-const lt = ` A1B'K2L@CIF/MSP"E3H9O6R^DJG>NTQ,*5<-U8V.%[$+X!&:;4\\0Z7(_?W]#Y=)`;
-function ct(f) {
-  const a = /[\u2800-\u28FF]/.test(f) ? f : Ue(f);
+const it = ` A1B'K2L@CIF/MSP"E3H9O6R^DJG>NTQ,*5<-U8V.%[$+X!&:;4\\0Z7(_?W]#Y=)`;
+function at(f) {
+  const a = /[\u2800-\u28FF]/.test(f) ? f : Ke(f);
   let e = "";
   for (let i = 0; i < a.length; i++) {
     const t = a.charCodeAt(i);
-    t >= 10240 && t <= 10303 ? e += lt[t - 10240] || " " : t === 32 || a[i] === " " ? e += " " : (a[i] === `
+    t >= 10240 && t <= 10303 ? e += it[t - 10240] || " " : t === 32 || a[i] === " " ? e += " " : (a[i] === `
 ` || a[i], e += a[i]);
   }
   return e;
@@ -897,30 +897,30 @@ function Le(f, a = 40) {
         t = s;
   return t && i.push(t), i;
 }
-function dt(f) {
+function st(f) {
   const a = f.language === "am", e = [], i = 25, t = 40, s = "=".repeat(t);
   e.push(s), e.push(...Le(f.title.toUpperCase(), t)), e.push("STANDARD: BANA 40X25 GRADE-1 EMBOSSER"), e.push(`LANGUAGE: ${a ? "AMHARIC" : "ENGLISH"}`), e.push(`DATE: ${f.date || "2026-11-14 (HIDAR 5, 2019 E.C.)"}`), e.push(s), e.push("");
-  for (let c = 0; c < f.segments.length; c++) {
-    const b = f.segments[c], l = c + 1, E = Math.floor(b.start / 60).toString().padStart(2, "0"), v = Math.floor(b.start % 60).toString().padStart(2, "0"), y = Math.floor(b.end / 60).toString().padStart(2, "0"), g = Math.floor(b.end % 60).toString().padStart(2, "0"), F = b.speaker || (a ? "አስተማሪ" : "Instructor");
-    e.push(`[#${l} ${E}:${v}-${y}:${g} ${F}]`);
-    const u = Ue(b.text);
+  for (let d = 0; d < f.segments.length; d++) {
+    const b = f.segments[d], l = d + 1, E = Math.floor(b.start / 60).toString().padStart(2, "0"), v = Math.floor(b.start % 60).toString().padStart(2, "0"), y = Math.floor(b.end / 60).toString().padStart(2, "0"), h = Math.floor(b.end % 60).toString().padStart(2, "0"), A = b.speaker || (a ? "አስተማሪ" : "Instructor");
+    e.push(`[#${l} ${E}:${v}-${y}:${h} ${A}]`);
+    const u = Ke(b.text);
     e.push(...Le(u, t)), e.push(...Le(`TEXT: ${b.text}`, t));
-    const C = ct(u);
+    const C = at(u);
     e.push(...Le(`EMBOSSER: ${C}`, t)), e.push("");
   }
   const r = [];
-  let d = [], n = 1;
-  for (let c = 0; c < e.length; c++)
-    if (d.push(e[c]), d.length === i - 1 || c === e.length - 1) {
+  let c = [], n = 1;
+  for (let d = 0; d < e.length; d++)
+    if (c.push(e[d]), c.length === i - 1 || d === e.length - 1) {
       const l = `P.${n}`.padStart(t, " ");
-      d.push(l), r.push(d.join(`\r
-`)), d = [], n++;
+      c.push(l), r.push(c.join(`\r
+`)), c = [], n++;
     }
   return r.join(`\r
 \f\r
 `);
 }
-const D = {
+const V = {
   play: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>',
   pause: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>',
   restart: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>',
@@ -940,37 +940,39 @@ const D = {
   shortcuts: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm9 7H8v-2h8v2zm0-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2z"/></svg>',
   quality: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M19 4H5c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.89-2-2-2zm-8 11H9.5v-2h-2v2H6V9h1.5v2.5h2V9H11v6zm7-1c0 .55-.45 1-1 1h-4V9h4c.55 0 1 .45 1 1v4zm-1.5-3.5h-2v3h2v-3z"/></svg>'
 };
-class _e extends HTMLElement {
+class Ue extends HTMLElement {
   constructor() {
     super();
-    m(this, "shadow");
-    m(this, "manifest", null);
-    m(this, "activeLocale", "en");
-    m(this, "prefs");
+    g(this, "shadow");
+    g(this, "manifest", null);
+    g(this, "activeLocale", "en");
+    g(this, "prefs");
     // Media & sync
-    m(this, "mainVideo");
-    m(this, "signVideo", null);
-    m(this, "syncController");
-    m(this, "pendingSeekTime", null);
+    g(this, "mainVideo");
+    g(this, "signVideo", null);
+    g(this, "syncController");
+    g(this, "pendingSeekTime", null);
     // Captions
-    m(this, "currentCues", []);
-    m(this, "captionOverlay");
+    g(this, "currentCues", []);
+    g(this, "captionOverlay");
     // Transcript & Live Chat Replay
-    m(this, "transcriptViewer");
-    m(this, "liveChatViewer");
-    m(this, "liveChatMessages", []);
-    m(this, "activeLeftTab", "transcript");
+    g(this, "transcriptViewer");
+    g(this, "liveChatViewer");
+    g(this, "liveChatMessages", []);
+    g(this, "activeLeftTab", "transcript");
     // UI state
-    m(this, "isPreferencesOpen", !1);
-    m(this, "isQualityMenuOpen", !1);
-    m(this, "isShortcutsOpen", !1);
-    m(this, "isAudioMode", !1);
-    m(this, "currentQuality", "auto");
-    m(this, "qualityToastTimer", null);
-    m(this, "onCaptionsUpdated", () => {
+    g(this, "isPreferencesOpen", !1);
+    g(this, "isQualityMenuOpen", !1);
+    g(this, "isShortcutsOpen", !1);
+    g(this, "activePopover", null);
+    g(this, "onOutsidePointerDown", null);
+    g(this, "isAudioMode", !1);
+    g(this, "currentQuality", "auto");
+    g(this, "qualityToastTimer", null);
+    g(this, "onCaptionsUpdated", () => {
       this.initTracksAndTranscript();
     });
-    this.shadow = this.attachShadow({ mode: "open" }), this.prefs = De(), this.currentQuality = this.prefs.videoQuality || "auto";
+    this.shadow = this.attachShadow({ mode: "open" }), this.prefs = Ce(), this.currentQuality = this.prefs.videoQuality || "auto";
   }
   static get observedAttributes() {
     return ["manifest-src", "locale", "lang", "src", "captions", "sign", "describe", "api"];
@@ -981,7 +983,7 @@ class _e extends HTMLElement {
     e ? this.loadManifest(e) : this.getAttribute("src") && this.initFromAttributes(), window.addEventListener("db-player:captions-updated", this.onCaptionsUpdated);
   }
   disconnectedCallback() {
-    window.removeEventListener("db-player:captions-updated", this.onCaptionsUpdated), this.syncController && this.syncController.destroy();
+    window.removeEventListener("db-player:captions-updated", this.onCaptionsUpdated), this.onOutsidePointerDown && (window.removeEventListener("pointerdown", this.onOutsidePointerDown), this.onOutsidePointerDown = null), this.syncController && this.syncController.destroy();
   }
   attributeChangedCallback(e, i, t) {
     i !== t && (e === "locale" || e === "lang" ? (this.activeLocale = t || "en", this.updateLocaleStrings()) : e === "manifest-src" ? this.loadManifest(t) : (e === "src" || e === "captions" || e === "sign" || e === "describe") && (this.getAttribute("manifest-src") || this.initFromAttributes()));
@@ -991,12 +993,12 @@ class _e extends HTMLElement {
     if (!e) return;
     const i = this.getAttribute("lang") || this.getAttribute("locale") || "en";
     this.activeLocale = i;
-    const t = this.getAttribute("captions") || "", s = this.getAttribute("sign"), r = this.getAttribute("describe"), d = t.split(",").map((n) => n.trim()).filter(Boolean).map((n) => {
-      const c = n.includes(".am.") || n.endsWith("am.vtt") || n.includes("am");
+    const t = this.getAttribute("captions") || "", s = this.getAttribute("sign"), r = this.getAttribute("describe"), c = t.split(",").map((n) => n.trim()).filter(Boolean).map((n) => {
+      const d = n.includes(".am.") || n.endsWith("am.vtt") || n.includes("am");
       return {
-        id: c ? "cap-am" : "cap-en",
-        language: c ? "am" : "en",
-        label: c ? "አማርኛ" : "English",
+        id: d ? "cap-am" : "cap-en",
+        language: d ? "am" : "en",
+        label: d ? "አማርኛ" : "English",
         src: n
       };
     });
@@ -1008,7 +1010,7 @@ class _e extends HTMLElement {
         { id: "main-video", kind: "main", src: e, mimeType: "video/mp4" },
         ...s ? [{ id: "sign-video", kind: "sign", src: s, mimeType: "video/mp4" }] : []
       ],
-      captionTracks: d,
+      captionTracks: c,
       audioDescription: r ? { src: r } : void 0
     }, this.render(), this.initTracksAndTranscript();
   }
@@ -1018,30 +1020,30 @@ class _e extends HTMLElement {
       const s = await fetch(e);
       if (!s.ok) throw new Error(`HTTP error ${s.status}`);
       const r = await s.json();
-      let d;
+      let c;
       try {
-        d = new URL(e, window.location.href);
+        c = new URL(e, window.location.href);
       } catch {
-        d = new URL(window.location.href);
+        c = new URL(window.location.href);
       }
-      const n = (c) => {
-        if (!c) return c;
+      const n = (d) => {
+        if (!d) return d;
         try {
-          return new URL(c, d).href;
+          return new URL(d, c).href;
         } catch {
-          return c;
+          return d;
         }
       };
       if (this.manifest = {
         ...r,
         poster: r.poster ? { ...r.poster, src: n(r.poster.src) } : void 0,
-        sources: (r.sources || []).map((c) => ({
-          ...c,
-          src: n(c.src)
+        sources: (r.sources || []).map((d) => ({
+          ...d,
+          src: n(d.src)
         })),
-        captionTracks: (r.captionTracks || []).map((c) => ({
-          ...c,
-          src: n(c.src)
+        captionTracks: (r.captionTracks || []).map((d) => ({
+          ...d,
+          src: n(d.src)
         })),
         transcript: r.transcript ? {
           ...r.transcript,
@@ -1053,10 +1055,10 @@ class _e extends HTMLElement {
         } : void 0
       }, (t = (i = this.manifest) == null ? void 0 : i.liveSession) != null && t.chatSrc)
         try {
-          const c = await fetch(this.manifest.liveSession.chatSrc);
-          c.ok && (this.liveChatMessages = await c.json(), this.liveChatViewer && this.liveChatViewer.setMessages(this.liveChatMessages));
-        } catch (c) {
-          console.warn("Could not load live chat messages:", c);
+          const d = await fetch(this.manifest.liveSession.chatSrc);
+          d.ok && (this.liveChatMessages = await d.json(), this.liveChatViewer && this.liveChatViewer.setMessages(this.liveChatMessages));
+        } catch (d) {
+          console.warn("Could not load live chat messages:", d);
         }
       this.render(), await this.initTracksAndTranscript();
     } catch (s) {
@@ -1070,7 +1072,7 @@ class _e extends HTMLElement {
     const e = typeof localStorage < "u" ? localStorage.getItem(`db-player:custom-transcript:${this.activeLocale}`) : null;
     if (e)
       try {
-        const d = (JSON.parse(e).segments || []).map((n) => ({
+        const c = (JSON.parse(e).segments || []).map((n) => ({
           id: n.id,
           start: n.start_ms !== void 0 ? n.start_ms / 1e3 : n.start || 0,
           end: n.end_ms !== void 0 ? n.end_ms / 1e3 : n.end || 0,
@@ -1078,7 +1080,7 @@ class _e extends HTMLElement {
           text: n.text || n.reviewedText || n.draft_text || n.draftText || "",
           visualDescription: n.visual_description || n.visualDescription
         }));
-        this.transcriptViewer.setSegments(d);
+        this.transcriptViewer.setSegments(c);
         return;
       } catch (r) {
         console.warn("Could not parse custom transcript, falling back to localized transcript", r);
@@ -1088,13 +1090,13 @@ class _e extends HTMLElement {
     try {
       const r = await fetch(i);
       if (r.ok) {
-        const n = ((await r.json()).segments || []).map((c) => ({
-          id: c.id,
-          start: c.start_ms !== void 0 ? c.start_ms / 1e3 : c.start || 0,
-          end: c.end_ms !== void 0 ? c.end_ms / 1e3 : c.end || 0,
-          speaker: c.speaker,
-          text: c.text || c.draft_text || "",
-          visualDescription: c.visual_description || c.visualDescription
+        const n = ((await r.json()).segments || []).map((d) => ({
+          id: d.id,
+          start: d.start_ms !== void 0 ? d.start_ms / 1e3 : d.start || 0,
+          end: d.end_ms !== void 0 ? d.end_ms / 1e3 : d.end || 0,
+          speaker: d.speaker,
+          text: d.text || d.draft_text || "",
+          visualDescription: d.visual_description || d.visualDescription
         }));
         this.transcriptViewer.setSegments(n), t = !0;
       }
@@ -1104,13 +1106,13 @@ class _e extends HTMLElement {
       try {
         const r = await fetch(this.manifest.transcript.src);
         if (r.ok) {
-          const n = ((await r.json()).segments || []).map((c) => ({
-            id: c.id,
-            start: c.start_ms !== void 0 ? c.start_ms / 1e3 : c.start || 0,
-            end: c.end_ms !== void 0 ? c.end_ms / 1e3 : c.end || 0,
-            speaker: c.speaker,
-            text: c.text || c.draft_text || "",
-            visualDescription: c.visual_description || c.visualDescription
+          const n = ((await r.json()).segments || []).map((d) => ({
+            id: d.id,
+            start: d.start_ms !== void 0 ? d.start_ms / 1e3 : d.start || 0,
+            end: d.end_ms !== void 0 ? d.end_ms / 1e3 : d.end || 0,
+            speaker: d.speaker,
+            text: d.text || d.draft_text || "",
+            visualDescription: d.visual_description || d.visualDescription
           }));
           this.transcriptViewer.setSegments(n);
         }
@@ -1125,13 +1127,13 @@ class _e extends HTMLElement {
     const t = typeof localStorage < "u" ? localStorage.getItem(`db-player:custom-transcript:${e}`) : null;
     if (t)
       try {
-        const r = (JSON.parse(t).segments || []).map((d) => ({
-          id: d.id,
-          start: d.start_ms !== void 0 ? d.start_ms / 1e3 : d.start || 0,
-          end: d.end_ms !== void 0 ? d.end_ms / 1e3 : d.end || 0,
-          speaker: d.speaker,
-          text: d.text || d.reviewedText || d.draft_text || d.draftText || "",
-          visualDescription: d.visual_description || d.visualDescription
+        const r = (JSON.parse(t).segments || []).map((c) => ({
+          id: c.id,
+          start: c.start_ms !== void 0 ? c.start_ms / 1e3 : c.start || 0,
+          end: c.end_ms !== void 0 ? c.end_ms / 1e3 : c.end || 0,
+          speaker: c.speaker,
+          text: c.text || c.reviewedText || c.draft_text || c.draftText || "",
+          visualDescription: c.visual_description || c.visualDescription
         }));
         this.transcriptViewer.setSegments(r);
         return;
@@ -1141,7 +1143,7 @@ class _e extends HTMLElement {
     try {
       const s = await fetch(`/lessons/digital-workplace/transcript.${e}.json`);
       if (s.ok) {
-        const d = ((await s.json()).segments || []).map((n) => ({
+        const c = ((await s.json()).segments || []).map((n) => ({
           id: n.id,
           start: n.start_ms !== void 0 ? n.start_ms / 1e3 : n.start || 0,
           end: n.end_ms !== void 0 ? n.end_ms / 1e3 : n.end || 0,
@@ -1149,7 +1151,7 @@ class _e extends HTMLElement {
           text: n.text || n.draft_text || "",
           visualDescription: n.visual_description || n.visualDescription
         }));
-        this.transcriptViewer.setSegments(d);
+        this.transcriptViewer.setSegments(c);
       }
     } catch (s) {
       console.warn("Could not load transcript for", e, s);
@@ -1175,12 +1177,12 @@ class _e extends HTMLElement {
     try {
       const t = typeof localStorage < "u" ? localStorage.getItem(`db-player:custom-vtt:${e}`) : null;
       if (t)
-        this.currentCues = Qe(t);
+        this.currentCues = Oe(t);
       else {
         const s = await fetch(i.src);
         if (s.ok) {
           const r = await s.text();
-          this.currentCues = Qe(r);
+          this.currentCues = Oe(r);
         }
       }
     } catch {
@@ -1195,7 +1197,7 @@ class _e extends HTMLElement {
       return;
     }
     const e = this.mainVideo.currentTime, i = this.currentCues.find((t) => e >= t.start && e <= t.end);
-    i ? (this.captionOverlay.style.display = "block", this.captionOverlay.style.cssText = st(this.prefs.captionTheme, this.prefs.captionSize), this.captionOverlay.textContent = i.text) : this.captionOverlay.style.display = "none";
+    i ? (this.captionOverlay.style.display = "block", this.captionOverlay.style.cssText = Ye(this.prefs.captionTheme, this.prefs.captionSize), this.captionOverlay.textContent = i.text) : this.captionOverlay.style.display = "none";
   }
   seekAndPlay(e) {
     if (isNaN(this.mainVideo.duration) || this.mainVideo.readyState < 1) {
@@ -1229,7 +1231,7 @@ class _e extends HTMLElement {
     `;
   }
   getAvailableStreams() {
-    var n, c, b, l, E, v, y;
+    var n, d, b, l, E, v, y;
     const e = [], i = this.activeLocale === "am";
     if (!this.manifest || !this.manifest.sources)
       return [
@@ -1239,34 +1241,34 @@ class _e extends HTMLElement {
         { id: "360p", quality: "360p", label: "360p (SD)", tag: "SD", kind: "video", format: "MP4", src: "" },
         { id: "240p", quality: "240p", label: "240p (Low Data)", tag: "Low Data", kind: "video", format: "MP4", src: "" }
       ];
-    const t = (g) => {
-      const F = g.match(/(\d+)/);
-      return F ? parseInt(F[1], 10) : 0;
-    }, r = [...this.manifest.sources.filter((g) => g.kind === "main")].sort((g, F) => t(F.quality || "") - t(g.quality || ""));
-    for (const g of r) {
-      const F = ((n = g.type) == null ? void 0 : n.includes("webm")) || g.src.endsWith(".webm") || g.quality === "webm", u = g.quality || "";
+    const t = (h) => {
+      const A = h.match(/(\d+)/);
+      return A ? parseInt(A[1], 10) : 0;
+    }, r = [...this.manifest.sources.filter((h) => h.kind === "main")].sort((h, A) => t(A.quality || "") - t(h.quality || ""));
+    for (const h of r) {
+      const A = ((n = h.type) == null ? void 0 : n.includes("webm")) || h.src.endsWith(".webm") || h.quality === "webm", u = h.quality || "";
       let C = "";
-      F ? C = "WebM" : u === "1080p" || t(u) >= 1080 ? C = "FHD" : u === "720p" || t(u) >= 720 ? C = "HD" : u === "480p" || u === "360p" ? C = "SD" : u === "240p" || t(u) <= 240 ? C = i ? "ዝቅተኛ" : "3G Data" : C = g.label || "", e.push({
-        id: g.id,
-        quality: F ? "webm" : u,
-        label: g.label || `${u} (${F ? "WebM VP9" : "MP4"})`,
+      A ? C = "WebM" : u === "1080p" || t(u) >= 1080 ? C = "FHD" : u === "720p" || t(u) >= 720 ? C = "HD" : u === "480p" || u === "360p" ? C = "SD" : u === "240p" || t(u) <= 240 ? C = i ? "ዝቅተኛ" : "3G Data" : C = h.label || "", e.push({
+        id: h.id,
+        quality: A ? "webm" : u,
+        label: h.label || `${u} (${A ? "WebM VP9" : "MP4"})`,
         tag: C,
         kind: "video",
-        format: F ? "WebM (VP9)" : "MP4 (H.264)",
-        src: g.src
+        format: A ? "WebM (VP9)" : "MP4 (H.264)",
+        src: h.src
       });
     }
-    const d = this.manifest.sources.filter((g) => g.kind === "audio-only");
-    for (const g of d) {
-      let F = g.format || "Audio", u = "Audio", C = g.quality || "audio-opus";
-      g.src.endsWith(".opus") || (c = g.type) != null && c.includes("opus") || g.id.includes("opus") ? (F = i ? "ኦፐስ ድምጽ (32kbps እጅግ ዝቅተኛ ዳታ)" : "Opus Audio (32kbps Low-Data)", u = "Opus", C = "audio-opus") : g.src.endsWith(".mp3") || (b = g.type) != null && b.includes("mpeg") || g.id.includes("mp3") ? (F = i ? "ኤምፒ3 ድምጽ (64kbps ዓለም አቀፍ)" : "MP3 Audio (64kbps Universal)", u = "MP3", C = "audio-mp3") : g.src.endsWith(".ogg") || (l = g.type) != null && l.includes("ogg") || g.id.includes("ogg") ? (F = i ? "ኦግ ቮርቢስ ድምጽ (Ogg Vorbis)" : "Ogg Vorbis Audio", u = "OGG", C = "audio-ogg") : g.src.endsWith(".wav") || (E = g.type) != null && E.includes("wav") || g.id.includes("wav") ? (F = i ? "ዋቭ ድምጽ (WAV Lossless PCM)" : "WAV Audio (Lossless PCM)", u = "WAV", C = "audio-wav") : (g.src.endsWith(".m4a") || (v = g.type) != null && v.includes("mp4") || (y = g.type) != null && y.includes("aac") || g.id.includes("m4a")) && (F = i ? "ኤኤሲ / ኤም4ኤ ድምጽ (AAC/M4A)" : "AAC / M4A Audio (Apple)", u = "M4A", C = "audio-m4a"), e.push({
-        id: g.id,
+    const c = this.manifest.sources.filter((h) => h.kind === "audio-only");
+    for (const h of c) {
+      let A = h.format || "Audio", u = "Audio", C = h.quality || "audio-opus";
+      h.src.endsWith(".opus") || (d = h.type) != null && d.includes("opus") || h.id.includes("opus") ? (A = i ? "ኦፐስ ድምጽ (32kbps እጅግ ዝቅተኛ ዳታ)" : "Opus Audio (32kbps Low-Data)", u = "Opus", C = "audio-opus") : h.src.endsWith(".mp3") || (b = h.type) != null && b.includes("mpeg") || h.id.includes("mp3") ? (A = i ? "ኤምፒ3 ድምጽ (64kbps ዓለም አቀፍ)" : "MP3 Audio (64kbps Universal)", u = "MP3", C = "audio-mp3") : h.src.endsWith(".ogg") || (l = h.type) != null && l.includes("ogg") || h.id.includes("ogg") ? (A = i ? "ኦግ ቮርቢስ ድምጽ (Ogg Vorbis)" : "Ogg Vorbis Audio", u = "OGG", C = "audio-ogg") : h.src.endsWith(".wav") || (E = h.type) != null && E.includes("wav") || h.id.includes("wav") ? (A = i ? "ዋቭ ድምጽ (WAV Lossless PCM)" : "WAV Audio (Lossless PCM)", u = "WAV", C = "audio-wav") : (h.src.endsWith(".m4a") || (v = h.type) != null && v.includes("mp4") || (y = h.type) != null && y.includes("aac") || h.id.includes("m4a")) && (A = i ? "ኤኤሲ / ኤም4ኤ ድምጽ (AAC/M4A)" : "AAC / M4A Audio (Apple)", u = "M4A", C = "audio-m4a"), e.push({
+        id: h.id,
         quality: C,
-        label: g.label || F,
+        label: h.label || A,
         tag: u,
         kind: "audio",
-        format: F,
-        src: g.src
+        format: A,
+        src: h.src
       });
     }
     return e;
@@ -1283,18 +1285,18 @@ class _e extends HTMLElement {
     if (e.startsWith("audio-") || e === "audio") {
       const s = e.replace("audio-", "").toLowerCase(), r = this.manifest.sources.find(
         (n) => {
-          var c;
-          return n.kind === "audio-only" && (n.quality === e || n.src.toLowerCase().includes(s) || ((c = n.type) == null ? void 0 : c.toLowerCase().includes(s)) || n.id.toLowerCase().includes(s));
+          var d;
+          return n.kind === "audio-only" && (n.quality === e || n.src.toLowerCase().includes(s) || ((d = n.type) == null ? void 0 : d.toLowerCase().includes(s)) || n.id.toLowerCase().includes(s));
         }
       );
       if (r) return r.src;
-      const d = this.manifest.sources.find((n) => n.kind === "audio-only");
-      if (d) return d.src;
+      const c = this.manifest.sources.find((n) => n.kind === "audio-only");
+      if (c) return c.src;
     }
     if (e === "webm") {
       const s = this.manifest.sources.find((r) => {
-        var d;
-        return ((d = r.type) == null ? void 0 : d.includes("webm")) || r.src.endsWith(".webm") || r.quality === "webm";
+        var c;
+        return ((c = r.type) == null ? void 0 : c.includes("webm")) || r.src.endsWith(".webm") || r.quality === "webm";
       });
       if (s) return s.src;
     }
@@ -1303,16 +1305,16 @@ class _e extends HTMLElement {
     if (e === "auto") {
       const s = navigator.connection;
       if (s != null && s.saveData || (s == null ? void 0 : s.effectiveType) === "slow-2g" || (s == null ? void 0 : s.effectiveType) === "2g") {
-        const n = i.find((c) => c.quality === "240p");
+        const n = i.find((d) => d.quality === "240p");
         if (n) return n.src;
       } else if ((s == null ? void 0 : s.effectiveType) === "3g") {
-        const n = i.find((c) => c.quality === "360p") || i.find((c) => c.quality === "480p");
+        const n = i.find((d) => d.quality === "360p") || i.find((d) => d.quality === "480p");
         if (n) return n.src;
       }
       const r = i.find((n) => n.quality === "1080p");
       if (r) return r.src;
-      const d = i.find((n) => n.quality === "720p" && !n.src.endsWith(".webm"));
-      return d ? d.src : i[0].src;
+      const c = i.find((n) => n.quality === "720p" && !n.src.endsWith(".webm"));
+      return c ? c.src : i[0].src;
     }
     const t = i.find((s) => s.quality === e && !s.src.endsWith(".webm"));
     return t ? t.src : i[0].src;
@@ -1323,19 +1325,19 @@ class _e extends HTMLElement {
     this.isAudioMode = t;
     const s = e === "auto" ? "Auto" : e === "webm" ? "WebM" : e === "audio-opus" ? "Opus" : e === "audio-mp3" ? "MP3" : e === "audio-ogg" ? "OGG" : e === "audio-wav" ? "WAV" : e === "audio-m4a" ? "M4A" : e, r = this.shadow.getElementById("quality-badge-text");
     r && (r.textContent = s), this.shadow.querySelectorAll(".quality-menu-item").forEach((y) => {
-      const F = y.getAttribute("data-quality") === e;
-      y.classList.toggle("selected", F), y.setAttribute("aria-checked", F ? "true" : "false");
+      const A = y.getAttribute("data-quality") === e;
+      y.classList.toggle("selected", A), y.setAttribute("aria-checked", A ? "true" : "false");
       const u = y.querySelector(".quality-check");
-      u && (u.textContent = F ? "✓" : "");
+      u && (u.textContent = A ? "✓" : "");
     });
     const n = this.shadow.getElementById("select-video-quality");
     n && n.value !== e && (n.value = e);
-    const c = this.shadow.getElementById("audio-mode-card"), b = this.shadow.getElementById("audio-mode-badge"), l = this.shadow.getElementById("audio-equalizer");
-    c && (c.style.display = t ? "flex" : "none", b && (b.textContent = `🎵 ${s} Audio Stream • Active`), l && this.mainVideo && !this.mainVideo.paused && l.classList.add("playing"));
+    const d = this.shadow.getElementById("audio-mode-card"), b = this.shadow.getElementById("audio-mode-badge"), l = this.shadow.getElementById("audio-equalizer");
+    d && (d.style.display = t ? "flex" : "none", b && (b.textContent = `🎵 ${s} Audio Stream • Active`), l && this.mainVideo && !this.mainVideo.paused && l.classList.add("playing"));
     const E = this.shadow.getElementById("quality-toast"), v = this.shadow.getElementById("quality-toast-text");
     if (E && v) {
-      const y = this.activeLocale === "am", g = e === "auto" ? y ? "ጥራት፡ Auto (ተለዋዋጭ)" : "Quality: Auto (Adaptive)" : `${y ? "የሚዲያ ቅርጸት፡ " : "Format/Quality: "}${s}`;
-      v.textContent = `⚡ ${g}`, E.style.display = "flex", E.style.opacity = "1", this.qualityToastTimer && clearTimeout(this.qualityToastTimer), this.qualityToastTimer = window.setTimeout(() => {
+      const y = this.activeLocale === "am", h = e === "auto" ? y ? "ጥራት፡ Auto (ተለዋዋጭ)" : "Quality: Auto (Adaptive)" : `${y ? "የሚዲያ ቅርጸት፡ " : "Format/Quality: "}${s}`;
+      v.textContent = `⚡ ${h}`, E.style.display = "flex", E.style.opacity = "1", this.qualityToastTimer && clearTimeout(this.qualityToastTimer), this.qualityToastTimer = window.setTimeout(() => {
         E.style.opacity = "0", setTimeout(() => {
           E.style.opacity === "0" && (E.style.display = "none");
         }, 300);
@@ -1345,8 +1347,8 @@ class _e extends HTMLElement {
       if (this.syncController)
         await this.syncController.switchSource(i);
       else {
-        const y = !this.mainVideo.paused, g = this.mainVideo.currentTime, F = this.mainVideo.playbackRate;
-        if (this.mainVideo.src = i, this.mainVideo.currentTime = g, this.mainVideo.playbackRate = F, y)
+        const y = !this.mainVideo.paused, h = this.mainVideo.currentTime, A = this.mainVideo.playbackRate;
+        if (this.mainVideo.src = i, this.mainVideo.currentTime = h, this.mainVideo.playbackRate = A, y)
           try {
             await this.mainVideo.play();
           } catch {
@@ -1355,7 +1357,7 @@ class _e extends HTMLElement {
   }
   render() {
     var b, l, E;
-    const e = this.activeLocale === "am", i = this.manifest ? this.manifest.title[this.activeLocale] || this.manifest.title.en : "Media Player", t = this.resolveMainSource(this.currentQuality), s = (b = this.manifest) == null ? void 0 : b.sources.find((v) => v.kind === "sign"), r = this.prefs.transcriptWidth || P.transcriptWidth || 260, d = this.prefs.transcriptHeight || P.transcriptHeight || 400, n = this.prefs.eslWidth || P.eslWidth || 240, c = this.prefs.eslHeight || P.eslHeight || 180;
+    const e = this.activeLocale === "am", i = this.manifest ? this.manifest.title[this.activeLocale] || this.manifest.title.en : "Media Player", t = this.resolveMainSource(this.currentQuality), s = (b = this.manifest) == null ? void 0 : b.sources.find((v) => v.kind === "sign"), r = this.prefs.transcriptWidth || H.transcriptWidth || 260, c = this.prefs.transcriptHeight || H.transcriptHeight || 400, n = this.prefs.eslWidth || H.eslWidth || 240, d = this.prefs.eslHeight || H.eslHeight || 180;
     this.shadow.innerHTML = `
       <style>
         :host {
@@ -2827,7 +2829,7 @@ class _e extends HTMLElement {
           <div 
             class="window-panel transcript-window" 
             id="transcript-window"
-            style="width: ${r}px; height: ${d}px; flex: 0 0 ${r}px; display: ${this.prefs.transcriptVisible !== !1 ? "flex" : "none"};"
+            style="width: ${r}px; height: ${c}px; flex: 0 0 ${r}px; display: ${this.prefs.transcriptVisible !== !1 ? "flex" : "none"};"
             aria-label="${e ? "የትምህርቱ የጽሑፍ ግልባጭ መስኮት" : "Lesson Transcript Window"}">
             
             <!-- Transcript Titlebar -->
@@ -3033,48 +3035,48 @@ class _e extends HTMLElement {
                 <!-- Left: Playback & Navigation -->
                 <div class="controls-cluster">
                   <button class="btn-ctrl" id="btn-play" aria-label="${e ? "አጫውት (Space / K)" : "Play (Space / K)"}" title="${e ? "አጫውት (Space / K)" : "Play (Space / K)"}">
-                    <span id="play-icon" aria-hidden="true">${D.play}</span>
+                    <span id="play-icon" aria-hidden="true">${V.play}</span>
                   </button>
 
                   <button class="btn-ctrl" id="btn-restart" aria-label="${e ? "እንደገና ጀምር (0 / Home)" : "Restart (0 / Home)"}" title="${e ? "እንደገና ጀምር (0 / Home)" : "Restart (0 / Home)"}">
-                    <span aria-hidden="true">${D.restart}</span>
+                    <span aria-hidden="true">${V.restart}</span>
                   </button>
 
                   <button class="btn-ctrl" id="btn-rewind" aria-label="${e ? "ወደኋላ 5 ሰከንድ (J / ←)" : "Rewind 5 seconds (J / ←)"}" title="${e ? "ወደኋላ 5 ሰከንድ (J / ←)" : "Rewind 5 seconds (J / ←)"}">
-                    <span aria-hidden="true">${D.rewind}</span>
+                    <span aria-hidden="true">${V.rewind}</span>
                   </button>
 
                   <button class="btn-ctrl" id="btn-forward" aria-label="${e ? "ወደፊት 5 ሰከንድ (L / →)" : "Forward 5 seconds (L / →)"}" title="${e ? "ወደፊት 5 ሰከንድ (L / →)" : "Forward 5 seconds (L / →)"}">
-                    <span aria-hidden="true">${D.forward}</span>
+                    <span aria-hidden="true">${V.forward}</span>
                   </button>
                 </div>
 
                 <!-- Center: Accessibility & Speed -->
                 <div class="controls-cluster">
                   <button class="btn-ctrl" id="btn-cc" aria-pressed="${this.prefs.captionLanguage !== "off" ? "true" : "false"}" aria-label="${e ? "የትርጉም ጽሑፍ (C)" : "Captions (C)"}" title="${e ? "የትርጉም ጽሑፍ (C)" : "Captions (C)"}">
-                    <span aria-hidden="true">${D.cc}</span>
+                    <span aria-hidden="true">${V.cc}</span>
                   </button>
 
                   <button class="btn-ctrl" id="btn-esl" aria-pressed="${this.prefs.eslVisible ? "true" : "false"}" aria-label="${e ? "የኢትዮጵያ የምልክት ቋንቋ (ESL) (S)" : "Ethiopian Sign Language (ESL) (S)"}" title="${e ? "የኢትዮጵያ የምልክት ቋንቋ (ESL) (S)" : "Ethiopian Sign Language (ESL) (S)"}">
-                    <span aria-hidden="true">${D.esl}</span>
+                    <span aria-hidden="true">${V.esl}</span>
                   </button>
 
                   <button class="btn-ctrl" id="btn-ad" aria-pressed="${this.prefs.audioDescriptionEnabled ? "true" : "false"}" aria-label="${e ? "የድምጽ ማብራሪያ (D)" : "Audio Description (D)"}" title="${e ? "የድምጽ ማብራሪያ (D)" : "Audio Description (D)"}">
-                    <span aria-hidden="true">${D.ad}</span>
+                    <span aria-hidden="true">${V.ad}</span>
                   </button>
 
                   <button class="btn-ctrl" id="btn-transcript-toggle" aria-pressed="${this.prefs.transcriptVisible !== !1 ? "true" : "false"}" aria-label="${e ? "የጽሑፍ ግልባጭ ማሳያ (T)" : "Toggle Transcript (T)"}" title="${e ? "የጽሑፍ ግልባጭ ማሳያ (T)" : "Toggle Transcript (T)"}">
-                    <span aria-hidden="true">${D.transcript}</span>
+                    <span aria-hidden="true">${V.transcript}</span>
                   </button>
 
                   <span class="ctrl-divider" aria-hidden="true"></span>
 
                   <button class="btn-ctrl" id="btn-speed-faster" aria-label="${e ? "ፍጥነት ጨምር (>)" : "Increase speed (>)"}" title="${e ? "ፍጥነት ጨምር (>)" : "Increase speed (>)"}">
-                    <span aria-hidden="true">${D.faster}</span>
+                    <span aria-hidden="true">${V.faster}</span>
                   </button>
 
                   <button class="btn-ctrl" id="btn-speed-slower" aria-label="${e ? "ፍጥነት ቀንስ (<)" : "Decrease speed (<)"}" title="${e ? "ፍጥነት ቀንስ (<)" : "Decrease speed (<)"}">
-                    <span aria-hidden="true">${D.slower}</span>
+                    <span aria-hidden="true">${V.slower}</span>
                   </button>
 
                   <span class="ctrl-divider" aria-hidden="true"></span>
@@ -3083,24 +3085,24 @@ class _e extends HTMLElement {
                 <!-- Right: Settings, Fullscreen, Volume -->
                 <div class="controls-cluster">
                   <button class="btn-ctrl btn-ctrl-quality" id="btn-quality" aria-expanded="false" aria-haspopup="menu" aria-label="${e ? "የቪዲዮ ጥራት" : "Video Quality"}" title="${e ? "የቪዲዮ ጥራት መቆጣጠሪያ (Auto / 720p / 360p / 240p)" : "Video Quality (Auto / 720p / 360p / 240p)"}">
-                    <span aria-hidden="true">${D.quality}</span>
+                    <span aria-hidden="true">${V.quality}</span>
                     <span class="quality-badge-text" id="quality-badge-text">${this.currentQuality === "auto" ? "Auto" : this.currentQuality}</span>
                   </button>
 
                   <button class="btn-ctrl" id="btn-shortcuts" aria-expanded="false" aria-label="${e ? "የኪቦርድ አቋራጮች (?)" : "Keyboard Shortcuts (?)"}" title="${e ? "የኪቦርድ አቋራጮች (?)" : "Keyboard Shortcuts (?)"}">
-                    <span aria-hidden="true">${D.shortcuts}</span>
+                    <span aria-hidden="true">${V.shortcuts}</span>
                   </button>
 
                   <button class="btn-ctrl" id="btn-prefs" aria-expanded="false" aria-label="${e ? "የተደራሽነት ምርጫዎች" : "Accessibility Preferences"}" title="${e ? "የተደራሽነት ምርጫዎች" : "Accessibility Preferences"}">
-                    <span aria-hidden="true">${D.prefs}</span>
+                    <span aria-hidden="true">${V.prefs}</span>
                   </button>
 
                   <button class="btn-ctrl" id="btn-fullscreen" aria-pressed="false" aria-label="${e ? "ሙሉ ማያ ገጽ (F)" : "Fullscreen (F)"}" title="${e ? "ሙሉ ማያ ገጽ (F)" : "Fullscreen (F)"}">
-                    <span id="fullscreen-icon" aria-hidden="true">${D.fullscreenEnter}</span>
+                    <span id="fullscreen-icon" aria-hidden="true">${V.fullscreenEnter}</span>
                   </button>
 
                   <button class="btn-ctrl" id="btn-mute" aria-pressed="false" aria-label="${e ? "ድምጽ አጥፋ (M)" : "Mute (M)"}" title="${e ? "ድምጽ አጥፋ (M)" : "Mute (M)"}">
-                    <span id="mute-icon" aria-hidden="true">${D.volumeUnmuted}</span>
+                    <span id="mute-icon" aria-hidden="true">${V.volumeUnmuted}</span>
                   </button>
                 </div>
               </div>
@@ -3157,7 +3159,7 @@ class _e extends HTMLElement {
               aria-labelledby="prefs-title">
               <div class="popover-header">
                 <div class="popover-title" id="prefs-title">
-                  <span aria-hidden="true">${D.prefs}</span>
+                  <span aria-hidden="true">${V.prefs}</span>
                   <span>${e ? "የተደራሽነት እና አቀማመጥ ምርጫዎች" : "Accessibility & Layout Settings"}</span>
                 </div>
                 <button type="button" class="btn-popover-close" id="btn-dismiss-prefs" aria-label="${e ? "ምርጫዎችን ዝጋ" : "Close settings"}" title="${e ? "ዝጋ" : "Close"}">✕</button>
@@ -3268,7 +3270,7 @@ class _e extends HTMLElement {
               aria-labelledby="shortcuts-title">
               <div class="popover-header">
                 <div class="popover-title" id="shortcuts-title">
-                  <span aria-hidden="true">${D.shortcuts}</span>
+                  <span aria-hidden="true">${V.shortcuts}</span>
                   <span>${e ? "የኪቦርድ አቋራጭ ቁልፎች" : "Keyboard Shortcuts Cheat-Sheet"}</span>
                 </div>
                 <button type="button" class="btn-popover-close" id="btn-close-shortcuts" aria-label="${e ? "ዝጋ" : "Close"}" title="${e ? "ዝጋ" : "Close"}">✕</button>
@@ -3307,7 +3309,7 @@ class _e extends HTMLElement {
           <div 
             class="window-panel esl-window" 
             id="esl-window" 
-            style="width: ${n}px; height: ${c}px; flex: 0 0 ${n}px; display: ${this.prefs.eslVisible && s ? "flex" : "none"};"
+            style="width: ${n}px; height: ${d}px; flex: 0 0 ${n}px; display: ${this.prefs.eslVisible && s ? "flex" : "none"};"
             aria-label="${e ? "የኢትዮጵያ የምልክት ቋንቋ መስኮት" : "Ethiopian Sign Language Window"}">
             
             <!-- Sign Titlebar -->
@@ -3373,7 +3375,7 @@ class _e extends HTMLElement {
     `, this.bindDOMElements(), this.attachEventListeners(), this.setupWindowInteractions();
   }
   bindDOMElements() {
-    this.mainVideo = this.shadow.getElementById("main-video"), this.signVideo = this.shadow.getElementById("sign-video"), this.captionOverlay = this.shadow.getElementById("caption-overlay"), this.syncController = new ot(this.mainVideo, {
+    this.mainVideo = this.shadow.getElementById("main-video"), this.signVideo = this.shadow.getElementById("sign-video"), this.captionOverlay = this.shadow.getElementById("caption-overlay"), this.syncController = new Ze(this.mainVideo, {
       driftThreshold: 0.25,
       onSignStatusChange: (s) => {
         const r = this.shadow.getElementById("sign-status-indicator");
@@ -3381,7 +3383,7 @@ class _e extends HTMLElement {
       }
     }), this.signVideo && this.syncController.setSignVideo(this.signVideo);
     const e = this.shadow.getElementById("transcript-target"), i = this.shadow.getElementById("live-chat-target"), t = this.shadow.getElementById("cb-auto-scroll");
-    this.transcriptViewer = new rt(e, {
+    this.transcriptViewer = new et(e, {
       locale: this.activeLocale,
       onSeekAndPlay: (s) => {
         this.seekAndPlay(s);
@@ -3389,7 +3391,7 @@ class _e extends HTMLElement {
       onFollowChange: (s) => {
         t && (t.checked = s);
       }
-    }), i && (this.liveChatViewer = new nt(i, {
+    }), i && (this.liveChatViewer = new tt(i, {
       locale: this.activeLocale,
       onSeekAndPlay: (s) => {
         this.seekAndPlay(s);
@@ -3399,27 +3401,27 @@ class _e extends HTMLElement {
   setupWindowInteractions() {
     const e = this.shadow.getElementById("player-stage");
     if (!e) return;
-    const i = (t, s, r, d, n, c, b) => {
-      const l = this.shadow.getElementById(t), E = this.shadow.getElementById(s), v = this.shadow.getElementById(r), y = this.shadow.getElementById(d), g = this.shadow.getElementById(n), F = c ? this.shadow.getElementById(c) : null;
+    const i = (t, s, r, c, n, d, b) => {
+      const l = this.shadow.getElementById(t), E = this.shadow.getElementById(s), v = this.shadow.getElementById(r), y = this.shadow.getElementById(c), h = this.shadow.getElementById(n), A = d ? this.shadow.getElementById(d) : null;
       if (!l || !E || !v) return;
-      let u = null, C = !1, _ = "corner", le = 0, ce = 0, W = 0, de = 0, X = null;
-      const I = (k) => {
+      let u = null, C = !1, X = "corner", le = 0, de = 0, _ = 0, ce = 0, ee = null;
+      const P = (k) => {
         if (!C) return;
-        const L = k.clientX - le, x = k.clientY - ce;
-        X !== null && cancelAnimationFrame(X), X = requestAnimationFrame(() => {
-          let B = W, V = de;
-          _ === "corner" || _ === "right" ? B = Math.min(b.maxWidth, Math.max(b.minWidth, W + L)) : _ === "left" && (B = Math.min(b.maxWidth, Math.max(b.minWidth, W - L))), (_ === "corner" || _ === "bottom") && (V = Math.min(b.maxHeight, Math.max(b.minHeight, de + x))), l.style.width = `${B}px`, l.style.height = `${V}px`, l.style.flex = `0 0 ${B}px`, u && (u.style.width = `${B}px`, u.style.height = `${V}px`, u.style.flex = `0 0 ${B}px`);
+        const L = k.clientX - le, w = k.clientY - de;
+        ee !== null && cancelAnimationFrame(ee), ee = requestAnimationFrame(() => {
+          let $ = _, D = ce;
+          X === "corner" || X === "right" ? $ = Math.min(b.maxWidth, Math.max(b.minWidth, _ + L)) : X === "left" && ($ = Math.min(b.maxWidth, Math.max(b.minWidth, _ - L))), (X === "corner" || X === "bottom") && (D = Math.min(b.maxHeight, Math.max(b.minHeight, ce + w))), l.style.width = `${$}px`, l.style.height = `${D}px`, l.style.flex = `0 0 ${$}px`, u && (u.style.width = `${$}px`, u.style.height = `${D}px`, u.style.flex = `0 0 ${$}px`);
         });
       }, z = () => {
-        C && (C = !1, l.classList.remove("is-resizing"), window.removeEventListener("pointermove", I), window.removeEventListener("pointerup", z), window.removeEventListener("pointercancel", z), X !== null && (cancelAnimationFrame(X), X = null), b.onSaveSize(l.offsetWidth, l.offsetHeight));
-      }, q = (k, L) => {
-        C = !0, _ = k, le = L.clientX, ce = L.clientY, W = l.offsetWidth, de = l.offsetHeight, l.classList.add("is-resizing"), window.addEventListener("pointermove", I), window.addEventListener("pointerup", z), window.addEventListener("pointercancel", z), L.preventDefault(), L.stopPropagation();
+        C && (C = !1, l.classList.remove("is-resizing"), window.removeEventListener("pointermove", P), window.removeEventListener("pointerup", z), window.removeEventListener("pointercancel", z), ee !== null && (cancelAnimationFrame(ee), ee = null), b.onSaveSize(l.offsetWidth, l.offsetHeight));
+      }, M = (k, L) => {
+        C = !0, X = k, le = L.clientX, de = L.clientY, _ = l.offsetWidth, ce = l.offsetHeight, l.classList.add("is-resizing"), window.addEventListener("pointermove", P), window.addEventListener("pointerup", z), window.addEventListener("pointercancel", z), L.preventDefault(), L.stopPropagation();
       };
-      v.addEventListener("pointerdown", (k) => q("corner", k)), y == null || y.addEventListener("pointerdown", (k) => q("bottom", k)), g == null || g.addEventListener("pointerdown", (k) => q("right", k)), F == null || F.addEventListener("pointerdown", (k) => q("left", k)), v.addEventListener("keydown", (k) => {
-        let L = l.offsetWidth, x = l.offsetHeight, B = !1;
-        k.key === "ArrowRight" ? (L = Math.min(b.maxWidth, L + 20), B = !0) : k.key === "ArrowLeft" ? (L = Math.max(b.minWidth, L - 20), B = !0) : k.key === "ArrowDown" ? (x = Math.min(b.maxHeight, x + 20), B = !0) : k.key === "ArrowUp" && (x = Math.max(b.minHeight, x - 20), B = !0), B && (k.preventDefault(), l.style.width = `${L}px`, l.style.height = `${x}px`, l.style.flex = `0 0 ${L}px`, u && (u.style.width = `${L}px`, u.style.height = `${x}px`, u.style.flex = `0 0 ${L}px`), b.onSaveSize(L, x));
+      v.addEventListener("pointerdown", (k) => M("corner", k)), y == null || y.addEventListener("pointerdown", (k) => M("bottom", k)), h == null || h.addEventListener("pointerdown", (k) => M("right", k)), A == null || A.addEventListener("pointerdown", (k) => M("left", k)), v.addEventListener("keydown", (k) => {
+        let L = l.offsetWidth, w = l.offsetHeight, $ = !1;
+        k.key === "ArrowRight" ? (L = Math.min(b.maxWidth, L + 20), $ = !0) : k.key === "ArrowLeft" ? (L = Math.max(b.minWidth, L - 20), $ = !0) : k.key === "ArrowDown" ? (w = Math.min(b.maxHeight, w + 20), $ = !0) : k.key === "ArrowUp" && (w = Math.max(b.minHeight, w - 20), $ = !0), $ && (k.preventDefault(), l.style.width = `${L}px`, l.style.height = `${w}px`, l.style.flex = `0 0 ${L}px`, u && (u.style.width = `${L}px`, u.style.height = `${w}px`, u.style.flex = `0 0 ${L}px`), b.onSaveSize(L, w));
       });
-      let w = !1, H = 0, A = 0, ie = 0, ae = 0, $ = null;
+      let x = !1, I = 0, B = 0, oe = 0, re = 0, F = null;
       l.addEventListener("pointerdown", () => {
         if (l.classList.contains("floating")) {
           l.style.zIndex = "100";
@@ -3427,48 +3429,48 @@ class _e extends HTMLElement {
           L && L.classList.contains("floating") && (L.style.zIndex = "90");
         }
       });
-      const se = (k) => {
-        const L = k.clientX - H, x = k.clientY - A;
-        !w && Math.hypot(L, x) > 4 && (w = !0, !u && l.parentNode && (u = document.createElement("div"), u.className = "window-placeholder", u.style.width = `${l.offsetWidth}px`, u.style.height = `${l.offsetHeight}px`, u.style.flex = l.style.flex || `0 0 ${l.offsetWidth}px`, l.parentNode.insertBefore(u, l)), l.classList.add("floating"), l.style.position = "absolute", l.style.zIndex = "100"), w && ($ !== null && cancelAnimationFrame($), $ = requestAnimationFrame(() => {
-          const B = ie + L, V = ae + x;
-          l.style.left = `${B}px`, l.style.top = `${V}px`, l.style.right = "auto", l.style.bottom = "auto";
+      const Y = (k) => {
+        const L = k.clientX - I, w = k.clientY - B;
+        !x && Math.hypot(L, w) > 4 && (x = !0, !u && l.parentNode && (u = document.createElement("div"), u.className = "window-placeholder", u.style.width = `${l.offsetWidth}px`, u.style.height = `${l.offsetHeight}px`, u.style.flex = l.style.flex || `0 0 ${l.offsetWidth}px`, l.parentNode.insertBefore(u, l)), l.classList.add("floating"), l.style.position = "absolute", l.style.zIndex = "100"), x && (F !== null && cancelAnimationFrame(F), F = requestAnimationFrame(() => {
+          const $ = oe + L, D = re + w;
+          l.style.left = `${$}px`, l.style.top = `${D}px`, l.style.right = "auto", l.style.bottom = "auto";
         }));
-      }, G = () => {
-        w && (w = !1), window.removeEventListener("pointermove", se), window.removeEventListener("pointerup", G), window.removeEventListener("pointercancel", G), $ !== null && (cancelAnimationFrame($), $ = null);
+      }, N = () => {
+        x && (x = !1), window.removeEventListener("pointermove", Y), window.removeEventListener("pointerup", N), window.removeEventListener("pointercancel", N), F !== null && (cancelAnimationFrame(F), F = null);
       };
       E.addEventListener("pointerdown", (k) => {
         if (k.target.tagName === "INPUT" || k.target.tagName === "SELECT")
           return;
-        H = k.clientX, A = k.clientY;
-        const L = e.getBoundingClientRect(), x = l.getBoundingClientRect();
-        ie = l.style.left ? parseFloat(l.style.left) : x.left - L.left, ae = l.style.top ? parseFloat(l.style.top) : x.top - L.top, w = !1, l.style.zIndex = "100";
-        const B = t === "transcript-window" ? "esl-window" : "transcript-window", V = this.shadow.getElementById(B);
-        V && V.classList.contains("floating") && (V.style.zIndex = "90"), window.addEventListener("pointermove", se), window.addEventListener("pointerup", G), window.addEventListener("pointercancel", G);
+        I = k.clientX, B = k.clientY;
+        const L = e.getBoundingClientRect(), w = l.getBoundingClientRect();
+        oe = l.style.left ? parseFloat(l.style.left) : w.left - L.left, re = l.style.top ? parseFloat(l.style.top) : w.top - L.top, x = !1, l.style.zIndex = "100";
+        const $ = t === "transcript-window" ? "esl-window" : "transcript-window", D = this.shadow.getElementById($);
+        D && D.classList.contains("floating") && (D.style.zIndex = "90"), window.addEventListener("pointermove", Y), window.addEventListener("pointerup", N), window.addEventListener("pointercancel", N);
       }), E.addEventListener("keydown", (k) => {
         let L = !1;
-        const x = 20;
+        const w = 20;
         if (!l.classList.contains("floating")) {
           !u && l.parentNode && (u = document.createElement("div"), u.className = "window-placeholder", u.style.width = `${l.offsetWidth}px`, u.style.height = `${l.offsetHeight}px`, u.style.flex = l.style.flex || `0 0 ${l.offsetWidth}px`, l.parentNode.insertBefore(u, l));
-          const S = e.getBoundingClientRect(), R = l.getBoundingClientRect();
-          l.classList.add("floating"), l.style.position = "absolute", l.style.zIndex = "100", l.style.left = `${R.left - S.left}px`, l.style.top = `${R.top - S.top}px`;
+          const S = e.getBoundingClientRect(), W = l.getBoundingClientRect();
+          l.classList.add("floating"), l.style.position = "absolute", l.style.zIndex = "100", l.style.left = `${W.left - S.left}px`, l.style.top = `${W.top - S.top}px`;
         }
-        let B = parseFloat(l.style.left) || 0, V = parseFloat(l.style.top) || 0;
-        k.key === "ArrowRight" ? (B += x, L = !0) : k.key === "ArrowLeft" ? (B -= x, L = !0) : k.key === "ArrowDown" ? (V += x, L = !0) : k.key === "ArrowUp" && (V -= x, L = !0), L && (k.preventDefault(), l.style.left = `${B}px`, l.style.top = `${V}px`);
+        let $ = parseFloat(l.style.left) || 0, D = parseFloat(l.style.top) || 0;
+        k.key === "ArrowRight" ? ($ += w, L = !0) : k.key === "ArrowLeft" ? ($ -= w, L = !0) : k.key === "ArrowDown" ? (D += w, L = !0) : k.key === "ArrowUp" && (D -= w, L = !0), L && (k.preventDefault(), l.style.left = `${$}px`, l.style.top = `${D}px`);
       });
-      const J = () => {
+      const O = () => {
         l.classList.remove("floating"), l.style.position = "", l.style.left = "", l.style.top = "", l.style.right = "", l.style.bottom = "", l.style.zIndex = "", u && (u.remove(), u = null);
       };
-      E.addEventListener("dblclick", J);
-      const he = (k) => {
+      E.addEventListener("dblclick", O);
+      const ue = (k) => {
         if (k === "split") {
-          J();
+          O();
           return;
         }
         l.classList.contains("floating") || (!u && l.parentNode && (u = document.createElement("div"), u.className = "window-placeholder", u.style.width = `${l.offsetWidth}px`, u.style.height = `${l.offsetHeight}px`, u.style.flex = l.style.flex || `0 0 ${l.offsetWidth}px`, l.parentNode.insertBefore(u, l)), l.classList.add("floating"), l.style.position = "absolute", l.style.zIndex = "100");
-        const L = e.getBoundingClientRect(), x = l.offsetWidth || 280, B = l.offsetHeight || 210, V = 16, S = Math.max(0, L.width - x - V), R = Math.max(0, L.height - B - V);
-        k === "tr" ? (l.style.left = `${S}px`, l.style.top = `${V}px`) : k === "br" && (l.style.left = `${S}px`, l.style.top = `${R}px`);
+        const L = e.getBoundingClientRect(), w = l.offsetWidth || 280, $ = l.offsetHeight || 210, D = 16, S = Math.max(0, L.width - w - D), W = Math.max(0, L.height - $ - D);
+        k === "tr" ? (l.style.left = `${S}px`, l.style.top = `${D}px`) : k === "br" && (l.style.left = `${S}px`, l.style.top = `${W}px`);
       };
-      l.__reDock = J, l.__dockPreset = he;
+      l.__reDock = O, l.__dockPreset = ue;
     };
     i(
       "transcript-window",
@@ -3505,20 +3507,20 @@ class _e extends HTMLElement {
     );
   }
   attachEventListeners() {
-    var Me, qe, Ie, He, Pe, je, Re, Oe;
-    const e = this.shadow.getElementById("btn-play"), i = this.shadow.getElementById("play-icon"), t = this.shadow.getElementById("big-play-btn"), s = this.shadow.getElementById("btn-restart"), r = this.shadow.getElementById("btn-speed-faster"), d = this.shadow.getElementById("btn-speed-slower"), n = this.shadow.getElementById("speed-display"), c = this.shadow.getElementById("state-display"), b = this.shadow.getElementById("btn-fullscreen"), l = this.shadow.getElementById("fullscreen-icon"), E = this.shadow.getElementById("btn-mute"), v = this.shadow.getElementById("mute-icon"), y = this.shadow.getElementById("player-container"), g = this.shadow.getElementById("seek-scrubber"), F = this.shadow.getElementById("time-display"), u = () => {
+    var ze, Me, qe, Pe, Ie, He, je, Re;
+    const e = this.shadow.getElementById("btn-play"), i = this.shadow.getElementById("play-icon"), t = this.shadow.getElementById("big-play-btn"), s = this.shadow.getElementById("btn-restart"), r = this.shadow.getElementById("btn-speed-faster"), c = this.shadow.getElementById("btn-speed-slower"), n = this.shadow.getElementById("speed-display"), d = this.shadow.getElementById("state-display"), b = this.shadow.getElementById("btn-fullscreen"), l = this.shadow.getElementById("fullscreen-icon"), E = this.shadow.getElementById("btn-mute"), v = this.shadow.getElementById("mute-icon"), y = this.shadow.getElementById("player-container"), h = this.shadow.getElementById("seek-scrubber"), A = this.shadow.getElementById("time-display"), u = () => {
       this.mainVideo.paused ? this.mainVideo.play() : this.mainVideo.pause();
     };
     e && e.addEventListener("click", u), t && t.addEventListener("click", u), this.mainVideo.addEventListener("click", u), this.mainVideo.addEventListener("play", () => {
-      i && (i.innerHTML = D.pause), e == null || e.setAttribute("aria-label", this.activeLocale === "am" ? "አቁም (Space / K)" : "Pause (Space / K)"), e == null || e.setAttribute("title", this.activeLocale === "am" ? "አቁም (Space / K)" : "Pause (Space / K)"), t == null || t.classList.add("is-hidden"), c && (c.textContent = this.activeLocale === "am" ? "እየተጫወተ ነው" : "Playing");
+      i && (i.innerHTML = V.pause), e == null || e.setAttribute("aria-label", this.activeLocale === "am" ? "አቁም (Space / K)" : "Pause (Space / K)"), e == null || e.setAttribute("title", this.activeLocale === "am" ? "አቁም (Space / K)" : "Pause (Space / K)"), t == null || t.classList.add("is-hidden"), d && (d.textContent = this.activeLocale === "am" ? "እየተጫወተ ነው" : "Playing");
       const o = this.shadow.getElementById("audio-equalizer");
       o && o.classList.add("playing");
     }), this.mainVideo.addEventListener("pause", () => {
-      i && (i.innerHTML = D.play), e == null || e.setAttribute("aria-label", this.activeLocale === "am" ? "አጫውት (Space / K)" : "Play (Space / K)"), e == null || e.setAttribute("title", this.activeLocale === "am" ? "አጫውት (Space / K)" : "Play (Space / K)"), t == null || t.classList.remove("is-hidden"), c && (c.textContent = this.mainVideo.ended ? this.activeLocale === "am" ? "ተጠናቋል" : "End of track" : this.activeLocale === "am" ? "ቆሟል" : "Paused");
+      i && (i.innerHTML = V.play), e == null || e.setAttribute("aria-label", this.activeLocale === "am" ? "አጫውት (Space / K)" : "Play (Space / K)"), e == null || e.setAttribute("title", this.activeLocale === "am" ? "አጫውት (Space / K)" : "Play (Space / K)"), t == null || t.classList.remove("is-hidden"), d && (d.textContent = this.mainVideo.ended ? this.activeLocale === "am" ? "ተጠናቋል" : "End of track" : this.activeLocale === "am" ? "ቆሟል" : "Paused");
       const o = this.shadow.getElementById("audio-equalizer");
       o && o.classList.remove("playing");
     }), this.mainVideo.addEventListener("ended", () => {
-      i && (i.innerHTML = D.play), e == null || e.setAttribute("aria-label", this.activeLocale === "am" ? "አጫውት (Space / K)" : "Play (Space / K)"), e == null || e.setAttribute("title", this.activeLocale === "am" ? "አጫውት (Space / K)" : "Play (Space / K)"), t == null || t.classList.remove("is-hidden"), c && (c.textContent = this.activeLocale === "am" ? "ተጠናቋል" : "End of track");
+      i && (i.innerHTML = V.play), e == null || e.setAttribute("aria-label", this.activeLocale === "am" ? "አጫውት (Space / K)" : "Play (Space / K)"), e == null || e.setAttribute("title", this.activeLocale === "am" ? "አጫውት (Space / K)" : "Play (Space / K)"), t == null || t.classList.remove("is-hidden"), d && (d.textContent = this.activeLocale === "am" ? "ተጠናቋል" : "End of track");
       const o = this.shadow.getElementById("audio-equalizer");
       o && o.classList.remove("playing"), this.dispatchEvent(
         new CustomEvent("db-player:complete", {
@@ -3530,26 +3532,26 @@ class _e extends HTMLElement {
     }), s == null || s.addEventListener("click", () => {
       this.mainVideo.currentTime = 0, this.mainVideo.play(), this.transcriptViewer.updateActiveTime(0);
     });
-    const C = [0.5, 0.75, 1, 1.25, 1.5, 2], _ = () => {
+    const C = [0.5, 0.75, 1, 1.25, 1.5, 2], X = () => {
       const o = this.mainVideo.playbackRate;
       n && (n.textContent = `Speed: ${o}x`);
     };
     r == null || r.addEventListener("click", () => {
-      const o = this.mainVideo.playbackRate, p = C.filter((M) => M > o + 0.01), h = p.length > 0 ? p[0] : 2;
-      this.mainVideo.playbackRate = h, _();
-    }), d == null || d.addEventListener("click", () => {
-      const o = this.mainVideo.playbackRate, p = C.filter((M) => M < o - 0.01), h = p.length > 0 ? p[p.length - 1] : 0.5;
-      this.mainVideo.playbackRate = h, _();
+      const o = this.mainVideo.playbackRate, p = C.filter((q) => q > o + 0.01), m = p.length > 0 ? p[0] : 2;
+      this.mainVideo.playbackRate = m, X();
+    }), c == null || c.addEventListener("click", () => {
+      const o = this.mainVideo.playbackRate, p = C.filter((q) => q < o - 0.01), m = p.length > 0 ? p[p.length - 1] : 0.5;
+      this.mainVideo.playbackRate = m, X();
     });
-    const le = () => !!(document.fullscreenElement || document.webkitFullscreenElement || this.shadow.fullscreenElement || y != null && y.classList.contains("is-fullscreen") || this.hasAttribute("data-fullscreen")), ce = async () => {
+    const le = () => !!(document.fullscreenElement || document.webkitFullscreenElement || this.shadow.fullscreenElement || y != null && y.classList.contains("is-fullscreen") || this.hasAttribute("data-fullscreen")), de = async () => {
       try {
-        le() ? ((document.fullscreenElement || document.webkitFullscreenElement || this.shadow.fullscreenElement) && (document.exitFullscreen ? await document.exitFullscreen() : document.webkitExitFullscreen && await document.webkitExitFullscreen()), y == null || y.classList.remove("is-fullscreen"), this.removeAttribute("data-fullscreen"), W()) : y != null && y.requestFullscreen ? await y.requestFullscreen() : y != null && y.webkitRequestFullscreen ? await y.webkitRequestFullscreen() : (y == null || y.classList.add("is-fullscreen"), this.setAttribute("data-fullscreen", "true"), W());
+        le() ? ((document.fullscreenElement || document.webkitFullscreenElement || this.shadow.fullscreenElement) && (document.exitFullscreen ? await document.exitFullscreen() : document.webkitExitFullscreen && await document.webkitExitFullscreen()), y == null || y.classList.remove("is-fullscreen"), this.removeAttribute("data-fullscreen"), _()) : y != null && y.requestFullscreen ? await y.requestFullscreen() : y != null && y.webkitRequestFullscreen ? await y.webkitRequestFullscreen() : (y == null || y.classList.add("is-fullscreen"), this.setAttribute("data-fullscreen", "true"), _());
       } catch (o) {
-        console.warn("Fullscreen native request fell back to CSS:", o), (y == null ? void 0 : y.classList.contains("is-fullscreen")) ? (y == null || y.classList.remove("is-fullscreen"), this.removeAttribute("data-fullscreen")) : (y == null || y.classList.add("is-fullscreen"), this.setAttribute("data-fullscreen", "true")), W();
+        console.warn("Fullscreen native request fell back to CSS:", o), (y == null ? void 0 : y.classList.contains("is-fullscreen")) ? (y == null || y.classList.remove("is-fullscreen"), this.removeAttribute("data-fullscreen")) : (y == null || y.classList.add("is-fullscreen"), this.setAttribute("data-fullscreen", "true")), _();
       }
     };
-    b == null || b.addEventListener("click", ce);
-    const W = () => {
+    b == null || b.addEventListener("click", de);
+    const _ = () => {
       const o = le();
       b == null || b.setAttribute("aria-pressed", o ? "true" : "false"), b == null || b.setAttribute(
         "aria-label",
@@ -3557,14 +3559,14 @@ class _e extends HTMLElement {
       ), b == null || b.setAttribute(
         "title",
         o ? this.activeLocale === "am" ? "ከሙሉ ማያ ገጽ ውጣ (F)" : "Exit Fullscreen (F)" : this.activeLocale === "am" ? "ሙሉ ማያ ገጽ (F)" : "Fullscreen (F)"
-      ), l && (l.innerHTML = o ? D.fullscreenExit : D.fullscreenEnter);
+      ), l && (l.innerHTML = o ? V.fullscreenExit : V.fullscreenEnter);
     };
-    document.addEventListener("fullscreenchange", W), document.addEventListener("webkitfullscreenchange", W);
-    const de = () => {
+    document.addEventListener("fullscreenchange", _), document.addEventListener("webkitfullscreenchange", _);
+    const ce = () => {
       this.mainVideo.muted = !this.mainVideo.muted;
     };
-    E == null || E.addEventListener("click", de);
-    const X = () => {
+    E == null || E.addEventListener("click", ce);
+    const ee = () => {
       const o = this.mainVideo.muted;
       E == null || E.setAttribute("aria-pressed", o ? "true" : "false"), E == null || E.setAttribute(
         "aria-label",
@@ -3572,11 +3574,11 @@ class _e extends HTMLElement {
       ), E == null || E.setAttribute(
         "title",
         o ? this.activeLocale === "am" ? "ድምጽ አብራ (M)" : "Unmute (M)" : this.activeLocale === "am" ? "ድምጽ አጥፋ (M)" : "Mute (M)"
-      ), v && (v.innerHTML = o ? D.volumeMuted : D.volumeUnmuted);
+      ), v && (v.innerHTML = o ? V.volumeMuted : V.volumeUnmuted);
     };
-    this.mainVideo.addEventListener("volumechange", X), this.mainVideo.addEventListener("timeupdate", () => {
+    this.mainVideo.addEventListener("volumechange", ee), this.mainVideo.addEventListener("timeupdate", () => {
       const o = this.mainVideo.currentTime, p = this.mainVideo.duration || 1;
-      g && !g.matches(":active") && (g.value = (o / p * 100).toFixed(1)), F && (F.textContent = `${this.formatTime(o)} / ${this.formatTime(p)}`), this.updateCaptionDisplay(), this.transcriptViewer.updateActiveTime(o), this.liveChatViewer && this.liveChatViewer.updateTime(o), this.dispatchEvent(
+      h && !h.matches(":active") && (h.value = (o / p * 100).toFixed(1)), A && (A.textContent = `${this.formatTime(o)} / ${this.formatTime(p)}`), this.updateCaptionDisplay(), this.transcriptViewer.updateActiveTime(o), this.liveChatViewer && this.liveChatViewer.updateTime(o), this.dispatchEvent(
         new CustomEvent("db-player:progress", {
           bubbles: !0,
           composed: !0,
@@ -3586,101 +3588,87 @@ class _e extends HTMLElement {
           }
         })
       );
-    }), g.addEventListener("input", () => {
+    }), h.addEventListener("input", () => {
       const o = this.mainVideo.duration || 1;
-      this.mainVideo.currentTime = parseFloat(g.value) / 100 * o;
-    }), (Me = this.shadow.getElementById("btn-rewind")) == null || Me.addEventListener("click", () => {
+      this.mainVideo.currentTime = parseFloat(h.value) / 100 * o;
+    }), (ze = this.shadow.getElementById("btn-rewind")) == null || ze.addEventListener("click", () => {
       this.mainVideo.currentTime = Math.max(0, this.mainVideo.currentTime - 5);
-    }), (qe = this.shadow.getElementById("btn-forward")) == null || qe.addEventListener("click", () => {
+    }), (Me = this.shadow.getElementById("btn-forward")) == null || Me.addEventListener("click", () => {
       this.mainVideo.currentTime = Math.min(this.mainVideo.duration || 1e3, this.mainVideo.currentTime + 5);
     });
-    const I = this.shadow.getElementById("btn-ad");
-    I == null || I.addEventListener("click", async () => {
+    const P = this.shadow.getElementById("btn-ad");
+    P == null || P.addEventListener("click", async () => {
       if (!this.manifest) return;
-      this.prefs.audioDescriptionEnabled = !this.prefs.audioDescriptionEnabled, T({ audioDescriptionEnabled: this.prefs.audioDescriptionEnabled }), I.setAttribute("aria-pressed", this.prefs.audioDescriptionEnabled ? "true" : "false");
-      const o = this.prefs.audioDescriptionEnabled ? "described" : "main", p = this.manifest.sources.find((h) => h.kind === o) || this.manifest.sources.find((h) => h.kind === "main");
+      this.prefs.audioDescriptionEnabled = !this.prefs.audioDescriptionEnabled, T({ audioDescriptionEnabled: this.prefs.audioDescriptionEnabled }), P.setAttribute("aria-pressed", this.prefs.audioDescriptionEnabled ? "true" : "false");
+      const o = this.prefs.audioDescriptionEnabled ? "described" : "main", p = this.manifest.sources.find((m) => m.kind === o) || this.manifest.sources.find((m) => m.kind === "main");
       p && await this.syncController.switchSource(p.src);
     });
     const z = this.shadow.getElementById("btn-cc");
     z == null || z.addEventListener("click", async () => {
       const o = ["en", "am", "om", "ti", "so", "off"], p = (o.indexOf(this.prefs.captionLanguage) + 1) % o.length;
       this.prefs.captionLanguage = o[p], T({ captionLanguage: this.prefs.captionLanguage });
-      const h = this.prefs.captionLanguage === "off";
-      z.setAttribute("aria-pressed", h ? "false" : "true"), z.setAttribute("title", `Captions: ${this.prefs.captionLanguage.toUpperCase()} (C)`), z.setAttribute(
+      const m = this.prefs.captionLanguage === "off";
+      z.setAttribute("aria-pressed", m ? "false" : "true"), z.setAttribute("title", `Captions: ${this.prefs.captionLanguage.toUpperCase()} (C)`), z.setAttribute(
         "aria-label",
         `Captions: ${this.prefs.captionLanguage.toUpperCase()} (C)`
       );
-      const M = this.shadow.getElementById("select-cc-lang");
-      if (M && (M.value = this.prefs.captionLanguage), await this.loadCaptionTrack(this.prefs.captionLanguage), !h) {
-        const N = this.shadow.getElementById("select-transcript-lang");
-        N && N.value !== this.prefs.captionLanguage && (N.value = this.prefs.captionLanguage, await this.switchTranscriptLanguage(this.prefs.captionLanguage));
+      const q = this.shadow.getElementById("select-cc-lang");
+      if (q && (q.value = this.prefs.captionLanguage), await this.loadCaptionTrack(this.prefs.captionLanguage), !m) {
+        const R = this.shadow.getElementById("select-transcript-lang");
+        R && R.value !== this.prefs.captionLanguage && (R.value = this.prefs.captionLanguage, await this.switchTranscriptLanguage(this.prefs.captionLanguage));
       }
     });
-    const q = this.shadow.getElementById("btn-esl"), w = this.shadow.getElementById("esl-window");
-    q == null || q.addEventListener("click", () => {
-      this.prefs.eslVisible = !this.prefs.eslVisible, T({ eslVisible: this.prefs.eslVisible }), q.setAttribute("aria-pressed", this.prefs.eslVisible ? "true" : "false"), w && (w.style.display = this.prefs.eslVisible ? "flex" : "none");
+    const M = this.shadow.getElementById("btn-esl"), x = this.shadow.getElementById("esl-window");
+    M == null || M.addEventListener("click", () => {
+      this.prefs.eslVisible = !this.prefs.eslVisible, T({ eslVisible: this.prefs.eslVisible }), M.setAttribute("aria-pressed", this.prefs.eslVisible ? "true" : "false"), x && (x.style.display = this.prefs.eslVisible ? "flex" : "none");
     });
-    const H = this.shadow.getElementById("btn-transcript-toggle"), A = this.shadow.getElementById("transcript-window");
-    H == null || H.addEventListener("click", () => {
-      const p = !((A == null ? void 0 : A.style.display) !== "none");
-      this.prefs.transcriptVisible = p, T({ transcriptVisible: p }), H.setAttribute("aria-pressed", p ? "true" : "false"), A && (A.style.display = p ? "flex" : "none");
+    const I = this.shadow.getElementById("btn-transcript-toggle"), B = this.shadow.getElementById("transcript-window");
+    I == null || I.addEventListener("click", () => {
+      const p = !((B == null ? void 0 : B.style.display) !== "none");
+      this.prefs.transcriptVisible = p, T({ transcriptVisible: p }), I.setAttribute("aria-pressed", p ? "true" : "false"), B && (B.style.display = p ? "flex" : "none");
     });
-    const ie = this.shadow.getElementById("cb-auto-scroll");
-    ie == null || ie.addEventListener("change", () => {
-      this.transcriptViewer.setFollowing(ie.checked);
+    const oe = this.shadow.getElementById("cb-auto-scroll");
+    oe == null || oe.addEventListener("change", () => {
+      this.transcriptViewer.setFollowing(oe.checked);
     });
-    const ae = this.shadow.getElementById("select-transcript-lang");
-    ae == null || ae.addEventListener("change", async () => {
-      const o = ae.value;
+    const re = this.shadow.getElementById("select-transcript-lang");
+    re == null || re.addEventListener("change", async () => {
+      const o = re.value;
       await this.switchTranscriptLanguage(o);
     });
-    const $ = this.shadow.getElementById("btn-prefs"), se = this.shadow.getElementById("btn-transcript-prefs"), G = this.shadow.getElementById("btn-esl-prefs"), J = this.shadow.getElementById("prefs-dialog"), he = this.shadow.getElementById("btn-close-prefs"), k = this.shadow.getElementById("btn-dismiss-prefs"), L = this.shadow.getElementById("btn-reset-layout"), x = this.shadow.getElementById("btn-quality"), B = this.shadow.getElementById("quality-menu"), V = this.shadow.getElementById("dialog-shortcuts"), S = this.shadow.getElementById("btn-shortcuts"), R = this.shadow.getElementById("btn-close-shortcuts"), Ee = this.shadow.getElementById("btn-ok-shortcuts"), pe = () => {
-      this.isQualityMenuOpen && (this.isQualityMenuOpen = !1, B && (B.style.display = "none"), x == null || x.classList.remove("is-active"), x == null || x.setAttribute("aria-expanded", "false"));
-    }, Ge = () => {
-      re(), ne(), this.isQualityMenuOpen = !0, B && (B.style.display = "flex"), x == null || x.classList.add("is-active"), x == null || x.setAttribute("aria-expanded", "true");
-      const o = this.shadow.querySelector(`.quality-menu-item[data-quality="${this.currentQuality}"]`) || this.shadow.querySelector(".quality-menu-item");
-      o == null || o.focus();
-    }, Je = () => {
-      this.isQualityMenuOpen ? pe() : Ge();
-    };
-    x == null || x.addEventListener("click", (o) => {
-      o.preventDefault(), o.stopPropagation(), Je();
+    const F = this.shadow.getElementById("btn-prefs"), Y = this.shadow.getElementById("btn-transcript-prefs"), N = this.shadow.getElementById("btn-esl-prefs"), O = this.shadow.getElementById("prefs-dialog"), ue = this.shadow.getElementById("btn-close-prefs"), k = this.shadow.getElementById("btn-dismiss-prefs"), L = this.shadow.getElementById("btn-reset-layout"), w = this.shadow.getElementById("btn-quality"), $ = this.shadow.getElementById("quality-menu"), D = this.shadow.getElementById("dialog-shortcuts"), S = this.shadow.getElementById("btn-shortcuts"), W = this.shadow.getElementById("btn-close-shortcuts"), Ee = this.shadow.getElementById("btn-ok-shortcuts"), j = this.shadow.getElementById("select-cc-lang"), G = this.shadow.getElementById("select-cc-size"), J = this.shadow.getElementById("select-cc-theme"), ne = this.shadow.getElementById("select-video-quality"), te = this.shadow.getElementById("toggle-esl-visibility"), ie = this.shadow.getElementById("toggle-transcript-visibility"), ae = this.shadow.getElementById("toggle-ad-enabled"), Z = () => {
+      $ && ($.style.display = "none"), D && (D.style.display = "none"), O && (O.style.display = "none"), w == null || w.classList.remove("is-active"), w == null || w.setAttribute("aria-expanded", "false"), S == null || S.classList.remove("is-active"), S == null || S.setAttribute("aria-expanded", "false"), F == null || F.classList.remove("is-active"), F == null || F.setAttribute("aria-expanded", "false"), this.activePopover = null, this.isQualityMenuOpen = !1, this.isPreferencesOpen = !1, this.isShortcutsOpen = !1;
+    }, Fe = (o) => {
+      if (Z(), o === "quality") {
+        this.activePopover = "quality", this.isQualityMenuOpen = !0, $ && ($.style.display = "flex"), w == null || w.classList.add("is-active"), w == null || w.setAttribute("aria-expanded", "true");
+        const p = this.shadow.querySelector(`.quality-menu-item[data-quality="${this.currentQuality}"]`) || this.shadow.querySelector(".quality-menu-item");
+        p == null || p.focus();
+      } else o === "shortcuts" ? (this.activePopover = "shortcuts", this.isShortcutsOpen = !0, D && (D.style.display = "flex"), S == null || S.classList.add("is-active"), S == null || S.setAttribute("aria-expanded", "true"), W == null || W.focus()) : o === "prefs" && (this.activePopover = "prefs", this.isPreferencesOpen = !0, ne && (ne.value = this.currentQuality), j && (j.value = this.prefs.captionLanguage), G && (G.value = this.prefs.captionSize), J && (J.value = this.prefs.captionTheme), te && (te.value = this.prefs.eslVisible ? "show" : "hide"), ie && (ie.value = this.prefs.transcriptVisible !== !1 ? "show" : "hide"), ae && (ae.value = this.prefs.audioDescriptionEnabled ? "on" : "off"), O && (O.style.display = "flex"), F == null || F.classList.add("is-active"), F == null || F.setAttribute("aria-expanded", "true"), j == null || j.focus());
+    }, be = (o) => {
+      this.activePopover === o ? Z() : Fe(o);
+    }, se = (o) => o.stopPropagation();
+    w == null || w.addEventListener("pointerdown", se), S == null || S.addEventListener("pointerdown", se), F == null || F.addEventListener("pointerdown", se), Y == null || Y.addEventListener("pointerdown", se), N == null || N.addEventListener("pointerdown", se), $ == null || $.addEventListener("pointerdown", se), D == null || D.addEventListener("pointerdown", se), O == null || O.addEventListener("pointerdown", se), w == null || w.addEventListener("click", (o) => {
+      o.preventDefault(), o.stopPropagation(), be("quality");
     }), this.shadow.querySelectorAll(".quality-menu-item").forEach((o) => {
       o.addEventListener("click", (p) => {
         p.preventDefault(), p.stopPropagation();
-        const h = o.getAttribute("data-quality");
-        h && (pe(), x == null || x.focus(), this.applyQuality(h).catch((M) => console.warn("Quality apply error:", M)));
+        const m = o.getAttribute("data-quality");
+        m && (Z(), w == null || w.focus(), this.applyQuality(m).catch((q) => console.warn("Quality apply error:", q)));
       });
-    });
-    const j = this.shadow.getElementById("select-cc-lang"), K = this.shadow.getElementById("select-cc-size"), U = this.shadow.getElementById("select-cc-theme"), oe = this.shadow.getElementById("select-video-quality"), Y = this.shadow.getElementById("toggle-esl-visibility"), Z = this.shadow.getElementById("toggle-transcript-visibility"), ee = this.shadow.getElementById("toggle-ad-enabled"), re = () => {
-      this.isPreferencesOpen && (this.isPreferencesOpen = !1, J && (J.style.display = "none"), $ == null || $.classList.remove("is-active"), $ == null || $.setAttribute("aria-expanded", "false"));
-    }, Fe = () => {
-      pe(), ne(), this.isPreferencesOpen = !0, oe && (oe.value = this.currentQuality), j && (j.value = this.prefs.captionLanguage), K && (K.value = this.prefs.captionSize), U && (U.value = this.prefs.captionTheme), Y && (Y.value = this.prefs.eslVisible ? "show" : "hide"), Z && (Z.value = this.prefs.transcriptVisible !== !1 ? "show" : "hide"), ee && (ee.value = this.prefs.audioDescriptionEnabled ? "on" : "off"), J && (J.style.display = "flex"), $ == null || $.classList.add("is-active"), $ == null || $.setAttribute("aria-expanded", "true"), j == null || j.focus();
-    }, Xe = () => {
-      this.isPreferencesOpen ? re() : Fe();
-    };
-    $ == null || $.addEventListener("click", (o) => {
-      o.preventDefault(), o.stopPropagation(), Xe();
-    }), se == null || se.addEventListener("click", (o) => {
-      o.stopPropagation(), Fe();
-    }), G == null || G.addEventListener("click", (o) => {
-      o.stopPropagation(), Fe();
+    }), F == null || F.addEventListener("click", (o) => {
+      o.preventDefault(), o.stopPropagation(), be("prefs");
+    }), Y == null || Y.addEventListener("click", (o) => {
+      o.stopPropagation(), Fe("prefs");
+    }), N == null || N.addEventListener("click", (o) => {
+      o.stopPropagation(), Fe("prefs");
     }), k == null || k.addEventListener("click", (o) => {
-      o.stopPropagation(), re(), $ == null || $.focus();
-    });
-    const ne = () => {
-      this.isShortcutsOpen && (this.isShortcutsOpen = !1, V && (V.style.display = "none"), S == null || S.classList.remove("is-active"), S == null || S.setAttribute("aria-expanded", "false"));
-    }, Ye = () => {
-      pe(), re(), this.isShortcutsOpen = !0, V && (V.style.display = "flex"), S == null || S.classList.add("is-active"), S == null || S.setAttribute("aria-expanded", "true"), R == null || R.focus();
-    }, ze = () => {
-      this.isShortcutsOpen ? ne() : Ye();
-    };
-    S == null || S.addEventListener("click", (o) => {
-      o.preventDefault(), o.stopPropagation(), ze();
-    }), R == null || R.addEventListener("click", (o) => {
-      o.preventDefault(), o.stopPropagation(), ne(), S == null || S.focus();
+      o.stopPropagation(), Z(), F == null || F.focus();
+    }), S == null || S.addEventListener("click", (o) => {
+      o.preventDefault(), o.stopPropagation(), be("shortcuts");
+    }), W == null || W.addEventListener("click", (o) => {
+      o.preventDefault(), o.stopPropagation(), Z(), S == null || S.focus();
     }), Ee == null || Ee.addEventListener("click", (o) => {
-      o.preventDefault(), o.stopPropagation(), ne(), S == null || S.focus();
+      o.preventDefault(), o.stopPropagation(), Z(), S == null || S.focus();
     }), j == null || j.addEventListener("change", async () => {
       if (j.value !== this.prefs.captionLanguage) {
         if (this.prefs.captionLanguage = j.value, T({ captionLanguage: this.prefs.captionLanguage }), z) {
@@ -3689,83 +3677,82 @@ class _e extends HTMLElement {
         }
         await this.loadCaptionTrack(this.prefs.captionLanguage);
       }
-    }), K == null || K.addEventListener("change", () => {
-      K.value !== this.prefs.captionSize && (this.prefs.captionSize = K.value, T({ captionSize: this.prefs.captionSize }), this.updateCaptionDisplay());
-    }), U == null || U.addEventListener("change", () => {
-      U.value !== this.prefs.captionTheme && (this.prefs.captionTheme = U.value, T({ captionTheme: this.prefs.captionTheme }), this.updateCaptionDisplay());
-    }), Y == null || Y.addEventListener("change", () => {
-      var h;
-      const o = !!(this.signVideo || (h = this.manifest) != null && h.sources.some((M) => M.kind === "sign")), p = Y.value === "show";
-      this.prefs.eslVisible = p, T({ eslVisible: p }), q && q.setAttribute("aria-pressed", p ? "true" : "false"), w && (w.style.display = p && o ? "flex" : "none");
-    }), Z == null || Z.addEventListener("change", () => {
-      const o = Z.value === "show";
-      this.prefs.transcriptVisible = o, T({ transcriptVisible: o }), H && H.setAttribute("aria-pressed", o ? "true" : "false"), A && (A.style.display = o ? "flex" : "none");
-    }), ee == null || ee.addEventListener("change", () => {
-      const o = ee.value === "on";
-      this.prefs.audioDescriptionEnabled = o, T({ audioDescriptionEnabled: o }), I && I.setAttribute("aria-pressed", o ? "true" : "false");
-    }), he == null || he.addEventListener("click", async () => {
+    }), G == null || G.addEventListener("change", () => {
+      G.value !== this.prefs.captionSize && (this.prefs.captionSize = G.value, T({ captionSize: this.prefs.captionSize }), this.updateCaptionDisplay());
+    }), J == null || J.addEventListener("change", () => {
+      J.value !== this.prefs.captionTheme && (this.prefs.captionTheme = J.value, T({ captionTheme: this.prefs.captionTheme }), this.updateCaptionDisplay());
+    }), te == null || te.addEventListener("change", () => {
+      var m;
+      const o = !!(this.signVideo || (m = this.manifest) != null && m.sources.some((q) => q.kind === "sign")), p = te.value === "show";
+      this.prefs.eslVisible = p, T({ eslVisible: p }), M && M.setAttribute("aria-pressed", p ? "true" : "false"), x && (x.style.display = p && o ? "flex" : "none");
+    }), ie == null || ie.addEventListener("change", () => {
+      const o = ie.value === "show";
+      this.prefs.transcriptVisible = o, T({ transcriptVisible: o }), I && I.setAttribute("aria-pressed", o ? "true" : "false"), B && (B.style.display = o ? "flex" : "none");
+    }), ae == null || ae.addEventListener("change", () => {
+      const o = ae.value === "on";
+      this.prefs.audioDescriptionEnabled = o, T({ audioDescriptionEnabled: o }), P && P.setAttribute("aria-pressed", o ? "true" : "false");
+    }), ue == null || ue.addEventListener("click", async () => {
       var p;
       if (j && j.value !== this.prefs.captionLanguage) {
         if (this.prefs.captionLanguage = j.value, T({ captionLanguage: this.prefs.captionLanguage }), z) {
-          const h = this.prefs.captionLanguage === "off";
-          z.setAttribute("aria-pressed", h ? "false" : "true");
+          const m = this.prefs.captionLanguage === "off";
+          z.setAttribute("aria-pressed", m ? "false" : "true");
         }
         await this.loadCaptionTrack(this.prefs.captionLanguage);
       }
-      K && K.value !== this.prefs.captionSize && (this.prefs.captionSize = K.value, T({ captionSize: this.prefs.captionSize }), this.updateCaptionDisplay()), U && U.value !== this.prefs.captionTheme && (this.prefs.captionTheme = U.value, T({ captionTheme: this.prefs.captionTheme }), this.updateCaptionDisplay());
-      const o = !!(this.signVideo || (p = this.manifest) != null && p.sources.some((h) => h.kind === "sign"));
-      if (Y) {
-        const h = Y.value === "show";
-        this.prefs.eslVisible = h, T({ eslVisible: h }), q && q.setAttribute("aria-pressed", h ? "true" : "false"), w && (w.style.display = h && o ? "flex" : "none");
+      G && G.value !== this.prefs.captionSize && (this.prefs.captionSize = G.value, T({ captionSize: this.prefs.captionSize }), this.updateCaptionDisplay()), J && J.value !== this.prefs.captionTheme && (this.prefs.captionTheme = J.value, T({ captionTheme: this.prefs.captionTheme }), this.updateCaptionDisplay());
+      const o = !!(this.signVideo || (p = this.manifest) != null && p.sources.some((m) => m.kind === "sign"));
+      if (te) {
+        const m = te.value === "show";
+        this.prefs.eslVisible = m, T({ eslVisible: m }), M && M.setAttribute("aria-pressed", m ? "true" : "false"), x && (x.style.display = m && o ? "flex" : "none");
       }
-      if (Z) {
-        const h = Z.value === "show";
-        this.prefs.transcriptVisible = h, T({ transcriptVisible: h }), H && H.setAttribute("aria-pressed", h ? "true" : "false"), A && (A.style.display = h ? "flex" : "none");
+      if (ie) {
+        const m = ie.value === "show";
+        this.prefs.transcriptVisible = m, T({ transcriptVisible: m }), I && I.setAttribute("aria-pressed", m ? "true" : "false"), B && (B.style.display = m ? "flex" : "none");
       }
-      if (ee) {
-        const h = ee.value === "on";
-        this.prefs.audioDescriptionEnabled = h, T({ audioDescriptionEnabled: h }), I && I.setAttribute("aria-pressed", h ? "true" : "false");
+      if (ae) {
+        const m = ae.value === "on";
+        this.prefs.audioDescriptionEnabled = m, T({ audioDescriptionEnabled: m }), P && P.setAttribute("aria-pressed", m ? "true" : "false");
       }
-      re();
-    });
-    const Ze = (o) => {
-      const p = o.composedPath(), h = (M) => M && (p.includes(M) || M.contains(o.target));
-      this.isPreferencesOpen && !h(J) && !h($) && !h(se) && !h(G) && re(), this.isQualityMenuOpen && !h(B) && !h(x) && pe(), this.isShortcutsOpen && !h(V) && !h(S) && ne();
-    };
-    window.addEventListener("pointerdown", Ze), oe == null || oe.addEventListener("change", async () => {
-      oe.value !== this.currentQuality && await this.applyQuality(oe.value);
+      Z(), F == null || F.focus();
+    }), this.onOutsidePointerDown && window.removeEventListener("pointerdown", this.onOutsidePointerDown), this.onOutsidePointerDown = (o) => {
+      if (this.activePopover === null) return;
+      const p = o.composedPath(), m = (U) => U && p.includes(U), q = this.activePopover === "quality" ? $ : this.activePopover === "shortcuts" ? D : O, R = this.activePopover === "quality" ? w : this.activePopover === "shortcuts" ? S : F;
+      !m(q) && !m(R) && Z();
+    }, window.addEventListener("pointerdown", this.onOutsidePointerDown), ne == null || ne.addEventListener("change", async () => {
+      ne.value !== this.currentQuality && await this.applyQuality(ne.value);
     }), L == null || L.addEventListener("click", () => {
-      var be, ue, ke;
-      at(), this.prefs = De();
-      const o = this.shadow.getElementById("select-cc-lang"), p = this.shadow.getElementById("select-cc-size"), h = this.shadow.getElementById("select-cc-theme"), M = this.shadow.getElementById("select-video-quality"), N = this.shadow.getElementById("toggle-esl-visibility"), te = this.shadow.getElementById("toggle-transcript-visibility"), me = this.shadow.getElementById("toggle-ad-enabled");
-      M && (M.value = "auto"), this.applyQuality("auto"), o && (o.value = this.prefs.captionLanguage), p && (p.value = this.prefs.captionSize), h && (h.value = this.prefs.captionTheme), N && (N.value = "show"), te && (te.value = "show"), me && (me.value = "off"), this.updateCaptionDisplay(), this.loadCaptionTrack(this.prefs.captionLanguage), A && ((be = A.__reDock) == null || be.call(A), A.classList.remove("floating"), A.style.position = "", A.style.left = "", A.style.top = "", A.style.right = "", A.style.bottom = "", A.style.zIndex = "", A.style.width = `${P.transcriptWidth}px`, A.style.height = `${P.transcriptHeight}px`, A.style.flex = `0 0 ${P.transcriptWidth}px`, A.style.display = "flex"), w && ((ue = w.__reDock) == null || ue.call(w), w.classList.remove("floating"), w.style.position = "", w.style.left = "", w.style.top = "", w.style.right = "", w.style.bottom = "", w.style.zIndex = "", w.style.width = `${P.eslWidth}px`, w.style.height = `${P.eslHeight}px`, w.style.flex = `0 0 ${P.eslWidth}px`, w.style.display = this.signVideo || (ke = this.manifest) != null && ke.sources.some((et) => et.kind === "sign") ? "flex" : "none"), q && q.setAttribute("aria-pressed", "true"), H && H.setAttribute("aria-pressed", "true"), I && I.setAttribute("aria-pressed", "false");
-    }), (Ie = this.shadow.getElementById("select-cc-lang")) == null || Ie.addEventListener("change", async (o) => {
+      var me, pe, ke;
+      Xe(), this.prefs = Ce();
+      const o = this.shadow.getElementById("select-cc-lang"), p = this.shadow.getElementById("select-cc-size"), m = this.shadow.getElementById("select-cc-theme"), q = this.shadow.getElementById("select-video-quality"), R = this.shadow.getElementById("toggle-esl-visibility"), U = this.shadow.getElementById("toggle-transcript-visibility"), fe = this.shadow.getElementById("toggle-ad-enabled");
+      q && (q.value = "auto"), this.applyQuality("auto"), o && (o.value = this.prefs.captionLanguage), p && (p.value = this.prefs.captionSize), m && (m.value = this.prefs.captionTheme), R && (R.value = "show"), U && (U.value = "show"), fe && (fe.value = "off"), this.updateCaptionDisplay(), this.loadCaptionTrack(this.prefs.captionLanguage), B && ((me = B.__reDock) == null || me.call(B), B.classList.remove("floating"), B.style.position = "", B.style.left = "", B.style.top = "", B.style.right = "", B.style.bottom = "", B.style.zIndex = "", B.style.width = `${H.transcriptWidth}px`, B.style.height = `${H.transcriptHeight}px`, B.style.flex = `0 0 ${H.transcriptWidth}px`, B.style.display = "flex"), x && ((pe = x.__reDock) == null || pe.call(x), x.classList.remove("floating"), x.style.position = "", x.style.left = "", x.style.top = "", x.style.right = "", x.style.bottom = "", x.style.zIndex = "", x.style.width = `${H.eslWidth}px`, x.style.height = `${H.eslHeight}px`, x.style.flex = `0 0 ${H.eslWidth}px`, x.style.display = this.signVideo || (ke = this.manifest) != null && ke.sources.some((_e) => _e.kind === "sign") ? "flex" : "none"), M && M.setAttribute("aria-pressed", "true"), I && I.setAttribute("aria-pressed", "true"), P && P.setAttribute("aria-pressed", "false");
+    }), (qe = this.shadow.getElementById("select-cc-lang")) == null || qe.addEventListener("change", async (o) => {
       const p = o.target.value;
       if (this.prefs.captionLanguage = p, T({ captionLanguage: this.prefs.captionLanguage }), z) {
-        const h = this.prefs.captionLanguage === "off";
-        z.setAttribute("aria-pressed", h ? "false" : "true"), z.setAttribute("title", `Captions: ${this.prefs.captionLanguage.toUpperCase()} (C)`), z.setAttribute(
+        const m = this.prefs.captionLanguage === "off";
+        z.setAttribute("aria-pressed", m ? "false" : "true"), z.setAttribute("title", `Captions: ${this.prefs.captionLanguage.toUpperCase()} (C)`), z.setAttribute(
           "aria-label",
           `Captions: ${this.prefs.captionLanguage.toUpperCase()} (C)`
         );
       }
       if (await this.loadCaptionTrack(this.prefs.captionLanguage), p !== "off") {
-        const h = this.shadow.getElementById("select-transcript-lang");
-        h && h.value !== p && (h.value = p, await this.switchTranscriptLanguage(p));
+        const m = this.shadow.getElementById("select-transcript-lang");
+        m && m.value !== p && (m.value = p, await this.switchTranscriptLanguage(p));
       }
-    }), (He = this.shadow.getElementById("select-cc-size")) == null || He.addEventListener("change", (o) => {
+    }), (Pe = this.shadow.getElementById("select-cc-size")) == null || Pe.addEventListener("change", (o) => {
       this.prefs.captionSize = o.target.value, T({ captionSize: this.prefs.captionSize }), this.updateCaptionDisplay();
-    }), (Pe = this.shadow.getElementById("select-cc-theme")) == null || Pe.addEventListener("change", (o) => {
+    }), (Ie = this.shadow.getElementById("select-cc-theme")) == null || Ie.addEventListener("change", (o) => {
       this.prefs.captionTheme = o.target.value, T({ captionTheme: this.prefs.captionTheme }), this.updateCaptionDisplay();
-    }), (je = this.shadow.getElementById("toggle-esl-visibility")) == null || je.addEventListener("change", (o) => {
-      var M;
-      const p = o.target.value === "show", h = !!(this.signVideo || (M = this.manifest) != null && M.sources.some((N) => N.kind === "sign"));
-      this.prefs.eslVisible = p, T({ eslVisible: p }), q && q.setAttribute("aria-pressed", p ? "true" : "false"), w && (w.style.display = p && h ? "flex" : "none");
-    }), (Re = this.shadow.getElementById("toggle-transcript-visibility")) == null || Re.addEventListener("change", (o) => {
+    }), (He = this.shadow.getElementById("toggle-esl-visibility")) == null || He.addEventListener("change", (o) => {
+      var q;
+      const p = o.target.value === "show", m = !!(this.signVideo || (q = this.manifest) != null && q.sources.some((R) => R.kind === "sign"));
+      this.prefs.eslVisible = p, T({ eslVisible: p }), M && M.setAttribute("aria-pressed", p ? "true" : "false"), x && (x.style.display = p && m ? "flex" : "none");
+    }), (je = this.shadow.getElementById("toggle-transcript-visibility")) == null || je.addEventListener("change", (o) => {
       const p = o.target.value === "show";
-      this.prefs.transcriptVisible = p, T({ transcriptVisible: p }), H && H.setAttribute("aria-pressed", p ? "true" : "false"), A && (A.style.display = p ? "flex" : "none");
-    }), (Oe = this.shadow.getElementById("toggle-ad-enabled")) == null || Oe.addEventListener("change", (o) => {
+      this.prefs.transcriptVisible = p, T({ transcriptVisible: p }), I && I.setAttribute("aria-pressed", p ? "true" : "false"), B && (B.style.display = p ? "flex" : "none");
+    }), (Re = this.shadow.getElementById("toggle-ad-enabled")) == null || Re.addEventListener("change", (o) => {
       const p = o.target.value === "on";
-      this.prefs.audioDescriptionEnabled = p, T({ audioDescriptionEnabled: p }), I && I.setAttribute("aria-pressed", p ? "true" : "false");
+      this.prefs.audioDescriptionEnabled = p, T({ audioDescriptionEnabled: p }), P && P.setAttribute("aria-pressed", p ? "true" : "false");
     });
     const ve = this.shadow.getElementById("transcript-search");
     ve == null || ve.addEventListener("input", () => {
@@ -3775,69 +3762,60 @@ class _e extends HTMLElement {
     ye == null || ye.addEventListener("input", () => {
       this.liveChatViewer && this.liveChatViewer.setSearchQuery(ye.value);
     });
-    const O = this.shadow.getElementById("tab-btn-transcript"), Q = this.shadow.getElementById("tab-btn-chat"), we = this.shadow.getElementById("transcript-view-panel"), xe = this.shadow.getElementById("live-chat-view-panel");
-    O == null || O.addEventListener("click", () => {
-      this.activeLeftTab = "transcript", O.classList.add("active"), O.setAttribute("aria-selected", "true"), Q == null || Q.classList.remove("active"), Q == null || Q.setAttribute("aria-selected", "false"), we && (we.style.display = "flex"), xe && (xe.style.display = "none");
-    }), Q == null || Q.addEventListener("click", () => {
-      this.activeLeftTab = "chat", Q.classList.add("active"), Q.setAttribute("aria-selected", "true"), O == null || O.classList.remove("active"), O == null || O.setAttribute("aria-selected", "false"), we && (we.style.display = "none"), xe && (xe.style.display = "flex"), this.liveChatViewer && this.liveChatViewer.updateTime(this.mainVideo.currentTime);
+    const Q = this.shadow.getElementById("tab-btn-transcript"), K = this.shadow.getElementById("tab-btn-chat"), we = this.shadow.getElementById("transcript-view-panel"), xe = this.shadow.getElementById("live-chat-view-panel");
+    Q == null || Q.addEventListener("click", () => {
+      this.activeLeftTab = "transcript", Q.classList.add("active"), Q.setAttribute("aria-selected", "true"), K == null || K.classList.remove("active"), K == null || K.setAttribute("aria-selected", "false"), we && (we.style.display = "flex"), xe && (xe.style.display = "none");
+    }), K == null || K.addEventListener("click", () => {
+      this.activeLeftTab = "chat", K.classList.add("active"), K.setAttribute("aria-selected", "true"), Q == null || Q.classList.remove("active"), Q == null || Q.setAttribute("aria-selected", "false"), we && (we.style.display = "none"), xe && (xe.style.display = "flex"), this.liveChatViewer && this.liveChatViewer.updateTime(this.mainVideo.currentTime);
     });
     const Se = this.shadow.getElementById("btn-dock-tr"), Ae = this.shadow.getElementById("btn-dock-br"), $e = this.shadow.getElementById("btn-dock-split");
     Se == null || Se.addEventListener("click", () => {
       var o;
-      return (o = w == null ? void 0 : w.__dockPreset) == null ? void 0 : o.call(w, "tr");
+      return (o = x == null ? void 0 : x.__dockPreset) == null ? void 0 : o.call(x, "tr");
     }), Ae == null || Ae.addEventListener("click", () => {
       var o;
-      return (o = w == null ? void 0 : w.__dockPreset) == null ? void 0 : o.call(w, "br");
+      return (o = x == null ? void 0 : x.__dockPreset) == null ? void 0 : o.call(x, "br");
     }), $e == null || $e.addEventListener("click", () => {
       var o;
-      return (o = w == null ? void 0 : w.__dockPreset) == null ? void 0 : o.call(w, "split");
+      return (o = x == null ? void 0 : x.__dockPreset) == null ? void 0 : o.call(x, "split");
     });
     const Be = this.shadow.getElementById("btn-export-brf");
     Be == null || Be.addEventListener("click", () => {
-      var me, be;
-      const o = ((me = this.transcriptViewer) == null ? void 0 : me.getSegments()) || [], p = ((be = this.manifest) == null ? void 0 : be.title) && (this.manifest.title[this.activeLocale] || this.manifest.title.en) || "Lesson Transcript", h = dt({
+      var fe, me;
+      const o = ((fe = this.transcriptViewer) == null ? void 0 : fe.getSegments()) || [], p = ((me = this.manifest) == null ? void 0 : me.title) && (this.manifest.title[this.activeLocale] || this.manifest.title.en) || "Lesson Transcript", m = st({
         title: p,
         language: this.activeLocale === "am" || this.activeLocale === "ti" ? "am" : "en",
-        segments: o.length > 0 ? o : this.currentCues.map((ue, ke) => ({
+        segments: o.length > 0 ? o : this.currentCues.map((pe, ke) => ({
           id: ke,
-          start: ue.start,
-          end: ue.end,
-          text: ue.text,
+          start: pe.start,
+          end: pe.end,
+          text: pe.text,
           speaker: this.activeLocale === "am" ? "አስተማሪ" : "Instructor"
         })),
         date: "2026-11-14"
-      }), M = new Blob([h], { type: "text/plain;charset=us-ascii" }), N = URL.createObjectURL(M), te = document.createElement("a");
-      te.href = N, te.download = `lesson-transcript.${this.activeLocale}.brf`, document.body.appendChild(te), te.click(), document.body.removeChild(te), URL.revokeObjectURL(N);
+      }), q = new Blob([m], { type: "text/plain;charset=us-ascii" }), R = URL.createObjectURL(q), U = document.createElement("a");
+      U.href = R, U.download = `lesson-transcript.${this.activeLocale}.brf`, document.body.appendChild(U), U.click(), document.body.removeChild(U), URL.revokeObjectURL(R);
     });
-    let ge = !1;
-    const fe = this.shadow.getElementById("btn-chat-questions-filter");
-    fe == null || fe.addEventListener("click", () => {
-      ge = !ge, fe.setAttribute("aria-pressed", ge ? "true" : "false"), fe.classList.toggle("active", ge), this.liveChatViewer && this.liveChatViewer.setQuestionsOnly(ge);
+    let he = !1;
+    const ge = this.shadow.getElementById("btn-chat-questions-filter");
+    ge == null || ge.addEventListener("click", () => {
+      he = !he, ge.setAttribute("aria-pressed", he ? "true" : "false"), ge.classList.toggle("active", he), this.liveChatViewer && this.liveChatViewer.setQuestionsOnly(he);
     }), this.shadow.querySelectorAll(".btn-preset-pill").forEach((o) => {
       o.addEventListener("click", () => {
         const p = o.getAttribute("data-preset");
         if (p) {
           this.prefs.captionTheme = p;
-          const h = this.shadow.getElementById("select-cc-theme");
-          h && (h.value = p), T({ captionTheme: p }), this.updateCaptionDisplay();
+          const m = this.shadow.getElementById("select-cc-theme");
+          m && (m.value = p), T({ captionTheme: p }), this.updateCaptionDisplay();
         }
       });
     });
     const Te = this.shadow.getElementById("player-container");
     Te == null || Te.addEventListener("keydown", (o) => {
-      if (o.key === "Escape") {
-        if (this.isQualityMenuOpen) {
-          pe(), x == null || x.focus();
-          return;
-        }
-        if (this.isShortcutsOpen) {
-          ne(), S == null || S.focus();
-          return;
-        }
-        if (this.isPreferencesOpen) {
-          re(), $ == null || $.focus();
-          return;
-        }
+      if (o.key === "Escape" && this.activePopover !== null) {
+        const p = this.activePopover;
+        Z(), p === "quality" ? w == null || w.focus() : p === "shortcuts" ? S == null || S.focus() : p === "prefs" && (F == null || F.focus());
+        return;
       }
       if (!(o.target.tagName === "INPUT" || o.target.tagName === "SELECT"))
         switch (o.key) {
@@ -3858,11 +3836,11 @@ class _e extends HTMLElement {
             break;
           case "m":
           case "M":
-            o.preventDefault(), de();
+            o.preventDefault(), ce();
             break;
           case "f":
           case "F":
-            o.preventDefault(), ce();
+            o.preventDefault(), de();
             break;
           case "0":
           case "Home":
@@ -3874,7 +3852,7 @@ class _e extends HTMLElement {
             break;
           case "<":
           case ",":
-            o.preventDefault(), d == null || d.click();
+            o.preventDefault(), c == null || c.click();
             break;
           case "c":
           case "C":
@@ -3882,22 +3860,22 @@ class _e extends HTMLElement {
             break;
           case "s":
           case "S":
-            o.preventDefault(), q == null || q.click();
+            o.preventDefault(), M == null || M.click();
             break;
           case "d":
           case "D":
-            o.preventDefault(), I == null || I.click();
+            o.preventDefault(), P == null || P.click();
             break;
           case "t":
           case "T":
-            o.preventDefault(), H == null || H.click();
+            o.preventDefault(), I == null || I.click();
             break;
           case "?":
           case "/":
-            o.preventDefault(), ze();
+            o.preventDefault(), be("shortcuts");
             break;
           case "Escape":
-            le() && (o.preventDefault(), ce());
+            le() && (o.preventDefault(), de());
             break;
         }
     });
@@ -3910,13 +3888,13 @@ class _e extends HTMLElement {
     return `${i.toString().padStart(2, "0")}:${t.toString().padStart(2, "0")}`;
   }
 }
-customElements.get("a11y-media-player") || customElements.define("a11y-media-player", _e);
+customElements.get("a11y-media-player") || customElements.define("a11y-media-player", Ue);
 if (!customElements.get("db-player")) {
-  class f extends _e {
+  class f extends Ue {
   }
   customElements.define("db-player", f);
 }
-const pt = [
+const ot = [
   "መስከረም",
   // Meskerem (1)
   "ጥቅምት",
@@ -3944,8 +3922,8 @@ const pt = [
   "ጳጉሜ"
   // Pagume (13)
 ];
-function ut(f) {
-  const a = typeof f == "string" ? new Date(f) : f, e = a.getUTCFullYear(), i = a.getUTCMonth() + 1, t = a.getUTCDate(), s = Math.floor((14 - i) / 12), r = e + 4800 - s, d = i + 12 * s - 3, n = t + Math.floor((153 * d + 2) / 5) + 365 * r + Math.floor(r / 4) - Math.floor(r / 100) + Math.floor(r / 400) - 32045, c = (n - 1723856) % 1461, b = c % 365 + 365 * Math.floor(c / 1460), l = 4 * Math.floor((n - 1723856) / 1461) + Math.floor(c / 365) - Math.floor(c / 1460), E = Math.floor(b / 30) + 1, v = b % 30 + 1, y = pt[Math.min(E - 1, 12)];
+function rt(f) {
+  const a = typeof f == "string" ? new Date(f) : f, e = a.getUTCFullYear(), i = a.getUTCMonth() + 1, t = a.getUTCDate(), s = Math.floor((14 - i) / 12), r = e + 4800 - s, c = i + 12 * s - 3, n = t + Math.floor((153 * c + 2) / 5) + 365 * r + Math.floor(r / 4) - Math.floor(r / 100) + Math.floor(r / 400) - 32045, d = (n - 1723856) % 1461, b = d % 365 + 365 * Math.floor(d / 1460), l = 4 * Math.floor((n - 1723856) / 1461) + Math.floor(d / 365) - Math.floor(d / 1460), E = Math.floor(b / 30) + 1, v = b % 30 + 1, y = ot[Math.min(E - 1, 12)];
   return {
     year: l,
     month: E,
@@ -3953,20 +3931,20 @@ function ut(f) {
     monthNameAmharic: y
   };
 }
-function ht(f) {
-  const a = ut(f), e = `${a.monthNameAmharic} ${a.day}፣ ${a.year} ዓ.ም`;
+function nt(f) {
+  const a = rt(f), e = `${a.monthNameAmharic} ${a.day}፣ ${a.year} ዓ.ም`;
   return {
     iso: f,
     ethiopic: e,
     display: `${f} (${e})`
   };
 }
-class gt extends HTMLElement {
+class lt extends HTMLElement {
   constructor() {
     super();
-    m(this, "shadow");
-    m(this, "job", null);
-    m(this, "activeLocale", "en");
+    g(this, "shadow");
+    g(this, "job", null);
+    g(this, "activeLocale", "en");
     this.shadow = this.attachShadow({ mode: "open" });
   }
   static get observedAttributes() {
@@ -4001,7 +3979,7 @@ class gt extends HTMLElement {
       this.shadow.innerHTML = '<div class="job-placeholder">No job data supplied</div>';
       return;
     }
-    const e = this.activeLocale === "am", i = this.job.title[this.activeLocale] || this.job.title.en, t = this.job.location[this.activeLocale] || this.job.location.en, s = this.job.description[this.activeLocale] || this.job.description.en, r = this.job.applicationDeadline ? ht(this.job.applicationDeadline) : null, d = {
+    const e = this.activeLocale === "am", i = this.job.title[this.activeLocale] || this.job.title.en, t = this.job.location[this.activeLocale] || this.job.location.en, s = this.job.description[this.activeLocale] || this.job.description.en, r = this.job.applicationDeadline ? nt(this.job.applicationDeadline) : null, c = {
       "@context": "https://schema.org/",
       "@type": "JobPosting",
       title: i,
@@ -4157,7 +4135,7 @@ class gt extends HTMLElement {
 
       <!-- schema.org/JobPosting JSON-LD -->
       <script type="application/ld+json">
-        ${JSON.stringify(d)}
+        ${JSON.stringify(c)}
       <\/script>
 
       <article class="card" aria-labelledby="job-title-${this.job.id}">
@@ -4241,17 +4219,17 @@ class gt extends HTMLElement {
     });
   }
 }
-customElements.get("a11y-job-card") || customElements.define("a11y-job-card", gt);
-const ft = "abugida-media", mt = 1;
-class bt {
+customElements.get("a11y-job-card") || customElements.define("a11y-job-card", lt);
+const dt = "abugida-media", ct = 1;
+class pt {
   constructor() {
-    m(this, "db", null);
-    m(this, "cacheName", "abugida-offline-v1");
+    g(this, "db", null);
+    g(this, "cacheName", "abugida-offline-v1");
   }
   async init() {
     if (!this.db)
       return new Promise((a, e) => {
-        const i = indexedDB.open(ft, mt);
+        const i = indexedDB.open(dt, ct);
         i.onupgradeneeded = (t) => {
           const s = t.target.result;
           s.objectStoreNames.contains("preferences") || s.createObjectStore("preferences"), s.objectStoreNames.contains("progress") || s.createObjectStore("progress", { keyPath: "lessonId" }), s.objectStoreNames.contains("packages") || s.createObjectStore("packages", { keyPath: "packageKey" });
@@ -4296,16 +4274,16 @@ class bt {
     if (!("caches" in window))
       throw new Error("Cache Storage API is not supported in this browser.");
     try {
-      const d = await caches.open(this.cacheName);
+      const c = await caches.open(this.cacheName);
       let n = 0;
-      const c = t.length;
+      const d = t.length;
       for (const b of t) {
         const l = await fetch(b);
         if (!l.ok)
           throw new Error(`Failed to fetch asset: ${b} (${l.status})`);
-        await d.put(b, l.clone()), n++;
-        const E = Math.round(n / c * 100);
-        s(E, n, c);
+        await c.put(b, l.clone()), n++;
+        const E = Math.round(n / d * 100);
+        s(E, n, d);
       }
       return await this.savePackageRecord({
         packageKey: r,
@@ -4317,7 +4295,7 @@ class bt {
         downloadedBytes: 32e5,
         timestamp: Date.now()
       }), !0;
-    } catch (d) {
+    } catch (c) {
       throw await this.savePackageRecord({
         packageKey: r,
         lessonId: a,
@@ -4327,8 +4305,8 @@ class bt {
         totalBytes: 32e5,
         downloadedBytes: 0,
         timestamp: Date.now(),
-        error: d instanceof Error ? d.message : "Download failed"
-      }), d;
+        error: c instanceof Error ? c.message : "Download failed"
+      }), c;
     }
   }
   async isPackageReady(a, e) {
@@ -4350,7 +4328,7 @@ class bt {
     }) : null;
   }
 }
-const xt = new bt(), kt = [
+const ft = new pt(), mt = [
   {
     code: "en",
     name: "English",
@@ -4386,7 +4364,7 @@ const xt = new bt(), kt = [
     script: "Latin",
     region: "Somali Region"
   }
-], Ce = {
+], De = {
   en: {
     appTitle: "Abugida Media Kit (አቡጊዳ)",
     appSubtitle: "Accessible Learning Media & Career Gateway · Digital Bridge 2026",
@@ -4638,35 +4616,35 @@ const xt = new bt(), kt = [
     resetSettings: "Dib u deji Qaabka & Xulashooyinka"
   }
 };
-function Lt(f, a) {
-  return (Ce[a] || Ce.en)[f] || Ce.en[f] || f;
+function bt(f, a) {
+  return (De[a] || De.en)[f] || De.en[f] || f;
 }
 export {
-  gt as A11yJobCard,
-  _e as A11yMediaPlayer,
-  lt as BRAILLE_ASCII_TABLE,
-  P as DEFAULT_PREFERENCES,
-  Ke as ETHIOPIC_BRAILLE_MAP,
-  pt as ETHIOPIC_MONTHS,
-  nt as LiveChatViewer,
-  ot as MediaSyncController,
-  bt as OfflineStorageManager,
-  kt as SUPPORTED_LANGUAGES,
-  rt as TranscriptViewer,
-  Ce as UI_TRANSLATIONS,
+  lt as A11yJobCard,
+  Ue as A11yMediaPlayer,
+  it as BRAILLE_ASCII_TABLE,
+  H as DEFAULT_PREFERENCES,
+  Qe as ETHIOPIC_BRAILLE_MAP,
+  ot as ETHIOPIC_MONTHS,
+  tt as LiveChatViewer,
+  Ze as MediaSyncController,
+  pt as OfflineStorageManager,
+  mt as SUPPORTED_LANGUAGES,
+  et as TranscriptViewer,
+  De as UI_TRANSLATIONS,
   We as UNICODE_BRAILLE_MAP,
-  ht as formatDualDate,
-  dt as generateBRFDocument,
-  st as getThemeStyles,
-  Lt as getTranslation,
-  De as loadPreferences,
-  xt as offlineStorage,
-  Qe as parseVTT,
-  at as resetPreferences,
+  nt as formatDualDate,
+  st as generateBRFDocument,
+  Ye as getThemeStyles,
+  bt as getTranslation,
+  Ce as loadPreferences,
+  ft as offlineStorage,
+  Oe as parseVTT,
+  Xe as resetPreferences,
   T as savePreferences,
-  ct as toAsciiBraille,
-  ut as toEthiopianDate,
-  Ue as toUnicodeBraille,
+  at as toAsciiBraille,
+  rt as toEthiopianDate,
+  Ke as toUnicodeBraille,
   Le as wrapBrailleLines
 };
 //# sourceMappingURL=a11y-media-kit.es.js.map
