@@ -313,6 +313,45 @@ async function run() {
       JSON.stringify(lessonEval.result.value, null, 2),
     );
 
+    // Verify Recorded Live Session Replay with Synchronized Chat (Rubric Bonus)
+    const chatEval = await send("Runtime.evaluate", {
+      expression: `(async () => {
+        const player = document.querySelector("a11y-media-player");
+        if (!player || !player.shadowRoot) return { error: "No player found" };
+        const shadow = player.shadowRoot;
+
+        const chatTab = shadow.getElementById("tab-btn-chat");
+        if (chatTab) chatTab.click();
+        await new Promise(r => setTimeout(r, 400));
+
+        const chatItems = shadow.querySelectorAll(".chat-replay-item");
+        const targetItem = shadow.querySelector('.chat-replay-item[data-timestamp="4"]');
+        let seekWorked = false;
+        let videoTimeAfter = 0;
+        if (targetItem) {
+          const video = shadow.querySelector("video");
+          targetItem.click();
+          await new Promise(r => setTimeout(r, 500));
+          videoTimeAfter = video ? video.currentTime : 0;
+          seekWorked = Math.abs(videoTimeAfter - 4) < 1.0;
+        }
+
+        return {
+          chatTabFound: Boolean(chatTab),
+          chatMessagesCount: chatItems.length,
+          firstMessageSender: chatItems[0]?.querySelector("span")?.textContent,
+          seekWorked,
+          videoTimeAfter
+        };
+      })()`,
+      awaitPromise: true,
+      returnByValue: true,
+    });
+    console.log(
+      "Live Chat Replay Evaluation (Slide 9 Bonus):",
+      JSON.stringify(chatEval.result.value, null, 2),
+    );
+
     const snap3 = await send("Page.captureScreenshot", { format: "png" });
     fs.writeFileSync(
       "evidence/lesson-side-by-side.png",
@@ -448,20 +487,42 @@ async function run() {
     await new Promise((r) => setTimeout(r, 1500));
 
     const verifyEval = await send("Runtime.evaluate", {
-      expression: `(() => {
+      expression: `(async () => {
         const text = document.body.innerText;
         const certFound = text.includes("CERT-DB-2026-0042") && text.includes("Demonstrated Credential Verified");
         const hasDualDate = text.includes("2026-11-14") && text.includes("ህዳር 5");
         const hasRecipient = text.includes("Demonstration Learner");
         const copyBtn = Array.from(document.querySelectorAll("button")).find(b => b.textContent.includes("Copy Shareable Link"));
         
+        // Open Badges 3.0 W3C JSON-LD check
+        const obv3Btn = Array.from(document.querySelectorAll("button")).find(b => b.textContent.includes("Open Badges 3.0"));
+        const downloadOBv3Btn = Array.from(document.querySelectorAll("button")).find(b => b.textContent.includes("Download Open Badge"));
+        let obv3MetadataFound = false;
+        let parsed = null;
+        if (obv3Btn) {
+          obv3Btn.click();
+          await new Promise(r => setTimeout(r, 400));
+          const pre = document.querySelector("pre");
+          if (pre && pre.textContent) {
+            obv3MetadataFound = true;
+            try { parsed = JSON.parse(pre.textContent); } catch (e) {}
+          }
+        }
+
         return {
           certFound,
           hasDualDate,
           hasRecipient,
-          hasCopyButton: Boolean(copyBtn)
+          hasCopyButton: Boolean(copyBtn),
+          hasDownloadOBv3Button: Boolean(downloadOBv3Btn),
+          obv3MetadataFound,
+          hasW3CContext: parsed?.["@context"]?.includes("https://www.w3.org/ns/credentials/v2"),
+          hasOBv3Context: parsed?.["@context"]?.includes("https://purl.imsglobal.org/spec/ob/v3p0/context-3.0.3.json"),
+          hasOpenBadgeType: parsed?.type?.includes("OpenBadgeCredential"),
+          issuerName: parsed?.issuer?.name
         };
       })()`,
+      awaitPromise: true,
       returnByValue: true,
     });
     console.log(
