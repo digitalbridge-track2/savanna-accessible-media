@@ -3,6 +3,7 @@ import { formatDualDate, SupportedLocale, SUPPORTED_LANGUAGES, getTranslation } 
 import { useRouter, NavLink } from "./router";
 import { HomeView } from "./views/HomeView";
 import { LessonView } from "./views/LessonView";
+import { CareersView } from "./views/CareersView";
 import { StudioView } from "./views/StudioView";
 import { VerifyView } from "./views/VerifyView";
 import { EmbedView } from "./views/EmbedView";
@@ -186,6 +187,7 @@ export const AppContent: React.FC = () => {
           <div className="nav-segmented">
             <NavLink to="/">{getTranslation("navHome", locale)}</NavLink>
             <NavLink to="/lesson">{getTranslation("navLesson", locale)}</NavLink>
+            <NavLink to="/careers">{getTranslation("navCareers", locale)}</NavLink>
             <NavLink to="/studio">{getTranslation("navStudio", locale)}</NavLink>
             <NavLink to="/verify">{getTranslation("navVerify", locale)}</NavLink>
             <NavLink to="/embed">{getTranslation("navEmbed", locale)}</NavLink>
@@ -197,6 +199,7 @@ export const AppContent: React.FC = () => {
       <main id="main-content" style={{ minHeight: "65vh", outline: "none" }}>
         {currentPath === "/" && <HomeView locale={locale} />}
         {currentPath === "/lesson" && <LessonView locale={locale} />}
+        {currentPath === "/careers" && <CareersView locale={locale} />}
         {currentPath === "/studio" && <StudioView locale={locale} />}
         {currentPath === "/verify" && <VerifyView locale={locale} />}
         {currentPath === "/embed" && <EmbedView locale={locale} />}

@@ -3,28 +3,40 @@
     "id": "job-01",
     "title": {
       "en": "Junior Accessibility QA Analyst",
-      "am": "ጀማሪ የተደራሽነት የጥራት ቁጥጥር ተንታኝ"
+      "am": "ጀማሪ የተደራሽነት የጥራት ቁጥጥር ተንታኝ",
+      "om": "Xiinxalaa Qulqullina Miijannaa Jalqabaa",
+      "ti": "ጀማሪ ናይ ተበጻሕነት ጽሬት ተንታኒ",
+      "so": "Falanqeeyaha Hubinta Tayada Helitaanka"
     },
     "employer": "FinTech Ethiopia",
     "location": {
       "en": "Addis Ababa",
-      "am": "አዲስ አበባ"
+      "am": "አዲስ አበባ",
+      "om": "Finfinnee",
+      "ti": "ኣዲስ ኣበባ",
+      "so": "Addis Ababa"
     },
     "workMode": "hybrid",
     "description": {
       "en": "Test mobile banking and web applications using NVDA, TalkBack, and keyboard navigation to ensure compliance with WCAG 2.2 AA standards.",
-      "am": "የሞባይል ባንኪንግ እና የድር መተግበሪያዎችን በNVDA፣ TalkBack እና በኪቦርድ በመጠቀም የWCAG 2.2 AA ተደራሽነትን ያረጋግጡ።"
+      "am": "የሞባይል ባንኪንግ እና የድር መተግበሪያዎችን በNVDA፣ TalkBack እና በኪቦርድ በመጠቀም የWCAG 2.2 AA ተደራሽነትን ያረጋግጡ።",
+      "om": "Banka mobaayilaa fi weebsaayitoota NVDA, TalkBack fi kiibordii qofaan qoruun ulaagaalee WCAG 2.2 AA mirkaneessuu.",
+      "ti": "ናይ ሞባይል ባንክን መርበብ ሓበሬታታትን ብNVDA፣ TalkBack ከምኡ'ውን ኪቦርድ ብምጥቃም ናይ WCAG 2.2 AA ተበጻሕነት ምርግጋጽ።",
+      "so": "Tijaabi bangiga moobilka iyo codsiyada webka adoo adeegsanaya NVDA, TalkBack iyo hagida kiiboodhka si loo waafajiyo WCAG 2.2 AA."
     },
     "requiredSkills": ["skill-a11y-literacy"],
-    "helpfulSkills": ["skill-digital-collab"],
+    "helpfulSkills": ["skill-digital-collab", "skill-screenreader-ops"],
     "applicationDeadline": "2026-12-01",
-    "applicationUrl": "https://example.et/jobs/a11y-qa",
+    "applicationUrl": "https://fintech.et/careers/a11y-qa",
     "accommodations": [
       {
         "id": "acc-screenreader",
         "label": {
           "en": "Screen reader accessible workstations provided",
-          "am": "የስክሪን አንባቢ ድጋፍ ያላቸው የሥራ ኮምፒውተሮች ይቀርባሉ"
+          "am": "የስክሪን አንባቢ ድጋፍ ያላቸው የሥራ ኮምፒውተሮች ይቀርባሉ",
+          "om": "Koompiitarootni dubbiftuu iskiriinii qaban ni dhiyaatu",
+          "ti": "ናይ ስክሪን ኣንባቢ ድጋፍ ዘለዎም ናይ ስራሕ ኮምፒዩተራት ይቐርቡ",
+          "so": "Kumbuyuutaro leh akhriska shaashadda ayaa la bixiyaa"
         },
         "source": "Employer Verified",
         "verifiedDate": "2026-10-15"
@@ -33,7 +45,10 @@
         "id": "acc-flexible-hours",
         "label": {
           "en": "Flexible transport and remote hours",
-          "am": "ተለዋዋጭ የትራንስፖርት እና የርቀት የሥራ ሰዓት"
+          "am": "ተለዋዋጭ የትራንስፖርት እና የርቀት የሥራ ሰዓት",
+          "om": "Geejjiba fi sa'aatii hojii fageenyaa mijataa",
+          "ti": "ተዓጻጻፊ ናይ ትራንስፖርትን ናይ ርሕቐት ስራሕ ሰዓታትን",
+          "so": "Gaadiid dabacsan iyo saacadaha shaqada meel fog"
         },
         "source": "Employer Verified",
         "verifiedDate": "2026-10-15"
@@ -45,6 +60,326 @@
       "type": "audio/mp3",
       "durationSeconds": 35,
       "textEquivalent": "Junior Accessibility QA Analyst at FinTech Ethiopia. Addis Ababa hybrid role. Tasks include auditing web and mobile apps with NVDA and TalkBack. Employer provides accessible workstations and flexible hours."
+    },
+    "isDemonstrationData": true
+  },
+  {
+    "id": "job-02",
+    "title": {
+      "en": "Sign Language (EthSL) Digital Media Specialist",
+      "am": "የኢትዮጵያ የምልክት ቋንቋ (EthSL) ዲጂታል ሚዲያ ባለሙያ",
+      "om": "Ogeessa Miidiyaa Diijitaalaa Afaan Mallattoo Itoophiyaa",
+      "ti": "ናይ ኢትዮጵያ ምልክት ቋንቋ (EthSL) ዲጂታል ሚዲያ ክኢላ",
+      "so": "Khabiirka Warbaahinta Dijitaalka ah ee Luqadda Dhagoolka Itoobiya"
+    },
+    "employer": "Ethiopian Center for Disability and Development (ECDD)",
+    "location": {
+      "en": "Addis Ababa",
+      "am": "አዲስ አበባ",
+      "om": "Finfinnee",
+      "ti": "ኣዲስ ኣበባ",
+      "so": "Addis Ababa"
+    },
+    "workMode": "hybrid",
+    "description": {
+      "en": "Record, review, and annotate Ethiopian Sign Language video interpretations for government educational portals and national learning systems.",
+      "am": "ለመንግስት የትምህርት ፖርታሎች እና ለብሔራዊ የትምህርት ሥርዓቶች የኢትዮጵያ የምልክት ቋንቋ ቪዲዮ ትርጉሞችን ይቅረጹ፣ ይገምግሙ እና ያዘጋጁ።",
+      "om": "Kutaalee barnoota mootummaa fi sirna barnootaa biyyaalessaaf hiikaa viidiyoo Afaan Mallattoo Itoophiyaa waraabuu fi qindeessuu.",
+      "ti": "ንትምህርታዊ ፖርታላትን ሃገራዊ ስርዓተ-ትምህርትን ናይ ምልክት ቋንቋ ቪድዮ ትርጉማት ምቕራጽን ምምዕባልን።",
+      "so": "Duub oo dib u eeg fasiraadaha fiidiyowga ee Luqadda Dhagoolka Itoobiya ee boggaga waxbarashada qaranka."
+    },
+    "requiredSkills": ["skill-a11y-literacy"],
+    "helpfulSkills": ["skill-digital-collab"],
+    "applicationDeadline": "2026-12-15",
+    "applicationUrl": "https://ecdd-ethiopia.org/careers/ethsl-specialist",
+    "accommodations": [
+      {
+        "id": "acc-interpreter",
+        "label": {
+          "en": "Deaf-inclusive team meetings with professional EthSL interpreters",
+          "am": "ሙያዊ የEthSL አስተርጓሚዎች ያሏቸው ሁሉን አካታች ስብሰባዎች",
+          "om": "Walga'iiwwan garee hiiktoota afaan mallattootiin deeggaraman",
+          "ti": "ብሙያዊ ናይ ምልክት ቋንቋ ተርጎምቲ ዝተደገፉ ናይ ጉጅለ ኣኼባታት",
+          "so": "Kulamada kooxda oo ay ku jiraan turjubaano xirfad leh oo luqadda dhegoolka ah"
+        },
+        "source": "Employer Verified",
+        "verifiedDate": "2026-10-20"
+      },
+      {
+        "id": "acc-visual-alerts",
+        "label": {
+          "en": "Full visual communication alerts & real-time live captions",
+          "am": "የእይታ ግንኙነት ማሳወቂያዎች እና የቀጥታ የትርጉም ጽሑፍ",
+          "om": "Akeekkachiisota mul'ataa fi barreeffama sagalee kallattii",
+          "ti": "ናይ ምርኣይ ሓበሬታታትን ናይ ቀጥታ ጽሑፍ ትርጉምን",
+          "so": "Digniinaha muuqaalka ah iyo qoraalka tooska ah"
+        },
+        "source": "Employer Verified",
+        "verifiedDate": "2026-10-20"
+      }
+    ],
+    "audioSummary": {
+      "src": "/jobs/audio/job-01-summary.mp3",
+      "language": "en",
+      "type": "audio/mp3",
+      "durationSeconds": 30,
+      "textEquivalent": "Sign Language Digital Media Specialist at ECDD Ethiopia. Hybrid position in Addis Ababa. Produce and review EthSL video overlays for educational portals. Workplaces feature certified sign interpreters and visual notification systems."
+    },
+    "isDemonstrationData": true
+  },
+  {
+    "id": "job-03",
+    "title": {
+      "en": "Accessible Content & Media Specialist",
+      "am": "ተደራሽ የይዘት እና የሚዲያ ባለሙያ",
+      "om": "Ogeessa Qabiyyee fi Miidiyaa Hundaaf Mijataa",
+      "ti": "ተበጻሒ ትሕዝቶን ሚዲያን ክኢላ",
+      "so": "Khabiirka Nuxurka iyo Warbaahinta la Heli Karo"
+    },
+    "employer": "Ethio Telecom",
+    "location": {
+      "en": "Remote (Ethiopia)",
+      "am": "የርቀት (ኢትዮጵያ)",
+      "om": "Fageenya (Itoophiyaa)",
+      "ti": "ናይ ርሕቐት (ኢትዮጵያ)",
+      "so": "Meel Fog (Itoobiya)"
+    },
+    "workMode": "remote",
+    "description": {
+      "en": "Design tagged PDFs, braille-ready documents, and accessible educational web pages for the Telebirr digital literacy initiative.",
+      "am": "ለቴሌብር ዲጂታል እውቀት ፕሮግራም የተታገጉ PDF ሰነዶችን፣ የብሬል ሰነዶችን እና ተደራሽ የትምህርት ገጾችን ያዘጋጁ።",
+      "om": "Waraqaalee PDF qindaa'an, barreeffamoota bireeyilii fi weebsaayitoota mijatoo Telebirriif qopheessuu.",
+      "ti": "ንቴሌብር ዲጂታል ትምህርቲ ዝተታገጉ PDF ሰነዳት፣ ናይ ብሬይል ሰነዳትን ተበጻሕቲ መርበብ ሓበሬታታትን ምድላው።",
+      "so": "Naqshadee dukumentiyada PDF-ka ah ee calaamadeysan, qoraallada farta indhoolaha, iyo boggaga waxbarashada ee barnaamijka Telebirr."
+    },
+    "requiredSkills": ["skill-a11y-literacy", "skill-digital-collab"],
+    "helpfulSkills": [],
+    "applicationDeadline": "2026-12-10",
+    "applicationUrl": "https://ethiotelecom.et/careers/accessible-content",
+    "accommodations": [
+      {
+        "id": "acc-remote-full",
+        "label": {
+          "en": "100% remote option with home assistive technology allowance",
+          "am": "100% የርቀት የሥራ ዕድል ከረዳት ቴክኖሎጂ አበል ጋር",
+          "om": "Hojii fageenyaa dhibbeentaa 100 deeggarsa teeknooloojii wajjin",
+          "ti": "100% ናይ ርሕቐት ስራሕ ምስ ናይ ቴክኖሎጂ ደገፍ ኣበል",
+          "so": "Ikhtiyaarka 100% fog oo leh kabka tignoolajiyada caawinta guriga"
+        },
+        "source": "Employer Verified",
+        "verifiedDate": "2026-10-25"
+      },
+      {
+        "id": "acc-screen-reader-lic",
+        "label": {
+          "en": "Screen reader and braille display enterprise licenses provided",
+          "am": "የስክሪን አንባቢ እና የብሬል ማሳያ ፈቃዶች በድርጅቱ ይቀርባሉ",
+          "om": "Hayyama dubbiftuu iskiriinii fi bireeyilii dhaabbatichaan kennamu",
+          "ti": "ናይ ስክሪን ኣንባቢን ብሬይልን ፍቓዳት ብትካል ይቐርብ",
+          "so": "Shatiyada shirkadda ee akhriska shaashadda iyo farta indhoolaha ayaa la bixiyaa"
+        },
+        "source": "Employer Verified",
+        "verifiedDate": "2026-10-25"
+      }
+    ],
+    "audioSummary": {
+      "src": "/jobs/audio/job-01-summary.mp3",
+      "language": "en",
+      "type": "audio/mp3",
+      "durationSeconds": 32,
+      "textEquivalent": "Accessible Content Specialist at Ethio Telecom. 100% remote role within Ethiopia. Create tagged PDFs and accessible web media for Telebirr. Employer provides assistive technology allowances and licenses."
+    },
+    "isDemonstrationData": true
+  },
+  {
+    "id": "job-04",
+    "title": {
+      "en": "Assistive Technology Specialist & Trainer",
+      "am": "የረዳት ቴክኖሎጂ ባለሙያ እና አሰልጣኝ",
+      "om": "Leenjisaa fi Ogeessa Teeknooloojii Deeggarsaa",
+      "ti": "ናይ ሓጋዚ ቴክኖሎጂ ክኢላን መላመድን",
+      "so": "Khabiirka iyo Tababaraha Tignoolajiyada Caawinta"
+    },
+    "employer": "Ministry of Innovation & Technology (MInT Ethiopia)",
+    "location": {
+      "en": "Hawassa",
+      "am": "ሀዋሳ",
+      "om": "Hawaasaa",
+      "ti": "ሃዋሳ",
+      "so": "Hawassa"
+    },
+    "workMode": "hybrid",
+    "description": {
+      "en": "Train civil servants and digital entrepreneurs with disabilities on NVDA, mobile accessibility features, and keyboard workflows.",
+      "am": "የመንግስት ሰራተኞችን እና አካል ጉዳተኛ የዲጂታል አንተርፕረነሮችን በNVDA፣ በሞባይል ተደራሽነት እና በኪቦርድ አጠቃቀም ላይ ያሰልጥኑ።",
+      "om": "Hojjettoota mootummaa fi ogeeyyii qaama miidhamtoota ta'an NVDA fi meeshaalee teeknooloojii irratti leenjisuu.",
+      "ti": "ንመንግስታዊ ሰራሕተኛታትን ኣካል ጉዳያት ዘለዎም ሰባትን ኣብ NVDAን ናይ ኪቦርድ ኣሰራርሓን ምልማድ።",
+      "so": "Tababar shaqaalaha dawladda iyo hal-abuurayaasha naafada ah ee ku saabsan NVDA iyo hababka kiiboodhka."
+    },
+    "requiredSkills": ["skill-a11y-literacy"],
+    "helpfulSkills": ["skill-digital-collab"],
+    "applicationDeadline": "2026-12-20",
+    "applicationUrl": "https://mint.gov.et/careers/assistive-tech-specialist",
+    "accommodations": [
+      {
+        "id": "acc-campus-barrier-free",
+        "label": {
+          "en": "Fully accessible campus with ramps, braille signage, and elevators",
+          "am": "ደረጃ አልባ መግቢያዎች፣ የብሬል ምልክቶች እና አሳንሰር ያለው ተደራሽ ግቢ",
+          "om": "Giddugala hundaa ol mijataa ta'e kan mallattoo bireeyilii fi yaabduu qabu",
+          "ti": "ንኹሉ ምቹእ ዝኾነ ናይ ትካል ቀጽሪ ምስ ናይ ብሬይል ምልክታትን ኣሳንሰርን",
+          "so": "Xarun si buuxda loo heli karo oo leh jaranjarooyinka gaarka ah iyo calaamadaha indhoolaha"
+        },
+        "source": "Employer Verified",
+        "verifiedDate": "2026-11-01"
+      },
+      {
+        "id": "acc-ergo",
+        "label": {
+          "en": "Custom ergonomic workstations and high-contrast monitors provided",
+          "am": "ምቹ የሆኑ የሥራ ጠረጴዛዎች እና ከፍተኛ ንፅፅር ያላቸው ማሳያዎች",
+          "om": "Barcumaa fi minjaala mijataa iskiriinii ifaa qabu",
+          "ti": "ምቹኣት ናይ ስራሕ ጠረጴዛታትን ልዑል ንጽጽር ዘለዎም ስክሪናትን",
+          "so": "Kuraasta iyo miisaska ergonomic-ka ah iyo kormeerayaasha iftiinka sare leh"
+        },
+        "source": "Employer Verified",
+        "verifiedDate": "2026-11-01"
+      }
+    ],
+    "audioSummary": {
+      "src": "/jobs/audio/job-01-summary.mp3",
+      "language": "en",
+      "type": "audio/mp3",
+      "durationSeconds": 33,
+      "textEquivalent": "Assistive Technology Specialist at MInT Ethiopia in Hawassa. Hybrid position conducting accessibility trainings. Workplace is wheelchair accessible with braille navigation and ergonomic equipment."
+    },
+    "isDemonstrationData": true
+  },
+  {
+    "id": "job-05",
+    "title": {
+      "en": "Accessible Frontend & Web Component Engineer",
+      "am": "ተደራሽ የፊት-ለፊት የድር መተግበሪያ መሃንዲስ",
+      "om": "Injinera Weebii Fuula Duraa Hundaaf Mijataa",
+      "ti": "ተበጻሒ ናይ ቅድሚት መርበብ መሃንድስ",
+      "so": "Injineerka Hore ee Webka ee La Heli Karo"
+    },
+    "employer": "Gebeya Inc.",
+    "location": {
+      "en": "Addis Ababa / Remote",
+      "am": "አዲስ አበባ / የርቀት",
+      "om": "Finfinnee / Fageenya",
+      "ti": "ኣዲስ ኣበባ / ናይ ርሕቐት",
+      "so": "Addis Ababa / Meel Fog"
+    },
+    "workMode": "remote",
+    "description": {
+      "en": "Build accessible custom HTML elements, focus-managed interactive interfaces, and WCAG-compliant design system components for African edtech products.",
+      "am": "ለአፍሪካ የትምህርት ቴክኖሎጂ ምርቶች ተደራሽ የሆኑ የድር ክፍሎችን፣ በኪቦርድ የሚሰሩ በይነገጾችን እና የንድፍ ስርዓቶችን ይገንቡ።",
+      "om": "Meishaalee weebii mijatoo, qunnamtii kiibordiin hogganamu fi sirnoota dizaayinii edtek Afrikaaf ijaaruu.",
+      "ti": "ንትምህርታዊ ቴክኖሎጂ ፍርያት ተበጻሕቲ ናይ መርበብ ሓበሬታ ኣካላትን ብኪቦርድ ዝሰርሑ ባእታታትን ምህናጽ።",
+      "so": "Dhis walxaha webka ee la heli karo, isku-xirka kiiboodhka lagu maamulo, iyo qaybaha nidaamka naqshadaynta."
+    },
+    "requiredSkills": ["skill-a11y-literacy", "skill-digital-collab"],
+    "helpfulSkills": [],
+    "applicationDeadline": "2026-12-25",
+    "applicationUrl": "https://gebeya.com/careers/a11y-frontend-engineer",
+    "accommodations": [
+      {
+        "id": "acc-keyboard-focused",
+        "label": {
+          "en": "100% keyboard-first developer tooling and pair programming support",
+          "am": "100% በኪቦርድ ላይ ያተኮሩ የልማት መተግበሪያዎች እና የጥንድ ፕሮግራሚንግ ድጋፍ",
+          "om": "Meeshaalee misoomaa kiibordii qofaan hojjetan fi deeggarsa garee",
+          "ti": "100% ብኪቦርድ ዝሰርሑ ናይ ዲቨሎፐር መሳርሒታትን ናይ ሓባር ስራሕን",
+          "so": "Qalabka horumarinta ee kiiboodhka ugu horreeya iyo taageerada barnaamijka labada ah"
+        },
+        "source": "Employer Verified",
+        "verifiedDate": "2026-10-30"
+      },
+      {
+        "id": "acc-async-culture",
+        "label": {
+          "en": "Asynchronous communication with documented meeting summaries",
+          "am": "የተመዘገቡ የስብሰባ ማጠቃለያዎች ያሉት ተለዋዋጭ ግንኙነት",
+          "om": "Qunnamtii wal-bira hin dabaramne fi gabaasa walga'ii barreeffame",
+          "ti": "ተለዋዋጢ ርክብ ምስ ዝተሰነደ ናይ ኣኼባ ጽሑፍ ሓበሬታ",
+          "so": "Xiriir asynchronous ah oo leh qoraallo kooban oo kulanka ah"
+        },
+        "source": "Employer Verified",
+        "verifiedDate": "2026-10-30"
+      }
+    ],
+    "audioSummary": {
+      "src": "/jobs/audio/job-01-summary.mp3",
+      "language": "en",
+      "type": "audio/mp3",
+      "durationSeconds": 31,
+      "textEquivalent": "Accessible Frontend Engineer at Gebeya. Remote within Ethiopia. Build keyboard-navigable Web Components and accessible UI systems. Company supports asynchronous workflows and assistive development setups."
+    },
+    "isDemonstrationData": true
+  },
+  {
+    "id": "job-06",
+    "title": {
+      "en": "Inclusive Curriculum & UX Researcher",
+      "am": "ሁሉን-አካታች የትምህርት ዝግጅት እና የUX ተመራማሪ",
+      "om": "Qorataa UX fi Qophii Barnoota Hunda-Hammatoo",
+      "ti": "ኩሉ-ሓቆፍ ናይ ትምህርቲ ምድላውን ናይ UX ተመራማሪን",
+      "so": "Manhajka loo Dhan yahay & Cilmi-baaraha UX"
+    },
+    "employer": "Safaricom Ethiopia",
+    "location": {
+      "en": "Dire Dawa",
+      "am": "ድሬዳዋ",
+      "om": "Dirree Dhawaa",
+      "ti": "ድሬዳዋ",
+      "so": "Dire Dawa"
+    },
+    "workMode": "hybrid",
+    "description": {
+      "en": "Conduct usability studies with blind, low-vision, and deaf smartphone users to optimize mobile app accessibility across regional Ethiopian languages.",
+      "am": "የሞባይል መተግበሪያዎችን በኢትዮጵያ ቋንቋዎች ተደራሽ ለማድረግ ከአይነ ስውራን እና መስማት ከተሳናቸው ተጠቃሚዎች ጋር የተጠቃሚነት ጥናቶችን ያካሂዱ።",
+      "om": "Mobaayila afaanoota naannootiin mijataa gochuuf fayyadamtoota qaama miidhamtoota ta'an waliin qorannoo adeemsisuu.",
+      "ti": "ናይ ሞባይል ኣፕሊኬሽናት ተበጻሕቲ ንምግባር ምስ ዕዉራትን ጸማማትን ተጠቀምቲ ሓባራዊ ናይ ምጥቃም መጽናዕቲ ምክያድ።",
+      "so": "Samee daraasado isticmaalka oo ay la socdaan isticmaalayaasha taleefannada gacanta ee indhoolayaasha iyo dhagoolayaasha si loo hagaajiyo abka."
+    },
+    "requiredSkills": ["skill-a11y-literacy", "skill-digital-collab"],
+    "helpfulSkills": [],
+    "applicationDeadline": "2026-12-30",
+    "applicationUrl": "https://safaricom.et/careers/inclusive-ux-researcher",
+    "accommodations": [
+      {
+        "id": "acc-user-testing-lab",
+        "label": {
+          "en": "Dedicated accessibility usability lab with professional interpreters",
+          "am": "ሙያዊ አስተርጓሚዎች ያሉት የተደራሽነት የተጠቃሚነት ጥናት ላብራቶሪ",
+          "om": "Laabooratorii qorannoo mijannaa hiiktoota afaaniitiin deeggarame",
+          "ti": "ናይ ተበጻሕነት መጽናዕቲ ላቦራቶሪ ምስ ሙያዊ ተርጎምቲ",
+          "so": "Shaybaadhka isticmaalka helitaanka oo leh turjubaano xirfad leh"
+        },
+        "source": "Employer Verified",
+        "verifiedDate": "2026-11-05"
+      },
+      {
+        "id": "acc-transport",
+        "label": {
+          "en": "Accessible transit shuttle service and door-to-door transport allowance",
+          "am": "ተደራሽ የትራንዚት አገልግሎት እና ከቤት ወደ ሥራ የትራንስፖርት አበል",
+          "om": "Tajaajila geejjibaa mijataa fi kaffaltii geejjiba manaa gara hojiitti",
+          "ti": "ምቹእ ናይ መጓዓዝያ ኣገልግሎትን ናይ ትራንስፖርት ኣበልን",
+          "so": "Adeegga gaadiidka ee la heli karo iyo gunnada gaadiidka guriga ilaa shaqada"
+        },
+        "source": "Employer Verified",
+        "verifiedDate": "2026-11-05"
+      }
+    ],
+    "audioSummary": {
+      "src": "/jobs/audio/job-01-summary.mp3",
+      "language": "en",
+      "type": "audio/mp3",
+      "durationSeconds": 34,
+      "textEquivalent": "Inclusive UX Researcher at Safaricom Ethiopia in Dire Dawa. Hybrid role running accessibility testing sessions with Ethiopian disability communities. Includes dedicated accessibility testing labs and accessible transit services."
     },
     "isDemonstrationData": true
   }

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from "react";
 
-export type RoutePath = "/" | "/lesson" | "/studio" | "/verify" | "/embed";
+export type RoutePath = "/" | "/lesson" | "/careers" | "/studio" | "/verify" | "/embed";
 
 interface RouterContextType {
   currentPath: RoutePath;
@@ -17,6 +17,7 @@ const RouterContext = createContext<RouterContextType>({
 export function normalizePath(pathname: string, hash: string): RoutePath {
   // Support both clean URLs and legacy .html filenames
   const path = pathname.toLowerCase();
+  if (path.includes("careers") || path.includes("jobs")) return "/careers";
   if (path.includes("lesson")) return "/lesson";
   if (path.includes("studio")) return "/studio";
   if (path.includes("verify")) return "/verify";
@@ -25,6 +26,7 @@ export function normalizePath(pathname: string, hash: string): RoutePath {
   // Support hash routing fallback if served from file:// or static server
   if (hash) {
     const cleanHash = hash.replace("#", "").toLowerCase();
+    if (cleanHash.includes("careers") || cleanHash.includes("jobs")) return "/careers";
     if (cleanHash.includes("lesson")) return "/lesson";
     if (cleanHash.includes("studio")) return "/studio";
     if (cleanHash.includes("verify")) return "/verify";
@@ -45,6 +47,8 @@ export const RouterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     switch (path) {
       case "/lesson":
         return "Accessible Lesson: Digital Workplace Skills";
+      case "/careers":
+        return "Career Gateway: Accessible Opportunities";
       case "/studio":
         return "Transcript Studio — Caption Review";
       case "/verify":

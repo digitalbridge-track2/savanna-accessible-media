@@ -447,10 +447,28 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
           <span className="badge badge-success">WCAG 1.4.10 Reflow Tested</span>
         </div>
 
-        <div id="job-cards-container">
-          {jobs.map((job) => (
+        <div id="job-cards-container" style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+          {jobs.slice(0, 2).map((job) => (
             <JobCardItem key={job.id} job={job} locale={locale} />
           ))}
+        </div>
+
+        <div style={{ marginTop: "1.75rem", textAlign: "center" }}>
+          <NavLink
+            to="/careers"
+            className="btn btn-primary"
+            style={{ padding: "0.65rem 1.6rem", fontSize: "14px", fontWeight: 600 }}
+          >
+            {locale === "am"
+              ? `ሁሉንም ${jobs.length} የሥራ ዕድሎች በዝርዝር ማጣሪያዎች ይመልከቱ →`
+              : locale === "om"
+              ? `Carraawwan Hojii Hunda (${jobs.length}) Qorannoo Bal'aa Waliin Ilaalaa →`
+              : locale === "ti"
+              ? `ንኹሎም ${jobs.length} ናይ ስራሕ ዕድላት ብዝርዝር ማጣረዪታት ርኣዩ →`
+              : locale === "so"
+              ? `Eeg Dhammaan ${jobs.length} Fursadaha Shaqo oo leh Shaandheeyeyaal Faahfaahsan →`
+              : `Explore All ${jobs.length} Accessible Opportunities with Detailed Filters →`}
+          </NavLink>
         </div>
       </section>
 
