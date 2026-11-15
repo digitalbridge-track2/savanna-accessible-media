@@ -24,8 +24,13 @@
       "ti": "ናይ ሞባይል ባንክን መርበብ ሓበሬታታትን ብNVDA፣ TalkBack ከምኡ'ውን ኪቦርድ ብምጥቃም ናይ WCAG 2.2 AA ተበጻሕነት ምርግጋጽ።",
       "so": "Tijaabi bangiga moobilka iyo codsiyada webka adoo adeegsanaya NVDA, TalkBack iyo hagida kiiboodhka si loo waafajiyo WCAG 2.2 AA."
     },
-    "requiredSkills": ["skill-a11y-literacy"],
-    "helpfulSkills": ["skill-digital-collab", "skill-screenreader-ops"],
+    "requiredSkills": [
+      "skill-a11y-literacy",
+      "skill-digital-collab"
+    ],
+    "helpfulSkills": [
+      "skill-screenreader-ops"
+    ],
     "applicationDeadline": "2026-12-01",
     "applicationUrl": "https://fintech.et/careers/a11y-qa",
     "accommodations": [
@@ -59,7 +64,13 @@
       "language": "en",
       "type": "audio/mp3",
       "durationSeconds": 35,
-      "textEquivalent": "Junior Accessibility QA Analyst at FinTech Ethiopia. Addis Ababa hybrid role. Tasks include auditing web and mobile apps with NVDA and TalkBack. Employer provides accessible workstations and flexible hours."
+      "textEquivalent": {
+        "en": "Junior Accessibility QA Analyst at FinTech Ethiopia. Addis Ababa hybrid role. Tasks include auditing web and mobile apps with NVDA and TalkBack. Employer provides accessible workstations and flexible hours.",
+        "am": "ጀማሪ የተደራሽነት የጥራት ቁጥጥር ተንታኝ በፊንቴክ ኢትዮጵያ። በአዲስ አበባ ድብልቅ የሥራ ሁኔታ። ኃላፊነቶች የድር እና የሞባይል መተግበሪያዎችን በNVDA እና TalkBack መገምገምን ያካትታሉ። ቀጣሪው ተደራሽ የሥራ ኮምፒውተሮችን እና ተለዋዋጭ ሰዓታትን ያቀርባል።",
+        "om": "Xiinxalaa Qulqullina Miijannaa FinTech Itoophiyaa keessatti. Finfinnee keessatti hojii makaa. Gaheen weebsaayitii fi moobaayila NVDA fi TalkBack tiin qoruu dabalata. Hojjechiisaan koompiitara mijataa fi sa'aatii hojii mijataa ni dhiyeessa.",
+        "ti": "ጀማሪ ናይ ተበጻሕነት ጽሬት ተንታኒ ኣብ ፊንቴክ ኢትዮጵያ። ኣብ ኣዲስ ኣበባ ሕውስዋስ ናይ ስራሕ ኩነታት። መተግበሪታት መርበብን ሞባይልን ብNVDAን TalkBackን ምግምጋም የጠቓልል። ቀጣሪ ተበጻሕቲ ናይ ስራሕ ኮምፒዩተራትን ተዓጻጻፊ ሰዓታትን የቕርብ።",
+        "so": "Falanqeeyaha Hubinta Tayada Helitaanka ee FinTech Ethiopia. Shaqo isku-dhafan oo Addis Ababa ah. Hawlaha waxaa ka mid ah hubinta codsiyada webka iyo moobilka ee NVDA iyo TalkBack. Loo-shaqeeyuhu wuxuu bixiyaa goobo shaqo oo la heli karo iyo saacado dabacsan."
+      }
     },
     "isDemonstrationData": true
   },
@@ -88,8 +99,14 @@
       "ti": "ንትምህርታዊ ፖርታላትን ሃገራዊ ስርዓተ-ትምህርትን ናይ ምልክት ቋንቋ ቪድዮ ትርጉማት ምቕራጽን ምምዕባልን።",
       "so": "Duub oo dib u eeg fasiraadaha fiidiyowga ee Luqadda Dhagoolka Itoobiya ee boggaga waxbarashada qaranka."
     },
-    "requiredSkills": ["skill-a11y-literacy"],
-    "helpfulSkills": ["skill-digital-collab"],
+    "requiredSkills": [
+      "skill-ethsl-fluent",
+      "skill-video-annotation"
+    ],
+    "helpfulSkills": [
+      "skill-a11y-literacy",
+      "skill-digital-collab"
+    ],
     "applicationDeadline": "2026-12-15",
     "applicationUrl": "https://ecdd-ethiopia.org/careers/ethsl-specialist",
     "accommodations": [
@@ -98,24 +115,24 @@
         "label": {
           "en": "Deaf-inclusive team meetings with professional EthSL interpreters",
           "am": "ሙያዊ የEthSL አስተርጓሚዎች ያሏቸው ሁሉን አካታች ስብሰባዎች",
-          "om": "Walga'iiwwan garee hiiktoota afaan mallattootiin deeggaraman",
-          "ti": "ብሙያዊ ናይ ምልክት ቋንቋ ተርጎምቲ ዝተደገፉ ናይ ጉጅለ ኣኼባታት",
-          "so": "Kulamada kooxda oo ay ku jiraan turjubaano xirfad leh oo luqadda dhegoolka ah"
+          "om": "Walga'ii garee turjumaanota Afaan Mallattoo ogummaa qaban waliin",
+          "ti": "ምስ ሙያዊ ናይ ምልክት ቋንቋ ኣተርጎምቲ ዝካየድ ናይ ጋንታ ኣኼባታት",
+          "so": "Kulamada kooxda oo leh turjumaano xirfad leh oo EthSL ah"
         },
-        "source": "Employer Verified",
-        "verifiedDate": "2026-10-20"
+        "source": "ECDD Verified",
+        "verifiedDate": "2026-09-20"
       },
       {
-        "id": "acc-visual-alerts",
+        "id": "acc-visual-alert",
         "label": {
-          "en": "Full visual communication alerts & real-time live captions",
-          "am": "የእይታ ግንኙነት ማሳወቂያዎች እና የቀጥታ የትርጉም ጽሑፍ",
-          "om": "Akeekkachiisota mul'ataa fi barreeffama sagalee kallattii",
-          "ti": "ናይ ምርኣይ ሓበሬታታትን ናይ ቀጥታ ጽሑፍ ትርጉምን",
-          "so": "Digniinaha muuqaalka ah iyo qoraalka tooska ah"
+          "en": "Strobe visual emergency alerts and quiet digital focus pods",
+          "am": "የብርሃን ብልጭታ የአደጋ ጊዜ ማስጠንቀቂያ እና ጸጥ ያሉ የትኩረት ክፍሎች",
+          "om": "Akeekkachiisa balaa ifa mul'atu fi kutaalee callisaa",
+          "ti": "ናይ ብርሃን ምልክት ሓደጋ መፍለጥን ጸጥታ ዘለዎም ናይ ስራሕ ክፍልታትን",
+          "so": "Digniinaha degdegga ah ee iftiinka leh iyo qolal shaqo oo aamusnaan ah"
         },
-        "source": "Employer Verified",
-        "verifiedDate": "2026-10-20"
+        "source": "ECDD Verified",
+        "verifiedDate": "2026-09-20"
       }
     ],
     "audioSummary": {
@@ -123,7 +140,13 @@
       "language": "en",
       "type": "audio/mp3",
       "durationSeconds": 30,
-      "textEquivalent": "Sign Language Digital Media Specialist at ECDD Ethiopia. Hybrid position in Addis Ababa. Produce and review EthSL video overlays for educational portals. Workplaces feature certified sign interpreters and visual notification systems."
+      "textEquivalent": {
+        "en": "Sign Language Digital Media Specialist at ECDD Ethiopia. Hybrid position in Addis Ababa. Produce and review EthSL video overlays for educational portals. Workplaces feature certified sign interpreters and visual notification systems.",
+        "am": "የምልክት ቋንቋ (EthSL) ዲጂታል ሚዲያ ባለሙያ በኢትዮጵያ የአካል ጉዳተኞች እና የልማት ማዕከል (ECDD)። በአዲስ አበባ ድብልቅ የሥራ ሁኔታ። ለትምህርት ፖርታሎች የEthSL ቪዲዮዎችን ማዘጋጀት እና መገምገም። የሥራ ቦታው የተረጋገጡ የምልክት ቋንቋ አስተርጓሚዎችን እና የዕይታ ማሳወቂያ ሥርዓቶችን ያካትታል።",
+        "om": "Ogeessa Miidiyaa Diijitaalaa Afaan Mallattoo Itoophiyaa ECDD keessatti. Finfinnee keessatti hojii makaa. Poortaalii barnootaaf viidiyoo Afaan Mallattoo qopheessuu fi qoruu. Iddoon hojii turjumaanota afaan mallattoo fi sirna beeksisa mul'ataa qaba.",
+        "ti": "ናይ ምልክት ቋንቋ ዲጂታል ሚዲያ ክኢላ ኣብ ECDD ኢትዮጵያ። ኣብ ኣዲስ ኣበባ ሕውስዋስ ስራሕ። ንትምህርታዊ ፖርታላት ናይ ምልክት ቋንቋ ቪድዮታት ምድላውን ምግምጋምን። ናይ ስራሕ ቦታ ዝተረጋገጹ ናይ ምልክት ቋንቋ ኣተርጎምትን ናይ ራእይ መፍለጢ ስርዓታትን የጠቓልል።",
+        "so": "Khabiirka Warbaahinta Dijitaalka ah ee Luqadda Dhegoolka ECDD Itoobiya. Shaqo isku-dhafan oo Addis Ababa ah. Soo saarista iyo dib u eegista fiidiyowyada luqadda dhegoolka ee boggaga waxbarashada. Goobta shaqadu waxay leedahay turjumaano la aqoonsan yahay iyo nidaamyo ogeysiis muuqaal ah."
+      }
     },
     "isDemonstrationData": true
   },
@@ -132,54 +155,59 @@
     "title": {
       "en": "Accessible Content & Media Specialist",
       "am": "ተደራሽ የይዘት እና የሚዲያ ባለሙያ",
-      "om": "Ogeessa Qabiyyee fi Miidiyaa Hundaaf Mijataa",
-      "ti": "ተበጻሒ ትሕዝቶን ሚዲያን ክኢላ",
-      "so": "Khabiirka Nuxurka iyo Warbaahinta la Heli Karo"
+      "om": "Ogeessa Qabiyyee fi Miidiyaa Hundaaf Mijatoo",
+      "ti": "ተበጻሒ ናይ ትሕዝቶን ሚዲያን ክኢላ",
+      "so": "Khabiirka Nuxurka iyo Warbaahinta ee La Heli Karo"
     },
     "employer": "Ethio Telecom",
     "location": {
-      "en": "Remote (Ethiopia)",
-      "am": "የርቀት (ኢትዮጵያ)",
-      "om": "Fageenya (Itoophiyaa)",
-      "ti": "ናይ ርሕቐት (ኢትዮጵያ)",
-      "so": "Meel Fog (Itoobiya)"
+      "en": "Addis Ababa / Regional Hubs",
+      "am": "አዲስ አበባ / የክልል ማዕከላት",
+      "om": "Finfinnee / Dameewwan Naannoo",
+      "ti": "ኣዲስ ኣበባ / ናይ ዞባ ማእከላት",
+      "so": "Addis Ababa / Xarumaha Gobollada"
     },
     "workMode": "remote",
     "description": {
-      "en": "Design tagged PDFs, braille-ready documents, and accessible educational web pages for the Telebirr digital literacy initiative.",
-      "am": "ለቴሌብር ዲጂታል እውቀት ፕሮግራም የተታገጉ PDF ሰነዶችን፣ የብሬል ሰነዶችን እና ተደራሽ የትምህርት ገጾችን ያዘጋጁ።",
-      "om": "Waraqaalee PDF qindaa'an, barreeffamoota bireeyilii fi weebsaayitoota mijatoo Telebirriif qopheessuu.",
-      "ti": "ንቴሌብር ዲጂታል ትምህርቲ ዝተታገጉ PDF ሰነዳት፣ ናይ ብሬይል ሰነዳትን ተበጻሕቲ መርበብ ሓበሬታታትን ምድላው።",
-      "so": "Naqshadee dukumentiyada PDF-ka ah ee calaamadeysan, qoraallada farta indhoolaha, iyo boggaga waxbarashada ee barnaamijka Telebirr."
+      "en": "Format, tag, and publish accessible digital handouts, billing guides, and instructional videos for nationwide Telebirr customer education portals.",
+      "am": "ለአገር አቀፍ የቴሌብር የደንበኞች ትምህርት ፖርታሎች ተደራሽ የዲጂታል ሰነዶችን፣ የክፍያ መመሪያዎችን እና የማስተማሪያ ቪዲዮዎችን ማዘጋጀት እና ማተም።",
+      "om": "Poortaalii barnoota maamiltoota Telebirr biyyaalessaaf barruulee diijitaalaa, qajeelcha kaffaltii fi viidiyoo leenjii hundaaf mijataa qopheessuu.",
+      "ti": "ንሃገራዊ ናይ ቴሌብር ተጠቃሚ ትምህርቲ ፖርታላት ተበጻሕቲ ዲጂታል ሰነዳት፣ ናይ ክፍሊት መምርሒታትን ናይ ስልጠና ቪድዮታትን ምድላው።",
+      "so": "Habaynta, calaamadaynta, iyo daabacaadda qoraallada dhijitaalka ah ee la heli karo, hagaha biilasha, iyo fiidiyowyada waxbarashada macaamiisha Telebirr."
     },
-    "requiredSkills": ["skill-a11y-literacy", "skill-digital-collab"],
-    "helpfulSkills": [],
+    "requiredSkills": [
+      "skill-a11y-literacy",
+      "skill-digital-collab"
+    ],
+    "helpfulSkills": [
+      "skill-tagged-pdf-ops"
+    ],
     "applicationDeadline": "2026-12-10",
     "applicationUrl": "https://ethiotelecom.et/careers/accessible-content",
     "accommodations": [
       {
-        "id": "acc-remote-full",
+        "id": "acc-assistive-tech",
         "label": {
-          "en": "100% remote option with home assistive technology allowance",
-          "am": "100% የርቀት የሥራ ዕድል ከረዳት ቴክኖሎጂ አበል ጋር",
-          "om": "Hojii fageenyaa dhibbeentaa 100 deeggarsa teeknooloojii wajjin",
-          "ti": "100% ናይ ርሕቐት ስራሕ ምስ ናይ ቴክኖሎጂ ደገፍ ኣበል",
-          "so": "Ikhtiyaarka 100% fog oo leh kabka tignoolajiyada caawinta guriga"
+          "en": "Direct subsidy for high-speed fiber & NVDA/JAWS licensed peripherals",
+          "am": "ለፈጣን ፋይበር ኢንተርኔት እና ለNVDA/JAWS ፈቃዶች የቀጥታ ድጎማ",
+          "om": "Faayibar intarneetii ariifataa fi deeggarsa meeshaalee NVDA/JAWS",
+          "ti": "ንቅልጡፍ ፋይበር ኢንተርኔትን ናይ NVDA/JAWS ፍቓዳትን ቀጥታዊ ድጎማ",
+          "so": "Kabid toos ah oo loogu talagalay internet-ka fiber-ka iyo shatiyada NVDA/JAWS"
         },
-        "source": "Employer Verified",
-        "verifiedDate": "2026-10-25"
+        "source": "Ethio Telecom HR Verified",
+        "verifiedDate": "2026-11-01"
       },
       {
-        "id": "acc-screen-reader-lic",
+        "id": "acc-flexible-remote",
         "label": {
-          "en": "Screen reader and braille display enterprise licenses provided",
-          "am": "የስክሪን አንባቢ እና የብሬል ማሳያ ፈቃዶች በድርጅቱ ይቀርባሉ",
-          "om": "Hayyama dubbiftuu iskiriinii fi bireeyilii dhaabbatichaan kennamu",
-          "ti": "ናይ ስክሪን ኣንባቢን ብሬይልን ፍቓዳት ብትካል ይቐርብ",
-          "so": "Shatiyada shirkadda ee akhriska shaashadda iyo farta indhoolaha ayaa la bixiyaa"
+          "en": "100% remote asynchronous schedule across all Ethiopian regional states",
+          "am": "በሁሉም የኢትዮጵያ ክልሎች የሚሰራ 100% የርቀት እና ተለዋዋጭ የሥራ ሰዓት",
+          "om": "Naannolee Itoophiyaa hunda keessatti 100% hojii fageenyaa sa'aatii mijataan",
+          "ti": "ኣብ ኩሎም ዞባታት ኢትዮጵያ ዝተዘርግሐ 100% ናይ ርሕቐት ተዓጻጻፊ ስራሕ",
+          "so": "100% shaqo meel fog ah oo jadwal dabacsan leh dhammaan gobollada Itoobiya"
         },
-        "source": "Employer Verified",
-        "verifiedDate": "2026-10-25"
+        "source": "Ethio Telecom HR Verified",
+        "verifiedDate": "2026-11-01"
       }
     ],
     "audioSummary": {
@@ -187,7 +215,13 @@
       "language": "en",
       "type": "audio/mp3",
       "durationSeconds": 32,
-      "textEquivalent": "Accessible Content Specialist at Ethio Telecom. 100% remote role within Ethiopia. Create tagged PDFs and accessible web media for Telebirr. Employer provides assistive technology allowances and licenses."
+      "textEquivalent": {
+        "en": "Accessible Content Specialist at Ethio Telecom. 100% remote role within Ethiopia. Create tagged PDFs and accessible web media for Telebirr. Employer provides assistive technology allowances and licenses.",
+        "am": "ተደራሽ የይዘት እና የሚዲያ ባለሙያ በኢትዮ ቴሌኮም። በኢትዮጵያ ውስጥ 100% የርቀት ሥራ። ለቴሌብር የታገጉ ፒዲኤፎች (Tagged PDFs) እና ተደራሽ የድር ይዘቶችን ማዘጋጀት። ቀጣሪው የተደራሽነት ቴክኖሎጂ አበል እና የሶፍትዌር ፈቃዶችን ያቀርባል።",
+        "om": "Ogeessa Qabiyyee fi Miidiyaa Hundaaf Mijatoo Itoophiyaa Telekoom keessatti. Itoophiyaa keessatti 100% hojii fageenyaa. Telebirr tiif PDF fi miidiyaa weebaa mijataa qopheessuu. Hojjechiisaan eeyyama teeknooloojii deeggarsaa ni dhiyeessa.",
+        "ti": "ተበጻሒ ናይ ትሕዝቶን ሚዲያን ክኢላ ኣብ ኢትዮ ቴሌኮም። ኣብ ውሽጢ ኢትዮጵያ 100% ናይ ርሕቐት ስራሕ። ንቴሌብር ዝተሰየሙ ፒዲኤፍን ተበጻሕቲ ናይ መርበብ ሓበሬታ ትሕዝቶታትን ምድላው። ቀጣሪ ናይ ቴክኖሎጂ ሓገዝን ፍቓዳትን የቕርብ።",
+        "so": "Khabiirka Nuxurka iyo Warbaahinta ee Ethio Telecom. 100% shaqo meel fog ah oo Itoobiya gudaheeda ah. Sameynta PDF-yo calaamadeysan iyo warbaahin la heli karo oo loogu talagalay Telebirr. Loo-shaqeeyuhu wuxuu bixiyaa gunnooyinka farsamada caawinta iyo shatiyada."
+      }
     },
     "isDemonstrationData": true
   },
@@ -195,55 +229,61 @@
     "id": "job-04",
     "title": {
       "en": "Assistive Technology Specialist & Trainer",
-      "am": "የረዳት ቴክኖሎጂ ባለሙያ እና አሰልጣኝ",
-      "om": "Leenjisaa fi Ogeessa Teeknooloojii Deeggarsaa",
+      "am": "የተደራሽነት ቴክኖሎጂ ባለሙያ እና አሰልጣኝ",
+      "om": "Ogeessa Teeknooloojii Deeggarsaa fi Leenjisaa",
       "ti": "ናይ ሓጋዚ ቴክኖሎጂ ክኢላን መላመድን",
-      "so": "Khabiirka iyo Tababaraha Tignoolajiyada Caawinta"
+      "so": "Khabiirka Farsamada Caawinta iyo Tababaraha"
     },
     "employer": "Ministry of Innovation & Technology (MInT Ethiopia)",
     "location": {
-      "en": "Hawassa",
-      "am": "ሀዋሳ",
-      "om": "Hawaasaa",
-      "ti": "ሃዋሳ",
-      "so": "Hawassa"
+      "en": "Hawassa Hub / Hybrid",
+      "am": "ሐዋሳ ማዕከል / ድብልቅ",
+      "om": "Wiirtuu Hawaasaa / Makaa",
+      "ti": "ማእከል ሃዋሳ / ሕውስዋስ",
+      "so": "Xarunta Hawassa / Isku-dhafan"
     },
     "workMode": "hybrid",
     "description": {
-      "en": "Train civil servants and digital entrepreneurs with disabilities on NVDA, mobile accessibility features, and keyboard workflows.",
-      "am": "የመንግስት ሰራተኞችን እና አካል ጉዳተኛ የዲጂታል አንተርፕረነሮችን በNVDA፣ በሞባይል ተደራሽነት እና በኪቦርድ አጠቃቀም ላይ ያሰልጥኑ።",
-      "om": "Hojjettoota mootummaa fi ogeeyyii qaama miidhamtoota ta'an NVDA fi meeshaalee teeknooloojii irratti leenjisuu.",
-      "ti": "ንመንግስታዊ ሰራሕተኛታትን ኣካል ጉዳያት ዘለዎም ሰባትን ኣብ NVDAን ናይ ኪቦርድ ኣሰራርሓን ምልማድ።",
-      "so": "Tababar shaqaalaha dawladda iyo hal-abuurayaasha naafada ah ee ku saabsan NVDA iyo hababka kiiboodhka."
+      "en": "Deliver digital accessibility masterclasses to federal civil servants, test assistive equipment configurations, and audit regional digital learning centers.",
+      "am": "ለፌዴራል የመንግስት ሰራተኞች የዲጂታል ተደራሽነት ስልጠናዎችን መስጠት፣ የረዳት መሣሪያዎችን ዝግጅት መፈተሽ እና የክልል ዲጂታል የመማሪያ ማዕከላትን መገምገም።",
+      "om": "Hojjettoota mootummaa federaalaatiif leenjii miijannaa diijitaalaa dhiyeessuu, qindaa'ina meeshaalee deeggarsaa qoruu fi wiirtuulee barnootaa naannoo odiitii gochuu.",
+      "ti": "ንፌደራል ሰራሕተኛታት መንግስቲ ናይ ዲጂታል ተበጻሕነት ስልጠናታት ምሃብ፣ ናይ ሓገዝቲ መሳርሒታት ቅጥዕታት ምፍታሽን ናይ ዞባ ማእከላት ትምህርቲ ምግምጋምን።",
+      "so": "Bixinta tababaro heer sare ah oo ku saabsan helitaanka dhijitaalka ah ee shaqaalaha dawladda federaalka, tijaabinta habaynta qalabka caawinta, iyo hubinta xarumaha waxbarashada gobolka."
     },
-    "requiredSkills": ["skill-a11y-literacy"],
-    "helpfulSkills": ["skill-digital-collab"],
+    "requiredSkills": [
+      "skill-assistive-training",
+      "skill-gov-pedagogy"
+    ],
+    "helpfulSkills": [
+      "skill-a11y-literacy",
+      "skill-digital-collab"
+    ],
     "applicationDeadline": "2026-12-20",
-    "applicationUrl": "https://mint.gov.et/careers/assistive-tech-specialist",
+    "applicationUrl": "https://mint.gov.et/careers/assistive-tech-trainer",
     "accommodations": [
       {
         "id": "acc-campus-barrier-free",
         "label": {
-          "en": "Fully accessible campus with ramps, braille signage, and elevators",
-          "am": "ደረጃ አልባ መግቢያዎች፣ የብሬል ምልክቶች እና አሳንሰር ያለው ተደራሽ ግቢ",
-          "om": "Giddugala hundaa ol mijataa ta'e kan mallattoo bireeyilii fi yaabduu qabu",
-          "ti": "ንኹሉ ምቹእ ዝኾነ ናይ ትካል ቀጽሪ ምስ ናይ ብሬይል ምልክታትን ኣሳንሰርን",
-          "so": "Xarun si buuxda loo heli karo oo leh jaranjarooyinka gaarka ah iyo calaamadaha indhoolaha"
+          "en": "Step-free ramp entrances, braille elevators, and ergonomic tactile lab desks",
+          "am": "ደረጃ አልባ መወጣጫዎች፣ የብሬይል አሳንሰሮች እና ምቹ የላብራቶሪ ጠረጴዛዎች",
+          "om": "Dallaa sadarkaa maleeyyii, wiirtuu liiftii bireelii qabu fi minjaala laabii mijataa",
+          "ti": "ደረጃ ዘይብሎም መደየብታት፣ ናይ ብሬይል መደየቢ ሊፍትን ምቹእ ናይ ላቦራቶሪ ጠረጴዛታትን",
+          "so": "Albaabbo wiishash la'aan ah, wiishashka braille, iyo miisaska shaybaarka ee ergonomic ah"
         },
-        "source": "Employer Verified",
-        "verifiedDate": "2026-11-01"
+        "source": "Ministry of Public Works Certified",
+        "verifiedDate": "2026-08-14"
       },
       {
-        "id": "acc-ergo",
+        "id": "acc-escort-transport",
         "label": {
-          "en": "Custom ergonomic workstations and high-contrast monitors provided",
-          "am": "ምቹ የሆኑ የሥራ ጠረጴዛዎች እና ከፍተኛ ንፅፅር ያላቸው ማሳያዎች",
-          "om": "Barcumaa fi minjaala mijataa iskiriinii ifaa qabu",
-          "ti": "ምቹኣት ናይ ስራሕ ጠረጴዛታትን ልዑል ንጽጽር ዘለዎም ስክሪናትን",
-          "so": "Kuraasta iyo miisaska ergonomic-ka ah iyo kormeerayaasha iftiinka sare leh"
+          "en": "Accessible institutional shuttle between Hawassa transit hub and campus",
+          "am": "በሐዋሳ የትራንስፖርት ማዕከል እና በግቢው መካከል የተመደበ ተደራሽ የተቋም አውቶቡስ",
+          "om": "Geejjiba dhaabbataa mijataa wiirtuu Hawaasaa fi kaampaasii gidduutti dhiyaatu",
+          "ti": "ኣብ መንጎ ናይ ሃዋሳ መጓዓዝያ ማእከልን ግብን ዝመላለስ ተበጻሒ ናይ ትካል ኣውቶቡስ",
+          "so": "Gaadiid dadweyne oo la heli karo oo u dhexeeya xarunta Hawassa iyo xerada tababarka"
         },
-        "source": "Employer Verified",
-        "verifiedDate": "2026-11-01"
+        "source": "Ministry of Public Works Certified",
+        "verifiedDate": "2026-08-14"
       }
     ],
     "audioSummary": {
@@ -251,7 +291,13 @@
       "language": "en",
       "type": "audio/mp3",
       "durationSeconds": 33,
-      "textEquivalent": "Assistive Technology Specialist at MInT Ethiopia in Hawassa. Hybrid position conducting accessibility trainings. Workplace is wheelchair accessible with braille navigation and ergonomic equipment."
+      "textEquivalent": {
+        "en": "Assistive Technology Specialist at MInT Ethiopia in Hawassa. Hybrid position conducting accessibility trainings. Workplace is wheelchair accessible with braille navigation and ergonomic equipment.",
+        "am": "የተደራሽነት ቴክኖሎጂ ባለሙያ እና አሰልጣኝ በፈጠራ እና ቴክኖሎጂ ሚኒስቴር (MInT) በሐዋሳ። የተደራሽነት ሥልጠናዎችን የሚሰጥ ድብልቅ የሥራ ሁኔታ። የሥራ ቦታው ለተሽከርካሪ ወንበር ምቹ፣ የብሬይል አቅጣጫ ጠቋሚዎች እና ምቹ መሣሪያዎች ያሉት ነው።",
+        "om": "Ogeessa Teeknooloojii Deeggarsaa fi Leenjisaa MInT Itoophiyaa Hawaasaa keessatti. Leenjiiwwan dhiyeessuuf hojii makaa. Iddoon hojii teessoo naanna'uuf kan mijate, qajeelcha bireelii fi meeshaalee ergoonomiksii kan qabuudha.",
+        "ti": "ናይ ሓጋዚ ቴክኖሎጂ ክኢላን መላመድን ኣብ ሚኒስትሪ ፈጠራን ቴክኖሎጂን (MInT) ኣብ ሃዋሳ። ናይ ተበጻሕነት ስልጠናታት ዝህብ ሕውስዋስ ስራሕ። ናይ ስራሕ ቦታ ንመንኰርኰር ወንበር ምቹእ፣ ብሬይል መምርሒታትን ናይ ስራሕ መሳርሒታትን ዘለዎ እዩ።",
+        "so": "Khabiirka Farsamada Caawinta iyo Tababaraha ee MInT Itoobiya ee Hawassa. Shaqo isku-dhafan oo bixisa tababaro helitaan ah. Goobta shaqadu waxay ku habboon tahay kuraasta curyaanka, iyadoo leh hagida braille iyo qalabka casriga ah."
+      }
     },
     "isDemonstrationData": true
   },
@@ -259,54 +305,60 @@
     "id": "job-05",
     "title": {
       "en": "Accessible Frontend & Web Component Engineer",
-      "am": "ተደራሽ የፊት-ለፊት የድር መተግበሪያ መሃንዲስ",
-      "om": "Injinera Weebii Fuula Duraa Hundaaf Mijataa",
-      "ti": "ተበጻሒ ናይ ቅድሚት መርበብ መሃንድስ",
-      "so": "Injineerka Hore ee Webka ee La Heli Karo"
+      "am": "ተደራሽ የፊት-ለፊት ድር መሐንዲስ",
+      "om": "Injinara Fuula Duraa (Frontend) Hundaaf Mijatoo",
+      "ti": "ተበጻሒ ናይ ፊት-ለፊት ዌብ መሃንድስ",
+      "so": "Injineerka Qaybta Hore ee La Heli Karo"
     },
     "employer": "Gebeya Inc.",
     "location": {
-      "en": "Addis Ababa / Remote",
-      "am": "አዲስ አበባ / የርቀት",
-      "om": "Finfinnee / Fageenya",
-      "ti": "ኣዲስ ኣበባ / ናይ ርሕቐት",
-      "so": "Addis Ababa / Meel Fog"
+      "en": "Addis Ababa / 100% Remote (Ethiopia)",
+      "am": "አዲስ አበባ / 100% የርቀት (ኢትዮጵያ)",
+      "om": "Finfinnee / 100% Fageenya (Itoophiyaa)",
+      "ti": "ኣዲስ ኣበባ / 100% ናይ ርሕቐት (ኢትዮጵያ)",
+      "so": "Addis Ababa / 100% Meel Fog (Itoobiya)"
     },
     "workMode": "remote",
     "description": {
-      "en": "Build accessible custom HTML elements, focus-managed interactive interfaces, and WCAG-compliant design system components for African edtech products.",
-      "am": "ለአፍሪካ የትምህርት ቴክኖሎጂ ምርቶች ተደራሽ የሆኑ የድር ክፍሎችን፣ በኪቦርድ የሚሰሩ በይነገጾችን እና የንድፍ ስርዓቶችን ይገንቡ።",
-      "om": "Meishaalee weebii mijatoo, qunnamtii kiibordiin hogganamu fi sirnoota dizaayinii edtek Afrikaaf ijaaruu.",
-      "ti": "ንትምህርታዊ ቴክኖሎጂ ፍርያት ተበጻሕቲ ናይ መርበብ ሓበሬታ ኣካላትን ብኪቦርድ ዝሰርሑ ባእታታትን ምህናጽ።",
-      "so": "Dhis walxaha webka ee la heli karo, isku-xirka kiiboodhka lagu maamulo, iyo qaybaha nidaamka naqshadaynta."
+      "en": "Architect accessible TypeScript web components, ARIA 1.2 interactive widgets, and keyboard-first design systems for leading African tech enterprises.",
+      "am": "ለቀዳሚ የአፍሪካ የቴክኖሎጂ ድርጅቶች ተደራሽ የሆኑ የTypeScript ድር ክፍሎችን፣ የARIA 1.2 መስተጋብራዊ ክፍሎችን እና በኪቦርድ የሚሰሩ የንድፍ ሥርዓቶችን ማልማት።",
+      "om": "Dhaabbilee teeknooloojii Afrikaa beekamoof koompoonantoota weebaa TypeScript mijatoo, wiijeettota ARIA 1.2 fi sirna dizaayinii kiibordiin durfamu ijaaruu.",
+      "ti": "ንቐዳሞት ናይ ኣፍሪቃ ቴክኖሎጂ ትካላት ተበጻሕቲ ናይ TypeScript መርበብ ሓበሬታ ኣካላትን ብኪቦርድ ዝሰርሑ ናይ ዲዛይን ስርዓታትን ምምዕባልን ምህናጽን።",
+      "so": "Dhisidda qaybaha webka ee TypeScript ee la heli karo, aaladaha isdhexgalka ee ARIA 1.2, iyo nidaamyada naqshadeynta kiiboodhka ee shirkadaha tignoolajiyada Afrika."
     },
-    "requiredSkills": ["skill-a11y-literacy", "skill-digital-collab"],
-    "helpfulSkills": [],
-    "applicationDeadline": "2026-12-25",
+    "requiredSkills": [
+      "skill-typescript-dev",
+      "skill-frontend-eng"
+    ],
+    "helpfulSkills": [
+      "skill-a11y-literacy",
+      "skill-digital-collab"
+    ],
+    "applicationDeadline": "2026-12-05",
     "applicationUrl": "https://gebeya.com/careers/a11y-frontend-engineer",
     "accommodations": [
       {
-        "id": "acc-keyboard-focused",
+        "id": "acc-keyboard-workflow",
         "label": {
-          "en": "100% keyboard-first developer tooling and pair programming support",
-          "am": "100% በኪቦርድ ላይ ያተኮሩ የልማት መተግበሪያዎች እና የጥንድ ፕሮግራሚንግ ድጋፍ",
-          "om": "Meeshaalee misoomaa kiibordii qofaan hojjetan fi deeggarsa garee",
-          "ti": "100% ብኪቦርድ ዝሰርሑ ናይ ዲቨሎፐር መሳርሒታትን ናይ ሓባር ስራሕን",
-          "so": "Qalabka horumarinta ee kiiboodhka ugu horreeya iyo taageerada barnaamijka labada ah"
+          "en": "Keyboard-first development tooling with bespoke CLI & screen magnifier workflow",
+          "am": "በኪቦርድ የሚሰሩ የልማት መሣሪያዎች፣ ልዩ የCLI እና የስክሪን ማጉያ ድጋፍ",
+          "om": "Meeshaalee hojii kiibordiidhaan socho'an, deeggarsa CLI fi guddiftuu iskiriinii",
+          "ti": "ብኪቦርድ ዝሰርሑ ናይ ልምዓት መሳርሒታት፣ ፍሉይ CLI ከምኡ'ውን ናይ ስክሪን መዕበዪ ሓገዝ",
+          "so": "Qalabka horumarinta ee ku shaqeeya kiiboodhka, CLI gaar ah iyo nidaamka weyneynta shaashadda"
         },
-        "source": "Employer Verified",
+        "source": "Gebeya People Operations Verified",
         "verifiedDate": "2026-10-30"
       },
       {
-        "id": "acc-async-culture",
+        "id": "acc-flexible-stipend",
         "label": {
-          "en": "Asynchronous communication with documented meeting summaries",
-          "am": "የተመዘገቡ የስብሰባ ማጠቃለያዎች ያሉት ተለዋዋጭ ግንኙነት",
-          "om": "Qunnamtii wal-bira hin dabaramne fi gabaasa walga'ii barreeffame",
-          "ti": "ተለዋዋጢ ርክብ ምስ ዝተሰነደ ናይ ኣኼባ ጽሑፍ ሓበሬታ",
-          "so": "Xiriir asynchronous ah oo leh qoraallo kooban oo kulanka ah"
+          "en": "Annual hardware ergonomics stipend (standing desk, split keyboard, high-contrast monitors)",
+          "am": "ዓመታዊ የአካላዊ ምቾት መሣሪያዎች አበል (የቆመ ጠረጴዛ፣ የተከፈለ ኪቦርድ፣ ከፍተኛ ንፅፅር ሞኒተር)",
+          "om": "Waggaatti deeggarsa maallaqaa meeshaalee ergoonomiksii (minjaala dhaabbatan, kiibordii addaan ba'e)",
+          "ti": "ዓመታዊ ናይ ኣካላዊ ምቹእነት መሳርሒታት ደገፍ (ጠረጴዛ ደውታ፣ ፍሉይ ኪቦርድ፣ ልዑል ንጽጽር ዘለዎ ሞኒተር)",
+          "so": "Gunno sanadeedka qalabka caafimaadka shaqada (miiska taagan, kiiboodhka labada qaybood ah, kormeerayaasha iftiinka sare leh)"
         },
-        "source": "Employer Verified",
+        "source": "Gebeya People Operations Verified",
         "verifiedDate": "2026-10-30"
       }
     ],
@@ -315,7 +367,13 @@
       "language": "en",
       "type": "audio/mp3",
       "durationSeconds": 31,
-      "textEquivalent": "Accessible Frontend Engineer at Gebeya. Remote within Ethiopia. Build keyboard-navigable Web Components and accessible UI systems. Company supports asynchronous workflows and assistive development setups."
+      "textEquivalent": {
+        "en": "Accessible Frontend Engineer at Gebeya. Remote within Ethiopia. Build keyboard-navigable Web Components and accessible UI systems. Company supports asynchronous workflows and assistive development setups.",
+        "am": "ተደራሽ የፊት-ለፊት ድር መሐንዲስ በገበያ። በኢትዮጵያ ውስጥ የርቀት ሥራ። በኪቦርድ የሚሰሩ የድር ክፍሎችን (Web Components) እና ተደራሽ የተጠቃሚ በይነገጾችን መገንባት። ኩባንያው የተደራሽነት ልማት መሣሪያዎችን ይደግፋል።",
+        "om": "Injinara Fuula Duraa (Frontend) Gebeya keessatti. Itoophiyaa keessatti hojii fageenyaa. Koompoonantoota weebaa kiibordiin socho'an fi sirna UI mijataa ijaaruu. Dhaabbanni adeemsa hojii fi teeknooloojii deeggarsaa ni deeggara.",
+        "ti": "ተበጻሒ ናይ ፊት-ለፊት ዌብ መሃንድስ ኣብ ገበያ። ኣብ ውሽጢ ኢትዮጵያ ናይ ርሕቐት ስራሕ። ብኪቦርድ ዝሰርሑ ናይ መርበብ ሓበሬታ ኣካላትን ተበጻሕቲ በይነገጻትን ምህናጽ። እቲ ትካል ናይ ልምዓት ሓገዝቲ መሳርሒታት ይድግፍ።",
+        "so": "Injineerka Qaybta Hore (Frontend) ee Gebeya. Shaqo meel fog ah oo Itoobiya gudaheeda ah. Dhisida qaybaha webka ee lagu maamulo kiiboodhka iyo hababka UI ee la heli karo. Shirkaddu waxay taageertaa hababka shaqada ee dabacsan."
+      }
     },
     "isDemonstrationData": true
   },
@@ -323,54 +381,59 @@
     "id": "job-06",
     "title": {
       "en": "Inclusive Curriculum & UX Researcher",
-      "am": "ሁሉን-አካታች የትምህርት ዝግጅት እና የUX ተመራማሪ",
-      "om": "Qorataa UX fi Qophii Barnoota Hunda-Hammatoo",
-      "ti": "ኩሉ-ሓቆፍ ናይ ትምህርቲ ምድላውን ናይ UX ተመራማሪን",
-      "so": "Manhajka loo Dhan yahay & Cilmi-baaraha UX"
+      "am": "ሁሉን አካታች ሥርዓተ-ትምህርት እና የUX ተመራማሪ",
+      "om": "Qorataa Sirna Barnootaa Hunda-hammataa fi UX",
+      "ti": "ኩሉ-ሓቆፍ ስርዓተ-ትምህርትን ናይ UX ተመራማሪን",
+      "so": "Cilmi-baadhaha Manhajka loo wada dhan yahay iyo UX"
     },
     "employer": "Safaricom Ethiopia",
     "location": {
-      "en": "Dire Dawa",
-      "am": "ድሬዳዋ",
-      "om": "Dirree Dhawaa",
-      "ti": "ድሬዳዋ",
-      "so": "Dire Dawa"
+      "en": "Dire Dawa / Eastern Hub",
+      "am": "ድሬዳዋ / የምሥራቅ ማዕከል",
+      "om": "Dirre Dhawaa / Wiirtuu Bahaa",
+      "ti": "ድሬዳዋ / ናይ ምብራቕ ማእከል",
+      "so": "Dire Dawa / Xarunta Bari"
     },
-    "workMode": "hybrid",
+    "workMode": "onsite",
     "description": {
-      "en": "Conduct usability studies with blind, low-vision, and deaf smartphone users to optimize mobile app accessibility across regional Ethiopian languages.",
-      "am": "የሞባይል መተግበሪያዎችን በኢትዮጵያ ቋንቋዎች ተደራሽ ለማድረግ ከአይነ ስውራን እና መስማት ከተሳናቸው ተጠቃሚዎች ጋር የተጠቃሚነት ጥናቶችን ያካሂዱ።",
-      "om": "Mobaayila afaanoota naannootiin mijataa gochuuf fayyadamtoota qaama miidhamtoota ta'an waliin qorannoo adeemsisuu.",
-      "ti": "ናይ ሞባይል ኣፕሊኬሽናት ተበጻሕቲ ንምግባር ምስ ዕዉራትን ጸማማትን ተጠቀምቲ ሓባራዊ ናይ ምጥቃም መጽናዕቲ ምክያድ።",
-      "so": "Samee daraasado isticmaalka oo ay la socdaan isticmaalayaasha taleefannada gacanta ee indhoolayaasha iyo dhagoolayaasha si loo hagaajiyo abka."
+      "en": "Conduct participatory research with persons with disabilities across Eastern Ethiopia to evaluate M-PESA accessibility features and community digital literacy toolkits.",
+      "am": "የM-PESA ተደራሽነት አገልግሎቶችን እና የማህበረሰብ ዲጂታል ክህሎት መሣሪያዎችን ለመገምገም በምሥራቅ ኢትዮጵያ ከአካል ጉዳተኞች ጋር የተሳታፊነት ጥናቶችን ማካሄድ።",
+      "om": "Baha Itoophiyaa keessatti tajaajiloota miijannaa M-PESA fi meeshaalee hubannoo diijitaalaa hawaasaa gamaaggamuuf qaama miidhamtoota waliin qorannoo hirmaachisaa gaggeessuu.",
+      "ti": "ናይ M-PESA ተበጻሕነት ኣገልግሎታትን ናይ ማሕበረሰብ ዲጂታል ክእለት መሳርሒታትን ንምግምጋም ኣብ ምብራቕ ኢትዮጵያ ምስ ኣካል ጉዳኣታት ሓባራዊ ምርምር ምክያድ።",
+      "so": "Samaynta cilmi-baaris ku saabsan dadka naafada ah ee Bariga Itoobiya si loo qiimeeyo astaamaha helitaanka M-PESA iyo xirmooyinka qoraalka dhijitaalka ah ee bulshada."
     },
-    "requiredSkills": ["skill-a11y-literacy", "skill-digital-collab"],
-    "helpfulSkills": [],
-    "applicationDeadline": "2026-12-30",
+    "requiredSkills": [
+      "skill-a11y-literacy",
+      "skill-digital-collab"
+    ],
+    "helpfulSkills": [
+      "skill-user-research"
+    ],
+    "applicationDeadline": "2026-12-18",
     "applicationUrl": "https://safaricom.et/careers/inclusive-ux-researcher",
     "accommodations": [
       {
-        "id": "acc-user-testing-lab",
+        "id": "acc-accessibility-lab",
         "label": {
-          "en": "Dedicated accessibility usability lab with professional interpreters",
-          "am": "ሙያዊ አስተርጓሚዎች ያሉት የተደራሽነት የተጠቃሚነት ጥናት ላብራቶሪ",
-          "om": "Laabooratorii qorannoo mijannaa hiiktoota afaaniitiin deeggarame",
-          "ti": "ናይ ተበጻሕነት መጽናዕቲ ላቦራቶሪ ምስ ሙያዊ ተርጎምቲ",
-          "so": "Shaybaadhka isticmaalka helitaanka oo leh turjubaano xirfad leh"
+          "en": "Dedicated usability testing suite with adjustable contrast lighting and assistive mounts",
+          "am": "የሚስተካከል የብርሃን ንፅፅር እና የረዳት መሣሪያዎች መያዣ ያለው የተሟላ የፍተሻ ላብራቶሪ",
+          "om": "Laabii qorannoo ifa sirreeffamuu danda'u fi qabduu meeshaalee deeggarsaa qabu",
+          "ti": "ዝስተኻኸል ናይ ብርሃን ንጽጽርን ናይ ሓገዝቲ መሳርሒታት መትሓዚታትን ዘለዎ ናይ መርመራ ላቦራቶሪ",
+          "so": "Qolka tijaabada oo leh iftiin la hagaajin karo iyo qalabka lagu xiro aaladaha caawinta"
         },
-        "source": "Employer Verified",
+        "source": "Safaricom Accessibility Office Verified",
         "verifiedDate": "2026-11-05"
       },
       {
-        "id": "acc-transport",
+        "id": "acc-transit-support",
         "label": {
-          "en": "Accessible transit shuttle service and door-to-door transport allowance",
-          "am": "ተደራሽ የትራንዚት አገልግሎት እና ከቤት ወደ ሥራ የትራንስፖርት አበል",
-          "om": "Tajaajila geejjibaa mijataa fi kaffaltii geejjiba manaa gara hojiitti",
-          "ti": "ምቹእ ናይ መጓዓዝያ ኣገልግሎትን ናይ ትራንስፖርት ኣበልን",
-          "so": "Adeegga gaadiidka ee la heli karo iyo gunnada gaadiidka guriga ilaa shaqada"
+          "en": "Door-to-door accessible transport allowance for field research across Dire Dawa & Harar",
+          "am": "በድሬዳዋ እና ሐረር ለሚደረግ የመስክ ጥናት ከበር-እስከ-በር ተደራሽ የትራንስፖርት አበል",
+          "om": "Dirre Dhawaa fi Harar keessatti qorannoo dirreetiif deeggarsa geejjiba balbalaa-hanga-balbalaatti",
+          "ti": "ኣብ ድሬዳዋን ሃረርን ንዝግበር ናይ መሮር ምርምር ካብ-ማዕጾ-ናብ-ማዕጾ ተበጻሒ ናይ መጓዓዝያ ደገፍ",
+          "so": "Gunno gaadiid oo albaab-ilaa-albaab ah oo loogu talagalay cilmi-baarista goobta ee Dire Dawa & Harar"
         },
-        "source": "Employer Verified",
+        "source": "Safaricom Accessibility Office Verified",
         "verifiedDate": "2026-11-05"
       }
     ],
@@ -379,7 +442,13 @@
       "language": "en",
       "type": "audio/mp3",
       "durationSeconds": 34,
-      "textEquivalent": "Inclusive UX Researcher at Safaricom Ethiopia in Dire Dawa. Hybrid role running accessibility testing sessions with Ethiopian disability communities. Includes dedicated accessibility testing labs and accessible transit services."
+      "textEquivalent": {
+        "en": "Inclusive UX Researcher at Safaricom Ethiopia in Dire Dawa. Hybrid role running accessibility testing sessions with Ethiopian disability communities. Includes dedicated accessibility testing labs and accessible transit services.",
+        "am": "ሁሉን አካታች የተጠቃሚ ተሞክሮ (UX) ተመራማሪ በሳፋሪኮም ኢትዮጵያ በድሬዳዋ። ከኢትዮጵያ አካል ጉዳተኞች ማህበረሰብ ጋር የተደራሽነት ፍተሻዎችን የሚያካሂድ ድብልቅ የሥራ ሁኔታ። የተደራሽነት ቤተ-ሙከራዎችን እና ተደራሽ የትራንስፖርት አገልግሎትን ያካትታል።",
+        "om": "Qorataa UX Hunda-hammataa Safaricom Itoophiyaa Dirre Dhawaa keessatti. Hawaasa qaama miidhamtootaa waliin qorannoo miijannaa gaggeessuuf hojii makaa. Laabii qorannoo miijannaa fi tajaajila geejjiba mijataa of keessaa qaba.",
+        "ti": "ኩሉ-ሓቆፍ ናይ ተጠቃሚ ተመክሮ (UX) ተመራማሪ ኣብ ሳፋሪኮም ኢትዮጵያ ኣብ ድሬዳዋ። ምስ ናይ ኢትዮጵያ ኣካል ጉዳኣታት ማሕበረሰብ ናይ ተበጻሕነት መርመራታት ዘካይድ ሕውስዋስ ስራሕ። ፍሉይ ናይ ምርመራ ላቦራቶርን ናይ መጓዓዝያ ኣገልግሎትን የጠቓልል።",
+        "so": "Cilmi-baadhaha UX ee loo wada dhan yahay ee Safaricom Ethiopia ee Dire Dawa. Shaqo isku-dhafan oo qabata kulamo tijaabo ah oo lala yeelano bulshada naafada ah ee Itoobiya. Waxaa ka mid ah sheybaarrada tijaabada helitaanka iyo adeegyada gaadiidka ee la heli karo."
+      }
     },
     "isDemonstrationData": true
   }

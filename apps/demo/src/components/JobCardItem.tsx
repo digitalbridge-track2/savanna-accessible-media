@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { AccessibleJob, LocalizedString } from "@abugida/lesson-schema";
 import { SupportedLocale } from "@abugida/media-kit";
 import {
@@ -145,11 +146,11 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
   };
 
   const speakFallback = () => {
-    const textToSpeak = job.audioSummary?.textEquivalent || description || title;
+    const textToSpeak = resolveLocalized(job.audioSummary?.textEquivalent, locale) || description || title;
     if (typeof window !== "undefined" && "speechSynthesis" in window && textToSpeak) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(textToSpeak);
-      utterance.lang = locale === "am" ? "am-ET" : "en-US";
+      utterance.lang = locale === "am" ? "am-ET" : locale === "om" ? "om-ET" : locale === "ti" ? "ti-ET" : locale === "so" ? "so-SO" : "en-US";
       utterance.rate = 1.0;
       utterance.onstart = () => setIsPlaying(true);
       utterance.onend = () => setIsPlaying(false);
@@ -165,6 +166,143 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
   const location = resolveLocalized(job.location, locale);
   const description = resolveLocalized(job.description, locale);
   const employer = typeof job.employer === "string" ? job.employer : resolveLocalized(job.employer, locale);
+
+  const transcriptLabels: Record<SupportedLocale, { heading: string; show: string; hide: string }> = {
+    en: {
+      heading: "Audio Summary Verbatim Transcript",
+      show: "Read text equivalent of audio summary",
+      hide: "Hide audio transcript & text equivalent",
+    },
+    am: {
+      heading: "የተረጋገጠ የድምጽ ማጠቃለያ ጽሑፍ",
+      show: "የድምፅ ማጠቃለያውን በጽሑፍ ይመልከቱ",
+      hide: "የድምፅ ጽሑፉን ደብቅ",
+    },
+    om: {
+      heading: "Barruu Qulqulluu Gabaasa Sagalee",
+      show: "Barruu sagalee kanaa dubbisi",
+      hide: "Barruu sagalee dhoksi",
+    },
+    ti: {
+      heading: "ዝተረጋገጸ ናይ ድምጺ ጽሑፍ ትሕዝቶ",
+      show: "ናይ ድምጺ ጽሑፍ ኣንብብ",
+      hide: "ናይ ድምጺ ጽሑፍ ሕባእ",
+    },
+    so: {
+      heading: "Qoraalka Rasmiga ah ee Koobidda Codka",
+      show: "Akhri qoraalka codka",
+      hide: "Qari qoraalka codka",
+    },
+  };
+  const tLabels = transcriptLabels[locale] || transcriptLabels.en;
+
+  const matchesLessonSkills = job.requiredSkills.includes("skill-a11y-literacy") && job.requiredSkills.includes("skill-digital-collab");
+
+  const skillMatchLabels: Record<SupportedLocale, string> = {
+    en: "Matches Lesson Skills",
+    am: "ከተማርኩት ችሎታ ጋር የሚስማሙ",
+    om: "Dandeettii Barnootaa Walsima",
+    ti: "ምስ ናይ ትምህርቲ ክእለት ዝሰማማዕ",
+    so: "Wuxuu Waafaqsan Yahay Xirfadaha Casharka",
+  };
+
+  const actionLabels: Record<SupportedLocale, { portal: string; apply: string; deadline: string }> = {
+    en: {
+      portal: "Employer Portal",
+      apply: "Apply with Verified Credential",
+      deadline: "Deadline:",
+    },
+    am: {
+      portal: "የቀጣሪው ድረ-ገጽ",
+      apply: "በተረጋገጠ ምስክር ወረቀት አመልክት",
+      deadline: "ማብቂያ ቀን፡",
+    },
+    om: {
+      portal: "Fuula Hojjechiisaa",
+      apply: "Waraqaa Ragaa Waliin Iyyadhu",
+      deadline: "Guyyaa Xumuraa:",
+    },
+    ti: {
+      portal: "ናይ ቀጣሪ መርበብ",
+      apply: "ብዝተረጋገጸ ምስክር ወረቐት ኣመልክት",
+      deadline: "መዛዘሚ ዕለት፡",
+    },
+    so: {
+      portal: "Bogga Loo-shaqeeyaha",
+      apply: "Ku Codso Shahaado La Xaqiijiyay",
+      deadline: "Waqtiga kama dambaysta ah:",
+    },
+  };
+  const aLabels = actionLabels[locale] || actionLabels.en;
+
+  const applyModalLabels: Record<SupportedLocale, {
+    badge: string;
+    close: string;
+    credentialId: string;
+    skillsPassed: string;
+    accommodations: string;
+    copyPacket: string;
+    copied: string;
+    submit: string;
+    successAlert: string;
+  }> = {
+    en: {
+      badge: "Verified Learner Application",
+      close: "Close",
+      credentialId: "Verifiable Credential:",
+      skillsPassed: "Skills Passed:",
+      accommodations: "Disclosed Workplace Accommodations:",
+      copyPacket: "Copy Application Packet",
+      copied: "Packet Copied ✓",
+      submit: "Submit with Credential",
+      successAlert: "Application submitted successfully with verified cryptographic credential!",
+    },
+    am: {
+      badge: "የተረጋገጠ መረጃ",
+      close: "ዝጋ",
+      credentialId: "የምስክር ወረቀት መለያ ቁጥር:",
+      skillsPassed: "የተረጋገጡ ክህሎቶች:",
+      accommodations: "የተጠየቁ የተደራሽነት ድጋፎች:",
+      copyPacket: "ማመልከቻውን ቅዳ",
+      copied: "ማመልከቻው ተቀድቷል ✓",
+      submit: "ማመልከቻውን ላክ",
+      successAlert: "ማመልከቻዎ ከተረጋገጠው የምስክር ወረቀት ጋር በተሳካ ሁኔታ ተልኳል!",
+    },
+    om: {
+      badge: "Iyyannoo Barataa Mirkanaa'e",
+      close: "Cufi",
+      credentialId: "Waraqaa Ragaa Mirkanaa'e:",
+      skillsPassed: "Dandeettiiwwan Darban:",
+      accommodations: "Mijannaa Bakka Hojii Gaafatame:",
+      copyPacket: "Pakeejii Iyyannoo Garagalchi",
+      copied: "Garagalfameera ✓",
+      submit: "Waraqaa Ragaa Waliin Ergi",
+      successAlert: "Iyyannoon keessan waraqaa ragaa mirkanaa'e waliin milkaa'inaan ergameera!",
+    },
+    ti: {
+      badge: "ዝተረጋገጸ ናይ ተምሃራይ መመልከቲ",
+      close: "ዕጸው",
+      credentialId: "ናይ ምስክር ወረቐት መፍለዪ ቁጽሪ:",
+      skillsPassed: "ዝተረጋገጹ ክእለታት:",
+      accommodations: "ዝተሓተቱ ናይ ተበጻሕነት ድጋፋት:",
+      copyPacket: "መመልከቲ ቅዳሕ",
+      copied: "ተቐዲሑ እዩ ✓",
+      submit: "ምስ ምስክር ወረቐት ኣረክብ",
+      successAlert: "መመልከቲኹም ምስ ዝተረጋገጸ ናይ ምስክር ወረቐት ብዓወት ተላኢኹ ኣሎ!",
+    },
+    so: {
+      badge: "Codsi Arday la Xaqiijiyay",
+      close: "Xidh",
+      credentialId: "Aqoonsiga La Xaqiijin Karo:",
+      skillsPassed: "Xirfadaha La Gudbay:",
+      accommodations: "Fursadaha Goobta Shaqada ee La Shaaciyay:",
+      copyPacket: "Nuuji Xirmada Codsiga",
+      copied: "Waa la nuuxiyay ✓",
+      submit: "Ku Gudbi Shahaadada",
+      successAlert: "Codsigaaga si guul leh ayaa loogu gudbiyay shahaado la xaqiijiyay!",
+    },
+  };
+  const modalLabels = applyModalLabels[locale] || applyModalLabels.en;
 
   // Clean location string to avoid duplicate parenthetical like "(Hybrid) (Hybrid)"
   const cleanLocation = location
@@ -264,8 +402,8 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
           contentUrl: job.audioSummary.src,
           encodingFormat: job.audioSummary.type || "audio/mp3",
           duration: `PT${job.audioSummary.durationSeconds || 30}S`,
-          description: job.audioSummary.textEquivalent,
-          transcript: job.audioSummary.textEquivalent,
+          description: resolveLocalized(job.audioSummary.textEquivalent, locale),
+          transcript: resolveLocalized(job.audioSummary.textEquivalent, locale),
         }
       : undefined,
   };
@@ -497,11 +635,7 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
             }}
           >
             <IconDocument size={14} />
-            <span>
-              {showTranscript
-                ? (isAm ? "የድምፅ ጽሑፉን ደብቅ" : "Hide audio transcript & text equivalent")
-                : (isAm ? "የድምፅ ማጠቃለያውን በጽሑፍ ይመልከቱ" : "Read text equivalent of audio summary")}
-            </span>
+            <span>{showTranscript ? tLabels.hide : tLabels.show}</span>
             <span
               style={{
                 transform: showTranscript ? "rotate(180deg)" : "none",
@@ -539,10 +673,10 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
                   marginBottom: "0.25rem",
                 }}
               >
-                {isAm ? "የተረጋገጠ የድምጽ ማጠቃለያ ጽሑፍ" : "Audio Summary Verbatim Transcript"}
+                {tLabels.heading}
               </div>
               <p style={{ margin: 0 }}>
-                {job.audioSummary.textEquivalent}
+                {resolveLocalized(job.audioSummary.textEquivalent, locale)}
               </p>
             </div>
           )}
@@ -576,10 +710,10 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
               }}
             >
               <IconClock size={13} />
-              <span>{isAm ? `ማብቂያ ቀን፡ ${job.applicationDeadline}` : `Deadline: ${job.applicationDeadline}`}</span>
+              <span>{`${aLabels.deadline} ${job.applicationDeadline}`}</span>
             </span>
           )}
-          {job.requiredSkills?.includes("skill-a11y-literacy") && (
+          {matchesLessonSkills && (
             <span
               className="badge"
               style={{
@@ -595,7 +729,7 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
               }}
             >
               <IconCheck size={12} style={{ strokeWidth: "2.5" }} />
-              <span>{isAm ? "የአቡጊዳ ሰርተፊኬት ይፈልጋል" : "Matches Lesson Skills"}</span>
+              <span>{skillMatchLabels[locale] || skillMatchLabels.en}</span>
             </span>
           )}
         </div>
@@ -617,9 +751,9 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
                 alignItems: "center",
                 gap: "0.35rem",
               }}
-              aria-label={`${isAm ? "የቀጣሪው ድረ-ገጽ" : "Employer Portal"} for ${title}`}
+              aria-label={`${aLabels.portal} for ${title}`}
             >
-              <span>{isAm ? "የቀጣሪው ድረ-ገጽ" : "Employer Portal"}</span>
+              <span>{aLabels.portal}</span>
               <IconExternal size={13} />
             </a>
           )}
@@ -640,14 +774,14 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
             }}
             aria-haspopup="dialog"
           >
-            <span>{isAm ? "በተረጋገጠ ምስክር ወረቀት አመልክት" : "Apply with Verified Credential"}</span>
+            <span>{aLabels.apply}</span>
             <IconCheck size={14} style={{ strokeWidth: "2.5" }} />
           </button>
         </div>
       </div>
 
       {/* Accessible "Apply with Credential" Modal Dialog */}
-      {showApplyModal && (
+      {showApplyModal && typeof document !== "undefined" && createPortal(
         <div
           role="dialog"
           aria-modal="true"
@@ -655,13 +789,11 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
           style={{
             position: "fixed",
             inset: 0,
-            background: "rgba(0, 0, 0, 0.55)",
-            backdropFilter: "blur(12px)",
-            WebkitBackdropFilter: "blur(12px)",
+            background: "transparent",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            zIndex: 9999,
+            zIndex: 99999,
             padding: "1rem",
           }}
           onClick={() => {
@@ -671,26 +803,26 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
         >
           <div
             style={{
-              background: "#FFFFFF",
-              color: "#1D1D1F",
+              background: "var(--color-surface-elevated, #FFFFFF)",
+              color: "var(--color-ink)",
               padding: "1.75rem",
               borderRadius: "16px",
               maxWidth: "520px",
               width: "100%",
-              boxShadow: "0 24px 60px rgba(0,0,0,0.3)",
-              border: "1px solid rgba(0,0,0,0.1)",
+              boxShadow: "0 24px 64px rgba(0, 0, 0, 0.22), 0 4px 16px rgba(0, 0, 0, 0.08)",
+              border: "1px solid var(--color-border)",
             }}
             onClick={(e) => e.stopPropagation()}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1rem" }}>
               <div>
                 <span className="badge badge-success" style={{ marginBottom: "0.4rem", display: "inline-block" }}>
-                  {isAm ? "የተረጋገጠ መረጃ" : "Verified Learner Application"}
+                  {modalLabels.badge}
                 </span>
                 <h3 id={`apply-dialog-title-${job.id || title}`} style={{ margin: "0.2rem 0", fontSize: "1.15rem", fontWeight: 700 }}>
                   {title}
                 </h3>
-                <p style={{ margin: 0, fontSize: "13px", color: "#64748B" }}>
+                <p style={{ margin: 0, fontSize: "13px", color: "var(--color-muted-ink)" }}>
                   {employer} · {cleanLocation}
                 </p>
               </div>
@@ -700,12 +832,12 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
                   setShowApplyModal(false);
                   setAppliedPacketCopied(false);
                 }}
-                aria-label={isAm ? "ዝጋ" : "Close"}
+                aria-label={modalLabels.close}
                 style={{
                   background: "transparent",
                   border: "none",
                   fontSize: "1.25rem",
-                  color: "#64748B",
+                  color: "var(--color-muted-ink)",
                   cursor: "pointer",
                   padding: "4px 8px",
                   borderRadius: "6px",
@@ -717,8 +849,8 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
 
             <div
               style={{
-                background: "#F8FAFC",
-                border: "1px solid #E2E8F0",
+                background: "var(--color-surface-hover, #F8FAFC)",
+                border: "1px solid var(--color-border-subtle, #E2E8F0)",
                 borderRadius: "10px",
                 padding: "1rem",
                 marginBottom: "1.25rem",
@@ -726,17 +858,17 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
               }}
             >
               <div style={{ marginBottom: "0.6rem" }}>
-                <strong style={{ color: "#0F172A" }}>{isAm ? "የምስክር ወረቀት መለያ ቁጥር:" : "Verifiable Credential:"}</strong>
-                <div style={{ fontFamily: "var(--font-mono)", color: "#0071E3", fontWeight: 600, marginTop: "2px" }}>
+                <strong style={{ color: "var(--color-ink)" }}>{modalLabels.credentialId}</strong>
+                <div style={{ fontFamily: "var(--font-mono)", color: "var(--color-brand)", fontWeight: 600, marginTop: "2px" }}>
                   CERT-DB-2026-0042
                 </div>
-                <div style={{ fontSize: "12px", color: "#64748B" }}>
+                <div style={{ fontSize: "12px", color: "var(--color-muted-ink)" }}>
                   https://savanna.alxafrica.com/verify?id=CERT-DB-2026-0042
                 </div>
               </div>
 
               <div style={{ marginBottom: "0.6rem" }}>
-                <strong style={{ color: "#0F172A" }}>{isAm ? "የተረጋገጡ ክህሎቶች:" : "Skills Passed:"}</strong>
+                <strong style={{ color: "var(--color-ink)" }}>{modalLabels.skillsPassed}</strong>
                 <div style={{ display: "flex", gap: "4px", flexWrap: "wrap", marginTop: "4px" }}>
                   <span style={{ background: "#E0F2FE", color: "#0369A1", padding: "2px 6px", borderRadius: "4px", fontSize: "11.5px" }}>Digital Collaboration</span>
                   <span style={{ background: "#E0F2FE", color: "#0369A1", padding: "2px 6px", borderRadius: "4px", fontSize: "11.5px" }}>Accessibility Literacy</span>
@@ -745,8 +877,8 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
               </div>
 
               <div>
-                <strong style={{ color: "#0F172A" }}>{isAm ? "የተጠየቁ የተደራሽነት ድጋፎች:" : "Disclosed Workplace Accommodations:"}</strong>
-                <div style={{ color: "#334155", marginTop: "2px" }}>
+                <strong style={{ color: "var(--color-ink)" }}>{modalLabels.accommodations}</strong>
+                <div style={{ color: "var(--color-ink)", marginTop: "2px" }}>
                   {accommodationsList.length > 0 ? (
                     accommodationsList.map((a) => resolveLocalized(a.label, locale)).join(", ")
                   ) : (
@@ -768,7 +900,7 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
                 }}
                 style={{ fontSize: "13px", padding: "0.5rem 1rem" }}
               >
-                {appliedPacketCopied ? (isAm ? "ማመልከቻው ተቀድቷል ✓" : "Packet Copied ✓") : (isAm ? "ማመልከቻውን ቅዳ" : "Copy Application Packet")}
+                {appliedPacketCopied ? modalLabels.copied : modalLabels.copyPacket}
               </button>
 
               <button
@@ -779,16 +911,17 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
                   setTimeout(() => {
                     setShowApplyModal(false);
                     setAppliedPacketCopied(false);
-                    alert(isAm ? "ማመልከቻዎ ከተረጋገጠው የምስክር ወረቀት ጋር በተሳካ ሁኔታ ተልኳል!" : "Application submitted successfully with verified cryptographic credential!");
+                    alert(modalLabels.successAlert);
                   }, 600);
                 }}
                 style={{ fontSize: "13px", padding: "0.5rem 1.25rem" }}
               >
-                {isAm ? "ማመልከቻውን ላክ" : "Submit with Credential"}
+                {modalLabels.submit}
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </article>
   );

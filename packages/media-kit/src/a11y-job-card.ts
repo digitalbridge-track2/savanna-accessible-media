@@ -55,6 +55,9 @@ export class A11yJobCard extends HTMLElement {
     const title = this.job.title[this.activeLocale] || this.job.title.en;
     const location = this.job.location[this.activeLocale] || this.job.location.en;
     const description = this.job.description[this.activeLocale] || this.job.description.en;
+    const textEquivalent = typeof this.job.audioSummary?.textEquivalent === "object"
+      ? ((this.job.audioSummary.textEquivalent as any)[this.activeLocale] || (this.job.audioSummary.textEquivalent as any).en || "")
+      : this.job.audioSummary?.textEquivalent || "";
 
     // Dual-calendar formatting for application deadline
     const deadlineDual = this.job.applicationDeadline
@@ -248,7 +251,7 @@ export class A11yJobCard extends HTMLElement {
           </audio>
           <div class="text-summary-box" aria-label="${isAm ? "የድምጹ አቻ ጽሑፍ" : "Equivalent text of audio summary"}">
             <strong>${isAm ? "የድምጽ አቻ ጽሑፍ:" : "Transcript of Summary:"}</strong>
-            ${this.job.audioSummary.textEquivalent}
+            ${textEquivalent}
           </div>
         </section>
 

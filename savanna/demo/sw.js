@@ -1,4 +1,4 @@
-const CACHE_NAME = "abugida-offline-v2";
+const CACHE_NAME = "abugida-offline-v3";
 
 const ESSENTIAL_SHELL = [
   "/",

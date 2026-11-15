@@ -1,6 +1,10 @@
 export interface LocalizedString {
   en: string;
   am: string;
+  om?: string;
+  ti?: string;
+  so?: string;
+  [key: string]: string | undefined;
 }
 
 export type MediaSourceKind = "main" | "described" | "sign" | "audio-only";
@@ -100,7 +104,7 @@ export interface JobAudioSummary {
   language: "en" | "am";
   type: string;
   durationSeconds: number;
-  textEquivalent: string;
+  textEquivalent: LocalizedString | string;
   sizeBytes?: number;
 }
 

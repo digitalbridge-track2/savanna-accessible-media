@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
+import { createPortal } from "react-dom";
 import { AccessibleJob } from "@abugida/lesson-schema";
 import { SupportedLocale } from "@abugida/media-kit";
 import { JobCardItem, resolveLocalized } from "../components/JobCardItem";
@@ -72,7 +73,7 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
 
       // 4. Course Skills Match filter
       if (filterCourseSkillsOnly) {
-        const matchesCourse = job.requiredSkills.includes("skill-a11y-literacy");
+        const matchesCourse = job.requiredSkills.includes("skill-a11y-literacy") && job.requiredSkills.includes("skill-digital-collab");
         if (!matchesCourse) return false;
       }
 
@@ -385,7 +386,17 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
               title="Filter opportunities aligned directly with the Abugida course learning outcomes"
             >
               {filterCourseSkillsOnly && <IconCheck size={13} style={{ marginRight: "2px", strokeWidth: "2.5" }} />}
-              <span>{isAm ? "ከተማርኩት ችሎታ ጋር የሚስማሙ" : "Matches Lesson Skills"}</span>
+              <span>
+                {locale === "am"
+                  ? "ከተማርኩት ችሎታ ጋር የሚስማሙ"
+                  : locale === "om"
+                  ? "Dandeettii Barnootaa Walsima"
+                  : locale === "ti"
+                  ? "ምስ ናይ ትምህርቲ ክእለት ዝሰማማዕ"
+                  : locale === "so"
+                  ? "U Dhigma Xirfadaha Casharka"
+                  : "Matches Lesson Skills"}
+              </span>
             </button>
           </div>
         </div>
@@ -463,11 +474,27 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
                 aria-hidden="true"
               />
               {loading ? (
-                <span>{isAm ? "የሥራ ዕድሎች በመጫን ላይ ናቸው..." : "Loading accessible job postings..."}</span>
+                <span>
+                  {locale === "am"
+                    ? "የሥራ ዕድሎች በመጫን ላይ ናቸው..."
+                    : locale === "om"
+                    ? "Carraawwan fe'amaa jiru..."
+                    : locale === "ti"
+                    ? "ናይ ስራሕ ዕድላት ይጽዓኑ ኣለዉ..."
+                    : locale === "so"
+                    ? "Fursadaha waa la soo dejinayaa..."
+                    : "Loading accessible job postings..."}
+                </span>
               ) : (
                 <span>
-                  {isAm
+                  {locale === "am"
                     ? `${jobs.length} የሥራ ዕድሎች ውስጥ ${filteredJobs.length} ተገኝተዋል`
+                    : locale === "om"
+                    ? `Carraawwan ${jobs.length} keessaa ${filteredJobs.length} mul'achaa jiru`
+                    : locale === "ti"
+                    ? `ካብ ${jobs.length} ናይ ስራሕ ዕድላት ${filteredJobs.length} ተረኺቦም`
+                    : locale === "so"
+                    ? `Waxaa la muujinayaa ${filteredJobs.length} ka mid ah ${jobs.length} fursadood`
                     : `Showing ${filteredJobs.length} of ${jobs.length} accessible opportunities`}
                 </span>
               )}
@@ -490,7 +517,17 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
                 aria-label={isAm ? "ሁሉንም ማጣሪያዎች አጽዳ" : "Reset all active filters"}
               >
                 <IconClose size={12} />
-                <span>{isAm ? "ማጣሪያዎችን አጽዳ" : "Reset Filters"}</span>
+                <span>
+                  {locale === "am"
+                    ? "ማጣሪያዎችን አጽዳ"
+                    : locale === "om"
+                    ? "Filtaroota Qulqulleessi"
+                    : locale === "ti"
+                    ? "ማጣረይቲ ኣጽሪ"
+                    : locale === "so"
+                    ? "Dib u deji"
+                    : "Reset Filters"}
+                </span>
               </button>
             )}
           </div>
@@ -542,7 +579,7 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
       </section>
 
       {/* JSON-LD Schema Modal */}
-      {showJsonLdModal && (
+      {showJsonLdModal && typeof document !== "undefined" && createPortal(
         <div
           role="dialog"
           aria-modal="true"
@@ -550,19 +587,18 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
           style={{
             position: "fixed",
             inset: 0,
-            background: "rgba(0, 0, 0, 0.45)",
-            backdropFilter: "blur(6px)",
+            background: "transparent",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             padding: "1rem",
-            zIndex: 1000,
+            zIndex: 99999,
           }}
           onClick={() => setShowJsonLdModal(false)}
         >
           <div
             style={{
-              background: "var(--color-surface)",
+              background: "var(--color-surface-elevated, #FFFFFF)",
               color: "var(--color-ink)",
               borderRadius: "var(--radius-card)",
               maxWidth: "720px",
@@ -570,7 +606,8 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
               maxHeight: "85vh",
               display: "flex",
               flexDirection: "column",
-              boxShadow: "0 24px 48px rgba(0, 0, 0, 0.3)",
+              boxShadow: "0 24px 64px rgba(0, 0, 0, 0.22), 0 4px 16px rgba(0, 0, 0, 0.08)",
+              border: "1px solid var(--color-border)",
               overflow: "hidden",
             }}
             onClick={(e) => e.stopPropagation()}
@@ -643,7 +680,8 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
