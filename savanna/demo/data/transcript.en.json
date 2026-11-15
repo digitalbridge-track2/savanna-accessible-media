@@ -1,0 +1,45 @@
+{
+  "lessonId": "digital-workplace-01",
+  "segments": [
+    {
+      "id": 1,
+      "start": 0,
+      "end": 4.5,
+      "speaker": "Instructor",
+      "text": "Welcome to Digital Workplace Skills: Foundations.",
+      "visualDescription": "Slide title: Digital Workplace Skills with partner logos."
+    },
+    {
+      "id": 2,
+      "start": 4.5,
+      "end": 9.0,
+      "speaker": "Instructor",
+      "text": "In this lesson, we will explore asynchronous communication and accessible documentation.",
+      "visualDescription": "Diagram displaying remote collaboration tools and document icons."
+    },
+    {
+      "id": 3,
+      "start": 9.0,
+      "end": 14.2,
+      "speaker": "Instructor",
+      "text": "When working across distributed teams, structured headings and alternative text are essential.",
+      "visualDescription": "Code snippet showing clean semantic HTML heading hierarchy."
+    },
+    {
+      "id": 4,
+      "start": 14.2,
+      "end": 19.5,
+      "speaker": "Instructor",
+      "text": "Notice how the submit button on the application portal is highlighted at the bottom-right.",
+      "visualDescription": "The Submit Application button is highlighted in bright green at the bottom-right of the form."
+    },
+    {
+      "id": 5,
+      "start": 19.5,
+      "end": 25.0,
+      "speaker": "Instructor",
+      "text": "Everyone has the right to fully accessible tools in education and employment.",
+      "visualDescription": "Closing banner: Digital Bridge — Build what works for everyone."
+    }
+  ]
+}

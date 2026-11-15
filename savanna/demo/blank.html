@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Outside Savanna Test (Clean Host / Zero CSS Framework)</title>
+    <!-- 1. Load the module: One script tag, no dependencies -->
+    <script src="../module/db-player.js" defer></script>
+  </head>
+  <body style="margin: 0; padding: 2rem; font-family: system-ui, -apple-system, sans-serif; background-color: #F8FAFC; color: #0F172A;">
+    <main style="max-width: 1200px; margin: 0 auto;">
+      <h1 style="font-size: 1.75rem; color: #0B5D4E; margin-bottom: 0.5rem;">
+        Outside Savanna Standalone Host Proof
+      </h1>
+      <p style="color: #475569; margin-bottom: 1.5rem; font-size: 1rem;">
+        This page carries <strong>no Bootstrap</strong> and <strong>no Savanna CSS</strong>. The web component below renders cleanly with full styling and encapsulation via Shadow DOM.
+      </p>
+
+      <!-- 2. Place it: Clean drop-in tag configured by attributes -->
+      <db-player
+        manifest-src="./data/lesson.json"
+        lang="en">
+      </db-player>
+
+      <!-- 3. Optionally, listen to it via standard CustomEvents -->
+      <div id="events-log" style="margin-top: 1.5rem; padding: 1rem; background: #FFF; border: 1px solid #CBD5E1; border-radius: 6px; font-family: monospace; font-size: 0.85rem;" aria-live="polite">
+        <strong>Host Event Listener:</strong> Ready for player events...
+      </div>
+      <script>
+        document.addEventListener('db-player:progress', (e) => {
+          const log = document.getElementById('events-log');
+          if (log) log.textContent = 'Host Event Received: db-player:progress -> ' + JSON.stringify(e.detail);
+        });
+        document.addEventListener('db-player:complete', (e) => {
+          const log = document.getElementById('events-log');
+          if (log) log.textContent = 'Host Event Received: db-player:complete (Lesson finished)';
+        });
+        document.addEventListener('db-player:prefs', (e) => {
+          const log = document.getElementById('events-log');
+          if (log) log.textContent = 'Host Event Received: db-player:prefs -> ' + JSON.stringify(e.detail);
+        });
+      </script>
+    </main>
+  </body>
+</html>

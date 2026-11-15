@@ -6,8 +6,6 @@ services:
       - "8080:80"
     volumes:
       - ./savanna:/usr/share/nginx/html:ro
-      - ./module:/usr/share/nginx/html/module:ro
-      - ./demo:/usr/share/nginx/html/demo:ro
     restart: unless-stopped
 
   # Interactive Hackathon Demo & Verification Application (React + Vite PWA)
