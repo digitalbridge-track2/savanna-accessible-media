@@ -555,5 +555,27 @@ export const IconBuilding: React.FC<IconProps> = ({ size = 15, className = "", s
   </svg>
 );
 
+export const IconGlobe: React.FC<IconProps> = ({ size = 15, className = "", style, ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    className={className}
+    style={{ verticalAlign: "-0.15em", flexShrink: 0, ...style }}
+    {...props}
+  >
+    <circle cx="12" cy="12" r="10" />
+    <line x1="2" y1="12" x2="22" y2="12" />
+    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+  </svg>
+);
+
+
 
 

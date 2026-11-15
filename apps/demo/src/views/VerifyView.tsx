@@ -672,7 +672,7 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
               />
               <div style={{ flex: "1 1 240px" }}>
                 <h5 style={{ margin: "0 0 0.25rem 0", fontSize: "14px", fontWeight: 600, color: "var(--color-ink)" }}>
-                  📱 {isAm ? "በስማርትፎን ካሜራ በቀጥታ ያረጋግጡ" : "Scan to Verify on Mobile"}
+                  {isAm ? "በስማርትፎን ካሜራ በቀጥታ ያረጋግጡ" : "Scan to Verify on Mobile"}
                 </h5>
                 <p style={{ margin: "0 0 0.75rem 0", fontSize: "13px", color: "var(--color-muted-ink)", lineHeight: 1.4 }}>
                   {isAm

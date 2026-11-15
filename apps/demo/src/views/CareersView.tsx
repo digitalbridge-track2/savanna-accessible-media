@@ -10,7 +10,6 @@ import {
   IconClose,
   IconChevronDown,
   IconShieldCheck,
-  IconSparkles,
   IconBriefcase
 } from "../components/Icons";
 
@@ -127,22 +126,18 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
     {
       id: "all",
       label: isAm ? "ሁሉም (All)" : locale === "om" ? "Hunda (All)" : locale === "ti" ? "ኩሎም (All)" : locale === "so" ? "Dhammaan (All)" : "All Modes",
-      icon: null,
     },
     {
       id: "hybrid",
       label: isAm ? "ድብልቅ" : locale === "om" ? "Makaa" : locale === "ti" ? "ሕውስዋስ" : locale === "so" ? "Isku-dhafan" : "Hybrid",
-      icon: "🌿",
     },
     {
       id: "remote",
       label: isAm ? "የርቀት" : locale === "om" ? "Fageenya" : locale === "ti" ? "ናይ ርሕቐት" : locale === "so" ? "Meel Fog" : "100% Remote",
-      icon: "🌐",
     },
     {
       id: "onsite",
       label: isAm ? "በቦታው" : locale === "om" ? "Bakka Hojii" : locale === "ti" ? "ኣብ ቦታኡ" : locale === "so" ? "Goobta" : "On-site",
-      icon: "🏢",
     },
   ];
 
@@ -389,9 +384,8 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
               onClick={() => setFilterCourseSkillsOnly(!filterCourseSkillsOnly)}
               title="Filter opportunities aligned directly with the Abugida course learning outcomes"
             >
-              <IconSparkles size={14} style={{ color: filterCourseSkillsOnly ? "#FFFFFF" : "var(--color-brand)" }} />
+              {filterCourseSkillsOnly && <IconCheck size={13} style={{ marginRight: "2px", strokeWidth: "2.5" }} />}
               <span>{isAm ? "ከተማርኩት ችሎታ ጋር የሚስማሙ" : "Matches Lesson Skills"}</span>
-              {filterCourseSkillsOnly && <IconCheck size={13} style={{ marginLeft: "2px" }} />}
             </button>
           </div>
         </div>
@@ -437,7 +431,6 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
                     className={`segmented-pill-btn ${isSelected ? "active" : ""}`}
                     onClick={() => setSelectedWorkMode(mode.id)}
                   >
-                    {mode.icon && <span aria-hidden="true">{mode.icon}</span>}
                     <span>{mode.label}</span>
                   </button>
                 );

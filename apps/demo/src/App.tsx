@@ -8,6 +8,7 @@ import { StudioView } from "./views/StudioView";
 import { VerifyView } from "./views/VerifyView";
 import { EmbedView } from "./views/EmbedView";
 import { ThemePicker } from "./components/ThemePicker";
+import { IconGlobe } from "./components/Icons";
 
 // Error Boundary to prevent any blank or white screens
 export class ErrorBoundary extends React.Component<
@@ -148,7 +149,9 @@ export const AppContent: React.FC = () => {
                 boxShadow: "var(--shadow-subtle)",
               }}
             >
-              <span style={{ fontSize: "14px", marginRight: "6px" }} aria-hidden="true">🌐</span>
+              <span style={{ color: "var(--color-muted-ink)", display: "flex", alignItems: "center", marginRight: "6px" }} aria-hidden="true">
+                <IconGlobe size={14} />
+              </span>
               <label htmlFor="system-lang-select" className="sr-only">
                 {getTranslation("selectLang", locale)}
               </label>

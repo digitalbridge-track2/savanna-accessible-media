@@ -8,7 +8,6 @@ import {
   IconMapPin,
   IconShieldCheck,
   IconClock,
-  IconSparkles,
   IconExternal,
   IconDocument,
   IconChevronDown,
@@ -185,7 +184,6 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
           style={{
             display: "inline-flex",
             alignItems: "center",
-            gap: "0.3rem",
             fontSize: "11.5px",
             fontWeight: 600,
             padding: "0.2rem 0.65rem",
@@ -195,7 +193,6 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
             border: "1px solid #C7D2FE",
           }}
         >
-          <span aria-hidden="true">🌐</span>
           <span>100% Remote</span>
         </span>
       );
@@ -206,7 +203,6 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
           style={{
             display: "inline-flex",
             alignItems: "center",
-            gap: "0.3rem",
             fontSize: "11.5px",
             fontWeight: 600,
             padding: "0.2rem 0.65rem",
@@ -216,7 +212,6 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
             border: "1px solid #A7F3D0",
           }}
         >
-          <span aria-hidden="true">🌿</span>
           <span>Hybrid</span>
         </span>
       );
@@ -226,7 +221,6 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
         style={{
           display: "inline-flex",
           alignItems: "center",
-          gap: "0.3rem",
           fontSize: "11.5px",
           fontWeight: 600,
           padding: "0.2rem 0.65rem",
@@ -236,7 +230,6 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
           border: "1px solid #FDE68A",
         }}
       >
-        <span aria-hidden="true">🏢</span>
         <span>On-Site</span>
       </span>
     );
@@ -601,7 +594,7 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
                 gap: "0.3rem",
               }}
             >
-              <IconSparkles size={12} />
+              <IconCheck size={12} style={{ strokeWidth: "2.5" }} />
               <span>{isAm ? "የአቡጊዳ ሰርተፊኬት ይፈልጋል" : "Matches Lesson Skills"}</span>
             </span>
           )}
