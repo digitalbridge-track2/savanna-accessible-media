@@ -1,17 +1,18 @@
 import React, { useState, useRef, useEffect } from "react";
 import { AccessibleJob, LocalizedString } from "@abugida/lesson-schema";
+import { SupportedLocale } from "@abugida/media-kit";
 import { IconPlay, IconPause, IconCheck } from "./Icons";
 
 interface JobCardItemProps {
   job: AccessibleJob;
-  locale: "en" | "am";
+  locale: SupportedLocale;
 }
 
-export function resolveLocalized(val: LocalizedString | string | undefined | null, locale: "en" | "am"): string {
+export function resolveLocalized(val: LocalizedString | string | undefined | null | any, locale: SupportedLocale): string {
   if (!val) return "";
   if (typeof val === "string") return val;
   if (typeof val === "object") {
-    return val[locale] || val.en || val.am || "";
+    return val[locale] || (locale === "am" || locale === "ti" ? val.am : val.en) || val.en || "";
   }
   return String(val);
 }

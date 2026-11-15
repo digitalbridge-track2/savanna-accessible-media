@@ -1,0 +1,46 @@
+{
+  "lessonId": "digital-workplace-01",
+  "language": "om",
+  "segments": [
+    {
+      "id": 1,
+      "start": 0,
+      "end": 4.5,
+      "speaker": "Barsiisaa",
+      "text": "Baga gara leenjii Dandeettii Bakka Hojii Diijitaalaa bu'uuraatti nagaan dhuftan.",
+      "visualDescription": "Mata duree Islaayidii: Dandeettii Bakka Hojii Diijitaalaa asxaa qooda fudhattootaa waliin."
+    },
+    {
+      "id": 2,
+      "start": 4.5,
+      "end": 9,
+      "speaker": "Barsiisaa",
+      "text": "Barnoota kana keessatti qunnamtii yerootiin hin daangeffamne fi sanadoota hundaaf mijatan ilaalla.",
+      "visualDescription": "Diyaagiraamii meeshaalee hojii gamtaa fi asxaawwan sanadaa agarsiisu."
+    },
+    {
+      "id": 3,
+      "start": 9,
+      "end": 14.2,
+      "speaker": "Barsiisaa",
+      "text": "Gareewwan faffaca'an keessatti yeroo hojjatamu, mata-dureewwan sirreeffaman fi barreeffamoonni suuraa ibsan baay'ee barbaachisoodha.",
+      "visualDescription": "Muraa koodii tartiiba mata-dureewwan HTML siimaantiikii ifaa agarsiisu."
+    },
+    {
+      "id": 4,
+      "start": 14.2,
+      "end": 19.5,
+      "speaker": "Barsiisaa",
+      "text": "Gara gadii mirgaatti qabduun iyyannoo galchuu akkamitti akka ifee mul'atu qalbeeffadhaa.",
+      "visualDescription": "Qabduun Iyyannoo Galchi gadi gara mirgaatti magariisa ifaatiin mul'ata."
+    },
+    {
+      "id": 5,
+      "start": 19.5,
+      "end": 25,
+      "speaker": "Barsiisaa",
+      "text": "Namni hundi barnootaa fi bakka hojiitti meeshaalee guutummaatti hundaaf mijatan argachuuf mirga qaba.",
+      "visualDescription": "Faajjii Cufiinsaa: Diijitaal Biriij — Waan hundaaf hojjatu ijaaraa."
+    }
+  ]
+}

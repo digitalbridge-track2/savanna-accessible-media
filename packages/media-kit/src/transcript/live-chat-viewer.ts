@@ -8,14 +8,14 @@ export interface LiveChatMessageItem {
 }
 
 export interface LiveChatViewerOptions {
-  locale?: "en" | "am";
+  locale?: string;
   onSeekAndPlay: (time: number) => void;
 }
 
 export class LiveChatViewer {
   private container: HTMLElement;
   private messages: LiveChatMessageItem[] = [];
-  private locale: "en" | "am" = "en";
+  private locale: string = "en";
   private onSeekAndPlay: (time: number) => void;
   private currentTime = 0;
   private searchQuery = "";
@@ -30,7 +30,7 @@ export class LiveChatViewer {
     this.onSeekAndPlay = options.onSeekAndPlay;
   }
 
-  setLocale(locale: "en" | "am") {
+  setLocale(locale: string) {
     if (this.locale !== locale) {
       this.locale = locale;
       this.render();

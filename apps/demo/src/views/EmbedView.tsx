@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { SupportedLocale } from "@abugida/media-kit";
 import { NavLink } from "../router";
 import { IconCopy, IconCheck, IconExternal } from "../components/Icons";
 
@@ -66,7 +67,7 @@ function highlightSyntaxLine(line: string): React.ReactNode[] {
   return elements.length > 0 ? elements : [line];
 }
 
-export const EmbedView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
+export const EmbedView: React.FC<{ locale: SupportedLocale }> = ({ locale }) => {
   const [copied, setCopied] = useState(false);
   const [embedType, setEmbedType] = useState<"script" | "customElement" | "iframe">("script");
   const [activeLineIndex, setActiveLineIndex] = useState<number>(5);

@@ -16,6 +16,7 @@ import { MediaSyncController, SignStatus } from "./media/sync-controller.js";
 import { TranscriptViewer, TranscriptSegmentData } from "./transcript/transcript-viewer.js";
 import { LiveChatViewer, LiveChatMessageItem } from "./transcript/live-chat-viewer.js";
 import { generateBRFDocument } from "./braille/braille-formatter.js";
+import { SupportedLocale, SUPPORTED_LANGUAGES, getTranslation } from "./localization/locales.js";
 
 const ICONS = {
   play: `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>`,
@@ -47,7 +48,7 @@ export class A11yMediaPlayer extends HTMLElement {
 
   private shadow: ShadowRoot;
   private manifest: LessonManifest | null = null;
-  private activeLocale: "en" | "am" = "en";
+  private activeLocale: SupportedLocale = "en";
   private prefs: PlayerPreferences;
 
   // Media & sync
@@ -84,7 +85,7 @@ export class A11yMediaPlayer extends HTMLElement {
   };
 
   connectedCallback() {
-    this.activeLocale = (this.getAttribute("lang") as "en" | "am") || (this.getAttribute("locale") as "en" | "am") || "en";
+    this.activeLocale = (this.getAttribute("lang") as SupportedLocale) || (this.getAttribute("locale") as SupportedLocale) || "en";
     const manifestSrc = this.getAttribute("manifest-src");
     if (manifestSrc) {
       this.loadManifest(manifestSrc);
@@ -104,7 +105,7 @@ export class A11yMediaPlayer extends HTMLElement {
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     if (oldValue !== newValue) {
       if (name === "locale" || name === "lang") {
-        this.activeLocale = (newValue as "en" | "am") || "en";
+        this.activeLocale = (newValue as SupportedLocale) || "en";
         this.updateLocaleStrings();
       } else if (name === "manifest-src") {
         this.loadManifest(newValue);
@@ -119,7 +120,7 @@ export class A11yMediaPlayer extends HTMLElement {
   private initFromAttributes() {
     const src = this.getAttribute("src");
     if (!src) return;
-    const lang = (this.getAttribute("lang") as "en" | "am") || (this.getAttribute("locale") as "en" | "am") || "en";
+    const lang = (this.getAttribute("lang") as SupportedLocale) || (this.getAttribute("locale") as SupportedLocale) || "en";
     this.activeLocale = lang;
     const captionsAttr = this.getAttribute("captions") || "";
     const signAttr = this.getAttribute("sign");
@@ -244,11 +245,33 @@ export class A11yMediaPlayer extends HTMLElement {
         this.transcriptViewer.setSegments(segments);
         return;
       } catch (e) {
-        console.warn("Could not parse custom transcript, falling back to manifest src", e);
+        console.warn("Could not parse custom transcript, falling back to localized transcript", e);
       }
     }
 
-    if (this.manifest.transcript?.src) {
+    // Try localized transcript file first (e.g. transcript.am.json, transcript.om.json, etc.)
+    const localizedTranscriptSrc = `/lessons/digital-workplace/transcript.${this.activeLocale}.json`;
+    let loadedTranscript = false;
+    try {
+      const res = await fetch(localizedTranscriptSrc);
+      if (res.ok) {
+        const data = await res.json();
+        const segments: TranscriptSegmentData[] = (data.segments || []).map((seg: any) => ({
+          id: seg.id,
+          start: seg.start_ms !== undefined ? seg.start_ms / 1000 : seg.start || 0,
+          end: seg.end_ms !== undefined ? seg.end_ms / 1000 : seg.end || 0,
+          speaker: seg.speaker,
+          text: seg.text || seg.draft_text || "",
+          visualDescription: seg.visual_description || seg.visualDescription,
+        }));
+        this.transcriptViewer.setSegments(segments);
+        loadedTranscript = true;
+      }
+    } catch {
+      // Fall through to manifest src
+    }
+
+    if (!loadedTranscript && this.manifest.transcript?.src) {
       try {
         const res = await fetch(this.manifest.transcript.src);
         if (res.ok) {
@@ -266,6 +289,71 @@ export class A11yMediaPlayer extends HTMLElement {
       } catch (e) {
         console.warn("Could not load external transcript file, using fallback cues", e);
       }
+    }
+  }
+
+  public async switchTranscriptLanguage(lang: SupportedLocale) {
+    this.activeLocale = lang;
+    this.setAttribute("locale", lang);
+    if (this.transcriptViewer) {
+      this.transcriptViewer.setLocale(lang);
+    }
+
+    const selectTranscriptLang = this.shadow.getElementById("select-transcript-lang") as HTMLSelectElement | null;
+    if (selectTranscriptLang && selectTranscriptLang.value !== lang) {
+      selectTranscriptLang.value = lang;
+    }
+    
+    // Check custom transcript
+    const customTranscript = typeof localStorage !== "undefined" ? localStorage.getItem(`db-player:custom-transcript:${lang}`) : null;
+    if (customTranscript) {
+      try {
+        const data = JSON.parse(customTranscript);
+        const segments: TranscriptSegmentData[] = (data.segments || []).map((seg: any) => ({
+          id: seg.id,
+          start: seg.start_ms !== undefined ? seg.start_ms / 1000 : seg.start || 0,
+          end: seg.end_ms !== undefined ? seg.end_ms / 1000 : seg.end || 0,
+          speaker: seg.speaker,
+          text: seg.text || seg.reviewedText || seg.draft_text || seg.draftText || "",
+          visualDescription: seg.visual_description || seg.visualDescription,
+        }));
+        this.transcriptViewer.setSegments(segments);
+        return;
+      } catch (e) {
+        console.warn("Could not parse custom transcript for", lang, e);
+      }
+    }
+
+    try {
+      const res = await fetch(`/lessons/digital-workplace/transcript.${lang}.json`);
+      if (res.ok) {
+        const data = await res.json();
+        const segments: TranscriptSegmentData[] = (data.segments || []).map((seg: any) => ({
+          id: seg.id,
+          start: seg.start_ms !== undefined ? seg.start_ms / 1000 : seg.start || 0,
+          end: seg.end_ms !== undefined ? seg.end_ms / 1000 : seg.end || 0,
+          speaker: seg.speaker,
+          text: seg.text || seg.draft_text || "",
+          visualDescription: seg.visual_description || seg.visualDescription,
+        }));
+        this.transcriptViewer.setSegments(segments);
+      }
+    } catch (e) {
+      console.warn("Could not load transcript for", lang, e);
+    }
+
+    // Sync captions if enabled
+    if (this.prefs.captionLanguage !== "off") {
+      this.prefs.captionLanguage = lang;
+      savePreferences({ captionLanguage: lang });
+      const btnCC = this.shadow.getElementById("btn-cc");
+      if (btnCC) {
+        btnCC.setAttribute("title", `Captions: ${lang.toUpperCase()} (C)`);
+        btnCC.setAttribute("aria-label", `Captions: ${lang.toUpperCase()} (C)`);
+      }
+      const ccSelect = this.shadow.getElementById("select-cc-lang") as HTMLSelectElement | null;
+      if (ccSelect) ccSelect.value = lang;
+      await this.loadCaptionTrack(lang);
     }
   }
 
@@ -451,7 +539,7 @@ export class A11yMediaPlayer extends HTMLElement {
 
   private render() {
     const isAm = this.activeLocale === "am";
-    const title = this.manifest ? this.manifest.title[this.activeLocale] : "Media Player";
+    const title = this.manifest ? ((this.manifest.title as any)[this.activeLocale] || this.manifest.title.en) : "Media Player";
 
     const activeMainSrc = this.resolveMainSource(this.currentQuality);
     const signSource = this.manifest?.sources.find((s) => s.kind === "sign");
@@ -1870,7 +1958,10 @@ export class A11yMediaPlayer extends HTMLElement {
                 <label for="select-transcript-lang" class="sr-only">${isAm ? "ቋንቋ" : "Language"}</label>
                 <select id="select-transcript-lang" class="header-select" aria-label="${isAm ? "የጽሑፍ ግልባጭ ቋንቋ" : "Transcript Language"}">
                   <option value="en" ${this.activeLocale === "en" ? "selected" : ""}>English</option>
-                  <option value="am" ${this.activeLocale === "am" ? "selected" : ""}>አማርኛ</option>
+                  <option value="am" ${this.activeLocale === "am" ? "selected" : ""}>አማርኛ (Amharic)</option>
+                  <option value="om" ${this.activeLocale === "om" ? "selected" : ""}>Afaan Oromoo (Oromo)</option>
+                  <option value="ti" ${this.activeLocale === "ti" ? "selected" : ""}>ትግርኛ (Tigrigna)</option>
+                  <option value="so" ${this.activeLocale === "so" ? "selected" : ""}>Af-Soomaali (Somali)</option>
                 </select>
               </div>
             </div>
@@ -2160,6 +2251,9 @@ export class A11yMediaPlayer extends HTMLElement {
                   <select id="select-cc-lang">
                     <option value="en" ${this.prefs.captionLanguage === "en" ? "selected" : ""}>English (Reviewed)</option>
                     <option value="am" ${this.prefs.captionLanguage === "am" ? "selected" : ""}>አማርኛ (የተገመገመ)</option>
+                    <option value="om" ${this.prefs.captionLanguage === "om" ? "selected" : ""}>Afaan Oromoo (Qophaa'e)</option>
+                    <option value="ti" ${this.prefs.captionLanguage === "ti" ? "selected" : ""}>ትግርኛ (ዝተገምገመ)</option>
+                    <option value="so" ${this.prefs.captionLanguage === "so" ? "selected" : ""}>Af-Soomaali (Dib loo eegay)</option>
                     <option value="off" ${this.prefs.captionLanguage === "off" ? "selected" : ""}>Off</option>
                   </select>
                 </div>
@@ -3040,7 +3134,7 @@ export class A11yMediaPlayer extends HTMLElement {
     // Captions Cycle
     const btnCC = this.shadow.getElementById("btn-cc");
     btnCC?.addEventListener("click", async () => {
-      const order = ["en", "am", "off"];
+      const order = ["en", "am", "om", "ti", "so", "off"];
       const nextIdx = (order.indexOf(this.prefs.captionLanguage) + 1) % order.length;
       this.prefs.captionLanguage = order[nextIdx];
       savePreferences({ captionLanguage: this.prefs.captionLanguage });
@@ -3049,11 +3143,19 @@ export class A11yMediaPlayer extends HTMLElement {
       btnCC.setAttribute("title", `Captions: ${this.prefs.captionLanguage.toUpperCase()} (C)`);
       btnCC.setAttribute(
         "aria-label",
-        this.activeLocale === "am"
-          ? `የትርጉም ጽሑፍ: ${this.prefs.captionLanguage.toUpperCase()} (C)`
-          : `Captions: ${this.prefs.captionLanguage.toUpperCase()} (C)`
+        `Captions: ${this.prefs.captionLanguage.toUpperCase()} (C)`
       );
+      const ccSelect = this.shadow.getElementById("select-cc-lang") as HTMLSelectElement | null;
+      if (ccSelect) ccSelect.value = this.prefs.captionLanguage;
       await this.loadCaptionTrack(this.prefs.captionLanguage);
+
+      if (!isOff) {
+        const selectTranscriptLang = this.shadow.getElementById("select-transcript-lang") as HTMLSelectElement | null;
+        if (selectTranscriptLang && selectTranscriptLang.value !== this.prefs.captionLanguage) {
+          selectTranscriptLang.value = this.prefs.captionLanguage;
+          await this.switchTranscriptLanguage(this.prefs.captionLanguage as SupportedLocale);
+        }
+      }
     });
 
     // Sign Language Toggle
@@ -3090,9 +3192,9 @@ export class A11yMediaPlayer extends HTMLElement {
 
     // Language Select in Transcript Header
     const selectTranscriptLang = this.shadow.getElementById("select-transcript-lang") as HTMLSelectElement;
-    selectTranscriptLang?.addEventListener("change", () => {
-      const newLocale = selectTranscriptLang.value as "en" | "am";
-      this.setAttribute("locale", newLocale);
+    selectTranscriptLang?.addEventListener("change", async () => {
+      const newLocale = selectTranscriptLang.value as SupportedLocale;
+      await this.switchTranscriptLanguage(newLocale);
     });
 
     // Accessibility Preferences & Quality Popovers Flyout (Smooth flow, zero dark scrim)
@@ -3400,7 +3502,8 @@ export class A11yMediaPlayer extends HTMLElement {
 
     // Preference Form Live Inputs
     this.shadow.getElementById("select-cc-lang")?.addEventListener("change", async (e) => {
-      this.prefs.captionLanguage = (e.target as HTMLSelectElement).value;
+      const newLang = (e.target as HTMLSelectElement).value;
+      this.prefs.captionLanguage = newLang;
       savePreferences({ captionLanguage: this.prefs.captionLanguage });
       if (btnCC) {
         const isOff = this.prefs.captionLanguage === "off";
@@ -3408,12 +3511,17 @@ export class A11yMediaPlayer extends HTMLElement {
         btnCC.setAttribute("title", `Captions: ${this.prefs.captionLanguage.toUpperCase()} (C)`);
         btnCC.setAttribute(
           "aria-label",
-          this.activeLocale === "am"
-            ? `የትርጉም ጽሑፍ: ${this.prefs.captionLanguage.toUpperCase()} (C)`
-            : `Captions: ${this.prefs.captionLanguage.toUpperCase()} (C)`
+          `Captions: ${this.prefs.captionLanguage.toUpperCase()} (C)`
         );
       }
       await this.loadCaptionTrack(this.prefs.captionLanguage);
+      if (newLang !== "off") {
+        const selectTranscriptLang = this.shadow.getElementById("select-transcript-lang") as HTMLSelectElement | null;
+        if (selectTranscriptLang && selectTranscriptLang.value !== newLang) {
+          selectTranscriptLang.value = newLang;
+          await this.switchTranscriptLanguage(newLang as SupportedLocale);
+        }
+      }
     });
 
     this.shadow.getElementById("select-cc-size")?.addEventListener("change", (e) => {
@@ -3508,11 +3616,11 @@ export class A11yMediaPlayer extends HTMLElement {
     btnExportBrf?.addEventListener("click", () => {
       const segments = this.transcriptViewer?.getSegments() || [];
       const title =
-        (this.manifest?.title && (this.manifest.title[this.activeLocale] || this.manifest.title.en)) ||
+        (this.manifest?.title && ((this.manifest.title as any)[this.activeLocale] || this.manifest.title.en)) ||
         "Lesson Transcript";
       const brfContent = generateBRFDocument({
         title,
-        language: this.activeLocale,
+        language: (this.activeLocale === "am" || this.activeLocale === "ti") ? "am" : "en",
         segments:
           segments.length > 0
             ? segments

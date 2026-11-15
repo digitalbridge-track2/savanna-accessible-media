@@ -83,11 +83,32 @@
       "src": "/lessons/digital-workplace/captions.am.vtt",
       "label": "አማርኛ (የተገመገመ)",
       "status": "reviewed"
+    },
+    {
+      "id": "cap-om",
+      "language": "om",
+      "src": "/lessons/digital-workplace/captions.om.vtt",
+      "label": "Afaan Oromoo (Qophaa'e)",
+      "status": "reviewed"
+    },
+    {
+      "id": "cap-ti",
+      "language": "ti",
+      "src": "/lessons/digital-workplace/captions.ti.vtt",
+      "label": "ትግርኛ (ዝተገምገመ)",
+      "status": "reviewed"
+    },
+    {
+      "id": "cap-so",
+      "language": "so",
+      "src": "/lessons/digital-workplace/captions.so.vtt",
+      "label": "Af-Soomaali (Dib loo eegay)",
+      "status": "reviewed"
     }
   ],
   "transcript": {
     "src": "/lessons/digital-workplace/transcript.en.json",
-    "languages": ["en", "am"]
+    "languages": ["en", "am", "om", "ti", "so"]
   },
   "documents": [
     {
@@ -104,7 +125,58 @@
       "src": "/lessons/digital-workplace/documents/lesson.en.tagged.pdf",
       "title": "Digital Workplace Foundations (Tagged PDF)",
       "language": "en",
-      "sizeBytes": 145000,
+      "sizeBytes": 248500,
+      "tagged": true
+    },
+    {
+      "id": "doc-brf-en",
+      "format": "brf",
+      "src": "/lessons/digital-workplace/documents/lesson-transcript.en.brf",
+      "title": "Digital Workplace Foundations (Braille Ready Format .brf)",
+      "language": "en",
+      "sizeBytes": 4200
+    },
+    {
+      "id": "doc-pdf-braille-en",
+      "format": "pdf",
+      "src": "/lessons/digital-workplace/documents/lesson-braille.en.pdf",
+      "title": "Digital Workplace Foundations (Tactile Braille PDF)",
+      "language": "en",
+      "sizeBytes": 207900,
+      "tagged": true
+    },
+    {
+      "id": "doc-html-am",
+      "format": "html",
+      "src": "/lessons/digital-workplace/documents/lesson.am.html",
+      "title": "የዲጂታል የሥራ ቦታ ክህሎቶች (ተደራሽ HTML)",
+      "language": "am",
+      "sizeBytes": 21500
+    },
+    {
+      "id": "doc-pdf-am",
+      "format": "pdf",
+      "src": "/lessons/digital-workplace/documents/lesson.am.tagged.pdf",
+      "title": "የዲጂታል የሥራ ቦታ ክህሎቶች (የታገዘ PDF)",
+      "language": "am",
+      "sizeBytes": 324400,
+      "tagged": true
+    },
+    {
+      "id": "doc-brf-am",
+      "format": "brf",
+      "src": "/lessons/digital-workplace/documents/lesson-transcript.am.brf",
+      "title": "የዲጂታል የሥራ ቦታ ክህሎቶች (የብሬል ሰነድ .brf)",
+      "language": "am",
+      "sizeBytes": 5600
+    },
+    {
+      "id": "doc-pdf-braille-am",
+      "format": "pdf",
+      "src": "/lessons/digital-workplace/documents/lesson-braille.am.pdf",
+      "title": "የዲጂታል የሥራ ቦታ ክህሎቶች (የሚዳሰስ የብሬል PDF)",
+      "language": "am",
+      "sizeBytes": 278100,
       "tagged": true
     }
   ],

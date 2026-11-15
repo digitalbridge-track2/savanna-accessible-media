@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Level 1 Integration: Standalone Drop-in Script Tag Demo</title>
+  
+  <!-- LEVEL 1: ONE LINE SCRIPT TAG -->
+  <script src="/dist/a11y-media-kit.umd.js"></script>
+
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      background: #F7F8F5;
+      color: #14201B;
+      line-height: 1.6;
+    }
+    .code-banner {
+      background: #E8F5E9;
+      border: 1px solid #A5D6A7;
+      padding: 1rem;
+      border-radius: 6px;
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Level 1 Integration Test: Zero-Build Script Tag</h1>
+  <div class="code-banner">
+    <p><strong>This page loads the player using only 1 line of HTML:</strong></p>
+    <code>&lt;script src="https://cdn.example.et/a11y-media-kit.umd.js"&gt;&lt;/script&gt;</code>
+  </div>
+
+  <h2>Embedded Player</h2>
+  <!-- Custom Element loaded purely via script tag -->
+  <a11y-media-player 
+    manifest-src="/lessons/digital-workplace/lesson.json" 
+    locale="en">
+  </a11y-media-player>
+
+  <h2 style="margin-top: 3rem;">Embedded Job Card</h2>
+  <a11y-job-card 
+    locale="en"
+    job-data='{"id":"demo-standalone-job","title":{"en":"Junior Accessibility Tester","am":"ጀማሪ የተደራሽነት መርማሪ"},"employer":"ALX Ethiopia","location":{"en":"Addis Ababa","am":"አዲስ አበባ"},"workMode":"hybrid","description":{"en":"Audit digital platforms for WCAG 2.2 AA compliance using screen readers and keyboard navigation.","am":"ዲጂታል መድረኮችን በስክሪን አንባቢ እና ኪቦርድ በመጠቀም ይመርምሩ።"},"requiredSkills":["skill-a11y-literacy"],"helpfulSkills":["skill-digital-collab"],"applicationDeadline":"2026-11-20","applicationUrl":"https://digitalbridge.et","accommodations":[{"id":"acc-1","label":{"en":"Screen reader workstations provided","am":"የስክሪን አንባቢ ድጋፍ ያላቸው ኮምፒውተሮች ይቀርባሉ"},"source":"Employer Verified"}],"audioSummary":{"src":"/jobs/audio/job-01-summary.mp3","language":"en","type":"audio/mp3","durationSeconds":30,"textEquivalent":"Junior Accessibility Tester at ALX Ethiopia. Hybrid role in Addis Ababa. Tasks include testing web applications with NVDA and TalkBack."},"isDemonstrationData":true}'>
+  </a11y-job-card>
+</body>
+</html>

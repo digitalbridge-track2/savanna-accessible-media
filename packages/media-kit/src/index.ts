@@ -7,4 +7,5 @@ export * from "./transcript/transcript-viewer.js";
 export * from "./transcript/live-chat-viewer.js";
 export * from "./offline/offline-manager.js";
 export * from "./localization/ethiopian-calendar.js";
+export * from "./localization/locales.js";
 export * from "./braille/braille-formatter.js";

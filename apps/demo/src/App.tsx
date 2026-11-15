@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { formatDualDate } from "@abugida/media-kit";
+import { formatDualDate, SupportedLocale, SUPPORTED_LANGUAGES, getTranslation } from "@abugida/media-kit";
 import { useRouter, NavLink } from "./router";
 import { HomeView } from "./views/HomeView";
 import { LessonView } from "./views/LessonView";
@@ -63,14 +63,13 @@ export class ErrorBoundary extends React.Component<
 
 export const AppContent: React.FC = () => {
   const { currentPath } = useRouter();
-  const [locale, setLocale] = useState<"en" | "am">(() => {
-    return (localStorage.getItem("abugida-locale") as "en" | "am") || "en";
+  const [locale, setLocale] = useState<SupportedLocale>(() => {
+    return (localStorage.getItem("abugida-locale") as SupportedLocale) || "en";
   });
 
-  const isAm = locale === "am";
   const dualDate = formatDualDate("2026-11-14");
 
-  const handleLocaleChange = (newLocale: "en" | "am") => {
+  const handleLocaleChange = (newLocale: SupportedLocale) => {
     setLocale(newLocale);
     localStorage.setItem("abugida-locale", newLocale);
   };
@@ -87,7 +86,7 @@ export const AppContent: React.FC = () => {
     <div className="site-container">
       {/* Skip to Content */}
       <a href="#main-content" className="skip-link">
-        {isAm ? "ወደ ዋናው ይዘት ዝለል" : "Skip to main content"}
+        {getTranslation("skipLink", locale)}
       </a>
 
       {/* Main Header with Apple-style Layout & Refined Spacing */}
@@ -111,7 +110,7 @@ export const AppContent: React.FC = () => {
                 letterSpacing: "-0.015em",
               }}
             >
-              Abugida Media Kit (አቡጊዳ)
+              {getTranslation("appTitle", locale)}
             </h1>
             <p
               style={{
@@ -121,9 +120,7 @@ export const AppContent: React.FC = () => {
                 fontWeight: 400,
               }}
             >
-              {isAm
-                ? "ተደራሽ የትምህርት ሚዲያ እና የሥራ መግቢያ በር · ዲጂታል ብሪጅ 2026"
-                : "Accessible Learning Media & Career Gateway · Digital Bridge 2026"}
+              {getTranslation("appSubtitle", locale)}
             </p>
           </div>
 
@@ -137,58 +134,46 @@ export const AppContent: React.FC = () => {
               {dualDate.display}
             </span>
 
-            {/* Language Switcher - Apple Segmented Pill */}
+            {/* Ethiopian National & Global Language Switcher */}
             <div
               style={{
+                position: "relative",
                 display: "inline-flex",
+                alignItems: "center",
                 background: "var(--color-surface)",
                 border: "1px solid var(--color-border-subtle)",
-                padding: "3px",
+                padding: "2px 8px 2px 10px",
                 borderRadius: "var(--radius-pill)",
+                boxShadow: "var(--shadow-subtle)",
               }}
-              role="group"
-              aria-label={isAm ? "ቋንቋ ይምረጡ" : "Select Language"}
             >
-              <button
-                type="button"
-                onClick={() => handleLocaleChange("en")}
+              <span style={{ fontSize: "14px", marginRight: "6px" }} aria-hidden="true">🌐</span>
+              <label htmlFor="system-lang-select" className="sr-only">
+                {getTranslation("selectLang", locale)}
+              </label>
+              <select
+                id="system-lang-select"
+                value={locale}
+                onChange={(e) => handleLocaleChange(e.target.value as SupportedLocale)}
                 style={{
-                  padding: "0.35rem 0.95rem",
+                  background: "transparent",
                   border: "none",
-                  borderRadius: "var(--radius-pill)",
-                  background: locale === "en" ? "var(--color-surface-elevated, #FFFFFF)" : "transparent",
-                  color: locale === "en" ? "var(--color-ink)" : "var(--color-muted-ink)",
-                  fontWeight: locale === "en" ? 600 : 500,
+                  color: "var(--color-ink)",
+                  fontWeight: 600,
                   fontSize: "13px",
                   cursor: "pointer",
-                  minHeight: "32px",
-                  boxShadow: locale === "en" ? "0 2px 6px rgba(0, 0, 0, 0.08)" : "none",
-                  transition: "background 0.16s ease, color 0.16s ease, box-shadow 0.16s ease",
+                  padding: "0.35rem 0.5rem 0.35rem 0",
+                  outline: "none",
+                  fontFamily: "inherit",
                 }}
-                aria-pressed={locale === "en"}
+                aria-label={getTranslation("selectLang", locale)}
               >
-                English
-              </button>
-              <button
-                type="button"
-                onClick={() => handleLocaleChange("am")}
-                style={{
-                  padding: "0.35rem 0.95rem",
-                  border: "none",
-                  borderRadius: "var(--radius-pill)",
-                  background: locale === "am" ? "var(--color-surface-elevated, #FFFFFF)" : "transparent",
-                  color: locale === "am" ? "var(--color-ink)" : "var(--color-muted-ink)",
-                  fontWeight: locale === "am" ? 600 : 500,
-                  fontSize: "13px",
-                  cursor: "pointer",
-                  minHeight: "32px",
-                  boxShadow: locale === "am" ? "0 2px 6px rgba(0, 0, 0, 0.08)" : "none",
-                  transition: "background 0.16s ease, color 0.16s ease, box-shadow 0.16s ease",
-                }}
-                aria-pressed={locale === "am"}
-              >
-                አማርኛ
-              </button>
+                {SUPPORTED_LANGUAGES.map((lang) => (
+                  <option key={lang.code} value={lang.code}>
+                    {lang.nativeName} ({lang.name})
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Universal Color Vision Theme Changer */}
@@ -197,13 +182,13 @@ export const AppContent: React.FC = () => {
         </div>
 
         {/* Clean Segmented Navigation */}
-        <nav className="main-nav" aria-label={isAm ? "ዋና አሰሳ" : "Main Navigation"}>
+        <nav className="main-nav" aria-label={getTranslation("navHome", locale)}>
           <div className="nav-segmented">
-            <NavLink to="/">{isAm ? "መነሻ" : "Home"}</NavLink>
-            <NavLink to="/lesson">{isAm ? "ተደራሽ ትምህርት" : "Accessible Lesson"}</NavLink>
-            <NavLink to="/studio">{isAm ? "የትርጉም ስቱዲዮ" : "Transcript Studio"}</NavLink>
-            <NavLink to="/verify">{isAm ? "ምስክር ወረቀት ማረጋገጫ" : "Verify Credential"}</NavLink>
-            <NavLink to="/embed">{isAm ? "የስክሪፕት ታግ ማካተቻ" : "Script Tag Embed"}</NavLink>
+            <NavLink to="/">{getTranslation("navHome", locale)}</NavLink>
+            <NavLink to="/lesson">{getTranslation("navLesson", locale)}</NavLink>
+            <NavLink to="/studio">{getTranslation("navStudio", locale)}</NavLink>
+            <NavLink to="/verify">{getTranslation("navVerify", locale)}</NavLink>
+            <NavLink to="/embed">{getTranslation("navEmbed", locale)}</NavLink>
           </div>
         </nav>
       </header>
@@ -233,16 +218,22 @@ export const AppContent: React.FC = () => {
         }}
       >
         <p style={{ margin: 0 }}>
-          {isAm
+          {locale === "am"
             ? "© 2026 አቡጊዳ ሚዲያ ኪት (ትራክ 2) · ክፍት ድር ደረጃዎች እና የተደራሽነት መስፈርቶች (WCAG 2.2 AA) የተጠበቁ ናቸው።"
+            : locale === "om"
+            ? "© 2026 Abugida Media Kit (Tiraakii 2) · Ulaagaalee Weebii fi Qajeelfama WCAG 2.2 AA irratti kan ijaarame."
+            : locale === "ti"
+            ? "© 2026 አቡጊዳ ሚዲያ ኪት (ትራክ 2) · ክፉት ናይ ድህረ-ገጽ መመዘንታትን WCAG 2.2 AA ተበጻሕነትን ዝሓለወ።"
+            : locale === "so"
+            ? "© 2026 Abugida Media Kit (Qaybta 2) · Waxaa lagu dhisay Halbeegyada Shabakadda Furan & WCAG 2.2 AA."
             : "© 2026 Abugida Media Kit (Track 2) · Built on Open Web Standards & WCAG 2.2 Level AA."}
         </p>
         <div style={{ display: "flex", gap: "1.25rem", alignItems: "center" }}>
           <a href="/verify?id=CERT-DB-2026-0042" style={{ color: "var(--color-link)" }}>
-            {isAm ? "ምስክር ወረቀት አረጋግጥ" : "Verify Certificate"}
+            {getTranslation("navVerify", locale)}
           </a>
           <a href="/lesson.en.html" style={{ color: "var(--color-link)" }}>
-            {isAm ? "ቀላል HTML ሰነድ" : "Accessible HTML Handout"}
+            {getTranslation("docHtmlTitle", locale)}
           </a>
         </div>
       </footer>

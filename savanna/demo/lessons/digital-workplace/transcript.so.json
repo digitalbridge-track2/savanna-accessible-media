@@ -1,0 +1,46 @@
+{
+  "lessonId": "digital-workplace-01",
+  "language": "so",
+  "segments": [
+    {
+      "id": 1,
+      "start": 0,
+      "end": 4.5,
+      "speaker": "Macallin",
+      "text": "Ku soo dhowow Xirfadaha Goobta Shaqada Dijitaalka: Aasaaska.",
+      "visualDescription": "Cinwaanka Bogga: Xirfadaha Goobta Shaqada Dijitaalka oo ay weheliyaan astaamaha bahwadaagta."
+    },
+    {
+      "id": 2,
+      "start": 4.5,
+      "end": 9,
+      "speaker": "Macallin",
+      "text": "Casharkan, waxaan ku baari doonaa xiriirka aan tooska ahayn iyo diyaarinta dukumentiyada la heli karo.",
+      "visualDescription": "Jaantus muujinaya qalabka wada-shaqaynta fog iyo astaamaha dukumentiga."
+    },
+    {
+      "id": 3,
+      "start": 9,
+      "end": 14.2,
+      "speaker": "Macallin",
+      "text": "Markaad ka shaqaynayso kooxo kala fog, cinwaannada habaysan iyo qoraallada sharaxaadda sawirrada ayaa muhiim ah.",
+      "visualDescription": "Qayb koodh ah oo muujinaysa kala sareynta cinwaannada semantic HTML oo cad."
+    },
+    {
+      "id": 4,
+      "start": 14.2,
+      "end": 19.5,
+      "speaker": "Macallin",
+      "text": "U fiirso sida badhanka gudbinta ee bogga codsiga loogu iftiimiyay xagga hoose ee midigta.",
+      "visualDescription": "Badhanka Gudbi Codsiga waxaa lagu iftiimiyay cagaar dhalaalaya oo ku yaal xagga hoose ee midigta foomka."
+    },
+    {
+      "id": 5,
+      "start": 19.5,
+      "end": 25,
+      "speaker": "Macallin",
+      "text": "Qof kastaa wuxuu xaq u leeyahay qalab si buuxda loo wada heli karo xagga waxbarashada iyo shaqada.",
+      "visualDescription": "Boor xiritaanka: Buundada Dijitaalka — Dhis wax u shaqeeya qof kasta."
+    }
+  ]
+}

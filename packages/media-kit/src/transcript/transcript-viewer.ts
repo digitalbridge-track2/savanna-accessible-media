@@ -8,7 +8,7 @@ export interface TranscriptSegmentData {
 }
 
 export interface TranscriptViewerOptions {
-  locale?: "en" | "am";
+  locale?: string;
   onSeekAndPlay: (time: number) => void;
   onFollowChange?: (isFollowing: boolean) => void;
 }
@@ -22,7 +22,7 @@ export class TranscriptViewer {
   private searchQuery = "";
   private isFollowing = true;
   private userPausedFollowing = false;
-  private locale: "en" | "am" = "en";
+  private locale: string = "en";
   private listElement: HTMLElement | null = null;
   private followBtn: HTMLButtonElement | null = null;
   private statusElement: HTMLElement | null = null;
@@ -34,7 +34,7 @@ export class TranscriptViewer {
     this.locale = options.locale || "en";
   }
 
-  setLocale(locale: "en" | "am") {
+  setLocale(locale: string) {
     if (this.locale !== locale) {
       this.locale = locale;
       this.render();

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>የዲጂታል የሥራ ቦታ ክህሎቶች፡ መሠረታዊ - Tactile Braille Edition</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 18mm 16mm 18mm 16mm;
+    }
+    :root {
+      --color-brand: #0B5D4E;
+      --color-brand-subtle: #E8F5F1;
+      --color-ink: #0F172A;
+      --color-muted: #475569;
+      --color-border: #CBD5E1;
+      --color-surface: #FFFFFF;
+      --font-braille: "Segoe UI Symbol", "Apple Symbols", "DejaVu Sans", "Courier New", monospace;
+    }
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--color-ink);
+      background: var(--color-surface);
+      line-height: 1.5;
+      margin: 0;
+      padding: 0;
+    }
+    .header-bar {
+      border-bottom: 3px solid var(--color-brand);
+      padding-bottom: 14px;
+      margin-bottom: 20px;
+    }
+    .org-banner {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--color-brand);
+      margin-bottom: 6px;
+    }
+    h1 {
+      font-size: 24px;
+      color: var(--color-ink);
+      margin: 0 0 6px 0;
+      line-height: 1.25;
+    }
+    .braille-banner-title {
+      font-family: var(--font-braille);
+      font-size: 24px;
+      color: var(--color-brand);
+      letter-spacing: 3px;
+      margin-bottom: 8px;
+      line-height: 1.4;
+      background: #F8FAFC;
+      padding: 6px 12px;
+      border-left: 4px solid var(--color-brand);
+      border-radius: 4px;
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+      font-size: 11.5px;
+      color: var(--color-muted);
+      background: #F1F5F9;
+      padding: 8px 12px;
+      border-radius: 6px;
+    }
+    .meta-item strong {
+      color: var(--color-ink);
+    }
+    .standard-badge {
+      display: inline-block;
+      background: var(--color-brand);
+      color: #FFF;
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    h2 {
+      font-size: 18px;
+      color: var(--color-brand);
+      border-bottom: 1.5px solid var(--color-border);
+      padding-bottom: 4px;
+      margin: 22px 0 14px 0;
+    }
+    .intro-callout {
+      background: var(--color-brand-subtle);
+      border: 1px solid #B2DFDB;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 12.5px;
+      margin-bottom: 18px;
+    }
+    .cue-card {
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      background: #FAFAFA;
+      page-break-inside: avoid;
+    }
+    .cue-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-size: 11.5px;
+    }
+    .cue-badge {
+      background: var(--color-ink);
+      color: #FFF;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 10.5px;
+    }
+    .cue-time {
+      font-weight: 600;
+      color: var(--color-brand);
+      font-family: monospace;
+    }
+    .cue-speaker {
+      color: var(--color-muted);
+    }
+    .braille-block {
+      background: #FFFFFF;
+      border: 1.5px solid var(--color-brand);
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 8px;
+    }
+    .braille-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--color-brand);
+      margin-bottom: 4px;
+      letter-spacing: 0.5px;
+    }
+    .braille-cells {
+      font-family: var(--font-braille);
+      font-size: 26px;
+      line-height: 1.55;
+      color: #0B5D4E;
+      letter-spacing: 2.5px;
+      word-break: break-word;
+    }
+    .print-block {
+      margin-bottom: 8px;
+      padding: 2px 4px;
+    }
+    .print-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--color-muted);
+      text-transform: uppercase;
+    }
+    .print-text {
+      margin: 2px 0 0 0;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #1E293B;
+      line-height: 1.4;
+    }
+    .embosser-block {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      font-size: 11px;
+      background: #F1F5F9;
+      padding: 5px 10px;
+      border-radius: 4px;
+      border: 1px dashed #CBD5E1;
+    }
+    .embosser-label {
+      font-weight: 700;
+      color: #64748B;
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 0.5px;
+    }
+    .embosser-code {
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      color: #0F172A;
+      font-weight: 700;
+      word-break: break-all;
+    }
+
+    /* Tactile diagram */
+    .tactile-section {
+      margin-top: 24px;
+      page-break-before: auto;
+      page-break-inside: avoid;
+    }
+    .tactile-desc {
+      font-size: 12.5px;
+      color: var(--color-muted);
+      margin-bottom: 12px;
+    }
+    .tactile-diagram-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 3px solid #000000;
+      background: #FFFFFF;
+      padding: 16px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+    .tactile-step {
+      flex: 1;
+      text-align: center;
+      border: 2px dashed #000000;
+      padding: 10px;
+      border-radius: 8px;
+      background: #F8FAFC;
+    }
+    .tactile-badge {
+      font-size: 10.5px;
+      font-weight: 800;
+      background: #000;
+      color: #FFF;
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 6px;
+    }
+    .tactile-braille-cell {
+      font-family: var(--font-braille);
+      font-size: 22px;
+      font-weight: 700;
+      color: #000;
+      letter-spacing: 2px;
+      margin-bottom: 4px;
+    }
+    .tactile-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #000;
+    }
+    .tactile-sub {
+      font-size: 10.5px;
+      color: #475569;
+      margin-top: 3px;
+    }
+    .tactile-arrow {
+      font-size: 22px;
+      font-weight: 800;
+      padding: 0 10px;
+      color: #000;
+      text-align: center;
+      line-height: 1;
+    }
+    .tactile-arrow-braille {
+      font-family: var(--font-braille);
+      font-size: 16px;
+      color: #0B5D4E;
+    }
+    .tactile-notes {
+      font-size: 11.5px;
+      color: #475569;
+      background: #F8FAFC;
+      border-left: 3px solid #000;
+      padding: 6px 10px;
+      border-radius: 4px;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 26px;
+      padding-top: 12px;
+      border-top: 1px solid var(--color-border);
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <header class="header-bar">
+    <div class="org-banner">Digital Bridge &bull; Savanna Accessible Media Initiative</div>
+    <span class="standard-badge">Standard: BANA 40&times;25 &bull; Grade 1 Tactile Edition</span>
+    <h1>የዲጂታል የሥራ ቦታ ክህሎቶች፡ መሠረታዊ</h1>
+    <div class="braille-banner-title" aria-label="Braille title: የዲጂታል የሥራ ቦታ ክህሎቶች፡ መሠረታዊ">⠽⠁⠙⠊⠚⠊⠞⠜⠇ ⠽⠁⠎⠗⠜ ⠃⠕⠞⠜ ⠅⠓⠇⠕⠞⠕⠡  ⠍⠁⠎⠁⠗⠁⠞⠜⠺⠊</div>
+    
+    <div class="meta-grid">
+      <div class="meta-item"><strong>ቋንቋ:</strong> አማርኛ (የኢትዮጵያ ብሬል ደረጃ ፩)</div>
+      <div class="meta-item"><strong>ቀን:</strong> 2026-11-14 (ኅዳር 5, 2019 ዓ.ም.)</div>
+      <div class="meta-item"><strong>መጠን:</strong> BANA 40 Cells &times; 25 Lines / Form Feed</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="intro-callout">
+      <strong>የትምህርት መመሪያ ለዓይነ ስውራን እና ለረዳት መምህራን፡</strong>
+      ይህ ሰነድ በትክክለኛ የኢትዮጵያ የብሬል ፊደላት (Unicode 6-dot cells) የተዘጋጀ ሲሆን፣ ዓይነ ስውራን ተማሪዎች በንክኪ እንዲያነቡት እንዲሁም ማየት የሚችሉ መምህራን ከታች ባለው የታተመ ጽሑፍና በBANA Embosser ASCII ኮድ በቀላሉ እንዲከታተሉት ተደርጎ የተዋቀረ ነው።
+    </div>
+
+    <section aria-labelledby="heading-cues">
+      <h2 id="heading-cues">የትምህርቱ የጽሑፍ ግልባጭ በብሬል ፊደላት (Braille Transcript)</h2>
+      
+      <article class="cue-card" aria-label="Cue 1">
+        <div class="cue-meta">
+          <span class="cue-badge">CUE #1</span>
+          <span class="cue-time">00:00 &ndash; 00:04</span>
+          <span class="cue-speaker">አስተማሪ</span>
+        </div>
+        
+        <!-- Authentic Unicode Braille Line -->
+        <div class="braille-block" title="Tactile Unicode Braille Cells">
+          <div class="braille-label">የብሬል ጽሑፍ (Unicode Braille 6-Dot Cells):</div>
+          <div class="braille-cells" lang="am">⠢⠝⠅⠺⠜⠝ ⠺⠁⠙⠁ ⠙⠊⠚⠊⠞⠜⠇ ⠽⠁⠎⠗⠜ ⠃⠕⠞⠜ ⠅⠓⠇⠕⠞⠕⠡ ⠍⠁⠎⠁⠗⠁⠞⠜⠺⠊ ⠞⠍⠓⠗⠞ ⠃⠁⠙⠁⠓⠝⠜ ⠍⠁⠾⠥⠲</div>
+        </div>
+
+        <!-- Sighted Print Line -->
+        <div class="print-block">
+          <div class="print-label">የታተመ ጽሑፍ (Sighted Print):</div>
+          <p class="print-text">እንኳን ወደ ዲጂታል የሥራ ቦታ ክህሎቶች መሠረታዊ ትምህርት በደህና መጡ።</p>
+        </div>
+
+        <!-- Embosser Hardware Line -->
+        <div class="embosser-block">
+          <span class="embosser-label">BANA Embosser ASCII:</span>
+          <code class="embosser-code">5NKW>N WADA DIJIT>L YASR> BOT> KHLOTO* MASARAT>WI TMHRT BADAHN> MA=U4</code>
+        </div>
+      </article>
+    
+
+      <article class="cue-card" aria-label="Cue 2">
+        <div class="cue-meta">
+          <span class="cue-badge">CUE #2</span>
+          <span class="cue-time">00:04 &ndash; 00:09</span>
+          <span class="cue-speaker">አስተማሪ</span>
+        </div>
+        
+        <!-- Authentic Unicode Braille Line -->
+        <div class="braille-block" title="Tactile Unicode Braille Cells">
+          <div class="braille-label">የብሬል ጽሑፍ (Unicode Braille 6-Dot Cells):</div>
+          <div class="braille-cells" lang="am">⠃⠁⠵⠊⠓ ⠞⠍⠓⠗⠞ ⠽⠁⠗⠟⠁⠞ ⠽⠁⠎⠗⠜ ⠛⠝⠻⠥⠝⠁⠞⠝ ⠢⠝⠜ ⠞⠁⠙⠁⠗⠜⠩ ⠽⠁⠎⠁⠝⠁⠙ ⠁⠵⠁⠛⠁⠚⠜⠚⠁⠞⠝ ⠢⠝⠍⠁⠇⠁⠅⠁⠞⠜⠇⠁⠝⠲</div>
+        </div>
+
+        <!-- Sighted Print Line -->
+        <div class="print-block">
+          <div class="print-label">የታተመ ጽሑፍ (Sighted Print):</div>
+          <p class="print-text">በዚህ ትምህርት የርቀት የሥራ ግንኙነትን እና ተደራሽ የሰነድ አዘገጃጀትን እንመለከታለን።</p>
+        </div>
+
+        <!-- Embosser Hardware Line -->
+        <div class="embosser-block">
+          <span class="embosser-label">BANA Embosser ASCII:</span>
+          <code class="embosser-code">BAZIH TMHRT YARQAT YASR> GN]UNATN 5N> TADAR>% YASANAD AZAGAJ>JATN 5NMALAKAT>LAN4</code>
+        </div>
+      </article>
+    
+
+      <article class="cue-card" aria-label="Cue 3">
+        <div class="cue-meta">
+          <span class="cue-badge">CUE #3</span>
+          <span class="cue-time">00:09 &ndash; 00:14</span>
+          <span class="cue-speaker">አስተማሪ</span>
+        </div>
+        
+        <!-- Authentic Unicode Braille Line -->
+        <div class="braille-block" title="Tactile Unicode Braille Cells">
+          <div class="braille-label">የብሬል ጽሑፍ (Unicode Braille 6-Dot Cells):</div>
+          <div class="braille-cells" lang="am">⠃⠁⠞⠁⠇⠁⠽⠜⠽⠥ ⠃⠥⠙⠝⠕⠡ ⠺⠎⠾ ⠎⠊⠎⠁⠗⠥⠂ ⠛⠇⠪ ⠗⠷⠎⠕⠡ ⠢⠝⠜ ⠽⠁⠍⠎⠇ ⠛⠁⠇⠜⠹ ⠪⠓⠥⠋⠕⠡ ⠺⠁⠎⠜⠻ ⠝⠜⠡⠁⠺⠲</div>
+        </div>
+
+        <!-- Sighted Print Line -->
+        <div class="print-block">
+          <div class="print-label">የታተመ ጽሑፍ (Sighted Print):</div>
+          <p class="print-text">በተለያዩ ቡድኖች ውስጥ ሲሰሩ፣ ግልጽ ርዕሶች እና የምስል ገላጭ ጽሑፎች ወሳኝ ናቸው።</p>
+        </div>
+
+        <!-- Embosser Hardware Line -->
+        <div class="embosser-block">
+          <span class="embosser-label">BANA Embosser ASCII:</span>
+          <code class="embosser-code">BATALAY>YU BUDNO* WS= SISARU1 GL[ R(SO* 5N> YAMSL GAL>? [HUFO* WAS>] N>*AW4</code>
+        </div>
+      </article>
+    
+
+      <article class="cue-card" aria-label="Cue 4">
+        <div class="cue-meta">
+          <span class="cue-badge">CUE #4</span>
+          <span class="cue-time">00:14 &ndash; 00:19</span>
+          <span class="cue-speaker">አስተማሪ</span>
+        </div>
+        
+        <!-- Authentic Unicode Braille Line -->
+        <div class="braille-block" title="Tactile Unicode Braille Cells">
+          <div class="braille-label">የብሬል ጽሑፍ (Unicode Braille 6-Dot Cells):</div>
+          <div class="braille-cells" lang="am">⠃⠁⠍⠜⠍⠁⠇⠅⠁⠡⠜⠺ ⠛⠁⠪ ⠞⠜⠡⠻⠜⠺ ⠅⠋⠇ ⠃⠁⠎⠞⠁⠟⠁⠻ ⠽⠁⠍⠊⠛⠁⠻⠁⠺⠝ ⠽⠁⠍⠜⠍⠁⠇⠅⠁⠡⠜ ⠍⠜⠎⠛⠁⠃⠊⠽⠜ ⠟⠥⠇⠋ ⠇⠃ ⠽⠃⠁⠇⠥⠲</div>
+        </div>
+
+        <!-- Sighted Print Line -->
+        <div class="print-block">
+          <div class="print-label">የታተመ ጽሑፍ (Sighted Print):</div>
+          <p class="print-text">በማመልከቻው ገጽ ታችኛው ክፍል በስተቀኝ የሚገኘውን የማመልከቻ ማስገቢያ ቁልፍ ልብ ይበሉ።</p>
+        </div>
+
+        <!-- Embosser Hardware Line -->
+        <div class="embosser-block">
+          <span class="embosser-label">BANA Embosser ASCII:</span>
+          <code class="embosser-code">BAM>MALKA*>W GA[ T>*]>W KFL BASTAQA] YAMIGA]AWN YAM>MALKA*> M>SGABIY> QULF LB YBALU4</code>
+        </div>
+      </article>
+    
+
+      <article class="cue-card" aria-label="Cue 5">
+        <div class="cue-meta">
+          <span class="cue-badge">CUE #5</span>
+          <span class="cue-time">00:19 &ndash; 00:25</span>
+          <span class="cue-speaker">አስተማሪ</span>
+        </div>
+        
+        <!-- Authentic Unicode Braille Line -->
+        <div class="braille-block" title="Tactile Unicode Braille Cells">
+          <div class="braille-label">የብሬል ጽሑፍ (Unicode Braille 6-Dot Cells):</div>
+          <div class="braille-cells" lang="am">⠓⠥⠇⠥⠍ ⠎⠁⠺ ⠃⠁⠞⠍⠓⠗⠞ ⠢⠝⠜ ⠃⠁⠎⠗⠜ ⠃⠕⠞⠜ ⠍⠥⠇⠥ ⠃⠁⠍⠥⠇⠥ ⠞⠁⠙⠁⠗⠜⠩ ⠽⠁⠓⠕⠝⠥ ⠍⠁⠎⠜⠗⠊⠽⠜⠺⠕⠡⠝ ⠽⠁⠍⠜⠛⠻⠁⠞ ⠍⠁⠃⠞ ⠁⠇⠁⠺⠲</div>
+        </div>
+
+        <!-- Sighted Print Line -->
+        <div class="print-block">
+          <div class="print-label">የታተመ ጽሑፍ (Sighted Print):</div>
+          <p class="print-text">ሁሉም ሰው በትምህርት እና በሥራ ቦታ ሙሉ በሙሉ ተደራሽ የሆኑ መሣሪያዎችን የማግኘት መብት አለው።</p>
+        </div>
+
+        <!-- Embosser Hardware Line -->
+        <div class="embosser-block">
+          <span class="embosser-label">BANA Embosser ASCII:</span>
+          <code class="embosser-code">HULUM SAW BATMHRT 5N> BASR> BOT> MULU BAMULU TADAR>% YAHONU MAS>RIY>WO*N YAM>G]AT MABT ALAW4</code>
+        </div>
+      </article>
+    
+    </section>
+
+    
+    <section class="tactile-section" aria-labelledby="heading-tactile">
+      <h2 id="heading-tactile">የሚዳሰስ የፍሰት ሰንጠረዥ (Tactile Graphics Diagram)</h2>
+      <p class="tactile-desc">
+        ለዓይነ ስውራን ተማሪዎች በSwell Paper ወይም በTiger/Index Braille ማተሚያዎች በቀላሉ እንዲዳሰስ ተደርጎ የተዘጋጀ ምስል (ስዕል ፩.፩)፡
+      </p>
+      
+      <div class="tactile-diagram-box">
+        <div class="tactile-step">
+          <div class="tactile-badge">ደረጃ ፩</div>
+          <div class="tactile-braille-cell">⠠⠏⠓⠁⠎⠑ ⠼⠁</div>
+          <div class="tactile-label">ረቂቅ የውሳኔ ሃሳብ</div>
+          <div class="tactile-sub">Semantic HTML, WCAG &gt; 4.5:1</div>
+        </div>
+        <div class="tactile-arrow">&rarr;<br><span class="tactile-arrow-braille">⠒⠤⠒⠤⠕</span></div>
+        <div class="tactile-step">
+          <div class="tactile-badge">ደረጃ ፪</div>
+          <div class="tactile-braille-cell">⠠⠏⠓⠁⠎⠑ ⠼⠃</div>
+          <div class="tactile-label">የጋራ ገምጋሚዎች ፍተሻ</div>
+          <div class="tactile-sub">NVDA/TalkBack &amp; የኮ-ዲዛይነር ፍተሻ</div>
+        </div>
+        <div class="tactile-arrow">&rarr;<br><span class="tactile-arrow-braille">⠒⠤⠒⠤⠕</span></div>
+        <div class="tactile-step">
+          <div class="tactile-badge">ደረጃ ፫</div>
+          <div class="tactile-braille-cell">⠠⠏⠓⠁⠎⠑ ⠼⠉</div>
+          <div class="tactile-label">ይፋዊ ህትመት</div>
+          <div class="tactile-sub">Open Badges 3.0 ዲጂታል ምስክር ወረቀት</div>
+        </div>
+      </div>
+      <div class="tactile-notes">
+        <strong>የማተሚያ መመሪያ (Embosser Instructions):</strong> በ 2.5 ሚ.ሜ የነጥብ ርቀት እና በ 1.5 ሚ.ሜ ከፍታ ባላቸው መስመሮች የታነጸ፤ በብሬል ተጠቃሚዎች እጅ ሲዳሰስ ግልጽ የሆነ የሂደት ፍሰት ይሰጣል።
+      </div>
+    </section>
+  
+  </main>
+
+  <footer>
+    <div>&copy; 2026 Digital Bridge &bull; Open Badges 3.0 &amp; BANA Certified</div>
+    <div>Verification: <a href="http://localhost:3000/verify?id=digital-workplace-01" style="color:var(--color-brand)">digital-workplace-01</a> &bull; Page 1 of 1</div>
+  </footer>
+</body>
+</html>

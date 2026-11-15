@@ -18,20 +18,83 @@ export const UNICODE_BRAILLE_MAP: Record<string, string> = {
 
 // Amharic Fidel Braille Transliteration Base (Ethiopian Braille Grade 1)
 export const ETHIOPIC_BRAILLE_MAP: Record<string, string> = {
+  // ሀ (h)
   "ሀ": "⠓⠁", "ሁ": "⠓⠥", "ሂ": "⠓⠊", "ሃ": "⠓⠜", "ሄ": "⠓⠑", "ህ": "⠓", "ሆ": "⠓⠕",
+  // ለ (l)
   "ለ": "⠇⠁", "ሉ": "⠇⠥", "ሊ": "⠇⠊", "ላ": "⠇⠜", "ሌ": "⠇⠑", "ል": "⠇", "ሎ": "⠇⠕",
+  // ሐ (h)
+  "ሐ": "⠓⠁", "ሑ": "⠓⠥", "ሒ": "⠓⠊", "ሓ": "⠓⠜", "ሔ": "⠓⠑", "ሕ": "⠓", "ሖ": "⠓⠕",
+  // መ (m)
   "መ": "⠍⠁", "ሙ": "⠍⠥", "ሚ": "⠍⠊", "ማ": "⠍⠜", "ሜ": "⠍⠑", "ም": "⠍", "ሞ": "⠍⠕",
+  // ሠ (s)
+  "ሠ": "⠎⠁", "ሡ": "⠎⠥", "ሢ": "⠎⠊", "ሣ": "⠎⠜", "ሤ": "⠎⠑", "ሥ": "⠎", "ሦ": "⠎⠕",
+  // ረ (r)
   "ረ": "⠗⠁", "ሩ": "⠗⠥", "ሪ": "⠗⠊", "ራ": "⠗⠜", "ሬ": "⠗⠑", "ር": "⠗", "ሮ": "⠗⠕",
+  // ሰ (s)
   "ሰ": "⠎⠁", "ሱ": "⠎⠥", "ሲ": "⠎⠊", "ሳ": "⠎⠜", "ሴ": "⠎⠑", "ስ": "⠎", "ሶ": "⠎⠕",
+  // ሸ (sh)
+  "ሸ": "⠩⠁", "ሹ": "⠩⠥", "ሺ": "⠩⠊", "ሻ": "⠩⠜", "ሼ": "⠩⠑", "ሽ": "⠩", "ሾ": "⠩⠕",
+  // ቀ (q)
+  "ቀ": "⠟⠁", "ቁ": "⠟⠥", "ቂ": "⠟⠊", "ቃ": "⠟⠜", "ቄ": "⠟⠑", "ቅ": "⠟", "ቆ": "⠟⠕",
+  // በ (b)
   "በ": "⠃⠁", "ቡ": "⠃⠥", "ቢ": "⠃⠊", "ባ": "⠃⠜", "ቤ": "⠃⠑", "ብ": "⠃", "ቦ": "⠃⠕",
+  // ቨ (v)
+  "ቨ": "⠧⠁", "ቩ": "⠧⠥", "ቪ": "⠧⠊", "ቫ": "⠧⠜", "ቬ": "⠧⠑", "ቭ": "⠧", "ቮ": "⠧⠕",
+  // ተ (t)
   "ተ": "⠞⠁", "ቱ": "⠞⠥", "ቲ": "⠞⠊", "ታ": "⠞⠜", "ቴ": "⠞⠑", "ት": "⠞", "ቶ": "⠞⠕",
+  // ቸ (ch)
+  "ቸ": "⠡⠁", "ቹ": "⠡⠥", "ቺ": "⠡⠊", "ቻ": "⠡⠜", "ቼ": "⠡⠑", "ች": "⠡", "ቾ": "⠡⠕",
+  // ኀ (h)
+  "ኀ": "⠭⠁", "ኁ": "⠭⠥", "ኂ": "⠭⠊", "ኃ": "⠭⠜", "ኄ": "⠭⠑", "ኅ": "⠭", "ኆ": "⠭⠕",
+  // ነ (n)
+  "ነ": "⠝⠁", "ኑ": "⠝⠥", "ኒ": "⠝⠊", "ና": "⠝⠜", "ኔ": "⠝⠑", "ን": "⠝", "ኖ": "⠝⠕",
+  // ኘ (ny)
+  "ኘ": "⠻⠁", "ኙ": "⠻⠥", "ኚ": "⠻⠊", "ኛ": "⠻⠜", "ኜ": "⠻⠑", "ኝ": "⠻", "ኞ": "⠻⠕",
+  // አ (a)
   "አ": "⠁", "ኡ": "⠥", "ኢ": "⠊", "ኣ": "⠜", "ኤ": "⠑", "እ": "⠢", "ኦ": "⠕",
+  // ከ (k)
+  "ከ": "⠅⠁", "ኩ": "⠅⠥", "ኪ": "⠅⠊", "ካ": "⠅⠜", "ኬ": "⠅⠑", "ክ": "⠅", "ኮ": "⠅⠕",
+  // ኸ (kh)
+  "ኸ": "⠭⠁", "ኹ": "⠭⠥", "ኺ": "⠭⠊", "ኻ": "⠭⠜", "ኼ": "⠭⠑", "ኽ": "⠭", "ኾ": "⠭⠕",
+  // ወ (w)
+  "ወ": "⠺⠁", "ዉ": "⠺⠥", "ዊ": "⠺⠊", "ዋ": "⠺⠜", "ዌ": "⠺⠑", "ው": "⠺", "ዎ": "⠺⠕",
+  // ዐ (a)
+  "ዐ": "⠷⠁", "ዑ": "⠷⠥", "ዒ": "⠷⠊", "ዓ": "⠷⠜", "ዔ": "⠷⠑", "ዕ": "⠷", "ዖ": "⠷⠕",
+  // ዘ (z)
+  "ዘ": "⠵⠁", "ዙ": "⠵⠥", "ዚ": "⠵⠊", "ዛ": "⠵⠜", "ዜ": "⠵⠑", "ዝ": "⠵", "ዞ": "⠵⠕",
+  // ዠ (zh)
+  "ዠ": "⠮⠁", "ዡ": "⠮⠥", "ዢ": "⠮⠊", "ዣ": "⠮⠜", "ዤ": "⠮⠑", "ዥ": "⠮", "ዦ": "⠮⠕",
+  // የ (y)
   "የ": "⠽⠁", "ዩ": "⠽⠥", "ዪ": "⠽⠊", "ያ": "⠽⠜", "ዬ": "⠽⠑", "ይ": "⠽", "ዮ": "⠽⠕",
+  // ደ (d)
   "ደ": "⠙⠁", "ዱ": "⠙⠥", "ዲ": "⠙⠊", "ዳ": "⠙⠜", "ዴ": "⠙⠑", "ድ": "⠙", "ዶ": "⠙⠕",
+  // ጀ (j)
   "ጀ": "⠚⠁", "ጁ": "⠚⠥", "ጂ": "⠚⠊", "ጃ": "⠚⠜", "ጄ": "⠚⠑", "ጅ": "⠚", "ጆ": "⠚⠕",
+  // ገ (g)
   "ገ": "⠛⠁", "ጉ": "⠛⠥", "ጊ": "⠛⠊", "ጋ": "⠛⠜", "ጌ": "⠛⠑", "ግ": "⠛", "ጎ": "⠛⠕",
+  // ጠ (t')
+  "ጠ": "⠾⠁", "ጡ": "⠾⠥", "ጢ": "⠾⠊", "ጣ": "⠾⠜", "ጤ": "⠾⠑", "ጥ": "⠾", "ጦ": "⠾⠕",
+  // ጨ (ch')
+  "ጨ": "⠹⠁", "ጩ": "⠹⠥", "ጪ": "⠹⠊", "ጫ": "⠹⠜", "ጬ": "⠹⠑", "ጭ": "⠹", "ጮ": "⠹⠕",
+  // ጰ (p')
+  "ጰ": "⠯⠁", "ጱ": "⠯⠥", "ጲ": "⠯⠊", "ጳ": "⠯⠜", "ጴ": "⠯⠑", "ጵ": "⠯", "ጶ": "⠯⠕",
+  // ጸ (ts')
+  "ጸ": "⠪⠁", "ጹ": "⠪⠥", "ጺ": "⠪⠊", "ጻ": "⠪⠜", "ጼ": "⠪⠑", "ጽ": "⠪", "ጾ": "⠪⠕",
+  // ፀ (ts')
+  "ፀ": "⠪⠁", "ፁ": "⠪⠥", "ፂ": "⠪⠊", "ፃ": "⠪⠜", "ፄ": "⠪⠑", "ፅ": "⠪", "ፆ": "⠪⠕",
+  // ፈ (f)
   "ፈ": "⠋⠁", "ፉ": "⠋⠥", "ፊ": "⠋⠊", "ፋ": "⠋⠜", "ፌ": "⠋⠑", "ፍ": "⠋", "ፎ": "⠋⠕",
-  "፡": " ", "።": "⠲", "፣": "⠂", "፤": "⠆", "፥": "⠒", "፦": "⠒⠤", "፧": "⠦"
+  // ፐ (p)
+  "ፐ": "⠏⠁", "ፑ": "⠏⠥", "ፒ": "⠏⠊", "ፓ": "⠏⠜", "ፔ": "⠏⠑", "ፕ": "⠏", "ፖ": "⠏⠕",
+  // Labialized
+  "ሏ": "⠇⠺⠜", "ሟ": "⠍⠺⠜", "ሯ": "⠗⠺⠜", "ሷ": "⠎⠺⠜", "ሿ": "⠩⠺⠜", "ቋ": "⠟⠺⠜",
+  "ቧ": "⠃⠺⠜", "ቷ": "⠞⠺⠜", "ቿ": "⠡⠺⠜", "ኗ": "⠝⠺⠜", "ኟ": "⠻⠺⠜", "ኳ": "⠅⠺⠜",
+  "ዟ": "⠵⠺⠜", "ዧ": "⠮⠺⠜", "ዷ": "⠙⠺⠜", "ጇ": "⠚⠺⠜", "ጧ": "⠾⠺⠜", "ጯ": "⠹⠺⠜",
+  "ጷ": "⠯⠺⠜", "ጿ": "⠪⠺⠜", "ፏ": "⠋⠺⠜",
+  // Numerals & Punctuation
+  "፡": " ", "።": "⠲", "፣": "⠂", "፤": "⠆", "፥": "⠒", "፦": "⠒⠤", "፧": "⠦", "፨": "⠶",
+  "፩": "⠼⠁", "፪": "⠼⠃", "፫": "⠼⠉", "፬": "⠼⠙", "፭": "⠼⠑",
+  "፮": "⠼⠋", "፯": "⠼⠛", "፰": "⠼⠓", "፱": "⠼⠊", "፲": "⠼⠚"
 };
 
 export function toUnicodeBraille(text: string): string {
@@ -59,29 +122,22 @@ export function toUnicodeBraille(text: string): string {
   return out;
 }
 
+// Standard 64-character North American Braille ASCII table for 6-dot cells (offset 0..63 from U+2800)
+export const BRAILLE_ASCII_TABLE = " A1B'K2L@CIF/MSP\"E3H9O6R^DJG>NTQ,*5<-U8V.%[$+X!&:;4\\0Z7(_?W]#Y=)";
+
 export function toAsciiBraille(text: string): string {
+  const brailleCells = /[\u2800-\u28FF]/.test(text) ? text : toUnicodeBraille(text);
   let res = "";
-  for (let i = 0; i < text.length; i++) {
-    const ch = text[i];
-    if (ch >= "A" && ch <= "Z") {
-      res += "," + ch;
-    } else if (ch >= "0" && ch <= "9") {
-      if (i === 0 || !/[0-9]/.test(text[i - 1])) res += "#";
-      res += String.fromCharCode(ch.charCodeAt(0) + 16);
-    } else if (ch === ".") {
-      res += "4";
-    } else if (ch === ",") {
-      res += "1";
-    } else if (ch === ";") {
-      res += "2";
-    } else if (ch === ":") {
-      res += "3";
-    } else if (ch === "!") {
-      res += "6";
-    } else if (ch === "?") {
-      res += "8";
+  for (let i = 0; i < brailleCells.length; i++) {
+    const code = brailleCells.charCodeAt(i);
+    if (code >= 0x2800 && code <= 0x283F) {
+      res += BRAILLE_ASCII_TABLE[code - 0x2800] || " ";
+    } else if (code === 0x20 || brailleCells[i] === " ") {
+      res += " ";
+    } else if (brailleCells[i] === "\n" || brailleCells[i] === "\r") {
+      res += brailleCells[i];
     } else {
-      res += ch;
+      res += brailleCells[i];
     }
   }
   return res;
@@ -167,9 +223,16 @@ export function generateBRFDocument(opts: BRFOptions): string {
 
     lines.push(`[#${cueNum} ${startM}:${startS}-${endM}:${endS} ${speaker}]`);
     
-    // ASCII Braille conversion
-    const asciiText = toAsciiBraille(seg.text);
-    lines.push(...wrapBrailleLines(asciiText, maxCells));
+    // Genuine Unicode Braille Patterns for refreshable braille displays & visual inspection
+    const unicodeBraille = toUnicodeBraille(seg.text);
+    lines.push(...wrapBrailleLines(unicodeBraille, maxCells));
+
+    // Interlined print line for sighted educators & transcribers
+    lines.push(...wrapBrailleLines(`TEXT: ${seg.text}`, maxCells));
+
+    // Hardware embosser line (BANA 40x25 ASCII Braille)
+    const asciiBraille = toAsciiBraille(unicodeBraille);
+    lines.push(...wrapBrailleLines(`EMBOSSER: ${asciiBraille}`, maxCells));
     lines.push("");
   }
 

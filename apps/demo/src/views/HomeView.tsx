@@ -1,17 +1,152 @@
 import React, { useEffect, useState } from "react";
 import { AccessibleJob } from "@abugida/lesson-schema";
+import { SupportedLocale, getTranslation } from "@abugida/media-kit";
 import { NavLink } from "../router";
 import { JobCardItem } from "../components/JobCardItem";
 import { IconExternal } from "../components/Icons";
 
 interface HomeViewProps {
-  locale: "en" | "am";
+  locale: SupportedLocale;
 }
+
+const HOME_TEXTS: Record<SupportedLocale, {
+  heroTitle: string;
+  heroDesc: string;
+  openLesson: string;
+  openStudio: string;
+  scriptEmbed: string;
+  adoptionHeading: string;
+  l1Title: string;
+  l1Desc: string;
+  l1Btn: string;
+  l2Title: string;
+  l2Desc: string;
+  l2Online: string;
+  l2Offline: string;
+  l3Title: string;
+  l3Desc: string;
+  l3Btn: string;
+  careerHeading: string;
+  careerDesc: string;
+  noticeTitle: string;
+  noticeDesc: string;
+}> = {
+  en: {
+    heroTitle: "Build what works for everyone. Then everyone gets to work.",
+    heroDesc: "Abugida Media Kit provides embeddable web components for learning platforms and job boards: keyboard-operated media, customizable subtitles in Ethiopian national languages, synchronized Ethiopian Sign Language, audio descriptions, lightweight 3G offline packages, and 200% zoom-resilient career cards.",
+    openLesson: "Open Accessible Lesson",
+    openStudio: "Open Caption Studio",
+    scriptEmbed: "Script Tag Embed",
+    adoptionHeading: "Adoption & Integration Levels",
+    l1Title: "Level 1: Script Tag Drop-in",
+    l1Desc: "Embed the player on any web page or LMS with a single line of HTML. Zero build steps required.",
+    l1Btn: "View Embed Code",
+    l2Title: "Level 2: REST API Pipeline",
+    l2Desc: "Local FastAPI transcription and manifest pipeline with full OpenAPI 3.0 documentation.",
+    l2Online: "API Online",
+    l2Offline: "API Offline",
+    l3Title: "Level 3: Open Standards & Credentials",
+    l3Desc: "Compatible with schema.org/JobPosting microdata, standard WebVTT subtitles, and Savanna LMS.",
+    l3Btn: "Verify Credential",
+    careerHeading: "Career Gateway: Accessible Opportunities",
+    careerDesc: "Opportunities with verified accommodation disclosures and 200% zoom reflow guarantee:",
+    noticeTitle: "Demonstration Notice:",
+    noticeDesc: "This demonstration environment uses mock fixtures and local test media. All credentials and job postings are strictly demonstration data."
+  },
+  am: {
+    heroTitle: "ለሁሉም የሚሰራ ነገር ይገንቡ። ከዚያ ሁሉም ወደ ሥራ ይገባል።",
+    heroDesc: "አቡጊዳ ሚዲያ ኪት ለትምህርት መድረኮች እና ለሥራ ማስታወቂያ ሰሌዳዎች ተደራሽ የሆኑ የድር ክፍሎችን ያቀርባል፡ በኪቦርድ ብቻ የሚሰሩ ተጫዋቾች፣ በኢትዮጵያ ብሔራዊ ቋንቋዎች የተዘጋጁ የትርጉም ጽሑፎች፣ የኢትዮጵያ ምልክት ቋንቋ መስኮት፣ የድምፅ ማብራሪያ፣ ዝቅተኛ ዳታ 3G ጥቅል እና 200% ማጉላትን የሚቋቋሙ የሥራ ካርዶች።",
+    openLesson: "ተደራሽ ትምህርቱን ይክፈቱ",
+    openStudio: "የትርጉም ስቱዲዮ ይክፈቱ",
+    scriptEmbed: "የስክሪፕት ታግ ማካተቻ",
+    adoptionHeading: "የማካተት እና የማዋሃድ ደረጃዎች",
+    l1Title: "ደረጃ 1፡ የስክሪፕት ታግ ማካተቻ",
+    l1Desc: "በማንኛውም የድር ገጽ ወይም LMS (Savanna, Moodle) ላይ በአንድ መስመር HTML ኮድ በቀላሉ ይጫኑ። ምንም ተጨማሪ የግንባታ ቅድመ ሁኔታ የለውም።",
+    l1Btn: "የማካተቻ ኮዱን ይመልከቱ",
+    l2Title: "ደረጃ 2፡ የ REST ኤፒአይ ሰነዶች",
+    l2Desc: "የአካባቢ ፈጣን FastAPI የድምፅ ትርጉም አገልግሎት ከሙሉ OpenAPI 3.0 Swagger ሰነዶች ጋር።",
+    l2Online: "ኤፒአይ ኦንላይን",
+    l2Offline: "ከመስመር ውጭ",
+    l3Title: "ደረጃ 3፡ ክፍት ደረጃዎች እና ምስክር ወረቀት",
+    l3Desc: "ከ schema.org/JobPosting ማይክሮዳታ፣ መደበኛ WebVTT ንዑስ ርዕሶች እና ከሳቫና LMS ማረጋገጫ ጋር ሙሉ ተኳሃኝ።",
+    l3Btn: "የምስክር ወረቀት አረጋግጥ",
+    careerHeading: "የሥራ መግቢያ በር፡ ክፍት የሥራ ዕድሎች",
+    careerDesc: "200% ማጉላት እና የድምፅ ማጠቃለያ ያላቸው ክፍት የሥራ መደቦች፡",
+    noticeTitle: "ማስታወሻ፡",
+    noticeDesc: "ይህ የማሳያ አካባቢ የአካባቢ ሙከራ ፋይሎችን እና ምሳሌዎችን ይጠቀማል። ሁሉም ምስክር ወረቀቶች እና የሥራ ማስታወቂያዎች ለውድድሩ ማሳያ ብቻ የቀረቡ ናቸው።"
+  },
+  om: {
+    heroTitle: "Waan hundaaf ta'u ijaaraa. Sana booda hunduu gara hojiitti gala.",
+    heroDesc: "Abugida Media Kit meeshaalee weebii maxxanfamoo ta'an kanneen akka taaphachiisaa kiiboordiidhaan hojjetu, barreeffama afaanoota Itoophiyaa, Afaan Mallattoo Itoophiyaa, ibsa sagalee, kuusaa 3G fi kaardii hojii dhiyeessa.",
+    openLesson: "Barnoota Hundaaf Mijataa Bani",
+    openStudio: "Istuudiyoo Jechootaa Bani",
+    scriptEmbed: "Koodii Maxxansaa",
+    adoptionHeading: "Sadarkaalee Walitti Makuu fi Fayyadamaa",
+    l1Title: "Sadarkaa 1: Maxxansa Koodii HTML",
+    l1Desc: "Sarara HTML tokkoon fuula weebii ykn sirna LMS kamiyyuu irratti salphatti maxxansaa. Qophii dabalataa hin barbaadu.",
+    l1Btn: "Koodii Maxxansaa Ilaali",
+    l2Title: "Sadarkaa 2: Tajaajila REST API",
+    l2Desc: "Tajaajila sagalee gara barreeffamaatti jijjiiruu FastAPI kan dokumantii OpenAPI 3.0 guutuu qabu.",
+    l2Online: "API Hojjjechaa Jira",
+    l2Offline: "API Cufameera",
+    l3Title: "Sadarkaa 3: Ulaagaalee Banaa fi Waraqaa Ragaa",
+    l3Desc: "Ulaagaalee schema.org/JobPosting, WebVTT fi sirna mirkaneessaa Savanna LMS waliin guutummaatti kan walta'u.",
+    l3Btn: "Waraqaa Ragaa Mirkaneessi",
+    careerHeading: "Karra Hojii: Carraawwan Hundaaf Mijatan",
+    careerDesc: "Carraawwan hojii guddina 200% dandamatan fi ibsa sagalee qaban:",
+    noticeTitle: "Hubachiisa:",
+    noticeDesc: "Naannoon agarsiisaa kun qormaata fi faayiloota fakkeenyaa fayyadama. Waraqaan ragaa fi carraawwan hojii hunduu agarsiisaaf qofa kan qophaa'aniidha."
+  },
+  ti: {
+    heroTitle: "ንኹሉ ዝሰርሕ ነገር ህነጹ። ድሕሪኡ ኹሉ ናብ ስራሕ ይኣቱ።",
+    heroDesc: "አቡጊዳ ሚዲያ ኪት ንትምህርቲ መድረኻትን ናይ ስራሕ ቦርድታትን ተበጻሕቲ ዌብ ኣካላት የቕርብ፡ ብኪቦርድ ዝሰርሕ፣ ብቋንቋታት ኢትዮጵያ ጽሑፍ ትርጉም፣ ምልክት ቋንቋ፣ ድምጺ መብርሂ፣ 3G ፓኬጅን ናይ ስራሕ ካርድታትን።",
+    openLesson: "ተበጻሒ ትምህርቲ ኽፈት",
+    openStudio: "ስቱዲዮ ትርጉም ኽፈት",
+    scriptEmbed: "ናይ ስክሪፕት ታግ ምእታው",
+    adoptionHeading: "ደረጃታት ምውህሃድን ምጥቃምን",
+    l1Title: "ደረጃ 1፡ ናይ ስክሪፕት ታግ ምእታው",
+    l1Desc: "ኣብ ዝኾነ ናይ ድህረ-ገጽ ወይ LMS (Savanna, Moodle) ብሓንቲ መስመር HTML ኮድ ብቐሊሉ ጽዓኑ። ተወሳኺ ህንጸት ኣየድልዮን።",
+    l1Btn: "ናይ ምእታው ኮድ ርአ",
+    l2Title: "ደረጃ 2፡ ናይ REST ኤፒአይ ሰነዳት",
+    l2Desc: "ናይ ከባቢ ፈጣን FastAPI ናይ ድምጺ ትርጉም ኣገልግሎት ምስ ምሉእ OpenAPI 3.0 Swagger ሰነዳት።",
+    l2Online: "ኤፒአይ ኦንላይን",
+    l2Offline: "ካብ መስመር ወጻኢ",
+    l3Title: "ደረጃ 3፡ ክፉት መዐቀኒታትን ምስክር ወረቐትን",
+    l3Desc: "ምስ schema.org/JobPosting ማይክሮዳታ፣ መደበኛ WebVTT ንኡስ ኣርእስታትን ሳቫና LMS መረጋገጽን ምሉእ ብምሉእ ዝሰማማዕ።",
+    l3Btn: "ምስክር ወረቐት ኣረጋግጽ",
+    careerHeading: "ናይ ስራሕ መእተዊ ማዕጾ፡ ክፍቲ ናይ ስራሕ ዕድላት",
+    careerDesc: "200% ምዕባይን ናይ ድምጺ ሓጺር መብርህን ዘለዎም ክፍቲ ናይ ስራሕ መደባት፡",
+    noticeTitle: "መተሓሳሰቢ፡",
+    noticeDesc: "እዚ ናይ መርኣያ ከባቢ ናይ ፈተነ ፋይላትን ኣብነታትን ይጥቀም። ኩሎም ምስክር ወረቐታትን ናይ ስራሕ ምልክታታትን ንመርኣያ ውድድር ጥራይ ዝቐረቡ እዮም።"
+  },
+  so: {
+    heroTitle: "U dhis wax u shaqeeya qof kasta. Kadib qof walba wuxuu galaa shaqo.",
+    heroDesc: "Abugida Media Kit wuxuu bixiyaa qalabka shabakadda ee lagu dhejin karo goobaha waxbarashada: muuqaal-gacmeedka kiiboodhka, qoraalada luqadaha Itoobiya, luqadda dhegoolaha, sharaxaadda codka, xirmada 3G, iyo kaadhadhka shaqada.",
+    openLesson: "Fur Casharka La Heli Karo",
+    openStudio: "Fur Istuudiyaha Qoraalka",
+    scriptEmbed: "Koodhka Ku Dhejinta",
+    adoptionHeading: "Heerarka Isku-dhafka iyo Isticmaalka",
+    l1Title: "Heerka 1: Ku Dhejinta Koodhka HTML",
+    l1Desc: "Ku dheji ciyaaryahanka bog kasta oo shabakad ah ama LMS adoo isticmaalaya hal xariiq oo HTML ah. Uma baahna tallaabooyin dhisid dheeraad ah.",
+    l1Btn: "Eeg Koodhka Ku Dhejinta",
+    l2Title: "Heerka 2: Khadka Adeegga REST API",
+    l2Desc: "Adeegga qoraalka codka ee maxalliga ah ee FastAPI oo leh dukumentiyada buuxa ee OpenAPI 3.0.",
+    l2Online: "API-ga Wuu Shaqaynayaa",
+    l2Offline: "API-ga Wuu Dansan Yahay",
+    l3Title: "Heerka 3: Halbeegyada Furan & Shahaadooyinka",
+    l3Desc: "La jaanqaadi kara xogta schema.org/JobPosting, qoraallada WebVTT, iyo xaqiijinta Savanna LMS.",
+    l3Btn: "Xaqiiji Shahaadada",
+    careerHeading: "Albaabka Shaqada: Fursadaha La Heli Karo",
+    careerDesc: "Fursadaha leh qoraalada la xaqiijiyay iyo dammaanadda weyneynta 200%:",
+    noticeTitle: "Ogeysiis Muhiim ah:",
+    noticeDesc: "Deegaankan tusaalaha ah wuxuu isticmaalaa xogta tijaabada ah. Dhammaan shahaadooyinka iyo xayeysiisyada shaqada waxaa loogu talagalay oo kaliya bandhigga tartanka."
+  }
+};
 
 export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
   const [jobs, setJobs] = useState<AccessibleJob[]>([]);
   const [apiOnline, setApiOnline] = useState<boolean | null>(null);
-  const isAm = locale === "am";
+  const t = HOME_TEXTS[locale] || HOME_TEXTS.en;
 
   useEffect(() => {
     // Fetch local demonstration jobs
@@ -41,9 +176,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
             letterSpacing: "-0.015em",
           }}
         >
-          {isAm
-            ? "ለሁሉም የሚሰራ ነገር ይገንቡ። ከዚያ ሁሉም ወደ ሥራ ይገባል።"
-            : "Build what works for everyone. Then everyone gets to work."}
+          {t.heroTitle}
         </h2>
         <p
           style={{
@@ -54,20 +187,18 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
             marginBottom: "2rem",
           }}
         >
-          {isAm
-            ? "አቡጊዳ ሚዲያ ኪት ለትምህርት መድረኮች እና ለሥራ ማስታወቂያ ሰሌዳዎች ተደራሽ የሆኑ የድር ክፍሎችን ያቀርባል፡ በኪቦርድ ብቻ የሚሰሩ ተጫዋቾች፣ የአማርኛ እና የእንግሊዝኛ የትርጉም ጽሑፎች፣ የኢትዮጵያ ምልክት ቋንቋ መስኮት፣ የድምፅ ማብራሪያ፣ ዝቅተኛ ዳታ 3G ጥቅል እና 200% ማጉላትን የሚቋቋሙ የሥራ ካርዶች።"
-            : "Abugida Media Kit provides embeddable web components for learning platforms and job boards: keyboard-operated media, customizable Amharic & English captions, synchronized Ethiopian Sign Language, audio descriptions, lightweight 3G offline packages, and 200% zoom-resilient career cards."}
+          {t.heroDesc}
         </p>
 
         <div style={{ display: "flex", gap: "0.85rem", flexWrap: "wrap", alignItems: "center" }}>
           <NavLink to="/lesson" className="btn btn-primary">
-            {isAm ? "ተደራሽ ትምህርቱን ይክፈቱ" : "Open Accessible Lesson"}
+            {t.openLesson}
           </NavLink>
           <NavLink to="/studio" className="btn btn-outline">
-            {isAm ? "የትርጉም ስቱዲዮ ይክፈቱ" : "Open Transcript Studio"}
+            {t.openStudio}
           </NavLink>
           <NavLink to="/embed" className="btn btn-secondary">
-            {isAm ? "የስክሪፕት ታግ ማካተቻ" : "Script Tag Embed"}
+            {t.scriptEmbed}
           </NavLink>
         </div>
       </section>
@@ -84,7 +215,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
             letterSpacing: "-0.008em",
           }}
         >
-          {isAm ? "የማካተት እና የማዋሃድ ደረጃዎች" : "Adoption & Integration Levels"}
+          {t.adoptionHeading}
         </h3>
 
         <div
@@ -101,12 +232,10 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
                 <span className="badge badge-brand">Level 1</span>
               </div>
               <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "1.15rem", color: "var(--color-ink)", fontWeight: 600 }}>
-                {isAm ? "ደረጃ 1፡ የስክሪፕት ታግ ማካተቻ" : "Level 1: Script Tag Drop-in"}
+                {t.l1Title}
               </h4>
               <p style={{ margin: 0, fontSize: "14px", color: "var(--color-muted-ink)", lineHeight: 1.55 }}>
-                {isAm
-                  ? "በማንኛውም የድር ገጽ ወይም LMS (Savanna, Moodle) ላይ በአንድ መስመር HTML ኮድ በቀላሉ ይጫኑ። ምንም ተጨማሪ የግንባታ ቅድመ ሁኔታ የለውም።"
-                  : "Embed the player on any web page or LMS with a single line of HTML. Zero build steps required."}
+                {t.l1Desc}
               </p>
             </div>
             <div style={{ marginTop: "1.5rem" }}>
@@ -115,7 +244,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
                 className="btn btn-outline"
                 style={{ fontSize: "14px", padding: "0.5rem 1rem", minHeight: "38px", width: "100%" }}
               >
-                {isAm ? "የማካተቻ ኮዱን ይመልከቱ" : "View Embed Code"}
+                {t.l1Btn}
               </NavLink>
             </div>
           </div>
@@ -127,17 +256,15 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
                 <span className="badge badge-brand">Level 2</span>
                 {apiOnline !== null && (
                   <span className={`badge ${apiOnline ? "badge-success" : "badge-neutral"}`}>
-                    {apiOnline ? (isAm ? "ኦንላይን" : "API Online") : (isAm ? "ከመስመር ውጭ" : "API Offline")}
+                    {apiOnline ? t.l2Online : t.l2Offline}
                   </span>
                 )}
               </div>
               <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "1.15rem", color: "var(--color-ink)", fontWeight: 600 }}>
-                {isAm ? "ደረጃ 2፡ የ REST ኤፒአይ ሰነዶች" : "Level 2: REST API Pipeline"}
+                {t.l2Title}
               </h4>
               <p style={{ margin: 0, fontSize: "14px", color: "var(--color-muted-ink)", lineHeight: 1.55 }}>
-                {isAm
-                  ? "የአካባቢ ፈጣን FastAPI የድምፅ ትርጉም አገልግሎት ከሙሉ OpenAPI 3.0 Swagger ሰነዶች ጋር።"
-                  : "Local FastAPI transcription and manifest pipeline with full OpenAPI 3.0 documentation."}
+                {t.l2Desc}
               </p>
             </div>
             <div style={{ marginTop: "1.5rem" }}>
@@ -161,12 +288,10 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
                 <span className="badge badge-brand">Level 3</span>
               </div>
               <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "1.15rem", color: "var(--color-ink)", fontWeight: 600 }}>
-                {isAm ? "ደረጃ 3፡ ክፍት ደረጃዎች እና ምስክር ወረቀት" : "Level 3: Open Standards & Credentials"}
+                {t.l3Title}
               </h4>
               <p style={{ margin: 0, fontSize: "14px", color: "var(--color-muted-ink)", lineHeight: 1.55 }}>
-                {isAm
-                  ? "ከ schema.org/JobPosting ማይክሮዳታ፣ መደበኛ WebVTT ንዑስ ርዕሶች እና ከሳቫና LMS ማረጋገጫ ጋር ሙሉ ተኳሃኝ።"
-                  : "Compatible with schema.org/JobPosting microdata, standard WebVTT subtitles, and Savanna LMS."}
+                {t.l3Desc}
               </p>
             </div>
             <div style={{ marginTop: "1.5rem" }}>
@@ -175,7 +300,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
                 className="btn btn-outline"
                 style={{ fontSize: "14px", padding: "0.5rem 1rem", minHeight: "38px", width: "100%" }}
               >
-                {isAm ? "የምስክር ወረቀት አረጋግጥ" : "Verify Credential"}
+                {t.l3Btn}
               </NavLink>
             </div>
           </div>
@@ -205,12 +330,10 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
                 letterSpacing: "-0.008em",
               }}
             >
-              {isAm ? "የሥራ መግቢያ በር፡ ክፍት የሥራ ዕድሎች" : "Career Gateway: Accessible Opportunities"}
+              {t.careerHeading}
             </h3>
             <p style={{ margin: 0, color: "var(--color-muted-ink)", fontSize: "14px" }}>
-              {isAm
-                ? "200% ማጉላት እና የድምፅ ማጠቃለያ ያላቸው ክፍት የሥራ መደቦች፡"
-                : "Opportunities with verified accommodation disclosures and 200% zoom reflow guarantee:"}
+              {t.careerDesc}
             </p>
           </div>
           <span className="badge badge-success">
@@ -236,10 +359,8 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
           color: "var(--color-muted-ink)",
         }}
       >
-        <strong style={{ color: "var(--color-ink)" }}>{isAm ? "ማስታወሻ፡" : "Demonstration Notice:"}</strong>{" "}
-        {isAm
-          ? "ይህ የማሳያ አካባቢ የአካባቢ ሙከራ ፋይሎችን እና ምሳሌዎችን ይጠቀማል። ሁሉም ምስክር ወረቀቶች እና የሥራ ማስታወቂያዎች ለውድድሩ ማሳያ ብቻ የቀረቡ ናቸው።"
-          : "This demonstration environment uses mock fixtures and local test media. All credentials and job postings are strictly demonstration data."}
+        <strong style={{ color: "var(--color-ink)" }}>{t.noticeTitle}</strong>{" "}
+        {t.noticeDesc}
       </aside>
     </div>
   );

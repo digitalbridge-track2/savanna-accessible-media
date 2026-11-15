@@ -9,6 +9,7 @@ import {
   IconCopy,
   IconCloudUpload,
 } from "../components/Icons";
+import { toUnicodeBraille, toAsciiBraille, generateBRFDocument, SupportedLocale } from "@abugida/media-kit";
 
 export interface StudioSegment {
   id: number;
@@ -68,6 +69,150 @@ const AMHARIC_SAMPLE: StudioSegment[] = [
   },
 ];
 
+const OROMO_SAMPLE: StudioSegment[] = [
+  {
+    id: 1,
+    start: 0,
+    end: 4.5,
+    speaker: "Instructor",
+    draftText: "baga gara leenjii dandeettii bakka hojii diijitaalaa nagaan dhuftan",
+    reviewedText: "Baga gara leenjii Dandeettii Bakka Hojii Diijitaalaa bu'uuraatti nagaan dhuftan.",
+    status: "reviewed",
+  },
+  {
+    id: 2,
+    start: 4.5,
+    end: 9.0,
+    speaker: "Instructor",
+    draftText: "barnoota kana keessatti qunnamtii fi sanadoota hundaaf mijatan ilaalla",
+    reviewedText: "Barnoota kana keessatti qunnamtii yerootiin hin daangeffamne fi sanadoota hundaaf mijatan ilaalla.",
+    status: "reviewed",
+  },
+  {
+    id: 3,
+    start: 9.0,
+    end: 14.2,
+    speaker: "Instructor",
+    draftText: "gareewwan faffaca'an keessatti yeroo hojjatamu mata duree sirreeffamaa qabaachuun gaariidha",
+    reviewedText: "Gareewwan faffaca'an keessatti yeroo hojjatamu, mata-dureewwan sirreeffaman fi barreeffamoonni suuraa ibsan baay'ee barbaachisoodha.",
+    status: "draft",
+  },
+  {
+    id: 4,
+    start: 14.2,
+    end: 19.5,
+    speaker: "Instructor",
+    draftText: "gara gadii mirgaatti qabduun iyyannoo galchuu qalbeeffadhaa",
+    reviewedText: "Gara gadii mirgaatti qabduun iyyannoo galchuu akkamitti akka ifee mul'atu qalbeeffadhaa.",
+    status: "draft",
+  },
+  {
+    id: 5,
+    start: 19.5,
+    end: 25.0,
+    speaker: "Instructor",
+    draftText: "namni hundi meeshaalee hundaaf mijatan argachuuf mirga qaba",
+    reviewedText: "Namni hundi barnootaa fi bakka hojiitti meeshaalee guutummaatti hundaaf mijatan argachuuf mirga qaba.",
+    status: "draft",
+  },
+];
+
+const TIGRIGNA_SAMPLE: StudioSegment[] = [
+  {
+    id: 1,
+    start: 0,
+    end: 4.5,
+    speaker: "Instructor",
+    draftText: "እንቋዕ ናብቲ ናይ ዲጂታል ስራሕ ቦታ መሰረታዊ ትምህርቲ ብደሓን መጻእኹም",
+    reviewedText: "እንቋዕ ናብ መሰረታዊ ትምህርቲ ናይ ዲጂታል ስራሕ ቦታ ክእለታት ብደሓን መጻእኹም።",
+    status: "reviewed",
+  },
+  {
+    id: 2,
+    start: 4.5,
+    end: 9.0,
+    speaker: "Instructor",
+    draftText: "ኣብዚ ትምህርቲ እዚ ናይ ርክብን ሰነዳትን ኣዘጋጅኣ ክንምርምር ኢና",
+    reviewedText: "ኣብዚ ትምህርቲ እዚ፣ ዘይቀጥታዊ ርክብን ተበጻሒ ምድላው ሰነዳትን ክንምርምር ኢና።",
+    status: "reviewed",
+  },
+  {
+    id: 3,
+    start: 9.0,
+    end: 14.2,
+    speaker: "Instructor",
+    draftText: "ኣብ ዝተፈላለዩ ጉጅለታት ክትሰርሑ ከለኹም ኣርእስታት ኣገዳሲ እዩ",
+    reviewedText: "ኣብ ዝተፈላለዩ ጉጅለታት ክትሰርሑ ከለኹም፣ ቅርጺ ዘለዎም ኣርእስታትን መግለጺ ምስልታትን ኣዝዮም ኣገደስቲ እዮም።",
+    status: "draft",
+  },
+  {
+    id: 4,
+    start: 14.2,
+    end: 19.5,
+    speaker: "Instructor",
+    draftText: "ኣብቲ ናይ መመልከቲ ገጽ ዘሎ መመልከቲ መእተዊ ቁልፊ ኣስተውዕሉ",
+    reviewedText: "ኣብቲ ናይ መመልከቲ ገጽ ታሕታይ ክፋል ብየማን ዘሎ መመልከቲ መእተዊ መጎተቲ ብኸመይ ተለልዩ ከምዘሎ ኣስተውዕሉ።",
+    status: "draft",
+  },
+  {
+    id: 5,
+    start: 19.5,
+    end: 25.0,
+    speaker: "Instructor",
+    draftText: "ነፍሲ ወከፍ ሰብ ተበጻሕቲ መሳርሒታት ናይ ምርካብ መሰል ኣለዎ",
+    reviewedText: "ነፍሲ ወከፍ ሰብ ኣብ ትምህርትን ስራሕን ምሉእ ብምሉእ ተበጻሕቲ ዝኾኑ መሳርሒታት ናይ ምርካብ መሰል ኣለዎ።",
+    status: "draft",
+  },
+];
+
+const SOMALI_SAMPLE: StudioSegment[] = [
+  {
+    id: 1,
+    start: 0,
+    end: 4.5,
+    speaker: "Instructor",
+    draftText: "ku soo dhowow xirfadaha goobta shaqada dijitaalka",
+    reviewedText: "Ku soo dhowow Xirfadaha Goobta Shaqada Dijitaalka: Aasaaska.",
+    status: "reviewed",
+  },
+  {
+    id: 2,
+    start: 4.5,
+    end: 9.0,
+    speaker: "Instructor",
+    draftText: "casharkan waxaan ku baari doonaa xiriirka iyo dukumentiyada",
+    reviewedText: "Casharkan, waxaan ku baari doonaa xiriirka aan tooska ahayn iyo diyaarinta dukumentiyada la heli karo.",
+    status: "reviewed",
+  },
+  {
+    id: 3,
+    start: 9.0,
+    end: 14.2,
+    speaker: "Instructor",
+    draftText: "markaad kooxo la shaqaynayso cinwaannada habaysan ayaa muhiim ah",
+    reviewedText: "Markaad ka shaqaynayso kooxo kala fog, cinwaannada habaysan iyo qoraallada sharaxaadda sawirrada ayaa muhiim ah.",
+    status: "draft",
+  },
+  {
+    id: 4,
+    start: 14.2,
+    end: 19.5,
+    speaker: "Instructor",
+    draftText: "u fiirso badhanka gudbinta ee hoose",
+    reviewedText: "U fiirso sida badhanka gudbinta ee bogga codsiga loogu iftiimiyay xagga hoose ee midigta.",
+    status: "draft",
+  },
+  {
+    id: 5,
+    start: 19.5,
+    end: 25.0,
+    speaker: "Instructor",
+    draftText: "qof kastaa wuxuu xaq u leeyahay qalab la heli karo",
+    reviewedText: "Qof kastaa wuxuu xaq u leeyahay qalab si buuxda loo wada heli karo xagga waxbarashada iyo shaqada.",
+    status: "draft",
+  },
+];
+
 const ENGLISH_SAMPLE: StudioSegment[] = [
   {
     id: 1,
@@ -116,54 +261,7 @@ const ENGLISH_SAMPLE: StudioSegment[] = [
   },
 ];
 
-function toUnicodeBraille(text: string): string {
-  const BRAILLE_MAP: Record<string, string> = {
-    a: "⠁", b: "⠃", c: "⠉", d: "⠙", e: "⠑", f: "⠋", g: "⠛", h: "⠓", i: "⠊", j: "⠚",
-    k: "⠅", l: "⠇", m: "⠍", n: "⠝", o: "⠕", p: "⠏", q: "⠟", r: "⠗", s: "⠎", t: "⠞",
-    u: "⠥", v: "⠧", w: "⠺", x: "⠭", y: "⠽", z: "⠵",
-    " ": " ", ".": "⠲", ",": "⠂", ";": "⠆", ":": "⠒", "!": "⠖", "?": "⠦",
-    "-": "⠤", "(": "⠶", ")": "⠶", "\"": "⠦", "'": "⠄"
-  };
 
-  let out = "";
-  for (let i = 0; i < text.length; i++) {
-    const ch = text[i];
-    const lower = ch.toLowerCase();
-    if (ch >= "A" && ch <= "Z") {
-      out += "⠠" + (BRAILLE_MAP[lower] || lower);
-    } else if (ch >= "0" && ch <= "9") {
-      const numMap: Record<string, string> = {
-        "1": "⠁", "2": "⠃", "3": "⠉", "4": "⠙", "5": "⠑",
-        "6": "⠋", "7": "⠛", "8": "⠓", "9": "⠊", "0": "⠚"
-      };
-      if (i === 0 || !/[0-9]/.test(text[i - 1])) {
-        out += "⠼";
-      }
-      out += numMap[ch] || ch;
-    } else if (BRAILLE_MAP[ch]) {
-      out += BRAILLE_MAP[ch];
-    } else {
-      out += ch;
-    }
-  }
-  return out;
-}
-
-function toAsciiBraille(text: string): string {
-  let res = "";
-  for (let i = 0; i < text.length; i++) {
-    const ch = text[i];
-    if (ch >= "A" && ch <= "Z") {
-      res += "," + ch;
-    } else if (ch >= "0" && ch <= "9") {
-      if (i === 0 || !/[0-9]/.test(text[i - 1])) res += "#";
-      res += String.fromCharCode(ch.charCodeAt(0) + 16);
-    } else {
-      res += ch;
-    }
-  }
-  return res;
-}
 
 function formatTime(seconds: number): string {
   const mins = Math.floor(seconds / 60);
@@ -250,9 +348,25 @@ function downloadFile(content: string, filename: string, mimeType: string) {
   URL.revokeObjectURL(url);
 }
 
-export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
+function getStudioSample(loc: SupportedLocale): StudioSegment[] {
+  switch (loc) {
+    case "am":
+      return AMHARIC_SAMPLE;
+    case "om":
+      return OROMO_SAMPLE;
+    case "ti":
+      return TIGRIGNA_SAMPLE;
+    case "so":
+      return SOMALI_SAMPLE;
+    case "en":
+    default:
+      return ENGLISH_SAMPLE;
+  }
+}
+
+export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) => {
   const isAm = locale === "am";
-  const [segments, setSegments] = useState<StudioSegment[]>(() => (isAm ? AMHARIC_SAMPLE : ENGLISH_SAMPLE));
+  const [segments, setSegments] = useState<StudioSegment[]>(() => getStudioSample(locale));
   const [statusMsg, setStatusMsg] = useState("");
   const [playingSegmentId, setPlayingSegmentId] = useState<number | null>(null);
   const [audioCurrentTime, setAudioCurrentTime] = useState(0);
@@ -265,8 +379,8 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
 
   // Switch initial sample when language changes if segments match previous defaults
   useEffect(() => {
-    setSegments(isAm ? AMHARIC_SAMPLE : ENGLISH_SAMPLE);
-  }, [isAm]);
+    setSegments(getStudioSample(locale));
+  }, [locale]);
 
   // Audio time listener to handle segment-specific boundaries
   useEffect(() => {
@@ -542,30 +656,38 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
 
   const handleExportBRF = () => {
     const title = isAm
-      ? "የዲጂታል የሥራ ቦታ ክህሎቶች - የትምህርት ግልባጭ"
-      : "DIGITAL WORKPLACE SKILLS: FOUNDATIONS - ACCESSIBLE TRANSCRIPT";
+      ? "የዲጂታል የሥራ ቦታ ክህሎቶች፡ መሠረታዊ"
+      : "DIGITAL WORKPLACE SKILLS: FOUNDATIONS";
 
-    let brf = "======================================================================\n";
-    brf += `${title}\n`;
-    brf += "STANDARD: GRADE 1 BRAILLE & ETHIOPIAN ACCESSIBLE TRANSCRIPT FORMAT\n";
-    brf += `LANGUAGE: ${isAm ? "AMHARIC (አማርኛ)" : "ENGLISH"}\n`;
-    brf += "DATE: 2026-11-14 (HIDAR 5, 2019 E.C.)\n";
-    brf += `TOTAL SEGMENTS: ${segments.length}\n`;
-    brf += "======================================================================\n\n";
+    const segs = segments.map((seg) => ({
+      start: seg.start,
+      end: seg.end,
+      speaker: seg.speaker,
+      text: seg.reviewedText || seg.draftText,
+    }));
 
-    for (let i = 0; i < segments.length; i++) {
-      const seg = segments[i];
-      const text = seg.reviewedText || seg.draftText;
-      const timeHeader = `[#${i + 1} | ${formatTime(seg.start)} - ${formatTime(seg.end)} | ${seg.speaker}]`;
+    const brfDoc = generateBRFDocument({
+      title,
+      language: isAm ? "am" : "en",
+      date: isAm ? "2026-11-14 (ኅዳር 5, 2019 ዓ.ም.)" : "2026-11-14 (HIDAR 5, 2019 E.C.)",
+      segments: segs,
+    });
 
-      brf += `${timeHeader}\n`;
-      brf += `TEXT: ${text}\n`;
-      brf += `BRAILLE: ${toUnicodeBraille(text)}\n`;
-      brf += `EMBOSSER (ASCII): ${toAsciiBraille(text)}\n\n`;
-    }
+    downloadFile(brfDoc, isAm ? "lesson-transcript.am.brf" : "lesson-transcript.en.brf", "text/plain;charset=utf-8");
+    setStatusMsg(isAm ? "ትክክለኛ የብሬይል ፊደላት የያዘ ፋይል (.brf) በተሳካ ሁኔታ ወርዷል።" : "Exported authentic Braille (.brf) document successfully.");
+  };
 
-    downloadFile(brf, isAm ? "lesson-transcript.am.brf" : "lesson-transcript.en.brf", "text/plain;charset=utf-8");
-    setStatusMsg(isAm ? "የብሬይል ፋይል (.brf) በተሳካ ሁኔታ ወርዷል።" : "Exported lesson-transcript.brf successfully.");
+  const handleExportBraillePDF = () => {
+    const pdfPath = isAm
+      ? "/lessons/digital-workplace/documents/lesson-braille.am.pdf"
+      : "/lessons/digital-workplace/documents/lesson-braille.en.pdf";
+    const link = document.createElement("a");
+    link.href = pdfPath;
+    link.download = isAm ? "lesson-braille.am.pdf" : "lesson-braille.en.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setStatusMsg(isAm ? "የሚዳሰስ የብሬል ፒዲኤፍ ሰነድ (.pdf) በተሳካ ሁኔታ ወርዷል።" : "Exported lesson-braille.pdf successfully.");
   };
 
   const handlePublishToAPI = async () => {
@@ -1331,6 +1453,15 @@ export const StudioView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
             style={{ padding: "0.6rem 1.25rem", fontSize: "14px" }}
           >
             {isAm ? "የብሬይል ፋይል አውርድ (.brf)" : "Export Braille (.brf)"}
+          </button>
+
+          <button
+            type="button"
+            onClick={handleExportBraillePDF}
+            className="btn btn-secondary"
+            style={{ padding: "0.6rem 1.25rem", fontSize: "14px" }}
+          >
+            {isAm ? "የብሬይል ፒዲኤፍ አውርድ (.pdf)" : "Export Braille PDF (.pdf)"}
           </button>
 
           <button

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abugida Media Kit — Accessible Learning & Career Gateway</title>
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('abugida-theme');
+        if (savedTheme) {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <script type="module" crossorigin src="/assets/main-CkuglXcT.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/main-T02Y1oom.css">
+</head>
+<body>
+  <div id="root">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <div class="site-container">
+      <header class="site-header">
+        <div>
+          <h1 style="margin: 0; font-size: 1.5rem; color: var(--color-brand);">Abugida Media Kit (አቡጊዳ)</h1>
+          <p style="margin: 0.25rem 0 0 0; color: var(--color-muted-ink); font-size: 0.9rem;">
+            Track 2: Accessible Learning Media & Career Gateway · Digital Bridge 2026
+          </p>
+        </div>
+        <nav class="main-nav" aria-label="Main Navigation">
+          <ul>
+            <li><a href="/" class="nav-link" aria-current="page">Home</a></li>
+            <li><a href="/lesson" class="nav-link">Accessible Lesson</a></li>
+            <li><a href="/studio" class="nav-link">Transcript Studio</a></li>
+            <li><a href="/verify" class="nav-link">Verify Certificate</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      <main id="main-content">
+        <section style="margin-bottom: 2.5rem;">
+          <h2>Build what works for everyone. Then everyone gets to work.</h2>
+          <p style="font-size: 1.15rem; max-width: 800px;">
+            Abugida Media Kit provides embeddable web components for learning platforms and job boards:
+            keyboard-operated media, customizable Amharic & English captions, synchronized Ethiopian Sign Language,
+            audio descriptions, lightweight 3G offline packages, and 200% zoom-resilient career cards.
+          </p>
+          <div style="display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
+            <a href="/lesson" class="btn btn-primary">Open Accessible Lesson</a>
+            <a href="/studio" class="btn btn-outline">Open Transcript Studio</a>
+          </div>
+        </section>
+
+        <section style="margin-bottom: 2.5rem;">
+          <h3>Adoption & Integration Levels</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+            <div class="card">
+              <h4 style="margin-top: 0; color: var(--color-brand);">Level 1: Script Tag</h4>
+              <p>Embed the player on any web page with a single line of HTML.</p>
+            </div>
+            <div class="card">
+              <h4 style="margin-top: 0; color: var(--color-brand);">Level 2: REST API</h4>
+              <p>Local FastAPI transcription and manifest pipeline with full OpenAPI 3.0 documentation.</p>
+            </div>
+            <div class="card">
+              <h4 style="margin-top: 0; color: var(--color-brand);">Level 3: Open Standards</h4>
+              <p>Compatible with schema.org/JobPosting, standard WebVTT subtitles, and Savanna LMS.</p>
+            </div>
+          </div>
+        </section>
+
+        <aside style="background: #F1F5F9; border-left: 4px solid var(--color-brand); padding: 1rem 1.25rem; border-radius: 6px; font-size: 0.88rem; color: #334155;">
+          <strong>Notice:</strong> This demonstration environment uses mock fixtures and local test media. All credentials and job postings are strictly demonstration data.
+        </aside>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

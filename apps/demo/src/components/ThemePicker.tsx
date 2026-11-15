@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { IconPalette, IconCheck, IconClose } from "./Icons";
+import { SupportedLocale } from "@abugida/media-kit";
 
 export type ThemeId =
   | "apple-light"
@@ -141,12 +142,16 @@ export function applyTheme(themeId: ThemeId) {
   players.forEach((p) => p.setAttribute("data-theme", themeId));
 }
 
-export const ThemePicker: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
+export const ThemePicker: React.FC<{ locale: SupportedLocale }> = ({ locale }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentTheme, setCurrentTheme] = useState<ThemeId>(getActiveTheme);
   const dialogRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const isAm = locale === "am";
+
+  const getLocText = (obj: { en: string; am: string }) => {
+    return (obj as any)[locale] || (locale === "am" || locale === "ti" ? obj.am : obj.en);
+  };
 
   // Initial application on mount
   useEffect(() => {
@@ -220,7 +225,7 @@ export const ThemePicker: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
         title={isAm ? "የቀለም እይታ እና የገጽታ መምረጫ" : "Color Vision & Theme Selector"}
       >
         <IconPalette size={15} style={{ color: "var(--color-brand)" }} />
-        <span>{activeOption.badge[locale] || activeOption.badge.en}</span>
+        <span>{getLocText(activeOption.badge)}</span>
         {/* Subtle Swatch Preview Dots */}
         <span style={{ display: "inline-flex", gap: "2px", alignItems: "center" }} aria-hidden="true">
           <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: activeOption.swatches[2], display: "inline-block" }} />
@@ -319,10 +324,10 @@ export const ThemePicker: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.35rem" }}>
                     <div>
                       <div style={{ fontSize: "13.5px", fontWeight: 600, color: "var(--color-ink)" }}>
-                        {theme.name[locale] || theme.name.en}
+                        {getLocText(theme.name)}
                       </div>
                       <div style={{ fontSize: "11px", color: "var(--color-muted-ink)", marginTop: "1px" }}>
-                        {theme.subtitle[locale] || theme.subtitle.en}
+                        {getLocText(theme.subtitle)}
                       </div>
                     </div>
 
@@ -347,7 +352,7 @@ export const ThemePicker: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
                   </div>
 
                   <p style={{ margin: "0 0 0.5rem 0", fontSize: "11.5px", color: "var(--color-muted-ink)", lineHeight: 1.4 }}>
-                    {theme.description[locale] || theme.description.en}
+                    {getLocText(theme.description)}
                   </p>
 
                   {/* Visual Color Palette Swatches */}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { formatDualDate } from "@abugida/media-kit";
+import { formatDualDate, SupportedLocale } from "@abugida/media-kit";
 import { generateQRSVG } from "../utils/qr-code";
 import {
   IconCheck,
@@ -14,7 +14,7 @@ import {
 
 export interface DemoCertificate {
   id: string;
-  title: { en: string; am: string };
+  title: Record<string, string>;
   issuer: string;
   issueDateISO: string;
   issueDateEthiopic: string;
@@ -85,7 +85,7 @@ export function getCanonicalShareableUrl(certId: string): string {
   return `${loc.origin}${basePath}/verify?id=${encodeURIComponent(certId)}`;
 }
 
-export const VerifyView: React.FC<{ locale: "en" | "am" }> = ({ locale }) => {
+export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) => {
   const getInitialId = (): string => {
     if (typeof window === "undefined") return "CERT-DB-2026-0042";
 
