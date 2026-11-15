@@ -2,7 +2,17 @@ import React, { useEffect, useState, useMemo } from "react";
 import { AccessibleJob } from "@abugida/lesson-schema";
 import { SupportedLocale } from "@abugida/media-kit";
 import { JobCardItem, resolveLocalized } from "../components/JobCardItem";
-import { IconCheck, IconDownload, IconVolume } from "../components/Icons";
+import {
+  IconCheck,
+  IconDownload,
+  IconVolume,
+  IconSearch,
+  IconClose,
+  IconChevronDown,
+  IconShieldCheck,
+  IconSparkles,
+  IconBriefcase
+} from "../components/Icons";
 
 interface CareersViewProps {
   locale: SupportedLocale;
@@ -38,7 +48,7 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
         const title = resolveLocalized(job.title, locale).toLowerCase();
-        const employer = job.employer.toLowerCase();
+        const employer = (typeof job.employer === "string" ? job.employer : resolveLocalized(job.employer, locale)).toLowerCase();
         const desc = resolveLocalized(job.description, locale).toLowerCase();
         const loc = resolveLocalized(job.location, locale).toLowerCase();
         if (!title.includes(q) && !employer.includes(q) && !desc.includes(q) && !loc.includes(q)) {
@@ -111,6 +121,40 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  };
+
+  const workModes = [
+    {
+      id: "all",
+      label: isAm ? "ሁሉም (All)" : locale === "om" ? "Hunda (All)" : locale === "ti" ? "ኩሎም (All)" : locale === "so" ? "Dhammaan (All)" : "All Modes",
+      icon: null,
+    },
+    {
+      id: "hybrid",
+      label: isAm ? "ድብልቅ" : locale === "om" ? "Makaa" : locale === "ti" ? "ሕውስዋስ" : locale === "so" ? "Isku-dhafan" : "Hybrid",
+      icon: "🌿",
+    },
+    {
+      id: "remote",
+      label: isAm ? "የርቀት" : locale === "om" ? "Fageenya" : locale === "ti" ? "ናይ ርሕቐት" : locale === "so" ? "Meel Fog" : "100% Remote",
+      icon: "🌐",
+    },
+    {
+      id: "onsite",
+      label: isAm ? "በቦታው" : locale === "om" ? "Bakka Hojii" : locale === "ti" ? "ኣብ ቦታኡ" : locale === "so" ? "Goobta" : "On-site",
+      icon: "🏢",
+    },
+  ];
+
+  const hasActiveFilters = Boolean(
+    searchQuery || selectedWorkMode !== "all" || selectedAccommodation !== "all" || filterCourseSkillsOnly
+  );
+
+  const resetAllFilters = () => {
+    setSearchQuery("");
+    setSelectedWorkMode("all");
+    setSelectedAccommodation("all");
+    setFilterCourseSkillsOnly(false);
   };
 
   return (
@@ -204,7 +248,7 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
         </div>
       </section>
 
-      {/* Accessible Interactive Filter Toolbar */}
+      {/* Accessible Interactive Filter Toolbar (Apple / Impeccable Design) */}
       <section
         style={{
           background: "var(--color-surface)",
@@ -213,150 +257,250 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
           padding: "1.25rem 1.5rem",
           marginBottom: "1.75rem",
           boxShadow: "var(--shadow-subtle)",
+          display: "flex",
+          flexDirection: "column",
+          gap: "1.1rem",
         }}
         aria-label={isAm ? "የሥራ ፍለጋ እና ማጣሪያዎች" : "Job Search & Filter Controls"}
       >
+        {/* Tier 1: Search Input, Accommodation Custom Select & Skill Match Chip */}
         <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", alignItems: "flex-end" }}>
-          {/* Keyword Search */}
-          <div style={{ flex: "1 1 240px", minWidth: "220px" }}>
+          {/* Keyword Search with Embedded Icons */}
+          <div style={{ flex: "1 1 260px", minWidth: "220px" }}>
             <label
               htmlFor="job-search-input"
-              style={{ display: "block", fontSize: "13px", fontWeight: 600, marginBottom: "0.35rem", color: "var(--color-ink)" }}
+              style={{
+                display: "block",
+                fontSize: "12.5px",
+                fontWeight: 600,
+                marginBottom: "0.35rem",
+                color: "var(--color-ink)",
+                letterSpacing: "-0.01em",
+              }}
             >
               {isAm ? "በስም፣ በድርጅት ወይም በቁልፍ ቃል ፈልግ:" : "Search by title, employer, or keyword:"}
             </label>
-            <input
-              id="job-search-input"
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={isAm ? "ለምሳሌ፡ QA Analyst፣ FinTech፣ Ethio Telecom..." : "e.g., QA Analyst, FinTech, Addis Ababa..."}
-              style={{
-                width: "100%",
-                padding: "0.55rem 0.85rem",
-                fontSize: "14px",
-                borderRadius: "var(--radius-pill)",
-                border: "1px solid var(--color-border)",
-                background: "var(--color-surface-elevated, #FFF)",
-                color: "var(--color-ink)",
-                outline: "none",
-                boxSizing: "border-box",
-              }}
-            />
+            <div className="search-input-wrapper">
+              <span
+                style={{
+                  position: "absolute",
+                  left: "0.85rem",
+                  color: "var(--color-muted-ink)",
+                  display: "flex",
+                  alignItems: "center",
+                  pointerEvents: "none",
+                }}
+              >
+                <IconSearch size={15} />
+              </span>
+              <input
+                id="job-search-input"
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={isAm ? "ለምሳሌ፡ QA Analyst፣ FinTech፣ Ethio Telecom..." : "e.g., QA Analyst, FinTech, Addis Ababa..."}
+                className="search-input-field"
+                aria-label={isAm ? "በስም ወይም በቁልፍ ቃል ፈልግ" : "Search jobs by keyword"}
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  aria-label={isAm ? "የፍለጋ ጽሑፉን አጽዳ" : "Clear search query"}
+                  style={{
+                    position: "absolute",
+                    right: "0.75rem",
+                    background: "none",
+                    border: "none",
+                    padding: "2px",
+                    color: "var(--color-muted-ink)",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: "50%",
+                  }}
+                >
+                  <IconClose size={13} />
+                </button>
+              )}
+            </div>
           </div>
 
-          {/* Work Mode Select */}
-          <div style={{ flex: "0 1 180px", minWidth: "160px" }}>
-            <label
-              htmlFor="filter-work-mode"
-              style={{ display: "block", fontSize: "13px", fontWeight: 600, marginBottom: "0.35rem", color: "var(--color-ink)" }}
-            >
-              {isAm ? "የሥራ ሁኔታ:" : "Work Mode:"}
-            </label>
-            <select
-              id="filter-work-mode"
-              value={selectedWorkMode}
-              onChange={(e) => setSelectedWorkMode(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "0.55rem 0.85rem",
-                fontSize: "14px",
-                borderRadius: "var(--radius-pill)",
-                border: "1px solid var(--color-border)",
-                background: "var(--color-surface-elevated, #FFF)",
-                color: "var(--color-ink)",
-                minHeight: "38px",
-              }}
-            >
-              <option value="all">{isAm ? "ሁሉም ሁኔታዎች (All)" : "All Work Modes"}</option>
-              <option value="hybrid">{isAm ? "ድብልቅ (Hybrid)" : "Hybrid (Addis / Regional)"}</option>
-              <option value="remote">{isAm ? "የርቀት (100% Remote)" : "100% Remote (Ethiopia)"}</option>
-              <option value="onsite">{isAm ? "በቦታው (On-site)" : "On-site"}</option>
-            </select>
-          </div>
-
-          {/* Accommodation Select */}
-          <div style={{ flex: "0 1 230px", minWidth: "190px" }}>
+          {/* Accommodation Custom Select */}
+          <div style={{ flex: "0 1 250px", minWidth: "210px" }}>
             <label
               htmlFor="filter-acc"
-              style={{ display: "block", fontSize: "13px", fontWeight: 600, marginBottom: "0.35rem", color: "var(--color-ink)" }}
+              style={{
+                display: "block",
+                fontSize: "12.5px",
+                fontWeight: 600,
+                marginBottom: "0.35rem",
+                color: "var(--color-ink)",
+                letterSpacing: "-0.01em",
+              }}
             >
               {isAm ? "የተረጋገጠ ምቹነት:" : "Workplace Accommodation:"}
             </label>
-            <select
-              id="filter-acc"
-              value={selectedAccommodation}
-              onChange={(e) => setSelectedAccommodation(e.target.value)}
+            <div className="custom-select-container">
+              <span className="custom-select-icon-left">
+                <IconShieldCheck size={15} />
+              </span>
+              <select
+                id="filter-acc"
+                value={selectedAccommodation}
+                onChange={(e) => setSelectedAccommodation(e.target.value)}
+                className="custom-select-field"
+                aria-label={isAm ? "የሥራ ቦታ ተደራሽነት ምቹነት" : "Filter by workplace accommodation"}
+              >
+                <option value="all">{isAm ? "ሁሉም ምቹነቶች (All)" : "All Accommodations"}</option>
+                <option value="screenreader">{isAm ? "የስክሪን አንባቢ ኮምፒውተሮች" : "Screen reader workstations"}</option>
+                <option value="interpreter">{isAm ? "የምልክት ቋንቋ አስተርጓሚ" : "Sign language interpreters"}</option>
+                <option value="flexible">{isAm ? "ተለዋዋጭ ሰዓት / የርቀት" : "Flexible hours / Remote"}</option>
+                <option value="campus">{isAm ? "ደረጃ አልባ ተደራሽ ግቢ" : "Barrier-free campus"}</option>
+                <option value="keyboard">{isAm ? "በኪቦርድ የሚሰራ የልማት አካባቢ" : "Keyboard-first workflow"}</option>
+              </select>
+              <span className="custom-select-icon-right">
+                <IconChevronDown size={14} />
+              </span>
+            </div>
+          </div>
+
+          {/* Tactile Switch Button: Matches Lesson Skills */}
+          <div style={{ display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
+            <span
               style={{
-                width: "100%",
-                padding: "0.55rem 0.85rem",
-                fontSize: "14px",
-                borderRadius: "var(--radius-pill)",
-                border: "1px solid var(--color-border)",
-                background: "var(--color-surface-elevated, #FFF)",
-                color: "var(--color-ink)",
-                minHeight: "38px",
+                display: "block",
+                fontSize: "12.5px",
+                fontWeight: 600,
+                marginBottom: "0.35rem",
+                color: "transparent",
+                userSelect: "none",
               }}
+              aria-hidden="true"
             >
-              <option value="all">{isAm ? "ሁሉም ምቹነቶች (All)" : "All Accommodations"}</option>
-              <option value="screenreader">{isAm ? "የስክሪን አንባቢ ኮምፒውተሮች" : "Screen reader workstations"}</option>
-              <option value="interpreter">{isAm ? "የምልክት ቋንቋ አስተርጓሚ" : "Sign language interpreters"}</option>
-              <option value="flexible">{isAm ? "ተለዋዋጭ ሰዓት / የርቀት" : "Flexible hours / Remote"}</option>
-              <option value="campus">{isAm ? "ደረጃ አልባ ተደራሽ ግቢ" : "Barrier-free accessible campus"}</option>
-              <option value="keyboard">{isAm ? "በኪቦርድ የሚሰራ የልማት አካባቢ" : "Keyboard-first workflow"}</option>
-            </select>
-          </div>
-
-          {/* Course Skill Match Toggle */}
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", paddingBottom: "0.45rem" }}>
-            <input
-              id="filter-skill-match"
-              type="checkbox"
-              checked={filterCourseSkillsOnly}
-              onChange={(e) => setFilterCourseSkillsOnly(e.target.checked)}
-              style={{ width: "18px", height: "18px", cursor: "pointer", accentColor: "var(--color-brand)" }}
-            />
-            <label
-              htmlFor="filter-skill-match"
-              style={{ fontSize: "13px", fontWeight: 600, color: "var(--color-ink)", cursor: "pointer" }}
-            >
-              {isAm ? "ከተማርኩት ችሎታ ጋር የሚስማሙ (Matches Course)" : "Matches Lesson Skills"}
-            </label>
-          </div>
-
-          {/* Clear Filters */}
-          {(searchQuery || selectedWorkMode !== "all" || selectedAccommodation !== "all" || filterCourseSkillsOnly) && (
+              Skill Filter
+            </span>
             <button
               type="button"
-              className="btn btn-secondary"
-              onClick={() => {
-                setSearchQuery("");
-                setSelectedWorkMode("all");
-                setSelectedAccommodation("all");
-                setFilterCourseSkillsOnly(false);
-              }}
-              style={{ fontSize: "13px", padding: "0.45rem 0.9rem", minHeight: "38px" }}
+              role="switch"
+              aria-checked={filterCourseSkillsOnly}
+              className={`tactile-toggle-chip ${filterCourseSkillsOnly ? "active" : ""}`}
+              onClick={() => setFilterCourseSkillsOnly(!filterCourseSkillsOnly)}
+              title="Filter opportunities aligned directly with the Abugida course learning outcomes"
             >
-              {isAm ? "ማጣሪያዎችን አጽዳ" : "Reset Filters"}
+              <IconSparkles size={14} style={{ color: filterCourseSkillsOnly ? "#FFFFFF" : "var(--color-brand)" }} />
+              <span>{isAm ? "ከተማርኩት ችሎታ ጋር የሚስማሙ" : "Matches Lesson Skills"}</span>
+              {filterCourseSkillsOnly && <IconCheck size={13} style={{ marginLeft: "2px" }} />}
             </button>
-          )}
+          </div>
         </div>
 
-        {/* Live Status Announcer for Screen Readers */}
+        {/* Tier 2: Apple Segmented Control for Work Mode + Results Counter & Reset */}
         <div
-          role="status"
-          aria-live="polite"
-          style={{ marginTop: "0.75rem", fontSize: "13px", color: "var(--color-muted-ink)" }}
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "0.85rem",
+            paddingTop: "0.25rem",
+            borderTop: "1px solid var(--color-border-subtle)",
+          }}
         >
-          {loading ? (
-            <span>{isAm ? "የሥራ ዕድሎች በመጫን ላይ ናቸው..." : "Loading accessible job postings..."}</span>
-          ) : (
-            <span>
-              {isAm
-                ? `${jobs.length} የሥራ ዕድሎች ውስጥ ${filteredJobs.length} ተገኝተዋል`
-                : `Showing ${filteredJobs.length} of ${jobs.length} accessible opportunities`}
+          {/* Apple Segmented Control for Work Mode */}
+          <div style={{ display: "flex", alignItems: "center", gap: "0.65rem", flexWrap: "wrap" }}>
+            <span
+              style={{
+                fontSize: "12px",
+                fontWeight: 600,
+                color: "var(--color-muted-ink)",
+                textTransform: "uppercase",
+                letterSpacing: "0.04em",
+              }}
+            >
+              {isAm ? "የሥራ ሁኔታ:" : "Work Mode:"}
             </span>
-          )}
+            <div
+              className="segmented-control-group"
+              role="radiogroup"
+              aria-label={isAm ? "የሥራ ሁኔታ ማጣሪያ" : "Work Mode selection"}
+            >
+              {workModes.map((mode) => {
+                const isSelected = selectedWorkMode === mode.id;
+                return (
+                  <button
+                    key={mode.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={isSelected}
+                    className={`segmented-pill-btn ${isSelected ? "active" : ""}`}
+                    onClick={() => setSelectedWorkMode(mode.id)}
+                  >
+                    {mode.icon && <span aria-hidden="true">{mode.icon}</span>}
+                    <span>{mode.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Results Badge & Reset CTA */}
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
+            <div
+              role="status"
+              aria-live="polite"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.45rem",
+                fontSize: "12.5px",
+                fontWeight: 500,
+                color: "var(--color-muted-ink)",
+              }}
+            >
+              <span
+                style={{
+                  width: "7px",
+                  height: "7px",
+                  borderRadius: "50%",
+                  background: filteredJobs.length > 0 ? "var(--color-brand)" : "var(--color-alert-ink, #D70015)",
+                  display: "inline-block",
+                }}
+                aria-hidden="true"
+              />
+              {loading ? (
+                <span>{isAm ? "የሥራ ዕድሎች በመጫን ላይ ናቸው..." : "Loading accessible job postings..."}</span>
+              ) : (
+                <span>
+                  {isAm
+                    ? `${jobs.length} የሥራ ዕድሎች ውስጥ ${filteredJobs.length} ተገኝተዋል`
+                    : `Showing ${filteredJobs.length} of ${jobs.length} accessible opportunities`}
+                </span>
+              )}
+            </div>
+
+            {hasActiveFilters && (
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={resetAllFilters}
+                style={{
+                  fontSize: "12px",
+                  padding: "0.3rem 0.75rem",
+                  borderRadius: "var(--radius-pill)",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.3rem",
+                  minHeight: "30px",
+                }}
+                aria-label={isAm ? "ሁሉንም ማጣሪያዎች አጽዳ" : "Reset all active filters"}
+              >
+                <IconClose size={12} />
+                <span>{isAm ? "ማጣሪያዎችን አጽዳ" : "Reset Filters"}</span>
+              </button>
+            )}
+          </div>
         </div>
       </section>
 

@@ -1,7 +1,18 @@
 import React, { useState, useRef, useEffect } from "react";
 import { AccessibleJob, LocalizedString } from "@abugida/lesson-schema";
 import { SupportedLocale } from "@abugida/media-kit";
-import { IconPlay, IconPause, IconCheck } from "./Icons";
+import {
+  IconPlay,
+  IconPause,
+  IconCheck,
+  IconMapPin,
+  IconShieldCheck,
+  IconClock,
+  IconSparkles,
+  IconExternal,
+  IconDocument,
+  IconChevronDown,
+} from "./Icons";
 
 interface JobCardItemProps {
   job: AccessibleJob;
@@ -17,9 +28,66 @@ export function resolveLocalized(val: LocalizedString | string | undefined | nul
   return String(val);
 }
 
+function getEmployerBrand(employer: string) {
+  const emp = employer.toLowerCase();
+  if (emp.includes("fintech")) {
+    return {
+      initials: "FE",
+      gradient: "linear-gradient(135deg, #4F46E5 0%, #3730A3 100%)",
+      color: "#EEF2FF",
+    };
+  }
+  if (emp.includes("ecdd") || emp.includes("disability") || emp.includes("center for disability")) {
+    return {
+      initials: "EC",
+      gradient: "linear-gradient(135deg, #059669 0%, #047857 100%)",
+      color: "#ECFDF5",
+    };
+  }
+  if (emp.includes("ethio telecom")) {
+    return {
+      initials: "ET",
+      gradient: "linear-gradient(135deg, #0284C7 0%, #0369A1 100%)",
+      color: "#F0F9FF",
+    };
+  }
+  if (emp.includes("ministry") || emp.includes("mint") || emp.includes("innovation")) {
+    return {
+      initials: "MI",
+      gradient: "linear-gradient(135deg, #0D9488 0%, #0F766E 100%)",
+      color: "#F0FDFA",
+    };
+  }
+  if (emp.includes("gebeya")) {
+    return {
+      initials: "GB",
+      gradient: "linear-gradient(135deg, #D97706 0%, #B45309 100%)",
+      color: "#FFFBEB",
+    };
+  }
+  if (emp.includes("safaricom")) {
+    return {
+      initials: "SF",
+      gradient: "linear-gradient(135deg, #E11D48 0%, #BE123C 100%)",
+      color: "#FFF1F2",
+    };
+  }
+  const initials = employer
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase() || "")
+    .join("");
+  return {
+    initials: initials || "ET",
+    gradient: "linear-gradient(135deg, #475569 0%, #1E293B 100%)",
+    color: "#F8FAFC",
+  };
+}
+
 export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showApplyModal, setShowApplyModal] = useState(false);
+  const [showTranscript, setShowTranscript] = useState(false);
   const [appliedPacketCopied, setAppliedPacketCopied] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -106,6 +174,73 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
     .trim();
 
   const accommodationsList = Array.isArray(job.accommodations) ? job.accommodations : [];
+  const employerBrand = getEmployerBrand(employer);
+
+  const getWorkModeBadge = (mode?: string) => {
+    if (!mode) return null;
+    const m = mode.toLowerCase();
+    if (m === "remote") {
+      return (
+        <span
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.3rem",
+            fontSize: "11.5px",
+            fontWeight: 600,
+            padding: "0.2rem 0.65rem",
+            borderRadius: "var(--radius-pill)",
+            background: "#EEF2FF",
+            color: "#4338CA",
+            border: "1px solid #C7D2FE",
+          }}
+        >
+          <span aria-hidden="true">🌐</span>
+          <span>100% Remote</span>
+        </span>
+      );
+    }
+    if (m === "hybrid") {
+      return (
+        <span
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.3rem",
+            fontSize: "11.5px",
+            fontWeight: 600,
+            padding: "0.2rem 0.65rem",
+            borderRadius: "var(--radius-pill)",
+            background: "#ECFDF5",
+            color: "#065F46",
+            border: "1px solid #A7F3D0",
+          }}
+        >
+          <span aria-hidden="true">🌿</span>
+          <span>Hybrid</span>
+        </span>
+      );
+    }
+    return (
+      <span
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "0.3rem",
+          fontSize: "11.5px",
+          fontWeight: 600,
+          padding: "0.2rem 0.65rem",
+          borderRadius: "var(--radius-pill)",
+          background: "#FFFBEB",
+          color: "#92400E",
+          border: "1px solid #FDE68A",
+        }}
+      >
+        <span aria-hidden="true">🏢</span>
+        <span>On-Site</span>
+      </span>
+    );
+  };
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -144,13 +279,7 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
 
   return (
     <article
-      className="card"
-      style={{
-        marginBottom: "1.25rem",
-        display: "flex",
-        flexDirection: "column",
-        gap: "0.85rem",
-      }}
+      className="job-card-modern"
       aria-labelledby={`job-title-${job.id}`}
     >
       {/* Schema.org / JobPosting Microdata */}
@@ -158,167 +287,370 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+
+      {/* Header: Avatar, Job Title, Employer, Location, Work Mode & Audio Pill */}
       <div
         style={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "flex-start",
           flexWrap: "wrap",
-          gap: "0.75rem",
+          gap: "1rem",
         }}
       >
-        <div style={{ flex: "1 1 300px" }}>
-          <h4
-            id={`job-title-${job.id}`}
+        <div style={{ display: "flex", alignItems: "flex-start", gap: "0.9rem", flex: "1 1 320px" }}>
+          {/* Company Initials Avatar Badge */}
+          <div
             style={{
-              margin: "0 0 0.35rem 0",
-              fontSize: "1.2rem",
-              fontWeight: 600,
-              color: "var(--color-ink)",
-              letterSpacing: "-0.005em",
+              width: "46px",
+              height: "46px",
+              borderRadius: "12px",
+              background: employerBrand.gradient,
+              color: "#FFFFFF",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "15px",
+              fontWeight: 700,
+              letterSpacing: "0.02em",
+              flexShrink: 0,
+              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.12)",
             }}
+            aria-hidden="true"
           >
-            {title}
-          </h4>
-          <p style={{ margin: 0, color: "var(--color-muted-ink)", fontWeight: 400, fontSize: "14px", display: "flex", alignItems: "center", gap: "0.4rem", flexWrap: "wrap" }}>
-            <strong style={{ color: "var(--color-ink)" }}>{employer}</strong> · <span>{cleanLocation || location}</span>
-            {job.workMode && (
-              <span
-                className="badge"
-                style={{
-                  fontSize: "11px",
-                  padding: "0.15rem 0.55rem",
-                  background: "var(--color-surface)",
-                  color: "var(--color-muted-ink)",
-                  borderRadius: "var(--radius-pill)",
-                  textTransform: "capitalize",
-                  fontWeight: 600,
-                  border: "1px solid var(--color-border-subtle)",
-                }}
-              >
-                {job.workMode}
+            {employerBrand.initials}
+          </div>
+
+          {/* Title & Metadata */}
+          <div style={{ flex: 1 }}>
+            <h4
+              id={`job-title-${job.id}`}
+              style={{
+                margin: "0 0 0.35rem 0",
+                fontSize: "1.2rem",
+                fontWeight: 650,
+                color: "var(--color-ink)",
+                letterSpacing: "-0.015em",
+                lineHeight: 1.3,
+              }}
+            >
+              {title}
+            </h4>
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexWrap: "wrap",
+                gap: "0.5rem",
+                fontSize: "13.5px",
+                color: "var(--color-muted-ink)",
+              }}
+            >
+              <span style={{ fontWeight: 600, color: "var(--color-ink)" }}>{employer}</span>
+              <span aria-hidden="true">·</span>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "0.25rem" }}>
+                <IconMapPin size={13} />
+                <span>{cleanLocation || location}</span>
               </span>
-            )}
-          </p>
+              {getWorkModeBadge(job.workMode)}
+            </div>
+          </div>
         </div>
 
+        {/* Apple-style Audio Summary Pill */}
         {audioSrc && (
           <button
             type="button"
-            className="btn btn-outline"
             onClick={toggleAudio}
             aria-pressed={isPlaying}
-            aria-label={`${isPlaying ? (isAm ? "አቁም" : "Pause") : (isAm ? "የድምፅ ማጠቃለያ አድምጥ" : "Listen to summary")} for ${title}`}
+            aria-label={`${isPlaying ? (isAm ? "አቁም" : "Pause audio summary") : (isAm ? "የድምፅ ማጠቃለያ አድምጥ" : "Listen to audio summary")} for ${title}`}
             style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              padding: "0.45rem 0.95rem",
               fontSize: "13px",
-              padding: "0.45rem 1rem",
-              minHeight: "36px",
+              fontWeight: 600,
+              borderRadius: "var(--radius-pill)",
+              border: isPlaying ? "1px solid var(--color-brand)" : "1px solid var(--color-border)",
+              background: isPlaying ? "var(--color-brand)" : "var(--color-surface)",
+              color: isPlaying ? "#FFFFFF" : "var(--color-ink)",
+              boxShadow: isPlaying ? "0 2px 10px rgba(0, 113, 227, 0.3)" : "0 1px 3px rgba(0, 0, 0, 0.04)",
+              cursor: "pointer",
+              transition: "all 150ms cubic-bezier(0.25, 1, 0.5, 1)",
+              outline: "none",
+              userSelect: "none",
             }}
           >
             {isPlaying ? (
               <>
-                <IconPause size={14} style={{ marginRight: "0.35rem" }} /> {isAm ? "አቁም" : "Pause"}
+                <div className="audio-equalizer-bars" aria-hidden="true" style={{ color: "#FFFFFF" }}>
+                  <span className="audio-equalizer-bar" />
+                  <span className="audio-equalizer-bar" />
+                  <span className="audio-equalizer-bar" />
+                </div>
+                <span>{isAm ? "እያዳመጠ ነው..." : "Playing Summary"}</span>
+                <IconPause size={13} style={{ marginLeft: "2px" }} />
               </>
             ) : (
               <>
-                <IconPlay size={14} style={{ marginRight: "0.35rem" }} /> {isAm ? "የድምፅ ማጠቃለያ" : "Audio Summary"}
+                <span
+                  style={{
+                    width: "22px",
+                    height: "22px",
+                    borderRadius: "50%",
+                    background: "var(--color-brand)",
+                    color: "#FFFFFF",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                  aria-hidden="true"
+                >
+                  <IconPlay size={10} style={{ marginLeft: "1px" }} />
+                </span>
+                <span>{isAm ? "የድምፅ ማጠቃለያ" : "Audio Summary"}</span>
+                {job.audioSummary?.durationSeconds && (
+                  <span
+                    style={{
+                      fontSize: "11px",
+                      padding: "0.1rem 0.4rem",
+                      borderRadius: "var(--radius-pill)",
+                      background: "rgba(0, 0, 0, 0.06)",
+                      color: "var(--color-muted-ink)",
+                      fontWeight: 500,
+                    }}
+                  >
+                    0:{String(job.audioSummary.durationSeconds).padStart(2, "0")}
+                  </span>
+                )}
               </>
             )}
           </button>
         )}
       </div>
 
-      <p style={{ margin: 0, fontSize: "14px", lineHeight: 1.5, color: "var(--color-muted-ink)" }}>
+      {/* Description */}
+      <p style={{ margin: 0, fontSize: "14.5px", lineHeight: 1.6, color: "var(--color-ink)" }}>
         {description}
       </p>
 
       {/* Verified Disability Accommodations Pills */}
       {accommodationsList.length > 0 && (
-        <div style={{ marginTop: "0.25rem" }}>
-          <p
+        <div style={{ marginTop: "0.15rem" }}>
+          <div
             style={{
-              margin: "0 0 0.4rem 0",
-              fontSize: "12px",
-              fontWeight: 600,
+              display: "flex",
+              alignItems: "center",
+              gap: "0.35rem",
+              marginBottom: "0.45rem",
+              fontSize: "11.5px",
+              fontWeight: 650,
               color: "var(--color-muted-ink)",
               textTransform: "uppercase",
-              letterSpacing: "0.04em",
+              letterSpacing: "0.05em",
             }}
           >
-            {isAm ? "የተረጋገጡ የተደራሽነት ድጋፎች" : "Verified Workplace Accommodations"}
-          </p>
+            <IconShieldCheck size={14} style={{ color: "var(--color-brand)" }} />
+            <span>{isAm ? "የተረጋገጡ የተደራሽነት ድጋፎች" : "Verified Workplace Accommodations"}</span>
+          </div>
           <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
             {accommodationsList.map((acc, idx) => (
               <span
                 key={idx}
-                className="badge badge-brand"
-                title={`Disability Accommodation Disclosure: ${resolveLocalized(acc.label, locale)}`}
-                style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem" }}
+                className="badge"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.4rem",
+                  padding: "0.35rem 0.75rem",
+                  fontSize: "12.5px",
+                  fontWeight: 500,
+                  background: "var(--color-brand-subtle, #F0F6FF)",
+                  color: "var(--color-brand)",
+                  border: "1px solid rgba(0, 113, 227, 0.18)",
+                  borderRadius: "var(--radius-pill)",
+                }}
+                title={`${acc.source || "Employer Verified"}${acc.verifiedDate ? ` · ${acc.verifiedDate}` : ""}`}
               >
-                <IconCheck size={12} /> {resolveLocalized(acc.label, locale)}
+                <IconCheck size={13} style={{ strokeWidth: "2.5" }} />
+                <span>{resolveLocalized(acc.label, locale)}</span>
               </span>
             ))}
           </div>
         </div>
       )}
 
-      {/* Audio Text Transcript Equivalent */}
+      {/* Audio Text Transcript Equivalent Drawer */}
       {job.audioSummary?.textEquivalent && (
-        <details
-          style={{
-            background: "var(--color-surface-elevated)",
-            padding: "0.6rem 0.85rem",
-            borderRadius: "var(--radius-sm)",
-            fontSize: "13px",
-            border: "1px solid var(--color-border-subtle)",
-            color: "var(--color-muted-ink)",
-          }}
-        >
-          <summary style={{ cursor: "pointer", fontWeight: 500, color: "var(--color-link)" }}>
-            {isAm ? "የድምፅ ማጠቃለያውን በጽሑፍ ይመልከቱ" : "Read text equivalent of audio summary"}
-          </summary>
-          <p style={{ margin: "0.5rem 0 0 0", lineHeight: 1.5, color: "var(--color-ink)" }}>
-            {job.audioSummary.textEquivalent}
-          </p>
-        </details>
-      )}
-
-      {/* Application Actions */}
-      <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.5rem", marginTop: "0.5rem", flexWrap: "wrap" }}>
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={() => setShowApplyModal(true)}
-          style={{
-            fontSize: "12.5px",
-            padding: "0.45rem 1rem",
-            fontWeight: 600,
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "0.35rem",
-          }}
-          aria-haspopup="dialog"
-        >
-          <span>{isAm ? "በተረጋገጠ ምስክር ወረቀት አመልክት" : "Apply with Verified Credential"}</span>
-          <IconCheck size={13} />
-        </button>
-
-        {job.applicationUrl && (
-          <a
-            href={job.applicationUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="btn btn-outline"
+        <div style={{ marginTop: "0.2rem" }}>
+          <button
+            type="button"
+            onClick={() => setShowTranscript(!showTranscript)}
+            aria-expanded={showTranscript}
             style={{
-              fontSize: "12.5px",
-              padding: "0.45rem 0.9rem",
-              textDecoration: "none",
-              fontWeight: 600,
+              background: "transparent",
+              border: "none",
+              padding: "0.3rem 0",
+              color: "var(--color-link)",
+              fontSize: "13px",
+              fontWeight: 550,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.35rem",
+              cursor: "pointer",
+              outline: "none",
             }}
           >
-            {isAm ? "የቀጣሪው ድረ-ገጽ" : "Employer Portal"} &rarr;
-          </a>
-        )}
+            <IconDocument size={14} />
+            <span>
+              {showTranscript
+                ? (isAm ? "የድምፅ ጽሑፉን ደብቅ" : "Hide audio transcript & text equivalent")
+                : (isAm ? "የድምፅ ማጠቃለያውን በጽሑፍ ይመልከቱ" : "Read text equivalent of audio summary")}
+            </span>
+            <span
+              style={{
+                transform: showTranscript ? "rotate(180deg)" : "none",
+                transition: "transform 180ms ease",
+                display: "inline-flex",
+              }}
+              aria-hidden="true"
+            >
+              <IconChevronDown size={13} />
+            </span>
+          </button>
+
+          {showTranscript && (
+            <div
+              style={{
+                marginTop: "0.5rem",
+                padding: "0.85rem 1.15rem",
+                background: "var(--color-surface)",
+                border: "1px solid var(--color-border-subtle)",
+                borderLeft: "3px solid var(--color-brand)",
+                borderRadius: "0 var(--radius-sm) var(--radius-sm) 0",
+                fontSize: "13.5px",
+                lineHeight: 1.6,
+                color: "var(--color-ink)",
+                maxWidth: "760px",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "11px",
+                  fontWeight: 600,
+                  color: "var(--color-muted-ink)",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.04em",
+                  marginBottom: "0.25rem",
+                }}
+              >
+                {isAm ? "የተረጋገጠ የድምጽ ማጠቃለያ ጽሑፍ" : "Audio Summary Verbatim Transcript"}
+              </div>
+              <p style={{ margin: 0 }}>
+                {job.audioSummary.textEquivalent}
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Card Footer: Deadline, Skills Match & Action CTAs */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "0.75rem",
+          marginTop: "0.4rem",
+          paddingTop: "0.85rem",
+          borderTop: "1px solid var(--color-border-subtle)",
+        }}
+      >
+        {/* Left: Deadline & Course match indicator */}
+        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
+          {job.applicationDeadline && (
+            <span
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.35rem",
+                fontSize: "12.5px",
+                color: "var(--color-muted-ink)",
+                fontWeight: 500,
+              }}
+            >
+              <IconClock size={13} />
+              <span>{isAm ? `ማብቂያ ቀን፡ ${job.applicationDeadline}` : `Deadline: ${job.applicationDeadline}`}</span>
+            </span>
+          )}
+          {job.requiredSkills?.includes("skill-a11y-literacy") && (
+            <span
+              className="badge"
+              style={{
+                background: "#F5F3FF",
+                color: "#6D28D9",
+                border: "1px solid #DDD6FE",
+                fontSize: "11.5px",
+                fontWeight: 600,
+                padding: "0.2rem 0.6rem",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.3rem",
+              }}
+            >
+              <IconSparkles size={12} />
+              <span>{isAm ? "የአቡጊዳ ሰርተፊኬት ይፈልጋል" : "Matches Lesson Skills"}</span>
+            </span>
+          )}
+        </div>
+
+        {/* Right: Action CTAs */}
+        <div style={{ display: "flex", gap: "0.6rem", flexWrap: "wrap", alignItems: "center" }}>
+          {job.applicationUrl && (
+            <a
+              href={job.applicationUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-outline"
+              style={{
+                fontSize: "13px",
+                padding: "0.45rem 1rem",
+                fontWeight: 600,
+                borderRadius: "var(--radius-pill)",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.35rem",
+              }}
+              aria-label={`${isAm ? "የቀጣሪው ድረ-ገጽ" : "Employer Portal"} for ${title}`}
+            >
+              <span>{isAm ? "የቀጣሪው ድረ-ገጽ" : "Employer Portal"}</span>
+              <IconExternal size={13} />
+            </a>
+          )}
+
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => setShowApplyModal(true)}
+            style={{
+              fontSize: "13px",
+              padding: "0.45rem 1.15rem",
+              fontWeight: 600,
+              borderRadius: "var(--radius-pill)",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.4rem",
+              boxShadow: "0 2px 8px rgba(0, 113, 227, 0.25)",
+            }}
+            aria-haspopup="dialog"
+          >
+            <span>{isAm ? "በተረጋገጠ ምስክር ወረቀት አመልክት" : "Apply with Verified Credential"}</span>
+            <IconCheck size={14} style={{ strokeWidth: "2.5" }} />
+          </button>
+        </div>
       </div>
 
       {/* Accessible "Apply with Credential" Modal Dialog */}
@@ -339,6 +671,10 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
             zIndex: 9999,
             padding: "1rem",
           }}
+          onClick={() => {
+            setShowApplyModal(false);
+            setAppliedPacketCopied(false);
+          }}
         >
           <div
             style={{
@@ -351,6 +687,7 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
               boxShadow: "0 24px 60px rgba(0,0,0,0.3)",
               border: "1px solid rgba(0,0,0,0.1)",
             }}
+            onClick={(e) => e.stopPropagation()}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1rem" }}>
               <div>
@@ -463,3 +800,4 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
     </article>
   );
 };
+
