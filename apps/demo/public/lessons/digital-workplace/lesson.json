@@ -65,6 +65,15 @@
       "label": "240p (Low Data)"
     },
     {
+      "id": "src-main-webm",
+      "kind": "main",
+      "src": "/lessons/digital-workplace/media/lesson.webm",
+      "type": "video/webm",
+      "sizeBytes": 115000,
+      "quality": "webm",
+      "label": "720p (WebM VP9)"
+    },
+    {
       "id": "src-ad",
       "kind": "described",
       "src": "/lessons/digital-workplace/media/lesson-ad.mp4",
@@ -80,11 +89,54 @@
       "sizeBytes": 8500000
     },
     {
-      "id": "src-audio-3g",
+      "id": "src-audio-opus",
       "kind": "audio-only",
       "src": "/lessons/digital-workplace/media/lesson-audio.opus",
       "type": "audio/opus",
-      "sizeBytes": 840000
+      "sizeBytes": 451145,
+      "quality": "audio-opus",
+      "format": "Opus",
+      "label": "Opus Audio (Low Bandwidth)"
+    },
+    {
+      "id": "src-audio-mp3",
+      "kind": "audio-only",
+      "src": "/lessons/digital-workplace/media/lesson-audio.mp3",
+      "type": "audio/mpeg",
+      "sizeBytes": 927912,
+      "quality": "audio-mp3",
+      "format": "MP3",
+      "label": "MP3 Audio (Universal)"
+    },
+    {
+      "id": "src-audio-ogg",
+      "kind": "audio-only",
+      "src": "/lessons/digital-workplace/media/lesson-audio.ogg",
+      "type": "audio/ogg",
+      "sizeBytes": 777051,
+      "quality": "audio-ogg",
+      "format": "OGG",
+      "label": "Ogg Vorbis Audio"
+    },
+    {
+      "id": "src-audio-wav",
+      "kind": "audio-only",
+      "src": "/lessons/digital-workplace/media/lesson-audio.wav",
+      "type": "audio/wav",
+      "sizeBytes": 1323078,
+      "quality": "audio-wav",
+      "format": "WAV",
+      "label": "WAV Audio (Lossless PCM)"
+    },
+    {
+      "id": "src-audio-m4a",
+      "kind": "audio-only",
+      "src": "/lessons/digital-workplace/media/lesson-audio.m4a",
+      "type": "audio/mp4",
+      "sizeBytes": 1205238,
+      "quality": "audio-m4a",
+      "format": "AAC/M4A",
+      "label": "AAC / M4A Audio (Apple High Quality)"
     }
   ],
   "captionTracks": [

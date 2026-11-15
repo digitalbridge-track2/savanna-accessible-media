@@ -162,38 +162,50 @@ export class MediaSyncController {
    */
   async switchSource(newSrc: string): Promise<void> {
     const wasPlaying = !this.mainVideo.paused;
-    const currentTime = this.mainVideo.currentTime;
-    const playbackRate = this.mainVideo.playbackRate;
+    const currentTime = isNaN(this.mainVideo.currentTime) ? 0 : this.mainVideo.currentTime;
+    const playbackRate = this.mainVideo.playbackRate || 1;
 
     this.mainVideo.src = newSrc;
     this.mainVideo.load();
 
     return new Promise((resolve) => {
-      const onLoaded = async () => {
-        this.mainVideo.removeEventListener("loadedmetadata", onLoaded);
-        this.mainVideo.currentTime = currentTime;
-        this.mainVideo.playbackRate = playbackRate;
-        if (wasPlaying) {
-          try {
-            await this.mainVideo.play();
-          } catch {
-            // Autoplay prevention catch
+      let settled = false;
+      const completeSwitch = async () => {
+        if (settled) return;
+        settled = true;
+        this.mainVideo.removeEventListener("loadedmetadata", completeSwitch);
+        this.mainVideo.removeEventListener("canplay", completeSwitch);
+        this.mainVideo.removeEventListener("error", completeSwitch);
+        clearTimeout(safetyTimer);
+
+        try {
+          if (!isNaN(currentTime) && currentTime > 0) {
+            this.mainVideo.currentTime = currentTime;
           }
-        }
-        // Ensure sign video stays aligned with new source position
-        if (this.signVideo) {
-          try {
-            this.signVideo.currentTime = currentTime;
-          } catch {}
+          this.mainVideo.playbackRate = playbackRate;
           if (wasPlaying) {
-            this.signVideo.play().catch(() => {});
-          } else {
-            this.signVideo.pause();
+            await this.mainVideo.play().catch(() => {});
           }
+          if (this.signVideo) {
+            if (!isNaN(currentTime) && currentTime > 0) {
+              try { this.signVideo.currentTime = currentTime; } catch {}
+            }
+            if (wasPlaying) {
+              this.signVideo.play().catch(() => {});
+            } else {
+              this.signVideo.pause();
+            }
+          }
+        } catch {
+          // Ignore seek/play errors during source switch
         }
         resolve();
       };
-      this.mainVideo.addEventListener("loadedmetadata", onLoaded);
+
+      const safetyTimer = setTimeout(completeSwitch, 600);
+      this.mainVideo.addEventListener("loadedmetadata", completeSwitch);
+      this.mainVideo.addEventListener("canplay", completeSwitch);
+      this.mainVideo.addEventListener("error", completeSwitch);
     });
   }
 

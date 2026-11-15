@@ -70,6 +70,8 @@ export class A11yMediaPlayer extends HTMLElement {
   // UI state
   private isPreferencesOpen = false;
   private isQualityMenuOpen = false;
+  private isShortcutsOpen = false;
+  private isAudioMode = false;
   private currentQuality: VideoQuality = "auto";
   private qualityToastTimer: number | null = null;
 
@@ -445,25 +447,34 @@ export class A11yMediaPlayer extends HTMLElement {
     `;
   }
 
-  private getAvailableQualities(): Array<{ quality: string; label: string; tag?: string }> {
+  private getAvailableStreams(): Array<{
+    id: string;
+    quality: VideoQuality;
+    label: string;
+    tag?: string;
+    kind: "video" | "audio";
+    format: string;
+    src: string;
+  }> {
+    const list: Array<{
+      id: string;
+      quality: VideoQuality;
+      label: string;
+      tag?: string;
+      kind: "video" | "audio";
+      format: string;
+      src: string;
+    }> = [];
+
+    const isAm = this.activeLocale === "am";
+
     if (!this.manifest || !this.manifest.sources) {
       return [
-        { quality: "1080p", label: "1080p (Full HD)", tag: "FHD" },
-        { quality: "720p", label: "720p (HD)", tag: "HD" },
-        { quality: "480p", label: "480p (Standard)", tag: "SD" },
-        { quality: "360p", label: "360p (SD)", tag: "SD" },
-        { quality: "240p", label: "240p (Low Data)", tag: "Low Data" },
-      ];
-    }
-
-    const mainSources = this.manifest.sources.filter((s) => s.kind === "main" && s.quality);
-    if (!mainSources.length) {
-      return [
-        { quality: "1080p", label: "1080p (Full HD)", tag: "FHD" },
-        { quality: "720p", label: "720p (HD)", tag: "HD" },
-        { quality: "480p", label: "480p (Standard)", tag: "SD" },
-        { quality: "360p", label: "360p (SD)", tag: "SD" },
-        { quality: "240p", label: "240p (Low Data)", tag: "Low Data" },
+        { id: "1080p", quality: "1080p", label: "1080p (Full HD)", tag: "FHD", kind: "video", format: "MP4", src: "" },
+        { id: "720p", quality: "720p", label: "720p (HD)", tag: "HD", kind: "video", format: "MP4", src: "" },
+        { id: "480p", quality: "480p", label: "480p (Standard)", tag: "SD", kind: "video", format: "MP4", src: "" },
+        { id: "360p", quality: "360p", label: "360p (SD)", tag: "SD", kind: "video", format: "MP4", src: "" },
+        { id: "240p", quality: "240p", label: "240p (Low Data)", tag: "Low Data", kind: "video", format: "MP4", src: "" },
       ];
     }
 
@@ -472,31 +483,106 @@ export class A11yMediaPlayer extends HTMLElement {
       return match ? parseInt(match[1], 10) : 0;
     };
 
-    const sorted = [...mainSources].sort((a, b) => {
+    // Video streams
+    const mainSources = this.manifest.sources.filter((s) => s.kind === "main");
+    const sortedMain = [...mainSources].sort((a, b) => {
       return parseRes(b.quality || "") - parseRes(a.quality || "");
     });
 
-    const isAm = this.activeLocale === "am";
-
-    return sorted.map((s) => {
+    for (const s of sortedMain) {
+      const isWebm = s.type?.includes("webm") || s.src.endsWith(".webm") || s.quality === "webm";
       const q = s.quality || "";
       let tag = "";
-      if (q === "1080p" || parseRes(q) >= 1080) tag = "FHD";
+      if (isWebm) tag = "WebM";
+      else if (q === "1080p" || parseRes(q) >= 1080) tag = "FHD";
       else if (q === "720p" || parseRes(q) >= 720) tag = "HD";
       else if (q === "480p" || q === "360p") tag = "SD";
-      else if (q === "240p" || parseRes(q) <= 240) tag = isAm ? "ዝቅተኛ" : "Low Data";
+      else if (q === "240p" || parseRes(q) <= 240) tag = isAm ? "ዝቅተኛ" : "3G Data";
       else tag = s.label || "";
 
-      return {
-        quality: q,
-        label: s.label || q,
+      list.push({
+        id: s.id,
+        quality: (isWebm ? "webm" : q) as VideoQuality,
+        label: s.label || `${q} (${isWebm ? "WebM VP9" : "MP4"})`,
         tag,
-      };
-    });
+        kind: "video",
+        format: isWebm ? "WebM (VP9)" : "MP4 (H.264)",
+        src: s.src,
+      });
+    }
+
+    // Audio streams
+    const audioSources = this.manifest.sources.filter((s) => s.kind === "audio-only");
+    for (const a of audioSources) {
+      let formatName = (a as any).format || "Audio";
+      let tag = "Audio";
+      let qKey = a.quality || "audio-opus";
+      if (a.src.endsWith(".opus") || a.type?.includes("opus") || a.id.includes("opus")) {
+        formatName = isAm ? "ኦፐስ ድምጽ (32kbps እጅግ ዝቅተኛ ዳታ)" : "Opus Audio (32kbps Low-Data)";
+        tag = "Opus";
+        qKey = "audio-opus";
+      } else if (a.src.endsWith(".mp3") || a.type?.includes("mpeg") || a.id.includes("mp3")) {
+        formatName = isAm ? "ኤምፒ3 ድምጽ (64kbps ዓለም አቀፍ)" : "MP3 Audio (64kbps Universal)";
+        tag = "MP3";
+        qKey = "audio-mp3";
+      } else if (a.src.endsWith(".ogg") || a.type?.includes("ogg") || a.id.includes("ogg")) {
+        formatName = isAm ? "ኦግ ቮርቢስ ድምጽ (Ogg Vorbis)" : "Ogg Vorbis Audio";
+        tag = "OGG";
+        qKey = "audio-ogg";
+      } else if (a.src.endsWith(".wav") || a.type?.includes("wav") || a.id.includes("wav")) {
+        formatName = isAm ? "ዋቭ ድምጽ (WAV Lossless PCM)" : "WAV Audio (Lossless PCM)";
+        tag = "WAV";
+        qKey = "audio-wav";
+      } else if (a.src.endsWith(".m4a") || a.type?.includes("mp4") || a.type?.includes("aac") || a.id.includes("m4a")) {
+        formatName = isAm ? "ኤኤሲ / ኤም4ኤ ድምጽ (AAC/M4A)" : "AAC / M4A Audio (Apple)";
+        tag = "M4A";
+        qKey = "audio-m4a";
+      }
+
+      list.push({
+        id: a.id,
+        quality: qKey as VideoQuality,
+        label: a.label || formatName,
+        tag,
+        kind: "audio",
+        format: formatName,
+        src: a.src,
+      });
+    }
+
+    return list;
+  }
+
+  private getAvailableQualities(): Array<{ quality: string; label: string; tag?: string }> {
+    return this.getAvailableStreams().map((s) => ({
+      quality: s.quality,
+      label: s.label,
+      tag: s.tag,
+    }));
   }
 
   private resolveMainSource(quality: VideoQuality = this.currentQuality): string {
     if (!this.manifest || !this.manifest.sources) return "";
+
+    // 1. Audio stream match
+    if (quality.startsWith("audio-") || quality === "audio") {
+      const ext = quality.replace("audio-", "").toLowerCase();
+      const match = this.manifest.sources.find((s) => 
+        s.kind === "audio-only" && 
+        (s.quality === quality || s.src.toLowerCase().includes(ext) || s.type?.toLowerCase().includes(ext) || s.id.toLowerCase().includes(ext))
+      );
+      if (match) return match.src;
+      const anyAudio = this.manifest.sources.find((s) => s.kind === "audio-only");
+      if (anyAudio) return anyAudio.src;
+    }
+
+    // 2. WebM format match
+    if (quality === "webm") {
+      const webmMatch = this.manifest.sources.find((s) => s.type?.includes("webm") || s.src.endsWith(".webm") || s.quality === "webm");
+      if (webmMatch) return webmMatch.src;
+    }
+
+    // 3. Standard Main Video Sources
     const mainSources = this.manifest.sources.filter((s) => s.kind === "main");
     if (!mainSources.length) return "";
 
@@ -511,11 +597,11 @@ export class A11yMediaPlayer extends HTMLElement {
       }
       const q1080 = mainSources.find((s) => s.quality === "1080p");
       if (q1080) return q1080.src;
-      const q720 = mainSources.find((s) => s.quality === "720p");
+      const q720 = mainSources.find((s) => s.quality === "720p" && !s.src.endsWith(".webm"));
       return q720 ? q720.src : mainSources[0].src;
     }
 
-    const matched = mainSources.find((s) => s.quality === quality);
+    const matched = mainSources.find((s) => s.quality === quality && !s.src.endsWith(".webm"));
     if (matched) return matched.src;
     return mainSources[0].src;
   }
@@ -525,13 +611,32 @@ export class A11yMediaPlayer extends HTMLElement {
     this.prefs.videoQuality = quality;
     savePreferences({ videoQuality: quality });
 
-    // Update button badge text
+    const newSrc = this.resolveMainSource(quality);
+    const isAudio = /\.(opus|mp3|ogg|wav|m4a|aac|flac)($|\?)/i.test(newSrc) || quality.startsWith("audio-");
+    this.isAudioMode = isAudio;
+
+    // Format display string
+    const formatLabel = quality === "auto" ? "Auto" : (
+      quality === "webm" ? "WebM" : (
+        quality === "audio-opus" ? "Opus" : (
+          quality === "audio-mp3" ? "MP3" : (
+            quality === "audio-ogg" ? "OGG" : (
+              quality === "audio-wav" ? "WAV" : (
+                quality === "audio-m4a" ? "M4A" : quality
+              )
+            )
+          )
+        )
+      )
+    );
+
+    // 1. Immediately update button badge text
     const badgeText = this.shadow.getElementById("quality-badge-text");
     if (badgeText) {
-      badgeText.textContent = quality === "auto" ? "Auto" : quality;
+      badgeText.textContent = formatLabel;
     }
 
-    // Update checkmarks in quality popover
+    // 2. Immediately update checkmarks in quality popover
     const menuItems = this.shadow.querySelectorAll(".quality-menu-item");
     menuItems.forEach((item) => {
       const q = item.getAttribute("data-quality");
@@ -542,20 +647,34 @@ export class A11yMediaPlayer extends HTMLElement {
       if (checkEl) checkEl.textContent = isSelected ? "✓" : "";
     });
 
-    // Update select-video-quality dropdown in settings popover
+    // 3. Immediately update select-video-quality dropdown in settings popover
     const selectQuality = this.shadow.getElementById("select-video-quality") as HTMLSelectElement | null;
     if (selectQuality && selectQuality.value !== quality) {
       selectQuality.value = quality;
     }
 
-    // Flash toast indicator
+    // 4. Update audio mode card display & equalizer
+    const audioCard = this.shadow.getElementById("audio-mode-card");
+    const audioBadge = this.shadow.getElementById("audio-mode-badge");
+    const audioEq = this.shadow.getElementById("audio-equalizer");
+    if (audioCard) {
+      audioCard.style.display = isAudio ? "flex" : "none";
+      if (audioBadge) {
+        audioBadge.textContent = `🎵 ${formatLabel} Audio Stream • Active`;
+      }
+      if (audioEq && this.mainVideo && !this.mainVideo.paused) {
+        audioEq.classList.add("playing");
+      }
+    }
+
+    // 5. Flash toast indicator
     const toast = this.shadow.getElementById("quality-toast");
     const toastText = this.shadow.getElementById("quality-toast-text");
     if (toast && toastText) {
       const isAm = this.activeLocale === "am";
       const qLabel = quality === "auto"
         ? (isAm ? "ጥራት፡ Auto (ተለዋዋጭ)" : "Quality: Auto (Adaptive)")
-        : `${isAm ? "ጥራት፡ " : "Quality: "}${quality}`;
+        : `${isAm ? "የሚዲያ ቅርጸት፡ " : "Format/Quality: "}${formatLabel}`;
       toastText.textContent = `⚡ ${qLabel}`;
       toast.style.display = "flex";
       toast.style.opacity = "1";
@@ -565,11 +684,10 @@ export class A11yMediaPlayer extends HTMLElement {
         setTimeout(() => {
           if (toast.style.opacity === "0") toast.style.display = "none";
         }, 300);
-      }, 2000);
+      }, 1800);
     }
 
-    // Switch video stream seamlessly
-    const newSrc = this.resolveMainSource(quality);
+    // 6. Switch media stream seamlessly with guaranteed timeout safety
     if (newSrc && this.mainVideo) {
       if (!this.prefs.audioDescriptionEnabled) {
         if (this.syncController) {
@@ -1019,6 +1137,84 @@ export class A11yMediaPlayer extends HTMLElement {
         @keyframes toastIn {
           from { opacity: 0; transform: translate(-50%, -6px); }
           to { opacity: 1; transform: translate(-50%, 0); }
+        }
+
+        /* Audio Mode Visualizer Card (Opus, MP3, WAV, OGG, M4A) */
+        .audio-mode-card {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, #0F172A 0%, #1E293B 55%, #0F2A24 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 5;
+          padding: 1.5rem;
+          box-sizing: border-box;
+          color: #F8FAFC;
+        }
+        .audio-mode-inner {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          gap: 0.65rem;
+          max-width: 480px;
+        }
+        .audio-mode-icon-circle {
+          width: 58px;
+          height: 58px;
+          border-radius: 50%;
+          background: rgba(16, 185, 129, 0.15);
+          border: 2px solid rgba(16, 185, 129, 0.4);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 26px;
+          box-shadow: 0 0 25px rgba(16, 185, 129, 0.25);
+        }
+        .audio-mode-title {
+          font-size: 1.05rem;
+          font-weight: 700;
+          letter-spacing: -0.01em;
+          color: #FFFFFF;
+        }
+        .audio-mode-badge {
+          display: inline-block;
+          font-size: 0.75rem;
+          font-weight: 600;
+          padding: 3px 10px;
+          border-radius: 999px;
+          background: rgba(16, 185, 129, 0.2);
+          border: 1px solid rgba(16, 185, 129, 0.5);
+          color: #6EE7B7;
+          letter-spacing: 0.02em;
+        }
+        .audio-equalizer {
+          display: flex;
+          align-items: flex-end;
+          gap: 4px;
+          height: 28px;
+          margin-top: 0.35rem;
+        }
+        .eq-bar {
+          width: 5px;
+          background: #10B981;
+          border-radius: 3px;
+          height: 6px;
+          transition: height 0.15s ease;
+        }
+        .audio-equalizer.playing .eq-bar-1 { animation: eqPulse 0.6s ease-in-out infinite alternate; }
+        .audio-equalizer.playing .eq-bar-2 { animation: eqPulse 0.8s ease-in-out 0.1s infinite alternate; }
+        .audio-equalizer.playing .eq-bar-3 { animation: eqPulse 0.5s ease-in-out 0.2s infinite alternate; }
+        .audio-equalizer.playing .eq-bar-4 { animation: eqPulse 0.9s ease-in-out 0.15s infinite alternate; }
+        .audio-equalizer.playing .eq-bar-5 { animation: eqPulse 0.7s ease-in-out 0.05s infinite alternate; }
+        .audio-equalizer.playing .eq-bar-6 { animation: eqPulse 0.85s ease-in-out 0.25s infinite alternate; }
+        .audio-equalizer.playing .eq-bar-7 { animation: eqPulse 0.55s ease-in-out 0.1s infinite alternate; }
+        .audio-equalizer.playing .eq-bar-8 { animation: eqPulse 0.75s ease-in-out 0.2s infinite alternate; }
+
+        @keyframes eqPulse {
+          0% { height: 5px; }
+          100% { height: 26px; }
         }
 
         /* 1-Click Caption Contrast Presets */
@@ -1851,9 +2047,53 @@ export class A11yMediaPlayer extends HTMLElement {
           color: var(--color-brand, #0071E3);
           background: rgba(255, 255, 255, 0.25);
         }
+        #btn-shortcuts.is-active,
+        #btn-quality.is-active {
+          color: var(--color-brand, #0071E3);
+          background: rgba(255, 255, 255, 0.25);
+        }
+
+        /* Keyboard Shortcuts Popover (Seamless Apple Flyout, Zero Dark Scrim) */
+        .shortcuts-popover {
+          position: absolute;
+          bottom: 64px;
+          right: 36px;
+          width: 380px;
+          max-width: calc(100% - 24px);
+          max-height: min(480px, calc(100vh - 120px));
+          background: var(--color-surface-elevated, #FFFFFF);
+          color: var(--color-ink, #1D1D1F);
+          border-radius: 14px;
+          border: 1px solid var(--color-border, rgba(0, 0, 0, 0.12));
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.24), 0 2px 10px rgba(0, 0, 0, 0.08);
+          backdrop-filter: blur(24px) saturate(180%);
+          -webkit-backdrop-filter: blur(24px) saturate(180%);
+          z-index: 122;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          box-sizing: border-box;
+          transform-origin: bottom right;
+          animation: appleFlyoutIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        :host-context([data-theme="dark"]) .shortcuts-popover,
+        :host-context([data-theme="black"]) .shortcuts-popover,
+        :host-context([data-theme="monochrome"]) .shortcuts-popover {
+          background: rgba(24, 24, 27, 0.95);
+          border-color: rgba(255, 255, 255, 0.15);
+          color: #F8FAFC;
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+        }
 
         @media (max-width: 600px) {
           .prefs-popover {
+            right: 8px;
+            left: 8px;
+            width: auto;
+            max-width: none;
+            bottom: 56px;
+          }
+          .shortcuts-popover {
             right: 8px;
             left: 8px;
             width: auto;
@@ -1864,36 +2104,6 @@ export class A11yMediaPlayer extends HTMLElement {
             right: 16px;
             bottom: 56px;
           }
-        }
-
-        /* Keyboard Shortcuts Modal Dialog (Soft accessible scrim) */
-        .dialog-backdrop {
-          position: fixed;
-          inset: 0;
-          background: rgba(0, 0, 0, 0.28);
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 1000;
-          padding: 1rem;
-        }
-        .dialog-panel {
-          background: #FFFFFF;
-          color: #1D1D1F;
-          padding: 1.75rem 2rem;
-          border-radius: 16px;
-          max-width: 500px;
-          width: 100%;
-          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .dialog-panel h3 {
-          margin-top: 0;
-          color: #1D1D1F;
-          font-size: 21px;
-          letter-spacing: -0.005em;
         }
         .form-row {
           margin-bottom: 1rem;
@@ -2120,6 +2330,29 @@ export class A11yMediaPlayer extends HTMLElement {
                 src="${activeMainSrc}">
               </video>
 
+              <!-- Audio-Only Visualizer Card (Opus, MP3, WAV, OGG, M4A) -->
+              <div class="audio-mode-card" id="audio-mode-card" style="display: ${this.isAudioMode ? "flex" : "none"};">
+                <div class="audio-mode-inner">
+                  <div class="audio-mode-icon-circle">
+                    <span class="audio-mode-icon" aria-hidden="true">🎵</span>
+                  </div>
+                  <div class="audio-mode-meta">
+                    <div class="audio-mode-title">${title}</div>
+                    <div class="audio-mode-badge" id="audio-mode-badge">${isAm ? "የድምጽ ሁነታ" : "High-Fidelity Audio Mode"}</div>
+                  </div>
+                  <div class="audio-equalizer ${this.mainVideo && !this.mainVideo.paused ? "playing" : ""}" aria-hidden="true" id="audio-equalizer">
+                    <span class="eq-bar eq-bar-1"></span>
+                    <span class="eq-bar eq-bar-2"></span>
+                    <span class="eq-bar eq-bar-3"></span>
+                    <span class="eq-bar eq-bar-4"></span>
+                    <span class="eq-bar eq-bar-5"></span>
+                    <span class="eq-bar eq-bar-6"></span>
+                    <span class="eq-bar eq-bar-7"></span>
+                    <span class="eq-bar eq-bar-8"></span>
+                  </div>
+                </div>
+              </div>
+
               <!-- Video Quality Toast Indicator -->
               <div class="quality-toast" id="quality-toast" style="display: none;" role="status" aria-live="polite">
                 <span id="quality-toast-text">⚡ Quality: Auto</span>
@@ -2243,23 +2476,35 @@ export class A11yMediaPlayer extends HTMLElement {
               </div>
             </div>
 
-            <!-- Video Quality Popover Menu (Aligned with standard media players) -->
+            <!-- Video Quality & Audio Formats Popover Menu -->
             <div 
               class="quality-popover" 
               id="quality-menu" 
               style="display: none;" 
               role="menu" 
-              aria-label="${isAm ? "የቪዲዮ ጥራት" : "Video Quality"}">
-              <div class="quality-menu-header">${isAm ? "የቪዲዮ ጥራት" : "QUALITY"}</div>
+              aria-label="${isAm ? "የቪዲዮ ጥራት እና የሚዲያ ቅርጸቶች" : "Media Quality & Formats"}">
+              <div class="quality-menu-header">${isAm ? "የቪዲዮ ጥራት" : "VIDEO QUALITY"}</div>
               <div class="quality-menu-list">
                 <button type="button" class="quality-menu-item ${this.currentQuality === "auto" ? "selected" : ""}" data-quality="auto" role="menuitemradio" aria-checked="${this.currentQuality === "auto"}">
                   <span class="quality-check" aria-hidden="true">${this.currentQuality === "auto" ? "✓" : ""}</span>
-                  <span class="quality-name">Auto</span>
+                  <span class="quality-name">Auto (Adaptive)</span>
                 </button>
-                ${this.getAvailableQualities().map((q) => `
-                <button type="button" class="quality-menu-item ${this.currentQuality === q.quality ? "selected" : ""}" data-quality="${q.quality}" role="menuitemradio" aria-checked="${this.currentQuality === q.quality}">
-                  <span class="quality-check" aria-hidden="true">${this.currentQuality === q.quality ? "✓" : ""}</span>
-                  <span class="quality-name">${q.quality} ${q.tag ? `<span class="quality-tag">${q.tag}</span>` : ""}</span>
+                ${this.getAvailableStreams().filter(s => s.kind === "video").map((s) => `
+                <button type="button" class="quality-menu-item ${this.currentQuality === s.quality ? "selected" : ""}" data-quality="${s.quality}" role="menuitemradio" aria-checked="${this.currentQuality === s.quality}">
+                  <span class="quality-check" aria-hidden="true">${this.currentQuality === s.quality ? "✓" : ""}</span>
+                  <span class="quality-name">${s.label} ${s.tag ? `<span class="quality-tag">${s.tag}</span>` : ""}</span>
+                </button>
+                `).join("")}
+              </div>
+
+              <div class="quality-menu-header" style="margin-top: 6px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 6px;">
+                ${isAm ? "የድምጽ ቅርጸቶች (ቀላል ዳታ)" : "AUDIO FORMATS (3G / LOW DATA)"}
+              </div>
+              <div class="quality-menu-list">
+                ${this.getAvailableStreams().filter(s => s.kind === "audio").map((s) => `
+                <button type="button" class="quality-menu-item ${this.currentQuality === s.quality ? "selected" : ""}" data-quality="${s.quality}" role="menuitemradio" aria-checked="${this.currentQuality === s.quality}">
+                  <span class="quality-check" aria-hidden="true">${this.currentQuality === s.quality ? "✓" : ""}</span>
+                  <span class="quality-name">${s.label} ${s.tag ? `<span class="quality-tag" style="background: rgba(16,185,129,0.25); color: #6EE7B7;">${s.tag}</span>` : ""}</span>
                 </button>
                 `).join("")}
               </div>
@@ -2283,12 +2528,19 @@ export class A11yMediaPlayer extends HTMLElement {
 
               <div class="popover-body">
                 <div class="form-row">
-                  <label for="select-video-quality">${isAm ? "የቪዲዮ ጥራት:" : "Video Quality:"}</label>
+                  <label for="select-video-quality">${isAm ? "የሚዲያ ቅርጸት እና ጥራት:" : "Media Format & Quality:"}</label>
                   <select id="select-video-quality">
-                    <option value="auto" ${this.currentQuality === "auto" ? "selected" : ""}>Auto (Adaptive)</option>
-                    ${this.getAvailableQualities().map((q) => `
-                    <option value="${q.quality}" ${this.currentQuality === q.quality ? "selected" : ""}>${q.label}</option>
-                    `).join("")}
+                    <option value="auto" ${this.currentQuality === "auto" ? "selected" : ""}>Auto (Adaptive Network)</option>
+                    <optgroup label="${isAm ? "የቪዲዮ ዥረቶች (Video Streams)" : "Video Streams"}">
+                      ${this.getAvailableStreams().filter(s => s.kind === "video").map((q) => `
+                      <option value="${q.quality}" ${this.currentQuality === q.quality ? "selected" : ""}>${q.label}</option>
+                      `).join("")}
+                    </optgroup>
+                    <optgroup label="${isAm ? "የድምጽ ቅርጸቶች (Audio Formats)" : "Audio Formats (3G / Low Data)"}">
+                      ${this.getAvailableStreams().filter(s => s.kind === "audio").map((q) => `
+                      <option value="${q.quality}" ${this.currentQuality === q.quality ? "selected" : ""}>${q.label}</option>
+                      `).join("")}
+                    </optgroup>
                   </select>
                 </div>
 
@@ -2368,6 +2620,50 @@ export class A11yMediaPlayer extends HTMLElement {
                 </button>
               </div>
             </div>
+
+            <!-- Keyboard Shortcuts Popover (Flows smoothly from keyboard icon, zero dark scrim) -->
+            <div 
+              class="shortcuts-popover" 
+              id="dialog-shortcuts" 
+              style="display: none;" 
+              role="dialog" 
+              aria-modal="true" 
+              aria-labelledby="shortcuts-title">
+              <div class="popover-header">
+                <div class="popover-title" id="shortcuts-title">
+                  <span aria-hidden="true">${ICONS.shortcuts}</span>
+                  <span>${isAm ? "የኪቦርድ አቋራጭ ቁልፎች" : "Keyboard Shortcuts Cheat-Sheet"}</span>
+                </div>
+                <button type="button" class="btn-popover-close" id="btn-close-shortcuts" aria-label="${isAm ? "ዝጋ" : "Close"}" title="${isAm ? "ዝጋ" : "Close"}">✕</button>
+              </div>
+
+              <div class="popover-body">
+                <p style="margin: 0 0 0.75rem 0; font-size: 0.8rem; color: var(--color-muted-ink, #64748B); line-height: 1.4;">
+                  ${isAm ? "ይህ ማጫወቻ ሙሉ በሙሉ በኪቦርድ ብቻ የሚሰራ ሲሆን ለስክሪን አንባቢ ተጠቃሚዎች ምቹ ነው" : "Full accessible keyboard control optimized for screen reader users and power learners."}
+                </p>
+                <div class="shortcuts-grid">
+                  <div class="shortcut-item"><kbd>Space</kbd> / <kbd>K</kbd> <span>${isAm ? "አጫውት / አቁም" : "Play / Pause"}</span></div>
+                  <div class="shortcut-item"><kbd>J</kbd> <span>${isAm ? "5 ሰከንድ ወደኋላ መልስ" : "Seek back 5s"}</span></div>
+                  <div class="shortcut-item"><kbd>L</kbd> <span>${isAm ? "5 ሰከንድ ወደፊት ውሰድ" : "Seek forward 5s"}</span></div>
+                  <div class="shortcut-item"><kbd>M</kbd> <span>${isAm ? "ድምጽ አጥፋ / አብራ" : "Mute / Unmute"}</span></div>
+                  <div class="shortcut-item"><kbd>F</kbd> <span>${isAm ? "ሙሉ ማያ ገጽ" : "Toggle Fullscreen"}</span></div>
+                  <div class="shortcut-item"><kbd>C</kbd> <span>${isAm ? "የትርጉም ጽሑፍ (CC)" : "Toggle Captions"}</span></div>
+                  <div class="shortcut-item"><kbd>S</kbd> <span>${isAm ? "የምልክት ቋንቋ (EthSL)" : "Toggle Sign Language"}</span></div>
+                  <div class="shortcut-item"><kbd>T</kbd> <span>${isAm ? "የጽሑፍ ግልባጭ ማሳያ" : "Toggle Transcript"}</span></div>
+                  <div class="shortcut-item"><kbd>D</kbd> <span>${isAm ? "የድምፅ ማብራሪያ (AD)" : "Toggle Audio Description"}</span></div>
+                  <div class="shortcut-item"><kbd>&gt;</kbd> / <kbd>&lt;</kbd> <span>${isAm ? "ፍጥነት ጨምር / ቀንስ" : "Speed Faster / Slower"}</span></div>
+                  <div class="shortcut-item"><kbd>0</kbd> / <kbd>Home</kbd> <span>${isAm ? "ከመጀመሪያ ጀምር" : "Restart from beginning"}</span></div>
+                  <div class="shortcut-item"><kbd>?</kbd> <span>${isAm ? "ይህን መመሪያ አሳይ" : "Open this cheat-sheet"}</span></div>
+                  <div class="shortcut-item"><kbd>Esc</kbd> <span>${isAm ? "መስኮት ዝጋ" : "Close dialogs / Fullscreen"}</span></div>
+                </div>
+              </div>
+
+              <div class="popover-footer" style="justify-content: flex-end;">
+                <button type="button" class="btn-popover-action btn-popover-save" id="btn-ok-shortcuts">
+                  ${isAm ? "ገባኝ" : "Got it"}
+                </button>
+              </div>
+            </div>
           </div>
 
           <!-- RIGHT: Movable & Resizable Sign Language Window (Outside of video frame) -->
@@ -2435,41 +2731,6 @@ export class A11yMediaPlayer extends HTMLElement {
             <div class="window-resize-edge-left" id="esl-resize-edge-left" aria-hidden="true" title="${isAm ? "ስፋቱን ለመቀየር ይጎትቱ" : "Drag to resize width"}"></div>
           </div>
 
-        </div>
-
-        <!-- Keyboard Shortcuts Modal Dialog -->
-        <div class="dialog-backdrop" id="dialog-shortcuts" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="shortcuts-title">
-          <div class="dialog-panel shortcuts-panel">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-              <h3 id="shortcuts-title" style="margin: 0; font-size: 1.15rem; font-weight: 600;">
-                ⌨ ${isAm ? "የኪቦርድ አቋራጭ ቁልፎች" : "Keyboard Shortcuts Cheat-Sheet"}
-              </h3>
-              <button type="button" class="btn-close-modal" id="btn-close-shortcuts" aria-label="${isAm ? "ዝጋ" : "Close"}">✕</button>
-            </div>
-            <p style="margin: 0 0 1rem 0; font-size: 0.85rem; color: #64748B;">
-              ${isAm ? "ይህ ማጫወቻ ሙሉ በሙሉ በኪቦርድ ብቻ የሚሰራ ሲሆን ለስክሪን አንባቢ ተጠቃሚዎች ምቹ ነው" : "Full accessible keyboard control optimized for screen reader users and power learners."}
-            </p>
-            <div class="shortcuts-grid">
-              <div class="shortcut-item"><kbd>Space</kbd> / <kbd>K</kbd> <span>${isAm ? "አጫውት / አቁም" : "Play / Pause"}</span></div>
-              <div class="shortcut-item"><kbd>J</kbd> <span>${isAm ? "5 ሰከንድ ወደኋላ መልስ" : "Seek back 5s"}</span></div>
-              <div class="shortcut-item"><kbd>L</kbd> <span>${isAm ? "5 ሰከንድ ወደፊት ውሰድ" : "Seek forward 5s"}</span></div>
-              <div class="shortcut-item"><kbd>M</kbd> <span>${isAm ? "ድምጽ አጥፋ / አብራ" : "Mute / Unmute"}</span></div>
-              <div class="shortcut-item"><kbd>F</kbd> <span>${isAm ? "ሙሉ ማያ ገጽ" : "Toggle Fullscreen"}</span></div>
-              <div class="shortcut-item"><kbd>C</kbd> <span>${isAm ? "የትርጉም ጽሑፍ (CC)" : "Toggle Captions"}</span></div>
-              <div class="shortcut-item"><kbd>S</kbd> <span>${isAm ? "የምልክት ቋንቋ (EthSL)" : "Toggle Sign Language"}</span></div>
-              <div class="shortcut-item"><kbd>T</kbd> <span>${isAm ? "የጽሑፍ ግልባጭ ማሳያ" : "Toggle Transcript"}</span></div>
-              <div class="shortcut-item"><kbd>D</kbd> <span>${isAm ? "የድምፅ ማብራሪያ (AD)" : "Toggle Audio Description"}</span></div>
-              <div class="shortcut-item"><kbd>&gt;</kbd> / <kbd>&lt;</kbd> <span>${isAm ? "ፍጥነት ጨምር / ቀንስ" : "Speed Faster / Slower"}</span></div>
-              <div class="shortcut-item"><kbd>0</kbd> / <kbd>Home</kbd> <span>${isAm ? "ከመጀመሪያ ጀምር" : "Restart from beginning"}</span></div>
-              <div class="shortcut-item"><kbd>?</kbd> <span>${isAm ? "ይህን መመሪያ አሳይ" : "Open this cheat-sheet"}</span></div>
-              <div class="shortcut-item"><kbd>Esc</kbd> <span>${isAm ? "መስኮት ዝጋ" : "Close dialogs / Fullscreen"}</span></div>
-            </div>
-            <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">
-              <button type="button" class="btn-dialog-action btn-dialog-save" id="btn-ok-shortcuts">
-                ${isAm ? "ገባኝ" : "Got it"}
-              </button>
-            </div>
-          </div>
         </div>
       </section>
     `;
@@ -2955,6 +3216,8 @@ export class A11yMediaPlayer extends HTMLElement {
       playBtn?.setAttribute("title", this.activeLocale === "am" ? "አቁም (Space / K)" : "Pause (Space / K)");
       bigPlayBtn?.classList.add("is-hidden");
       if (stateDisplay) stateDisplay.textContent = this.activeLocale === "am" ? "እየተጫወተ ነው" : "Playing";
+      const eq = this.shadow.getElementById("audio-equalizer");
+      if (eq) eq.classList.add("playing");
     });
 
     this.mainVideo.addEventListener("pause", () => {
@@ -2967,6 +3230,8 @@ export class A11yMediaPlayer extends HTMLElement {
           ? (this.activeLocale === "am" ? "ተጠናቋል" : "End of track")
           : (this.activeLocale === "am" ? "ቆሟል" : "Paused");
       }
+      const eq = this.shadow.getElementById("audio-equalizer");
+      if (eq) eq.classList.remove("playing");
     });
 
     this.mainVideo.addEventListener("ended", () => {
@@ -2975,6 +3240,8 @@ export class A11yMediaPlayer extends HTMLElement {
       playBtn?.setAttribute("title", this.activeLocale === "am" ? "አጫውት (Space / K)" : "Play (Space / K)");
       bigPlayBtn?.classList.remove("is-hidden");
       if (stateDisplay) stateDisplay.textContent = this.activeLocale === "am" ? "ተጠናቋል" : "End of track";
+      const eq = this.shadow.getElementById("audio-equalizer");
+      if (eq) eq.classList.remove("playing");
 
       this.dispatchEvent(
         new CustomEvent("db-player:complete", {
@@ -3255,6 +3522,11 @@ export class A11yMediaPlayer extends HTMLElement {
     const btnQuality = this.shadow.getElementById("btn-quality");
     const qualityMenu = this.shadow.getElementById("quality-menu");
 
+    const dialogShortcuts = this.shadow.getElementById("dialog-shortcuts");
+    const btnShortcuts = this.shadow.getElementById("btn-shortcuts");
+    const btnCloseShortcuts = this.shadow.getElementById("btn-close-shortcuts");
+    const btnOkShortcuts = this.shadow.getElementById("btn-ok-shortcuts");
+
     const closeQualityMenu = () => {
       if (!this.isQualityMenuOpen) return;
       this.isQualityMenuOpen = false;
@@ -3265,6 +3537,7 @@ export class A11yMediaPlayer extends HTMLElement {
 
     const openQualityMenu = () => {
       closePrefs();
+      closeShortcuts();
       this.isQualityMenuOpen = true;
       if (qualityMenu) qualityMenu.style.display = "flex";
       btnQuality?.classList.add("is-active");
@@ -3283,18 +3556,21 @@ export class A11yMediaPlayer extends HTMLElement {
     };
 
     btnQuality?.addEventListener("click", (e) => {
+      e.preventDefault();
       e.stopPropagation();
       toggleQualityMenu();
     });
 
     const qualityBtns = this.shadow.querySelectorAll(".quality-menu-item");
     qualityBtns.forEach((btn) => {
-      btn.addEventListener("click", async () => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         const q = btn.getAttribute("data-quality") as VideoQuality;
         if (q) {
-          await this.applyQuality(q);
           closeQualityMenu();
           btnQuality?.focus();
+          this.applyQuality(q).catch((err) => console.warn("Quality apply error:", err));
         }
       });
     });
@@ -3313,11 +3589,11 @@ export class A11yMediaPlayer extends HTMLElement {
       if (prefsDialog) prefsDialog.style.display = "none";
       btnPrefs?.classList.remove("is-active");
       btnPrefs?.setAttribute("aria-expanded", "false");
-      btnPrefs?.focus();
     };
 
     const openPrefs = () => {
       closeQualityMenu();
+      closeShortcuts();
       this.isPreferencesOpen = true;
 
       if (selectVideoQuality) selectVideoQuality.value = this.currentQuality;
@@ -3342,10 +3618,68 @@ export class A11yMediaPlayer extends HTMLElement {
       }
     };
 
-    btnPrefs?.addEventListener("click", togglePrefs);
-    btnTranscriptPrefs?.addEventListener("click", openPrefs);
-    btnEslPrefs?.addEventListener("click", openPrefs);
-    btnDismissPrefs?.addEventListener("click", closePrefs);
+    btnPrefs?.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      togglePrefs();
+    });
+    btnTranscriptPrefs?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openPrefs();
+    });
+    btnEslPrefs?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openPrefs();
+    });
+    btnDismissPrefs?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      closePrefs();
+      btnPrefs?.focus();
+    });
+
+    const closeShortcuts = () => {
+      if (!this.isShortcutsOpen) return;
+      this.isShortcutsOpen = false;
+      if (dialogShortcuts) dialogShortcuts.style.display = "none";
+      btnShortcuts?.classList.remove("is-active");
+      btnShortcuts?.setAttribute("aria-expanded", "false");
+    };
+
+    const openShortcuts = () => {
+      closeQualityMenu();
+      closePrefs();
+      this.isShortcutsOpen = true;
+      if (dialogShortcuts) dialogShortcuts.style.display = "flex";
+      btnShortcuts?.classList.add("is-active");
+      btnShortcuts?.setAttribute("aria-expanded", "true");
+      btnCloseShortcuts?.focus();
+    };
+
+    const toggleShortcuts = () => {
+      if (this.isShortcutsOpen) {
+        closeShortcuts();
+      } else {
+        openShortcuts();
+      }
+    };
+
+    btnShortcuts?.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleShortcuts();
+    });
+    btnCloseShortcuts?.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      closeShortcuts();
+      btnShortcuts?.focus();
+    });
+    btnOkShortcuts?.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      closeShortcuts();
+      btnShortcuts?.focus();
+    });
 
     // Live Reactive Updates (Learners immediately see effects without dialog blocking)
     ccLangSelect?.addEventListener("change", async () => {
@@ -3449,27 +3783,23 @@ export class A11yMediaPlayer extends HTMLElement {
     // Dismiss Popovers When Clicking Outside
     const handleOutsideClick = (e: MouseEvent) => {
       const path = e.composedPath();
+      const isInside = (el: HTMLElement | null) => el && (path.includes(el) || el.contains(e.target as Node));
+
       if (this.isPreferencesOpen) {
-        if (
-          (prefsDialog && path.includes(prefsDialog)) ||
-          (btnPrefs && path.includes(btnPrefs)) ||
-          (btnTranscriptPrefs && path.includes(btnTranscriptPrefs)) ||
-          (btnEslPrefs && path.includes(btnEslPrefs))
-        ) {
-          // Inside prefs
-        } else {
+        if (!isInside(prefsDialog) && !isInside(btnPrefs) && !isInside(btnTranscriptPrefs) && !isInside(btnEslPrefs)) {
           closePrefs();
         }
       }
 
       if (this.isQualityMenuOpen) {
-        if (
-          (qualityMenu && path.includes(qualityMenu)) ||
-          (btnQuality && path.includes(btnQuality))
-        ) {
-          // Inside quality menu
-        } else {
+        if (!isInside(qualityMenu) && !isInside(btnQuality)) {
           closeQualityMenu();
+        }
+      }
+
+      if (this.isShortcutsOpen) {
+        if (!isInside(dialogShortcuts) && !isInside(btnShortcuts)) {
+          closeShortcuts();
         }
       }
     };
@@ -3702,21 +4032,6 @@ export class A11yMediaPlayer extends HTMLElement {
       }
     });
 
-    // Keyboard Shortcuts Cheat-Sheet Modal Dialog
-    const dialogShortcuts = this.shadow.getElementById("dialog-shortcuts");
-    const btnShortcuts = this.shadow.getElementById("btn-shortcuts");
-    const btnCloseShortcuts = this.shadow.getElementById("btn-close-shortcuts");
-    const btnOkShortcuts = this.shadow.getElementById("btn-ok-shortcuts");
-    const toggleShortcutsModal = (show?: boolean) => {
-      const open = show !== undefined ? show : dialogShortcuts?.style.display === "none";
-      if (dialogShortcuts) dialogShortcuts.style.display = open ? "flex" : "none";
-      if (open) btnCloseShortcuts?.focus();
-      else btnShortcuts?.focus();
-    };
-    btnShortcuts?.addEventListener("click", () => toggleShortcutsModal(true));
-    btnCloseShortcuts?.addEventListener("click", () => toggleShortcutsModal(false));
-    btnOkShortcuts?.addEventListener("click", () => toggleShortcutsModal(false));
-
     // 1-Click Caption Preset Pills
     const presetBtns = this.shadow.querySelectorAll(".btn-preset-pill");
     presetBtns.forEach((btn) => {
@@ -3735,24 +4050,22 @@ export class A11yMediaPlayer extends HTMLElement {
     // Scoped Keyboard Hotkeys
     const playerRoot = this.shadow.getElementById("player-container");
     playerRoot?.addEventListener("keydown", (e) => {
-      if (this.isQualityMenuOpen) {
-        if (e.key === "Escape") {
+      if (e.key === "Escape") {
+        if (this.isQualityMenuOpen) {
           closeQualityMenu();
           btnQuality?.focus();
+          return;
         }
-        return;
-      }
-      if (this.isPreferencesOpen) {
-        if (e.key === "Escape") {
+        if (this.isShortcutsOpen) {
+          closeShortcuts();
+          btnShortcuts?.focus();
+          return;
+        }
+        if (this.isPreferencesOpen) {
           closePrefs();
+          btnPrefs?.focus();
+          return;
         }
-        return;
-      }
-      if (dialogShortcuts && dialogShortcuts.style.display === "flex") {
-        if (e.key === "Escape") {
-          toggleShortcutsModal(false);
-        }
-        return;
       }
 
       if ((e.target as HTMLElement).tagName === "INPUT" || (e.target as HTMLElement).tagName === "SELECT") {
@@ -3828,7 +4141,7 @@ export class A11yMediaPlayer extends HTMLElement {
         case "?":
         case "/":
           e.preventDefault();
-          toggleShortcutsModal();
+          toggleShortcuts();
           break;
         case "Escape":
           if (isFullscreen()) {
