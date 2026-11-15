@@ -819,7 +819,7 @@ export class A11yMediaPlayer extends HTMLElement {
           width: 100%;
           background: #111417;
           border-radius: 8px;
-          overflow: hidden;
+          overflow: visible;
           box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
           position: relative;
           outline: none;
@@ -863,6 +863,7 @@ export class A11yMediaPlayer extends HTMLElement {
           align-items: center;
           justify-content: center;
           overflow: hidden;
+          border-radius: 8px 8px 0 0;
         }
         #player-container:fullscreen .video-viewport,
         #player-container:-webkit-full-screen .video-viewport,
@@ -946,6 +947,7 @@ export class A11yMediaPlayer extends HTMLElement {
           background: #1F2428;
           color: #FFF;
           border-top: 1px solid #30363D;
+          border-radius: 0 0 8px 8px;
           user-select: none;
           flex-shrink: 0;
         }
@@ -1318,13 +1320,197 @@ export class A11yMediaPlayer extends HTMLElement {
           line-height: 1.4;
         }
 
-        /* Preferences Dialog */
+        /* Accessibility Preferences Popover Flyout (Flows smoothly from settings icon, zero dark scrim) */
+        .prefs-popover {
+          position: absolute;
+          bottom: 64px;
+          right: 12px;
+          width: 360px;
+          max-width: calc(100% - 24px);
+          max-height: min(520px, calc(100vh - 100px));
+          background: var(--color-surface-elevated, #FFFFFF);
+          color: var(--color-ink, #1D1D1F);
+          border-radius: 14px;
+          border: 1px solid var(--color-border, rgba(0, 0, 0, 0.12));
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.24), 0 2px 10px rgba(0, 0, 0, 0.08);
+          backdrop-filter: blur(24px) saturate(180%);
+          -webkit-backdrop-filter: blur(24px) saturate(180%);
+          z-index: 120;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          box-sizing: border-box;
+          transform-origin: bottom right;
+          animation: appleFlyoutIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes appleFlyoutIn {
+          0% {
+            opacity: 0;
+            transform: translateY(12px) scale(0.95);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+
+        .popover-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0.65rem 0.95rem;
+          border-bottom: 1px solid var(--color-border-subtle, rgba(0, 0, 0, 0.08));
+          background: rgba(0, 0, 0, 0.02);
+          flex-shrink: 0;
+        }
+        .popover-title {
+          font-size: 0.92rem;
+          font-weight: 600;
+          color: inherit;
+          display: flex;
+          align-items: center;
+          gap: 0.45rem;
+          margin: 0;
+          letter-spacing: -0.01em;
+        }
+        .popover-title svg {
+          width: 16px;
+          height: 16px;
+          color: var(--color-brand, #0071E3);
+        }
+        .btn-popover-close {
+          background: transparent;
+          border: none;
+          color: var(--color-muted-ink, #64748B);
+          width: 28px;
+          height: 28px;
+          border-radius: 999px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.85rem;
+          font-weight: 700;
+          transition: background 0.15s ease, color 0.15s ease;
+          padding: 0;
+        }
+        .btn-popover-close:hover {
+          background: rgba(0, 0, 0, 0.08);
+          color: var(--color-ink, #0F172A);
+        }
+        .btn-popover-close:focus-visible {
+          outline: 2px solid var(--color-focus, #0071E3);
+          outline-offset: 1px;
+        }
+
+        .popover-body {
+          padding: 0.75rem 0.95rem;
+          overflow-y: auto;
+          flex: 1 1 auto;
+          scrollbar-width: thin;
+          scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+        }
+        .popover-body .form-row {
+          margin-bottom: 0.65rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+        }
+        .popover-body .form-row:last-child {
+          margin-bottom: 0;
+        }
+        .popover-body label {
+          font-weight: 600;
+          font-size: 0.8rem;
+          color: inherit;
+        }
+        .popover-body select {
+          padding: 0.35rem 0.6rem;
+          border-radius: 8px;
+          border: 1px solid var(--color-border, #D2D2D7);
+          background: var(--color-surface, #FFFFFF);
+          color: var(--color-ink, #1D1D1F);
+          font-size: 0.85rem;
+          min-height: 36px;
+          transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        .popover-body select:focus-visible {
+          outline: 2px solid var(--color-focus, #0071E3);
+          outline-offset: 1px;
+        }
+
+        .popover-footer {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0.55rem 0.95rem;
+          border-top: 1px solid var(--color-border-subtle, rgba(0, 0, 0, 0.08));
+          background: rgba(0, 0, 0, 0.02);
+          gap: 0.5rem;
+          flex-shrink: 0;
+        }
+        .btn-popover-action {
+          padding: 0.45rem 0.9rem;
+          font-size: 0.85rem;
+          font-weight: 600;
+          border-radius: 6px;
+          min-height: 36px;
+          border: 1px solid transparent;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.35rem;
+          transition: all 0.15s ease;
+        }
+        .btn-popover-action:focus-visible {
+          outline: 2px solid var(--color-focus, #0071E3);
+          outline-offset: 1px;
+        }
+        .btn-popover-reset {
+          background: transparent;
+          color: var(--color-muted-ink, #64748B);
+          border-color: var(--color-border, #CBD5E1);
+        }
+        .btn-popover-reset:hover {
+          background: rgba(0, 0, 0, 0.05);
+          color: var(--color-ink, #1E293B);
+        }
+        .btn-popover-save {
+          background: var(--color-brand, #0071E3);
+          color: #FFFFFF;
+        }
+        .btn-popover-save:hover {
+          filter: brightness(1.1);
+        }
+
+        #btn-prefs {
+          transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.15s ease, background 0.15s ease;
+        }
+        #btn-prefs.is-active {
+          transform: rotate(45deg);
+          color: var(--color-brand, #0071E3);
+          background: rgba(255, 255, 255, 0.25);
+        }
+
+        @media (max-width: 600px) {
+          .prefs-popover {
+            right: 8px;
+            left: 8px;
+            width: auto;
+            max-width: none;
+            bottom: 56px;
+          }
+        }
+
+        /* Keyboard Shortcuts Modal Dialog (Soft accessible scrim) */
         .dialog-backdrop {
           position: fixed;
           inset: 0;
-          background: rgba(0, 0, 0, 0.45);
-          backdrop-filter: blur(20px) saturate(180%);
-          -webkit-backdrop-filter: blur(20px) saturate(180%);
+          background: rgba(0, 0, 0, 0.28);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -1691,6 +1877,97 @@ export class A11yMediaPlayer extends HTMLElement {
                 <span class="status-item status-state" id="state-display">Paused</span>
               </div>
             </div>
+
+            <!-- Accessibility & Layout Settings Popover (Flows smoothly from settings icon, zero dark scrim) -->
+            <div 
+              class="prefs-popover" 
+              id="prefs-dialog" 
+              style="display: none;" 
+              role="dialog" 
+              aria-modal="true" 
+              aria-labelledby="prefs-title">
+              <div class="popover-header">
+                <div class="popover-title" id="prefs-title">
+                  <span aria-hidden="true">${ICONS.prefs}</span>
+                  <span>${isAm ? "የተደራሽነት እና አቀማመጥ ምርጫዎች" : "Accessibility & Layout Settings"}</span>
+                </div>
+                <button type="button" class="btn-popover-close" id="btn-dismiss-prefs" aria-label="${isAm ? "ምርጫዎችን ዝጋ" : "Close settings"}" title="${isAm ? "ዝጋ" : "Close"}">✕</button>
+              </div>
+
+              <div class="popover-body">
+                <div class="form-row">
+                  <label for="select-cc-lang">${isAm ? "የትርጉም ጽሑፍ ቋንቋ:" : "Caption Language:"}</label>
+                  <select id="select-cc-lang">
+                    <option value="en" ${this.prefs.captionLanguage === "en" ? "selected" : ""}>English (Reviewed)</option>
+                    <option value="am" ${this.prefs.captionLanguage === "am" ? "selected" : ""}>አማርኛ (የተገመገመ)</option>
+                    <option value="off" ${this.prefs.captionLanguage === "off" ? "selected" : ""}>Off</option>
+                  </select>
+                </div>
+
+                <div class="form-row">
+                  <label for="select-cc-size">${isAm ? "የትርጉም ጽሑፍ መጠን:" : "Caption Font Size:"}</label>
+                  <select id="select-cc-size">
+                    <option value="small" ${this.prefs.captionSize === "small" ? "selected" : ""}>Small (14px)</option>
+                    <option value="medium" ${this.prefs.captionSize === "medium" ? "selected" : ""}>Medium (18px - Standard)</option>
+                    <option value="large" ${this.prefs.captionSize === "large" ? "selected" : ""}>Large (24px)</option>
+                    <option value="xlarge" ${this.prefs.captionSize === "xlarge" ? "selected" : ""}>Extra Large (32px)</option>
+                  </select>
+                </div>
+
+                <div class="form-row">
+                  <label for="select-cc-theme">${isAm ? "የንፅፅር ገጽታ:" : "Contrast Theme:"}</label>
+                  <div class="preset-pill-group" role="group" aria-label="${isAm ? "ፈጣን የንፅፅር ገጽታዎች" : "Quick Caption Contrast Presets"}">
+                    <button type="button" class="btn-preset-pill" data-preset="yellow-black" style="background: #000; color: #FFFF00; border: 1px solid #FFFF00;">Yellow / Black</button>
+                    <button type="button" class="btn-preset-pill" data-preset="white-black" style="background: #000; color: #FFF; border: 1px solid #FFF;">White / Black</button>
+                    <button type="button" class="btn-preset-pill" data-preset="amber-gold" style="background: #111; color: #FFD700; border: 1px solid #FFD700;">OLED Amber</button>
+                    <button type="button" class="btn-preset-pill" data-preset="default" style="background: rgba(28,28,30,0.85); color: #FFF; border: 1px solid rgba(255,255,255,0.3);">Apple Classic</button>
+                  </div>
+                  <select id="select-cc-theme">
+                    <option value="default" ${this.prefs.captionTheme === "default" ? "selected" : ""}>White on Translucent Black</option>
+                    <option value="yellow-black" ${this.prefs.captionTheme === "yellow-black" ? "selected" : ""}>High Contrast (Yellow on Black)</option>
+                    <option value="white-black" ${this.prefs.captionTheme === "white-black" ? "selected" : ""}>High Contrast (White on Black)</option>
+                    <option value="amber-gold" ${this.prefs.captionTheme === "amber-gold" ? "selected" : ""}>OLED Amber Gold (Amber on Black)</option>
+                    <option value="black-yellow" ${this.prefs.captionTheme === "black-yellow" ? "selected" : ""}>High Contrast (Black on Yellow)</option>
+                  </select>
+                </div>
+
+                <!-- Ethiopian Sign Language (ESL) Toggle -->
+                <div class="form-row">
+                  <label for="toggle-esl-visibility">${isAm ? "የምልክት ቋንቋ (ESL) ማሳያ:" : "Sign Language (ESL):"}</label>
+                  <select id="toggle-esl-visibility">
+                    <option value="show" ${this.prefs.eslVisible ? "selected" : ""}>${isAm ? "በጎን አሳይ (Visible)" : "Show on side"}</option>
+                    <option value="hide" ${!this.prefs.eslVisible ? "selected" : ""}>${isAm ? "ደብቅ (Hidden)" : "Hide"}</option>
+                  </select>
+                </div>
+
+                <!-- Interactive Transcript Toggle -->
+                <div class="form-row">
+                  <label for="toggle-transcript-visibility">${isAm ? "የትምህርቱ የጽሑፍ ግልባጭ:" : "Interactive Transcript:"}</label>
+                  <select id="toggle-transcript-visibility">
+                    <option value="show" ${this.prefs.transcriptVisible !== false ? "selected" : ""}>${isAm ? "በጎን አሳይ (Visible)" : "Show on side"}</option>
+                    <option value="hide" ${this.prefs.transcriptVisible === false ? "selected" : ""}>${isAm ? "ደብቅ (Hidden)" : "Hide"}</option>
+                  </select>
+                </div>
+
+                <!-- Audio Description Toggle -->
+                <div class="form-row">
+                  <label for="toggle-ad-enabled">${isAm ? "የድምጽ ማብራሪያ (AD):" : "Audio Description (AD):"}</label>
+                  <select id="toggle-ad-enabled">
+                    <option value="on" ${this.prefs.audioDescriptionEnabled ? "selected" : ""}>${isAm ? "አብራ (Enabled)" : "Enabled"}</option>
+                    <option value="off" ${!this.prefs.audioDescriptionEnabled ? "selected" : ""}>${isAm ? "አጥፋ (Disabled)" : "Disabled"}</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="popover-footer">
+                <button type="button" class="btn-popover-action btn-popover-reset" id="btn-reset-layout">
+                  ↺ ${isAm ? "ዳግም አስጀምር" : "Reset Layout"}
+                </button>
+                <button type="button" class="btn-popover-action btn-popover-save" id="btn-close-prefs">
+                  ${isAm ? "ተግብር እና ዝጋ" : "Done"}
+                </button>
+              </div>
+            </div>
           </div>
 
           <!-- RIGHT: Movable & Resizable Sign Language Window (Outside of video frame) -->
@@ -1758,85 +2035,6 @@ export class A11yMediaPlayer extends HTMLElement {
             <div class="window-resize-edge-left" id="esl-resize-edge-left" aria-hidden="true" title="${isAm ? "ስፋቱን ለመቀየር ይጎትቱ" : "Drag to resize width"}"></div>
           </div>
 
-        </div>
-
-        <!-- Preferences Modal Dialog -->
-        <div class="dialog-backdrop" id="prefs-dialog" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="prefs-title">
-          <div class="dialog-panel">
-            <h3 id="prefs-title">${isAm ? "የተደራሽነት እና አቀማመጥ ምርጫዎች" : "Accessibility & Layout Settings"}</h3>
-            
-            <div class="form-row">
-              <label for="select-cc-lang">${isAm ? "የትርጉም ጽሑፍ ቋንቋ:" : "Caption Language:"}</label>
-              <select id="select-cc-lang">
-                <option value="en" ${this.prefs.captionLanguage === "en" ? "selected" : ""}>English (Reviewed)</option>
-                <option value="am" ${this.prefs.captionLanguage === "am" ? "selected" : ""}>አማርኛ (የተገመገመ)</option>
-                <option value="off" ${this.prefs.captionLanguage === "off" ? "selected" : ""}>Off</option>
-              </select>
-            </div>
-
-            <div class="form-row">
-              <label for="select-cc-size">${isAm ? "የትርጉም ጽሑፍ መጠን:" : "Caption Font Size:"}</label>
-              <select id="select-cc-size">
-                <option value="small" ${this.prefs.captionSize === "small" ? "selected" : ""}>Small (14px)</option>
-                <option value="medium" ${this.prefs.captionSize === "medium" ? "selected" : ""}>Medium (18px - Standard)</option>
-                <option value="large" ${this.prefs.captionSize === "large" ? "selected" : ""}>Large (24px)</option>
-                <option value="xlarge" ${this.prefs.captionSize === "xlarge" ? "selected" : ""}>Extra Large (32px)</option>
-              </select>
-            </div>
-
-            <div class="form-row">
-              <label for="select-cc-theme">${isAm ? "የንፅፅር ገጽታ:" : "Contrast Theme:"}</label>
-              <div class="preset-pill-group" role="group" aria-label="${isAm ? "ፈጣን የንፅፅር ገጽታዎች" : "Quick Caption Contrast Presets"}">
-                <button type="button" class="btn-preset-pill" data-preset="yellow-black" style="background: #000; color: #FFFF00; border: 1px solid #FFFF00;">Yellow / Black</button>
-                <button type="button" class="btn-preset-pill" data-preset="white-black" style="background: #000; color: #FFF; border: 1px solid #FFF;">White / Black</button>
-                <button type="button" class="btn-preset-pill" data-preset="amber-gold" style="background: #111; color: #FFD700; border: 1px solid #FFD700;">OLED Amber</button>
-                <button type="button" class="btn-preset-pill" data-preset="default" style="background: rgba(28,28,30,0.85); color: #FFF; border: 1px solid rgba(255,255,255,0.3);">Apple Classic</button>
-              </div>
-              <select id="select-cc-theme">
-                <option value="default" ${this.prefs.captionTheme === "default" ? "selected" : ""}>White on Translucent Black</option>
-                <option value="yellow-black" ${this.prefs.captionTheme === "yellow-black" ? "selected" : ""}>High Contrast (Yellow on Black)</option>
-                <option value="white-black" ${this.prefs.captionTheme === "white-black" ? "selected" : ""}>High Contrast (White on Black)</option>
-                <option value="amber-gold" ${this.prefs.captionTheme === "amber-gold" ? "selected" : ""}>OLED Amber Gold (Amber on Black)</option>
-                <option value="black-yellow" ${this.prefs.captionTheme === "black-yellow" ? "selected" : ""}>High Contrast (Black on Yellow)</option>
-              </select>
-            </div>
-
-            <!-- Ethiopian Sign Language (ESL) Toggle -->
-            <div class="form-row">
-              <label for="toggle-esl-visibility">${isAm ? "የምልክት ቋንቋ (ESL) ማሳያ:" : "Sign Language (ESL):"}</label>
-              <select id="toggle-esl-visibility">
-                <option value="show" ${this.prefs.eslVisible ? "selected" : ""}>${isAm ? "በጎን አሳይ (Visible)" : "Show on side"}</option>
-                <option value="hide" ${!this.prefs.eslVisible ? "selected" : ""}>${isAm ? "ደብቅ (Hidden)" : "Hide"}</option>
-              </select>
-            </div>
-
-            <!-- Interactive Transcript Toggle -->
-            <div class="form-row">
-              <label for="toggle-transcript-visibility">${isAm ? "የትምህርቱ የጽሑፍ ግልባጭ:" : "Interactive Transcript:"}</label>
-              <select id="toggle-transcript-visibility">
-                <option value="show" ${this.prefs.transcriptVisible !== false ? "selected" : ""}>${isAm ? "በጎን አሳይ (Visible)" : "Show on side"}</option>
-                <option value="hide" ${this.prefs.transcriptVisible === false ? "selected" : ""}>${isAm ? "ደብቅ (Hidden)" : "Hide"}</option>
-              </select>
-            </div>
-
-            <!-- Audio Description Toggle -->
-            <div class="form-row">
-              <label for="toggle-ad-enabled">${isAm ? "የድምጽ ማብራሪያ (AD):" : "Audio Description (AD):"}</label>
-              <select id="toggle-ad-enabled">
-                <option value="on" ${this.prefs.audioDescriptionEnabled ? "selected" : ""}>${isAm ? "አብራ (Enabled)" : "Enabled"}</option>
-                <option value="off" ${!this.prefs.audioDescriptionEnabled ? "selected" : ""}>${isAm ? "አጥፋ (Disabled)" : "Disabled"}</option>
-              </select>
-            </div>
-
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; flex-wrap: wrap; gap: 0.75rem;">
-              <button type="button" class="btn-dialog-action btn-dialog-reset" id="btn-reset-layout">
-                ↺ ${isAm ? "አቀማመጥን ዳግም አስጀምር" : "Reset Layout & Settings"}
-              </button>
-              <button type="button" class="btn-dialog-action btn-dialog-save" id="btn-close-prefs">
-                ${isAm ? "ተግብር እና ዝጋ" : "Save & Close"}
-              </button>
-            </div>
-          </div>
         </div>
 
         <!-- Keyboard Shortcuts Modal Dialog -->
@@ -2637,15 +2835,33 @@ export class A11yMediaPlayer extends HTMLElement {
       this.setAttribute("locale", newLocale);
     });
 
-    // Window Options Buttons (Cog icons on Transcript and Sign headers)
+    // Accessibility Preferences Popover Flyout (Smooth flow, zero dark scrim)
+    const btnPrefs = this.shadow.getElementById("btn-prefs");
+    const btnTranscriptPrefs = this.shadow.getElementById("btn-transcript-prefs");
+    const btnEslPrefs = this.shadow.getElementById("btn-esl-prefs");
+    const prefsDialog = this.shadow.getElementById("prefs-dialog");
+    const btnClosePrefs = this.shadow.getElementById("btn-close-prefs");
+    const btnDismissPrefs = this.shadow.getElementById("btn-dismiss-prefs");
+    const btnResetLayout = this.shadow.getElementById("btn-reset-layout");
+
+    const ccLangSelect = this.shadow.getElementById("select-cc-lang") as HTMLSelectElement | null;
+    const ccSizeSelect = this.shadow.getElementById("select-cc-size") as HTMLSelectElement | null;
+    const ccThemeSelect = this.shadow.getElementById("select-cc-theme") as HTMLSelectElement | null;
+    const toggleEslSelect = this.shadow.getElementById("toggle-esl-visibility") as HTMLSelectElement | null;
+    const toggleTransSelect = this.shadow.getElementById("toggle-transcript-visibility") as HTMLSelectElement | null;
+    const toggleAdSelect = this.shadow.getElementById("toggle-ad-enabled") as HTMLSelectElement | null;
+
+    const closePrefs = () => {
+      if (!this.isPreferencesOpen) return;
+      this.isPreferencesOpen = false;
+      if (prefsDialog) prefsDialog.style.display = "none";
+      btnPrefs?.classList.remove("is-active");
+      btnPrefs?.setAttribute("aria-expanded", "false");
+      btnPrefs?.focus();
+    };
+
     const openPrefs = () => {
       this.isPreferencesOpen = true;
-      const ccLangSelect = this.shadow.getElementById("select-cc-lang") as HTMLSelectElement | null;
-      const ccSizeSelect = this.shadow.getElementById("select-cc-size") as HTMLSelectElement | null;
-      const ccThemeSelect = this.shadow.getElementById("select-cc-theme") as HTMLSelectElement | null;
-      const toggleEslSelect = this.shadow.getElementById("toggle-esl-visibility") as HTMLSelectElement | null;
-      const toggleTransSelect = this.shadow.getElementById("toggle-transcript-visibility") as HTMLSelectElement | null;
-      const toggleAdSelect = this.shadow.getElementById("toggle-ad-enabled") as HTMLSelectElement | null;
 
       if (ccLangSelect) ccLangSelect.value = this.prefs.captionLanguage;
       if (ccSizeSelect) ccSizeSelect.value = this.prefs.captionSize;
@@ -2655,28 +2871,79 @@ export class A11yMediaPlayer extends HTMLElement {
       if (toggleAdSelect) toggleAdSelect.value = this.prefs.audioDescriptionEnabled ? "on" : "off";
 
       if (prefsDialog) prefsDialog.style.display = "flex";
+      btnPrefs?.classList.add("is-active");
+      btnPrefs?.setAttribute("aria-expanded", "true");
       ccLangSelect?.focus();
     };
 
-    const btnPrefs = this.shadow.getElementById("btn-prefs");
-    const btnTranscriptPrefs = this.shadow.getElementById("btn-transcript-prefs");
-    const btnEslPrefs = this.shadow.getElementById("btn-esl-prefs");
-    const prefsDialog = this.shadow.getElementById("prefs-dialog");
-    const btnClosePrefs = this.shadow.getElementById("btn-close-prefs");
-    const btnResetLayout = this.shadow.getElementById("btn-reset-layout");
+    const togglePrefs = () => {
+      if (this.isPreferencesOpen) {
+        closePrefs();
+      } else {
+        openPrefs();
+      }
+    };
 
-    btnPrefs?.addEventListener("click", openPrefs);
+    btnPrefs?.addEventListener("click", togglePrefs);
     btnTranscriptPrefs?.addEventListener("click", openPrefs);
     btnEslPrefs?.addEventListener("click", openPrefs);
+    btnDismissPrefs?.addEventListener("click", closePrefs);
 
+    // Live Reactive Updates (Learners immediately see effects without dialog blocking)
+    ccLangSelect?.addEventListener("change", async () => {
+      if (ccLangSelect.value !== this.prefs.captionLanguage) {
+        this.prefs.captionLanguage = ccLangSelect.value;
+        savePreferences({ captionLanguage: this.prefs.captionLanguage });
+        if (btnCC) {
+          const isOff = this.prefs.captionLanguage === "off";
+          btnCC.setAttribute("aria-pressed", isOff ? "false" : "true");
+        }
+        await this.loadCaptionTrack(this.prefs.captionLanguage);
+      }
+    });
+
+    ccSizeSelect?.addEventListener("change", () => {
+      if (ccSizeSelect.value !== this.prefs.captionSize) {
+        this.prefs.captionSize = ccSizeSelect.value as CaptionSize;
+        savePreferences({ captionSize: this.prefs.captionSize });
+        this.updateCaptionDisplay();
+      }
+    });
+
+    ccThemeSelect?.addEventListener("change", () => {
+      if (ccThemeSelect.value !== this.prefs.captionTheme) {
+        this.prefs.captionTheme = ccThemeSelect.value as CaptionTheme;
+        savePreferences({ captionTheme: this.prefs.captionTheme });
+        this.updateCaptionDisplay();
+      }
+    });
+
+    toggleEslSelect?.addEventListener("change", () => {
+      const hasSign = Boolean(this.signVideo || this.manifest?.sources.some((s) => s.kind === "sign"));
+      const isVisible = toggleEslSelect.value === "show";
+      this.prefs.eslVisible = isVisible;
+      savePreferences({ eslVisible: isVisible });
+      if (btnESL) btnESL.setAttribute("aria-pressed", isVisible ? "true" : "false");
+      if (eslWindow) eslWindow.style.display = isVisible && hasSign ? "flex" : "none";
+    });
+
+    toggleTransSelect?.addEventListener("change", () => {
+      const isVisible = toggleTransSelect.value === "show";
+      this.prefs.transcriptVisible = isVisible;
+      savePreferences({ transcriptVisible: isVisible });
+      if (btnTranscript) btnTranscript.setAttribute("aria-pressed", isVisible ? "true" : "false");
+      if (transcriptWindow) transcriptWindow.style.display = isVisible ? "flex" : "none";
+    });
+
+    toggleAdSelect?.addEventListener("change", () => {
+      const isAd = toggleAdSelect.value === "on";
+      this.prefs.audioDescriptionEnabled = isAd;
+      savePreferences({ audioDescriptionEnabled: isAd });
+      if (btnAD) btnAD.setAttribute("aria-pressed", isAd ? "true" : "false");
+    });
+
+    // Close button / "Done" saves any final state and closes smoothly
     btnClosePrefs?.addEventListener("click", async () => {
-      const ccLangSelect = this.shadow.getElementById("select-cc-lang") as HTMLSelectElement | null;
-      const ccSizeSelect = this.shadow.getElementById("select-cc-size") as HTMLSelectElement | null;
-      const ccThemeSelect = this.shadow.getElementById("select-cc-theme") as HTMLSelectElement | null;
-      const toggleEslSelect = this.shadow.getElementById("toggle-esl-visibility") as HTMLSelectElement | null;
-      const toggleTransSelect = this.shadow.getElementById("toggle-transcript-visibility") as HTMLSelectElement | null;
-      const toggleAdSelect = this.shadow.getElementById("toggle-ad-enabled") as HTMLSelectElement | null;
-
       if (ccLangSelect && ccLangSelect.value !== this.prefs.captionLanguage) {
         this.prefs.captionLanguage = ccLangSelect.value;
         savePreferences({ captionLanguage: this.prefs.captionLanguage });
@@ -2718,10 +2985,24 @@ export class A11yMediaPlayer extends HTMLElement {
         if (btnAD) btnAD.setAttribute("aria-pressed", isAd ? "true" : "false");
       }
 
-      this.isPreferencesOpen = false;
-      if (prefsDialog) prefsDialog.style.display = "none";
-      btnPrefs?.focus();
+      closePrefs();
     });
+
+    // Dismiss Popover When Clicking Outside
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (!this.isPreferencesOpen) return;
+      const path = e.composedPath();
+      if (
+        (prefsDialog && path.includes(prefsDialog)) ||
+        (btnPrefs && path.includes(btnPrefs)) ||
+        (btnTranscriptPrefs && path.includes(btnTranscriptPrefs)) ||
+        (btnEslPrefs && path.includes(btnEslPrefs))
+      ) {
+        return;
+      }
+      closePrefs();
+    };
+    window.addEventListener("pointerdown", handleOutsideClick);
 
     // Reset Layout Button (Restores side-by-side docked layout & default dimensions)
     btnResetLayout?.addEventListener("click", () => {
@@ -2988,9 +3269,7 @@ export class A11yMediaPlayer extends HTMLElement {
     playerRoot?.addEventListener("keydown", (e) => {
       if (this.isPreferencesOpen) {
         if (e.key === "Escape") {
-          this.isPreferencesOpen = false;
-          if (prefsDialog) prefsDialog.style.display = "none";
-          btnPrefs?.focus();
+          closePrefs();
         }
         return;
       }
