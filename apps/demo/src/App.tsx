@@ -74,6 +74,15 @@ export const AppContent: React.FC = () => {
 
   const dualDate = formatDualDate("2026-11-14");
 
+  const navLabels: Record<SupportedLocale, { home: string; lesson: string; careers: string; studio: string; verify: string; embed: string }> = {
+    en: { home: "Home", lesson: "Lesson", careers: "Careers", studio: "Studio", verify: "Verify", embed: "Embed" },
+    am: { home: "ዋና ገጽ", lesson: "ትምህርት", careers: "የሥራ በር", studio: "ስቱዲዮ", verify: "ማረጋገጫ", embed: "የተከተተ" },
+    om: { home: "Fuula Duraa", lesson: "Barnoota", careers: "Hojii", studio: "Istuudiyoo", verify: "Mirkaneessi", embed: "Maxxanfame" },
+    ti: { home: "ቀንዲ ገጽ", lesson: "ትምህርቲ", careers: "ማዕጾ ስራሕ", studio: "ስቱዲዮ", verify: "ኣረጋግጽ", embed: "ዝተሰኸተ" },
+    so: { home: "Bogga Hore", lesson: "Casharka", careers: "Shaqooyinka", studio: "Istuudiyaha", verify: "Xaqiiji", embed: "Qalabka" },
+  };
+  const nav = navLabels[locale] || navLabels.en;
+
   const handleLocaleChange = (newLocale: SupportedLocale) => {
     setLocale(newLocale);
     localStorage.setItem("abugida-locale", newLocale);
@@ -103,7 +112,7 @@ export const AppContent: React.FC = () => {
             justifyContent: "space-between",
             alignItems: "center",
             flexWrap: "wrap",
-            gap: "1.25rem",
+            gap: "0.5rem",
           }}
         >
           <div>
@@ -129,78 +138,89 @@ export const AppContent: React.FC = () => {
               {getTranslation("appSubtitle", locale)}
             </p>
           </div>
-
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
-            {/* Dual Calendar Badge */}
-            <span
-              className="badge badge-neutral"
-              style={{ fontSize: "13px", padding: "0.35rem 0.85rem", borderRadius: "var(--radius-pill)" }}
-              title="Ethiopian & Gregorian Dual Calendar"
-            >
-              {dualDate.display}
-            </span>
-
-            {/* Ethiopian National & Global Language Switcher */}
-            <div
-              style={{
-                position: "relative",
-                display: "inline-flex",
-                alignItems: "center",
-                background: "var(--color-surface)",
-                border: "1px solid var(--color-border-subtle)",
-                padding: "2px 8px 2px 10px",
-                borderRadius: "var(--radius-pill)",
-                boxShadow: "var(--shadow-subtle)",
-              }}
-            >
-              <span style={{ color: "var(--color-muted-ink)", display: "flex", alignItems: "center", marginRight: "6px" }} aria-hidden="true">
-                <IconGlobe size={14} />
-              </span>
-              <label htmlFor="system-lang-select" className="sr-only">
-                {getTranslation("selectLang", locale)}
-              </label>
-              <select
-                id="system-lang-select"
-                value={locale}
-                onChange={(e) => handleLocaleChange(e.target.value as SupportedLocale)}
-                style={{
-                  background: "transparent",
-                  border: "none",
-                  color: "var(--color-ink)",
-                  fontWeight: 600,
-                  fontSize: "13px",
-                  cursor: "pointer",
-                  padding: "0.35rem 0.5rem 0.35rem 0",
-                  outline: "none",
-                  fontFamily: "inherit",
-                }}
-                aria-label={getTranslation("selectLang", locale)}
-              >
-                {SUPPORTED_LANGUAGES.map((lang) => (
-                  <option key={lang.code} value={lang.code}>
-                    {lang.nativeName} ({lang.name})
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Universal Color Vision Theme Changer */}
-            <ThemePicker locale={locale} />
-
-            {/* Keyboard-Accessible Voice Guide / Read-Aloud Opt-in & Mute (No Unexpected Audio on Load) */}
-            <VoiceGuideTopButton locale={locale} />
-          </div>
         </div>
 
-        {/* Clean Segmented Navigation */}
+        {/* Clean Segmented Navigation with Controls on the Right Side */}
         <nav className="main-nav" aria-label={getTranslation("navHome", locale)}>
           <div className="nav-segmented">
-            <NavLink to="/">{getTranslation("navHome", locale)}</NavLink>
-            <NavLink to="/lesson">{getTranslation("navLesson", locale)}</NavLink>
-            <NavLink to="/careers">{getTranslation("navCareers", locale)}</NavLink>
-            <NavLink to="/studio">{getTranslation("navStudio", locale)}</NavLink>
-            <NavLink to="/verify">{getTranslation("navVerify", locale)}</NavLink>
-            <NavLink to="/embed">{getTranslation("navEmbed", locale)}</NavLink>
+            {/* Left: Major Navigations */}
+            <div className="nav-links-group">
+              <NavLink to="/">{nav.home}</NavLink>
+              <NavLink to="/lesson">{nav.lesson}</NavLink>
+              <NavLink to="/careers">{nav.careers}</NavLink>
+              <NavLink to="/studio">{nav.studio}</NavLink>
+              <NavLink to="/verify">{nav.verify}</NavLink>
+              <NavLink to="/embed">{nav.embed}</NavLink>
+            </div>
+
+            {/* Right: Accessibility & Regional Controls filling the empty space */}
+            <div className="nav-controls-group">
+              {/* Dual Calendar Badge */}
+              <span
+                className="badge badge-neutral"
+                style={{
+                  fontSize: "12px",
+                  padding: "0.35rem 0.75rem",
+                  borderRadius: "var(--radius-pill)",
+                  background: "var(--color-bg)",
+                  border: "1px solid var(--color-border-subtle)",
+                  whiteSpace: "nowrap",
+                }}
+                title="Ethiopian & Gregorian Dual Calendar"
+              >
+                {dualDate.display}
+              </span>
+
+              {/* Ethiopian National & Global Language Switcher */}
+              <div
+                style={{
+                  position: "relative",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  background: "var(--color-bg)",
+                  border: "1px solid var(--color-border-subtle)",
+                  padding: "2px 8px 2px 10px",
+                  borderRadius: "var(--radius-pill)",
+                  boxShadow: "var(--shadow-subtle)",
+                }}
+              >
+                <span style={{ color: "var(--color-muted-ink)", display: "flex", alignItems: "center", marginRight: "6px" }} aria-hidden="true">
+                  <IconGlobe size={14} />
+                </span>
+                <label htmlFor="system-lang-select" className="sr-only">
+                  {getTranslation("selectLang", locale)}
+                </label>
+                <select
+                  id="system-lang-select"
+                  value={locale}
+                  onChange={(e) => handleLocaleChange(e.target.value as SupportedLocale)}
+                  style={{
+                    background: "transparent",
+                    border: "none",
+                    color: "var(--color-ink)",
+                    fontWeight: 600,
+                    fontSize: "12px",
+                    cursor: "pointer",
+                    padding: "0.3rem 0.4rem 0.3rem 0",
+                    outline: "none",
+                    fontFamily: "inherit",
+                  }}
+                  aria-label={getTranslation("selectLang", locale)}
+                >
+                  {SUPPORTED_LANGUAGES.map((lang) => (
+                    <option key={lang.code} value={lang.code}>
+                      {lang.nativeName} ({lang.name})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Universal Color Vision Theme Changer */}
+              <ThemePicker locale={locale} />
+
+              {/* Keyboard-Accessible Voice Guide / Read-Aloud Opt-in & Mute */}
+              <VoiceGuideTopButton locale={locale} />
+            </div>
           </div>
         </nav>
       </header>

@@ -406,6 +406,27 @@ header.site-header {
   }
 }
 
+@media (max-width: 1120px) {
+  .nav-segmented {
+    border-radius: var(--radius-card);
+    padding: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .nav-links-group {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+  .nav-controls-group {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    padding-top: 0.4rem;
+    border-top: 1px solid var(--color-border-subtle);
+    margin-left: 0;
+  }
+}
+
 @media (max-width: 735px) {
   header.site-header {
     position: relative;
@@ -423,28 +444,53 @@ header.site-header {
 }
 
 /* Apple Segmented Navigation Bar */
+nav.main-nav {
+  width: 100%;
+  display: block;
+}
+
 .nav-segmented {
   display: flex;
-  gap: 0.35rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
   background: var(--color-surface);
-  padding: 0.35rem;
+  padding: 0.28rem 0.5rem;
   border-radius: var(--radius-pill);
-  flex-wrap: wrap;
   border: 1px solid var(--color-border-subtle);
   transition: background-color var(--duration-normal) var(--ease-apple), border-color var(--duration-normal) var(--ease-apple);
+  width: 100%;
+  box-sizing: border-box;
+  flex-wrap: nowrap;
+}
+
+.nav-links-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-wrap: nowrap;
+}
+
+.nav-controls-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: nowrap;
+  margin-left: auto;
 }
 
 .nav-link {
   color: var(--color-muted-ink);
   text-decoration: none;
   font-weight: 500;
-  font-size: 14px;
-  padding: 0.5rem 1.15rem;
+  font-size: 13.5px;
+  padding: 0.38rem 0.8rem;
   border-radius: var(--radius-pill);
   transition: color 0.16s ease, background-color 0.16s ease, transform 0.08s ease;
   display: inline-flex;
   align-items: center;
-  min-height: 38px;
+  min-height: 34px;
+  white-space: nowrap;
 }
 
 .nav-link:hover {
