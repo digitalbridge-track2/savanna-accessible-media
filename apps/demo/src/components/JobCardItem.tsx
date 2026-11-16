@@ -411,6 +411,7 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
   return (
     <article
       className="job-card-modern"
+      data-read-aloud="card"
       aria-labelledby={`job-title-${job.id}`}
     >
       {/* Schema.org / JobPosting Microdata */}

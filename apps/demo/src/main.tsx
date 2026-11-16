@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "@abugida/media-kit";
+import "./read-aloud/read-aloud.css";
 import { RouterProvider } from "./router";
 import { App } from "./App";
 

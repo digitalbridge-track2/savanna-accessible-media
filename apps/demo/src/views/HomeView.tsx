@@ -271,6 +271,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
           {/* Level 1 */}
           <div
             className="card"
+            data-read-aloud="card"
             style={{
               display: "flex",
               flexDirection: "column",
@@ -328,6 +329,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
           {/* Level 2 */}
           <div
             className="card"
+            data-read-aloud="card"
             style={{
               display: "flex",
               flexDirection: "column",
@@ -399,6 +401,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
           {/* Level 3 */}
           <div
             className="card"
+            data-read-aloud="card"
             style={{
               display: "flex",
               flexDirection: "column",

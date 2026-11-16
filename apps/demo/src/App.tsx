@@ -9,6 +9,8 @@ import { VerifyView } from "./views/VerifyView";
 import { EmbedView } from "./views/EmbedView";
 import { ThemePicker } from "./components/ThemePicker";
 import { IconGlobe } from "./components/Icons";
+import { ReadAloudProvider } from "./read-aloud/ReadAloudProvider";
+import { ReadAloudPanel } from "./read-aloud/ReadAloudPanel";
 
 // Error Boundary to prevent any blank or white screens
 export class ErrorBoundary extends React.Component<
@@ -85,7 +87,8 @@ export const AppContent: React.FC = () => {
   }, []);
 
   return (
-    <div className="site-container">
+    <ReadAloudProvider locale={locale} routeKey={currentPath}>
+      <div className="site-container">
       {/* Skip to Content */}
       <a href="#main-content" className="skip-link">
         {getTranslation("skipLink", locale)}
@@ -199,7 +202,7 @@ export const AppContent: React.FC = () => {
       </header>
 
       {/* Main Content Area */}
-      <main id="main-content" style={{ minHeight: "65vh", outline: "none" }}>
+      <main id="main-content" lang={locale} style={{ minHeight: "65vh", outline: "none" }}>
         {currentPath === "/" && <HomeView locale={locale} />}
         {currentPath === "/lesson" && <LessonView locale={locale} />}
         {currentPath === "/careers" && <CareersView locale={locale} />}
@@ -244,6 +247,8 @@ export const AppContent: React.FC = () => {
         </div>
       </footer>
     </div>
+    <ReadAloudPanel locale={locale} />
+  </ReadAloudProvider>
   );
 };
 

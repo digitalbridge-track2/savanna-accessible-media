@@ -165,6 +165,19 @@ The certificate verification system at `/verify?id=CERT-DB-2026-0042` verifies d
 
 ---
 
+## 🔊 Read-Aloud Mode
+
+The React demo includes a page-level read-aloud feature built on the native Web Speech API. It reads content on hover after a 700 ms delay or when the user reaches it with the keyboard, and provides an accessible panel for enabling/disabling triggers, controlling playback, and choosing rate, pitch, volume, and voice.
+
+* **Shortcut:** `Alt` or `Option` + `Shift` + `R` toggles read-aloud.
+* **Languages:** English, Amharic, Afaan Oromo, Tigrinya, and Somali. Amharic text is never read with an unsuitable English voice; if no Amharic voice is installed, the feature says so instead.
+* **No new dependencies:** only browser speech synthesis and existing React app code.
+* **No autoplay:** the page is never read on load, and speech stops on route change or when the page is hidden.
+
+Implementation notes, the complete file list, browser/voice limitations, and the manual test checklist are in [`evidence/read-aloud.md`](evidence/read-aloud.md).
+
+---
+
 ## Languages and how to add one
 
 1. Language dictionaries are isolated in `module/i18n/` (`en.json`, `am.json`).
@@ -224,6 +237,7 @@ The certificate verification system at `/verify?id=CERT-DB-2026-0042` verifies d
 * ✅ **Level 3 Open Standard #2 (Open Badges 3.0):** 1EdTech / W3C Open Badges 3.0 (OBv3) Verifiable Credential standard metadata inspector and `.jsonld` export on `/verify`.
 * ✅ **Official Rubric Bonus (Slide 9):** Braille (`.brf`) export pipeline in Transcript Studio.
 * ✅ **Official Rubric Bonus (Slide 9):** Recorded Live-Session Replay Viewer with synchronized chat log and jump-to-timestamp seeking.
+* ✅ **Page-Level Read-Aloud Mode:** Built on native Web Speech API with zero dependencies, 700ms hover and keyboard-focus reading, 1-utterance management, repeat protection, floating accessible launcher and settings panel, voice/speed/pitch/volume controls, and honest voice detection for English and Amharic (see [`evidence/read-aloud.md`](evidence/read-aloud.md)).
 
 ### Not finished / Current limitations (Honest Engineering Disclosures):
 Per Hackathon Technical Guide Section 5 (*"The caption pipeline: judge your pipeline on the corrected result, and say honestly in the README what quality you measured"*) and Section 11 (*"Finished and not finished (be honest)"*):
