@@ -1,0 +1,4 @@
+# Enforce LF endings on shell scripts and Docker configs
+*.sh text eol=lf
+Dockerfile text eol=lf
+*.conf text eol=lf
