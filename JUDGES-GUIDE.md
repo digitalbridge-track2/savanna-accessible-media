@@ -14,7 +14,7 @@ Run with Docker Compose (zero dependencies needed):
 docker compose up -d
 ```
 * **Interactive Demo:** [http://localhost:3000](http://localhost:3000)
-* **Savanna LMS Starter Integration:** [http://localhost:8080/lessons/digital-workplace/concept-with-navigation.html](http://localhost:8080/lessons/digital-workplace/concept-with-navigation.html)
+* **Savanna LMS Starter Integration:** [http://localhost:8080/pages/concept-with-navigation.html](http://localhost:8080/pages/concept-with-navigation.html)
 * **Level 2 Transcription REST API & OpenAPI Docs:** [http://localhost:8000/docs](http://localhost:8000/docs)
 
 *Or natively with Node.js & Python:*
@@ -87,7 +87,7 @@ npm run dev
 1. **No Paid API Lock-In:**
    - Runs 100% locally with open-source tools (FastAPI, SQLite, Vite, Web Components). Zero dependency on paid cloud services.
 2. **Reproducible Automated Test Suite:**
-   - Run `npm run test` for 25 automated tests: 15 unit tests, 6 axe-core a11y audits, and 4 integration tests.
+   - Run `npm test` for 63 automated tests: 50 unit tests, 9 axe-core a11y audits (0 violations), and 4 integration tests across all 3 tiers.
 3. **Open Source Licensing:**
    - Permissive open-source license with complete `CREDITS.md` and `THIRD_PARTY_NOTICES.md`.
 
