@@ -9,6 +9,7 @@ import { VerifyView } from "./views/VerifyView";
 import { EmbedView } from "./views/EmbedView";
 import { ThemePicker } from "./components/ThemePicker";
 import { IconGlobe } from "./components/Icons";
+import { VoiceGuideTopButton } from "./components/VoiceGuideTopButton";
 import { ReadAloudProvider } from "./read-aloud/ReadAloudProvider";
 import { ReadAloudPanel } from "./read-aloud/ReadAloudPanel";
 
@@ -185,6 +186,9 @@ export const AppContent: React.FC = () => {
 
             {/* Universal Color Vision Theme Changer */}
             <ThemePicker locale={locale} />
+
+            {/* Keyboard-Accessible Voice Guide / Read-Aloud Opt-in & Mute (No Unexpected Audio on Load) */}
+            <VoiceGuideTopButton locale={locale} />
           </div>
         </div>
 

@@ -4,8 +4,10 @@ Page-level read-aloud for the React demo in `apps/demo`. It uses the browser's n
 
 ## What it does
 
+- **Strictly Opt-In (No Autoplay / No Unexpected Audio on Load):** Read-aloud is disabled by default (`enabled: false`) to prevent collision or interference with screen readers like NVDA, JAWS, VoiceOver, and TalkBack. Users confirm and activate the feature using the explicit keyboard-accessible **"Start Voice Guide"** button in the top navigation or via the global shortcut (`Alt/Option + Shift + R`).
 - Reads the element under the mouse after a **700 ms** hover, and cancels the pending read when the pointer leaves.
 - Reads the element that receives keyboard focus while the user is navigating with Tab, Shift+Tab, or arrow keys.
+- Includes instant **Mute / Stop** controls in the header, floating launcher, and settings panel.
 - Extracts useful speech for headings, paragraphs, lists and list items, buttons, links, images with meaningful `alt`, form labels/values/descriptions, table headers/cells/captions, quotes, terms/definitions, and explicitly marked information cards.
 - Skips hidden, empty, decorative, icon-only, and layout content. Elements inside `data-read-aloud-ignore` are never read.
 - Keeps **one active utterance**. Starting a new read cancels the previous one, and late browser callbacks from an old utterance are ignored.

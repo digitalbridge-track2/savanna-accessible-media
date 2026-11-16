@@ -66,7 +66,7 @@ const HIGHLIGHT_ATTRIBUTE = "data-read-aloud-active";
 const HIGHLIGHT_STYLE_ATTRIBUTE = "data-read-aloud-highlight";
 
 const DEFAULT_SETTINGS: ReadAloudSettings = {
-  enabled: true,
+  enabled: false, // Strict WCAG 2.2 AA & screen-reader protection: zero unexpected audio or collision with NVDA/TalkBack on load
   hoverEnabled: true,
   keyboardEnabled: true,
   rate: 1,

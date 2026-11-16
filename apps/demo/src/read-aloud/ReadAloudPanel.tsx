@@ -69,11 +69,19 @@ export const ReadAloudPanel: React.FC<ReadAloudPanelProps> = ({
         aria-expanded={open}
         aria-controls="read-aloud-panel"
         aria-keyshortcuts="Alt+Shift+R"
+        title={`${settings.enabled ? ui.launcherStateOn : ui.launcherStateOff} (Alt+Shift+R)`}
         data-read-aloud-ignore=""
         onClick={() => setOpen((value) => !value)}
       >
-        <span aria-hidden="true">🔊</span>
-        <span>{ui.launcher}</span>
+        <span aria-hidden="true">{settings.enabled ? (status === "speaking" ? "🔊" : "🎙️") : "🔇"}</span>
+        <span>
+          {ui.launcher}
+          {!settings.enabled && (
+            <span style={{ opacity: 0.85, fontSize: "0.82em", marginLeft: "4px" }}>
+              ({locale === "am" || locale === "ti" ? "ጠፍቷል" : "Off"})
+            </span>
+          )}
+        </span>
         <span className="sr-only">
           {settings.enabled ? ui.launcherStateOn : ui.launcherStateOff}
         </span>
