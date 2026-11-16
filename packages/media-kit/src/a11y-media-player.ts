@@ -3487,6 +3487,22 @@ export class A11yMediaPlayer extends HTMLElement {
       if (eslWindow) {
         eslWindow.style.display = this.prefs.eslVisible ? "flex" : "none";
       }
+      if (this.prefs.eslVisible && this.signVideo) {
+        if (!isNaN(this.mainVideo.currentTime) && this.mainVideo.currentTime > 0) {
+          try {
+            if (Math.abs(this.signVideo.currentTime - this.mainVideo.currentTime) > 0.3) {
+              this.signVideo.currentTime = this.mainVideo.currentTime;
+            }
+          } catch {}
+        }
+        if (!this.mainVideo.paused && this.signVideo.paused) {
+          this.signVideo.play().catch(() => {});
+        }
+      } else if (!this.prefs.eslVisible && this.signVideo) {
+        if (!this.signVideo.paused) {
+          this.signVideo.pause();
+        }
+      }
     });
 
     // Transcript Toggle
@@ -3714,6 +3730,11 @@ export class A11yMediaPlayer extends HTMLElement {
       savePreferences({ eslVisible: isVisible });
       if (btnESL) btnESL.setAttribute("aria-pressed", isVisible ? "true" : "false");
       if (eslWindow) eslWindow.style.display = isVisible && hasSign ? "flex" : "none";
+      if (isVisible && this.signVideo && !this.mainVideo.paused && this.signVideo.paused) {
+        this.signVideo.play().catch(() => {});
+      } else if (!isVisible && this.signVideo && !this.signVideo.paused) {
+        this.signVideo.pause();
+      }
     });
 
     toggleTransSelect?.addEventListener("change", () => {

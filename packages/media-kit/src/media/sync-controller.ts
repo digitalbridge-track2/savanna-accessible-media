@@ -141,18 +141,45 @@ export class MediaSyncController {
   public checkDrift() {
     if (!this.signVideo || this.isSyncing) return;
     if (this.signVideo.readyState < 2) return; // not ready to seek
+    if (this.signVideo.seeking) return; // avoid seek collision and black frame flicker
+
+    // Keep play/pause states locked
+    if (!this.mainVideo.paused && this.signVideo.paused) {
+      this.signVideo.play().catch(() => {});
+    } else if (this.mainVideo.paused && !this.signVideo.paused) {
+      this.signVideo.pause();
+    }
 
     const diff = Math.abs(this.mainVideo.currentTime - this.signVideo.currentTime);
     if (diff > this.driftThreshold) {
-      this.isSyncing = true;
-      try {
-        this.signVideo.currentTime = this.mainVideo.currentTime;
-      } catch {
-        // ignore
+      // Large drift (e.g. user scrubbed or clicked a chapter): perform seek with cooldown
+      if (diff >= 0.75) {
+        this.isSyncing = true;
+        try {
+          this.signVideo.currentTime = this.mainVideo.currentTime;
+        } catch {
+          // ignore
+        }
+        setTimeout(() => {
+          this.isSyncing = false;
+        }, 200);
+      } else {
+        // Minor drift (0.25s - 0.75s): nudge playbackRate smoothly
+        // Completely eliminates black frames and seek decoder thrashing
+        if (!this.mainVideo.paused) {
+          const lead = this.mainVideo.currentTime - this.signVideo.currentTime;
+          if (lead > 0) {
+            this.signVideo.playbackRate = this.mainVideo.playbackRate * 1.08;
+          } else {
+            this.signVideo.playbackRate = this.mainVideo.playbackRate * 0.92;
+          }
+        }
       }
-      setTimeout(() => {
-        this.isSyncing = false;
-      }, 50);
+    } else if (diff < 0.1) {
+      // Synchronized within 100ms: restore baseline rate
+      if (this.signVideo.playbackRate !== this.mainVideo.playbackRate) {
+        this.signVideo.playbackRate = this.mainVideo.playbackRate;
+      }
     }
   }
 
