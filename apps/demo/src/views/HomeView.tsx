@@ -188,7 +188,9 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
       .then((data) => setJobs(data))
       .catch((err) => console.warn("Failed to load jobs:", err));
 
-    const apiBaseUrl = import.meta.env.VITE_TRANSCRIPT_API_URL || "http://localhost:8000";
+    const apiBaseUrl = import.meta.env.VITE_TRANSCRIPT_API_URL !== undefined
+      ? import.meta.env.VITE_TRANSCRIPT_API_URL
+      : (import.meta.env.DEV ? "http://localhost:8000" : "");
     // Check FastAPI health
     fetch(`${apiBaseUrl}/health`)
       .then((res) => res.ok)
@@ -378,7 +380,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
             </div>
             <div style={{ marginTop: "1.5rem" }}>
               <a
-                href={import.meta.env.VITE_TRANSCRIPT_API_URL ? `${import.meta.env.VITE_TRANSCRIPT_API_URL}/docs` : "http://localhost:8000/docs"}
+                href={import.meta.env.VITE_TRANSCRIPT_API_URL !== undefined ? (import.meta.env.VITE_TRANSCRIPT_API_URL ? `${import.meta.env.VITE_TRANSCRIPT_API_URL}/docs` : "/docs") : (import.meta.env.DEV ? "http://localhost:8000/docs" : "/docs")}
                 target="_blank"
                 rel="noreferrer"
                 className="btn btn-outline"

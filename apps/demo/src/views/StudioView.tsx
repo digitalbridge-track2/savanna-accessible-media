@@ -722,7 +722,9 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
     }
 
     // 2. Publish to FastAPI Level 2 service
-    const apiBaseUrl = import.meta.env.VITE_TRANSCRIPT_API_URL || "http://localhost:8000";
+    const apiBaseUrl = import.meta.env.VITE_TRANSCRIPT_API_URL !== undefined
+      ? import.meta.env.VITE_TRANSCRIPT_API_URL
+      : (import.meta.env.DEV ? "http://localhost:8000" : "");
     try {
       const res = await fetch(`${apiBaseUrl}/api/v1/lessons/digital-workplace-01/captions`, {
         method: "POST",

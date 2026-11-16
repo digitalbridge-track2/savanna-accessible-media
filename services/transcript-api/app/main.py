@@ -148,6 +148,7 @@ class WebhookResponse(BaseModel):
 # --- Endpoints ---
 
 @app.get("/health", response_model=HealthResponse, tags=["System"])
+@app.get("/api/health", response_model=HealthResponse, tags=["System"])
 def health_check():
     return {
         "status": "healthy",
