@@ -122,6 +122,7 @@ export const VoiceGuideTopButton: React.FC<VoiceGuideTopButtonProps> = ({ locale
         </span>
         <span>{isEnabled ? l.active : l.start}</span>
         <span
+          className="hide-mobile-shortcut"
           style={{
             fontSize: "10.5px",
             opacity: 0.85,

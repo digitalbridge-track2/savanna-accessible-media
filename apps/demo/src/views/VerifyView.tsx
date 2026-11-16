@@ -465,11 +465,9 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
             </div>
 
             <dl
+              className="verify-cred-dl"
               style={{
                 margin: 0,
-                display: "grid",
-                gridTemplateColumns: "minmax(140px, auto) 1fr",
-                gap: "0.6rem 1rem",
                 fontSize: "14px",
               }}
             >

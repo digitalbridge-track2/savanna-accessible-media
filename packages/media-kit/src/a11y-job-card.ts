@@ -218,6 +218,21 @@ export class A11yJobCard extends HTMLElement {
           color: #1B5E20;
           font-weight: bold;
         }
+        @media (max-width: 600px) {
+          article.card {
+            padding: 1rem;
+          }
+          .action-row {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.6rem;
+          }
+          .btn-apply, .btn-secondary {
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+          }
+        }
       </style>
 
       <!-- schema.org/JobPosting JSON-LD -->

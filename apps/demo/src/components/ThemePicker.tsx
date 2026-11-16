@@ -238,6 +238,7 @@ export const ThemePicker: React.FC<{ locale: SupportedLocale }> = ({ locale }) =
         <div
           ref={dialogRef}
           role="dialog"
+          className="theme-popover-dialog"
           aria-modal="true"
           aria-label={isAm ? "የቀለም እይታ እና የገጽታ መምረጫ" : "Color Vision & Theme Selector"}
           style={{

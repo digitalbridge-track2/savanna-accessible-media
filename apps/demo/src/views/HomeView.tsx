@@ -204,7 +204,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
       <section style={{ marginBottom: "3.5rem" }}>
         <h2
           style={{
-            fontSize: "44px",
+            fontSize: "clamp(24px, 5.5vw, 44px)",
             fontWeight: 600,
             color: "var(--color-ink)",
             margin: "0 0 1rem 0",
@@ -216,7 +216,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
         </h2>
         <p
           style={{
-            fontSize: "19px",
+            fontSize: "clamp(15px, 2.5vw, 19px)",
             maxWidth: "68ch",
             color: "var(--color-muted-ink)",
             lineHeight: 1.5,
@@ -267,7 +267,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ locale }) => {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(290px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
             gap: "1.25rem",
           }}
         >

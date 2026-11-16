@@ -2731,6 +2731,32 @@ class Ue extends HTMLElement {
         }
 
         @media (max-width: 600px) {
+          .controls-row {
+            flex-wrap: wrap;
+            gap: 4px;
+            padding: 6px 8px;
+            justify-content: space-between;
+          }
+          .controls-cluster {
+            gap: 2px;
+            flex-wrap: nowrap;
+          }
+          .btn-ctrl {
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            min-height: 32px;
+          }
+          .ctrl-divider {
+            display: none;
+          }
+          .dock-presets-group,
+          .window-resize-handle,
+          .window-resize-edge-bottom,
+          .window-resize-edge-right,
+          .window-resize-edge-left {
+            display: none !important;
+          }
           .prefs-popover {
             right: 8px;
             left: 8px;
@@ -2746,7 +2772,10 @@ class Ue extends HTMLElement {
             bottom: 56px;
           }
           .quality-popover {
-            right: 16px;
+            right: 8px;
+            left: 8px;
+            width: auto;
+            max-width: none;
             bottom: 56px;
           }
         }
@@ -4149,6 +4178,21 @@ class lt extends HTMLElement {
           font-size: 0.875rem;
           color: #1B5E20;
           font-weight: bold;
+        }
+        @media (max-width: 600px) {
+          article.card {
+            padding: 1rem;
+          }
+          .action-row {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.6rem;
+          }
+          .btn-apply, .btn-secondary {
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+          }
         }
       </style>
 

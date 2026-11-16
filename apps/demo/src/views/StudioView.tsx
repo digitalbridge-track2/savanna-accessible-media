@@ -1168,9 +1168,9 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
 
               {/* Card Body: Split Grid for Draft ASR Reference and Big Human Reviewed Editor */}
               <div
+                className="studio-split-grid"
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "minmax(280px, 1fr) minmax(360px, 1.6fr)",
                   gap: "1.5rem",
                 }}
               >

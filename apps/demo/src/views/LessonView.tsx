@@ -330,7 +330,7 @@ export const LessonView: React.FC<LessonViewProps> = ({ locale }) => {
           {t.docsDesc}
         </p>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1rem" }}>
           {/* HTML Document Card */}
           <div
             style={{
