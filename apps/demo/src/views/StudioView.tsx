@@ -721,9 +721,10 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
       console.warn("Local storage update warning:", err);
     }
 
-    // 2. Publish to FastAPI Level 2 service on port 8000
+    // 2. Publish to FastAPI Level 2 service
+    const apiBaseUrl = import.meta.env.VITE_TRANSCRIPT_API_URL || "http://localhost:8000";
     try {
-      const res = await fetch("http://localhost:8000/api/v1/lessons/digital-workplace-01/captions", {
+      const res = await fetch(`${apiBaseUrl}/api/v1/lessons/digital-workplace-01/captions`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

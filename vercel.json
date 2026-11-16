@@ -1,0 +1,31 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
+  "outputDirectory": "apps/demo/dist",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, HEAD, OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "*" }
+      ]
+    },
+    {
+      "source": "/(.*)\\.(mp4|webm|opus|mp3|m4a|ogg|wav)",
+      "headers": [
+        { "key": "Accept-Ranges", "value": "bytes" },
+        { "key": "Cache-Control", "value": "public, max-age=604800, immutable" }
+      ]
+    }
+  ],
+  "rewrites": [
+    { "source": "/lesson", "destination": "/lesson.html" },
+    { "source": "/studio", "destination": "/studio.html" },
+    { "source": "/verify", "destination": "/verify.html" },
+    { "source": "/slides", "destination": "/slides.html" },
+    { "source": "/standalone-embed", "destination": "/standalone-embed.html" }
+  ]
+}
