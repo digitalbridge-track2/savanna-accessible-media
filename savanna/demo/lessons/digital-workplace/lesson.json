@@ -10,7 +10,7 @@
     "am": "ለዘመናዊ የሥራ ቦታ አስፈላጊ አሠራሮች፣ መሣሪያዎች እና የተደራሽነት ቅጦች።"
   },
   "language": "en",
-  "durationSeconds": 180,
+  "durationSeconds": 29,
   "poster": {
     "src": "/lessons/digital-workplace/media/poster.webp",
     "alt": {
@@ -24,7 +24,7 @@
       "kind": "main",
       "src": "/lessons/digital-workplace/media/lesson-1080p.mp4",
       "type": "video/mp4",
-      "sizeBytes": 28500000,
+      "sizeBytes": 936167,
       "quality": "1080p",
       "label": "1080p (Full HD)"
     },
@@ -33,7 +33,7 @@
       "kind": "main",
       "src": "/lessons/digital-workplace/media/lesson.mp4",
       "type": "video/mp4",
-      "sizeBytes": 14200000,
+      "sizeBytes": 673688,
       "quality": "720p",
       "label": "720p (HD)"
     },
@@ -42,7 +42,7 @@
       "kind": "main",
       "src": "/lessons/digital-workplace/media/lesson-480p.mp4",
       "type": "video/mp4",
-      "sizeBytes": 9200000,
+      "sizeBytes": 534089,
       "quality": "480p",
       "label": "480p (Standard)"
     },
@@ -51,7 +51,7 @@
       "kind": "main",
       "src": "/lessons/digital-workplace/media/lesson-360p.mp4",
       "type": "video/mp4",
-      "sizeBytes": 5800000,
+      "sizeBytes": 483216,
       "quality": "360p",
       "label": "360p (SD)"
     },
@@ -60,7 +60,7 @@
       "kind": "main",
       "src": "/lessons/digital-workplace/media/lesson-240p.mp4",
       "type": "video/mp4",
-      "sizeBytes": 2400000,
+      "sizeBytes": 423871,
       "quality": "240p",
       "label": "240p (Low Data)"
     },
@@ -69,7 +69,7 @@
       "kind": "main",
       "src": "/lessons/digital-workplace/media/lesson.webm",
       "type": "video/webm",
-      "sizeBytes": 115000,
+      "sizeBytes": 972850,
       "quality": "webm",
       "label": "720p (WebM VP9)"
     },
@@ -78,7 +78,7 @@
       "kind": "described",
       "src": "/lessons/digital-workplace/media/lesson-ad.mp4",
       "type": "video/mp4",
-      "sizeBytes": 14500000,
+      "sizeBytes": 721173,
       "describes": "src-main"
     },
     {
@@ -86,14 +86,14 @@
       "kind": "sign",
       "src": "/lessons/digital-workplace/media/lesson-esl.mp4",
       "type": "video/mp4",
-      "sizeBytes": 8500000
+      "sizeBytes": 872985
     },
     {
       "id": "src-audio-opus",
       "kind": "audio-only",
       "src": "/lessons/digital-workplace/media/lesson-audio.opus",
       "type": "audio/opus",
-      "sizeBytes": 451145,
+      "sizeBytes": 276594,
       "quality": "audio-opus",
       "format": "Opus",
       "label": "Opus Audio (Low Bandwidth)"
@@ -103,7 +103,7 @@
       "kind": "audio-only",
       "src": "/lessons/digital-workplace/media/lesson-audio.mp3",
       "type": "audio/mpeg",
-      "sizeBytes": 927912,
+      "sizeBytes": 465649,
       "quality": "audio-mp3",
       "format": "MP3",
       "label": "MP3 Audio (Universal)"
@@ -113,7 +113,7 @@
       "kind": "audio-only",
       "src": "/lessons/digital-workplace/media/lesson-audio.ogg",
       "type": "audio/ogg",
-      "sizeBytes": 777051,
+      "sizeBytes": 172172,
       "quality": "audio-ogg",
       "format": "OGG",
       "label": "Ogg Vorbis Audio"
@@ -123,7 +123,7 @@
       "kind": "audio-only",
       "src": "/lessons/digital-workplace/media/lesson-audio.wav",
       "type": "audio/wav",
-      "sizeBytes": 1323078,
+      "sizeBytes": 1278978,
       "quality": "audio-wav",
       "format": "WAV",
       "label": "WAV Audio (Lossless PCM)"
@@ -133,7 +133,7 @@
       "kind": "audio-only",
       "src": "/lessons/digital-workplace/media/lesson-audio.m4a",
       "type": "audio/mp4",
-      "sizeBytes": 1205238,
+      "sizeBytes": 332665,
       "quality": "audio-m4a",
       "format": "AAC/M4A",
       "label": "AAC / M4A Audio (Apple High Quality)"
