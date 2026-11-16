@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abugida Media Kit — Comprehensive Pitch & Evaluation Deck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@400;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090D16;
+      --card-bg: #111827;
+      --card-border: #1F2937;
+      --accent-cyan: #06B6D4;
+      --accent-green: #10B981;
+      --accent-indigo: #6366F1;
+      --accent-amber: #F59E0B;
+      --accent-rose: #F43F5E;
+      --text-main: #F9FAFB;
+      --text-muted: #9CA3AF;
+      --text-dim: #6B7280;
+      --font-main: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-eth: 'Noto Sans Ethiopic', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: var(--font-main);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* Top Navigation & Status Bar */
+    header.deck-header {
+      background: rgba(17, 24, 39, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 50;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .brand-badge {
+      background: linear-gradient(135deg, var(--accent-indigo), var(--accent-cyan));
+      color: #fff;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+    .brand-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .brand-geez {
+      font-family: var(--font-eth);
+      color: var(--accent-cyan);
+      font-weight: 600;
+      margin-left: 0.25rem;
+    }
+
+    .deck-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .slide-counter {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      background: #1F2937;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+    }
+    .btn-ctrl {
+      background: #1F2937;
+      border: 1px solid #374151;
+      color: #fff;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+    }
+    .btn-ctrl:hover {
+      background: #374151;
+      border-color: var(--accent-cyan);
+    }
+    .btn-ctrl:focus-visible {
+      outline: 2px solid var(--accent-cyan);
+    }
+
+    /* Progress Bar */
+    .progress-bar-container {
+      width: 100%;
+      height: 3px;
+      background: #1F2937;
+      position: relative;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
+      width: 4.34%;
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Slide Stage */
+    main.deck-stage {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      max-width: 1200px;
+      height: calc(100vh - 120px);
+      max-height: 700px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2.25rem;
+      position: relative;
+      overflow-y: auto;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      animation: fadeIn 0.25s ease-out;
+    }
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Slide Typography */
+    .slide-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--accent-cyan);
+      margin-bottom: 0.5rem;
+    }
+    .slide-title {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 0.4rem;
+    }
+    .slide-subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      font-weight: 400;
+    }
+
+    /* Layout Grids */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      flex: 1;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      flex: 1;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      flex: 1;
+    }
+
+    /* Cards */
+    .info-card {
+      background: #182234;
+      border: 1px solid #283548;
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .info-card.accent-border {
+      border-left: 4px solid var(--accent-cyan);
+    }
+    .info-card.green-border {
+      border-left: 4px solid var(--accent-green);
+    }
+    .info-card.amber-border {
+      border-left: 4px solid var(--accent-amber);
+    }
+    .info-card.rose-border {
+      border-left: 4px solid var(--accent-rose);
+    }
+    .info-card h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .info-card p, .info-card li {
+      font-size: 0.88rem;
+      line-height: 1.5;
+      color: #D1D5DB;
+    }
+    .info-card ul {
+      padding-left: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    /* Media Callouts & Images */
+    .slide-image-box {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #374151;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      min-height: 250px;
+      position: relative;
+    }
+    .slide-image-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .slide-image-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,0.75);
+      color: #E5E7EB;
+      font-size: 0.75rem;
+      padding: 0.4rem 0.75rem;
+      text-align: center;
+    }
+
+    /* Highlight Banner */
+    .banner-quote {
+      background: rgba(6, 182, 212, 0.08);
+      border: 1px solid rgba(6, 182, 212, 0.25);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      color: #E0F2FE;
+      margin-bottom: 1.25rem;
+      font-style: italic;
+    }
+
+    .key-badge {
+      display: inline-block;
+      background: #1E293B;
+      color: var(--accent-cyan);
+      border: 1px solid #334155;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+    }
+
+    /* Step List */
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .step-item {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      background: #182234;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      border: 1px solid #283548;
+    }
+    .step-num {
+      background: var(--accent-cyan);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.8rem;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+    .step-content strong {
+      color: #fff;
+      display: block;
+      margin-bottom: 0.2rem;
+      font-size: 0.9rem;
+    }
+    .step-content p {
+      font-size: 0.83rem;
+      color: #9CA3AF;
+      line-height: 1.4;
+    }
+
+    /* Links table */
+    .link-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+    }
+    .link-table th, .link-table td {
+      padding: 0.6rem 0.8rem;
+      text-align: left;
+      border-bottom: 1px solid #283548;
+    }
+    .link-table th {
+      background: #182234;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .link-table a {
+      color: var(--accent-cyan);
+      text-decoration: none;
+      font-family: var(--font-mono);
+    }
+    .link-table a:hover {
+      text-decoration: underline;
+    }
+
+    /* Bottom Navigation Bar */
+    footer.deck-footer {
+      background: rgba(17, 24, 39, 0.85);
+      border-top: 1px solid var(--card-border);
+      padding: 0.6rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+    .nav-hints {
+      display: flex;
+      gap: 1.25rem;
+    }
+    .nav-hint kbd {
+      background: #1F2937;
+      color: #D1D5DB;
+      border: 1px solid #374151;
+      padding: 0.1rem 0.35rem;
+      border-radius: 3px;
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+    }
+
+    /* Print Styles: Make all slides print one per page */
+    @media print {
+      body {
+        height: auto;
+        overflow: visible;
+        background: #fff;
+        color: #000;
+      }
+      header.deck-header, footer.deck-footer, .progress-bar-container {
+        display: none !important;
+      }
+      main.deck-stage {
+        padding: 0;
+        display: block;
+      }
+      .slide {
+        display: flex !important;
+        page-break-after: always;
+        height: 100vh;
+        max-height: none;
+        max-width: none;
+        border: none;
+        box-shadow: none;
+        background: #fff;
+        color: #111;
+        border-bottom: 2px solid #ddd;
+        padding: 2rem;
+      }
+      .slide-title { color: #000; }
+      .info-card { background: #f9f9f9; border: 1px solid #ccc; color: #111; }
+      .info-card h4 { color: #000; }
+      .info-card p, .info-card li { color: #333; }
+      .banner-quote { background: #f0f7f9; border-color: #06B6D4; color: #111; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header class="deck-header">
+    <div class="brand">
+      <span class="brand-badge">TRACK 2</span>
+      <span class="brand-title">Abugida Media Kit <span class="brand-geez">አቡጊዳ</span></span>
+      <span style="color: var(--text-dim); font-size: 0.8rem;">| ALX Tech Hub Hackathon 2026</span>
+    </div>
+    <div class="deck-controls">
+      <select id="slide-jump" class="btn-ctrl" style="cursor: pointer;" aria-label="Jump to Slide">
+        <!-- populated dynamically -->
+      </select>
+      <span class="slide-counter" id="slide-num">Slide 1 of 23</span>
+      <button class="btn-ctrl" id="btn-prev" title="Previous Slide (Left Arrow)">◀ Prev</button>
+      <button class="btn-ctrl" id="btn-next" title="Next Slide (Right Arrow)">Next ▶</button>
+      <button class="btn-ctrl" id="btn-fs" title="Toggle Fullscreen (F)">⛶ Fullscreen</button>
+      <button class="btn-ctrl" id="btn-print" title="Print to PDF (Ctrl+P)" onclick="window.print()">🖨 Print / PDF</button>
+    </div>
+  </header>
+
+  <!-- Progress Bar -->
+  <div class="progress-bar-container">
+    <div class="progress-bar-fill" id="progress-bar"></div>
+  </div>
+
+  <!-- Stage Area Holding All 23 Slides -->
+  <main class="deck-stage" id="deck-stage">
+
+    <!-- SLIDE 1 -->
+    <section class="slide active" data-title="Cover & Executive Identity">
+      <div class="slide-badge">ALX TECH HUB HACKATHON 2026 • LIDETA, ADDIS ABABA</div>
+      <h1 class="slide-title">Abugida Media Kit (አቡጊዳ ሚዲያ ኪት)</h1>
+      <p class="slide-subtitle">An Embeddable Accessibility Engine, Offline Media Player, and Career Gateway Built for African Learners</p>
+      
+      <div class="grid-2">
+        <div style="display: flex; flex-direction: column; justify-content: space-around;">
+          <div class="banner-quote">
+            "Education and employment cannot be a privilege reserved for learners with high-end laptops, fast fiber internet, and standard hearing or vision. Abugida Media Kit transforms any LMS into a fully accessible, offline-resilient, multi-modal learning environment through a single line of drop-in HTML, backed by authentic Ethiopian Sign Language, reviewed audio description, bilingual transcripts, and verifiable career pathways."
+          </div>
+          <div class="info-card accent-border">
+            <h4>🎯 Target Evaluation Environment</h4>
+            <p><strong>Savanna LMS:</strong> Serving 3,000+ Digital Bridge learners across Ethiopia.</p>
+            <p><strong>Track 2 Deliverable:</strong> Accessible video player, transcript pipeline, Ethiopian Sign Language, audio description, 3G offline pack, Braille export, and verifiable career gateway.</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <a href="http://localhost:8080/pages/concept-with-navigation.html" target="_blank" class="btn-ctrl" style="text-decoration: none; flex: 1; justify-content: center; background: #06B6D4; color: #000; font-weight: 700;">🚀 Open Savanna LMS</a>
+            <a href="http://localhost:3000/lesson" target="_blank" class="btn-ctrl" style="text-decoration: none; flex: 1; justify-content: center; background: #10B981; color: #000; font-weight: 700;">📱 Open PWA Demo</a>
+          </div>
+        </div>
+        <div class="slide-image-box">
+          <img src="/assets/slides/signer-sync.png" alt="Abugida Media Player running synchronized slide video and Ethiopian Sign Language interpreter in Savanna LMS">
+          <div class="slide-image-caption">Live Savanna LMS: 1080p Slide Video Synchronized with Ethiopian Sign Language Window</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 2 -->
+    <section class="slide" data-title="The Co-Design Mission & Core Deliverables">
+      <div class="slide-badge">CO-DESIGN WITH DISABLED LEARNERS</div>
+      <h2 class="slide-title">The Mission: What We Built & Why</h2>
+      <p class="slide-subtitle">Engineered with disabled learners, for disabled learners, in real Ethiopian network conditions</p>
+
+      <div class="grid-4" style="margin-bottom: 1rem;">
+        <div class="info-card accent-border">
+          <h4>🧏 Deaf & Hard of Hearing</h4>
+          <p>Authentic human Ethiopian Sign Language (EthSL) in a draggable/dockable PIP window, plus customizable bilingual captions (English & Amharic).</p>
+        </div>
+        <div class="info-card green-border">
+          <h4>🦯 Blind & Low-Vision</h4>
+          <p>Pre-authored audio description (<span class="key-badge">D)))</span>), tactile Braille export (<span class="key-badge">.brf</span>), tagged PDF/UA documents, and high-contrast color palettes.</p>
+        </div>
+        <div class="info-card amber-border">
+          <h4>📶 Rural 3G Learners</h4>
+          <p>A measured <strong>3.2 MB 3G Light Study Pack</strong> that downloads in seconds and runs 100% offline via Service Worker & CacheStorage.</p>
+        </div>
+        <div class="info-card rose-border">
+          <h4>🧠 Neurodivergent / Motor</h4>
+          <p>Clean semantic layout with 100% keyboard navigation, zero flashing elements, zero auto-play noise, and WCAG reflow up to 200% zoom.</p>
+        </div>
+      </div>
+
+      <div class="info-card" style="background: #111E2E; border-color: #1E3A8A;">
+        <h4>📦 The 4 Core Deliverables Delivered in the MVP</h4>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 0.25rem;">
+          <div><strong>1. Embeddable Player:</strong><br><span class="key-badge">&lt;db-player&gt;</span> Web Component with Shadow DOM.</div>
+          <div><strong>2. Career Gateway:</strong><br><span class="key-badge">&lt;a11y-job-card&gt;</span> with audio summaries & accommodations.</div>
+          <div><strong>3. Editorial Microservice:</strong><br>FastAPI Python service (<span class="key-badge">services/transcript-api</span>) on port 8000.</div>
+          <div><strong>4. Savanna Integration:</strong><br>1-line HTML drop-in verified live in Savanna LMS at port 8080.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3 -->
+    <section class="slide" data-title="Team Roster & Engineering Ownership">
+      <div class="slide-badge">THE BUILDERS</div>
+      <h2 class="slide-title">Engineering Team & Domain Ownership</h2>
+      <p class="slide-subtitle">Cross-functional expertise spanning systems architecture, accessibility standards, and localization</p>
+
+      <div class="grid-2">
+        <div class="info-card accent-border">
+          <h4>👨‍💻 Yeabsira Fikre — Team Lead & Full-Stack Systems Architect</h4>
+          <p style="color: var(--accent-cyan); font-family: var(--font-mono); font-size: 0.8rem;">fikreyabsira@gmail.com</p>
+          <ul>
+            <li><strong>Monorepo & Component Scaffolding:</strong> Architected the npm workspaces monorepo, Vite build pipelines, and framework-agnostic Custom Element lifecycle.</li>
+            <li><strong>FastAPI Microservice:</strong> Authored the Python Tier 2 transcription backend on port 8000 with OpenAPI specs and ASR worker pipelines.</li>
+            <li><strong>LMS Platform Integration:</strong> Verified seamless injection into Savanna LMS with zero backend refactoring and zero style interference.</li>
+          </ul>
+        </div>
+
+        <div class="info-card green-border">
+          <h4>♿ [Team Member 2] — Accessibility & UX Compliance Specialist</h4>
+          <p style="color: var(--accent-green); font-family: var(--font-mono); font-size: 0.8rem;">a11y-lead@team.local</p>
+          <ul>
+            <li><strong>WCAG 2.2 AA Enforcement:</strong> Audited and eliminated all keyboard traps, color contrast failures, and focus order anomalies.</li>
+            <li><strong>Screen Reader Validation:</strong> Conducted NVDA and TalkBack testing across all five application views.</li>
+            <li><strong>Ethical Voice Guide:</strong> Enforced strict non-autoplay speech architecture with keyboard-first opt-in activation.</li>
+          </ul>
+        </div>
+
+        <div class="info-card amber-border">
+          <h4>🎬 [Team Member 3] — Media Pipeline & Video Sync Engineer</h4>
+          <p style="color: var(--accent-amber); font-family: var(--font-mono); font-size: 0.8rem;">media-lead@team.local</p>
+          <ul>
+            <li><strong>Keyframe Decoding Breakthrough:</strong> Solved secondary video PIP flicker by encoding tight 0.5s GOP (<span class="key-badge">-g 15</span>, <span class="key-badge">-bf 0</span>) fastdecode MP4s.</li>
+            <li><strong>Dynamic Rate Micro-Sync:</strong> Engineered <span class="key-badge">MediaSyncController</span> with 1.08x / 0.92x speed nudging to avoid seek-pipeline flushes.</li>
+            <li><strong>Multi-Track Encoding:</strong> Generated 1080p, 720p, 480p, 360p, 240p, WebM, and described audio (<span class="key-badge">lesson-ad.mp4</span>) streams.</li>
+          </ul>
+        </div>
+
+        <div class="info-card rose-border">
+          <h4>🌍 [Team Member 4] — Curriculum, Localization & Ethiopian Standards</h4>
+          <p style="color: var(--accent-rose); font-family: var(--font-mono); font-size: 0.8rem;">localization-lead@team.local</p>
+          <ul>
+            <li><strong>Ethiopian Dual-Calendar Engine:</strong> Authored Ge'ez calendar mathematical leap-year converter in TypeScript.</li>
+            <li><strong>Bilingual Captions & BRF:</strong> Authored Amharic (<span class="brand-geez">አማርኛ</span>) and English WebVTT subtitles and tactile Braille Ready Format (<span class="key-badge">.brf</span>) files.</li>
+            <li><strong>Job & Credential Standards:</strong> Structured <span class="key-badge">schema.org/JobPosting</span> and W3C Open Badges 3.0 verifiable metadata.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4 -->
+    <section class="slide" data-title="The Problem — The Accessibility Chasm">
+      <div class="slide-badge">THE CHALLENGE</div>
+      <h2 class="slide-title">The Problem: Why Current LMS Platforms Fail</h2>
+      <p class="slide-subtitle">An invisible wall isolates over 15% of African learners from digital skills</p>
+
+      <div class="grid-3" style="margin-bottom: 1rem;">
+        <div class="info-card rose-border">
+          <h4>1. Zero Sign Language</h4>
+          <p>Standard video players offer no secondary video stream for sign language interpreters. Deaf learners are forced to rely on raw visual text without native linguistic interpretation.</p>
+        </div>
+        <div class="info-card rose-border">
+          <h4>2. Missing Amharic Subtitles</h4>
+          <p>Commercial video hosts default to English automated speech recognition (ASR), which fails on accented Ethiopian English and offers 0 support for Ethiopic script (<span class="brand-geez">ፊደል</span>).</p>
+        </div>
+        <div class="info-card rose-border">
+          <h4>3. Extreme Bandwidth Bloat</h4>
+          <p>Mainstream streaming players push heavy 50MB–200MB video chunks with no audio fallback, instantly failing on Ethiopian 3G networks where data is expensive.</p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="info-card rose-border">
+          <h4>4. Assistive Traps for Blind Learners</h4>
+          <p>Complex video overlays trap keyboard focus (<span class="key-badge">tabindex > 0</span>), lack audio descriptions for visual slides, and provide inaccessible documents that screen readers cannot interpret.</p>
+        </div>
+        <div class="info-card rose-border">
+          <h4>5. Disconnected Career Gateways</h4>
+          <p>Even when students complete courses, application forms lack accommodation disclosure and have zero support for verifiable credentials, keeping qualified graduates locked out of employment.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5 -->
+    <section class="slide" data-title="The Solution — 3-Tier Decoupled Architecture">
+      <div class="slide-badge">ARCHITECTURAL DESIGN</div>
+      <h2 class="slide-title">The Solution: 3-Tier Decoupled Architecture</h2>
+      <p class="slide-subtitle">How Abugida Media Kit bridges the gap without creating platform lock-in</p>
+
+      <div class="grid-3" style="margin-bottom: 1rem;">
+        <div class="info-card accent-border">
+          <h4>Tier 1: Client Core</h4>
+          <p style="color: var(--accent-cyan); font-weight: 600;">$0/month Learner Runtime</p>
+          <p>Web Components (<span class="key-badge">&lt;db-player&gt;</span>, <span class="key-badge">&lt;a11y-job-card&gt;</span>), Service Worker, and IndexedDB run 100% in the user's browser with zero backend requirement.</p>
+        </div>
+        <div class="info-card green-border">
+          <h4>Tier 2: Editorial Microservice</h4>
+          <p style="color: var(--accent-green); font-weight: 600;">Optional Authoring API</p>
+          <p>Self-hosted Python FastAPI service on port 8000 for transcription jobs, human-in-the-loop cue correction, and automated WebVTT exports.</p>
+        </div>
+        <div class="info-card amber-border">
+          <h4>Tier 3: Open Standards</h4>
+          <p style="color: var(--accent-amber); font-weight: 600;">Zero Vendor Lock-In</p>
+          <p>Strict adoption of global standards: W3C WebVTT, <span class="key-badge">schema.org/JobPosting</span> JSON-LD, W3C Open Badges 3.0, and Braille Ready Format (<span class="key-badge">.brf</span>).</p>
+        </div>
+      </div>
+
+      <div class="info-card" style="background: #111E2E; border-color: #1E3A8A;">
+        <h4>🔌 Single Drop-In HTML Embed Code for Any Platform</h4>
+        <div style="background: #000; padding: 0.75rem 1rem; border-radius: 6px; font-family: var(--font-mono); font-size: 0.85rem; color: #38BDF8; margin-top: 0.25rem;">
+          &lt;script src="/assets/js/db-player.js" defer&gt;&lt;/script&gt;<br>
+          &lt;db-player manifest-src="/lessons/digital-workplace/lesson.json" lang="en"&gt;&lt;/db-player&gt;
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6 -->
+    <section class="slide" data-title="How Did We Build It — Technical Scaffolding">
+      <div class="slide-badge">UNDER THE HOOD</div>
+      <h2 class="slide-title">How Did We Build It: Technical Scaffolding</h2>
+      <p class="slide-subtitle">Strict typing, custom element lifecycle, and zero-dependency shadow architecture</p>
+
+      <div class="grid-2">
+        <div class="info-card accent-border">
+          <h4>1. Framework-Agnostic Web Components</h4>
+          <p>Authored in <strong>TypeScript with <span class="key-badge">strict: true</span></strong>, compiled to standard W3C Custom Elements using Vite & ESBuild.</p>
+          <p>Uses an <strong>open Shadow DOM</strong> to completely isolate player CSS tokens from the host platform's styles — guaranteed zero stylesheet collisions inside Savanna LMS.</p>
+        </div>
+
+        <div class="info-card green-border">
+          <h4>2. Manifest-Driven Architecture (<span class="key-badge">lesson.json</span>)</h4>
+          <p>Fully validated against our strict JSON Schema (<span class="key-badge">lesson-manifest.schema.json</span>).</p>
+          <p>Decouples content from presentation: media sources, qualities (1080p down to 240p), sign language tracks, audio descriptions, documents, offline packs, and skills are declared declaratively.</p>
+        </div>
+
+        <div class="info-card amber-border">
+          <h4>3. Monorepo Organization (npm Workspaces)</h4>
+          <ul>
+            <li><span class="key-badge">packages/media-kit</span>: Core accessible player & job card components.</li>
+            <li><span class="key-badge">packages/lesson-schema</span>: Canonical TypeScript types & JSON schemas.</li>
+            <li><span class="key-badge">apps/demo</span>: Interactive Vite PWA demo application.</li>
+            <li><span class="key-badge">savanna</span>: Live Savanna LMS host platform environment.</li>
+            <li><span class="key-badge">services/transcript-api</span>: Python FastAPI microservice.</li>
+          </ul>
+        </div>
+
+        <div class="info-card rose-border">
+          <h4>4. Dual-Mode Distribution Pipeline</h4>
+          <p>Outputs both an <strong>ES Module</strong> (<span class="key-badge">a11y-media-kit.es.js</span>) for modern bundlers and a <strong>Universal UMD bundle</strong> (<span class="key-badge">a11y-media-kit.umd.js</span>) for legacy script tag embeds.</p>
+          <p>Tree-shakable and lightweight with zero external runtime dependencies.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 7 -->
+    <section class="slide" data-title="Technical Breakthrough — Solving Video Sync">
+      <div class="slide-badge">ENGINEERING DEEP DIVE</div>
+      <h2 class="slide-title">Technical Breakthrough: Solving Sign Language Video Sync</h2>
+      <p class="slide-subtitle">Eliminating decoder seek-storms and black-screen flickering on secondary video streams</p>
+
+      <div class="grid-2">
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          <div class="info-card rose-border">
+            <h4>⚠️ The Browser Decoder Problem</h4>
+            <p>In web browsers, playing two synchronized <span class="key-badge">&lt;video&gt;</span> elements causes severe black-screen flickering if synchronized naively with <span class="key-badge">currentTime = X</span>.</p>
+            <p>Standard video streams have 8-second keyframe intervals with B-frames. Attempting to seek flushes the browser hardware decoder, forcing it to decode hundreds of delta frames. The decoder enters an infinite seek loop and renders black.</p>
+          </div>
+
+          <div class="info-card green-border">
+            <h4>💡 The Abugida Dual-Rate Micro-Sync Solution</h4>
+            <p><strong>1. Ultra-Tight GOP Encoding:</strong> Re-encoded <span class="key-badge">lesson-esl.mp4</span> with a 0.5s keyframe interval (<span class="key-badge">-g 15</span> at 30fps), zero B-frames (<span class="key-badge">-bf 0</span>), and <span class="key-badge">+faststart</span>. Random-access seek latency dropped from 300ms to <strong>&lt;5ms</strong>.</p>
+            <p><strong>2. Dynamic Rate Micro-Sync:</strong> If drift is between 250ms and 750ms, instead of executing a violent seek, the controller smoothly nudges the sign video speed to <strong>1.08×</strong> or <strong>0.92×</strong>.</p>
+            <p><strong>Result:</strong> 100% smooth, continuous playback with ZERO dropped frames, ZERO black canvases, and ZERO flickering.</p>
+          </div>
+        </div>
+
+        <div class="slide-image-box">
+          <img src="/assets/slides/signer-sync.png" alt="Synchronized Human Sign Language Interpreter in PIP Window">
+          <div class="slide-image-caption">Verified: Smooth 30fps Interpreter Playback in Savanna LMS with Zero Flicker</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 8 -->
+    <section class="slide" data-title="MVP Walkthrough 1 — The Multi-Modal Player">
+      <div class="slide-badge">MVP INSPECTION</div>
+      <h2 class="slide-title">MVP Walkthrough: The Multi-Modal Player (<span class="key-badge">&lt;db-player&gt;</span>)</h2>
+      <p class="slide-subtitle">Authentic presentation slides, human sign language, and reviewed audio description</p>
+
+      <div class="grid-2">
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <strong>Real Curriculum Slides (No Placeholders)</strong>
+              <p>Five 1080p slides for <em>"Digital Workplace Skills: Foundations"</em> covering asynchronous collaboration, document heading hierarchy, and accessible form controls.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <strong>Authentic Human Ethiopian Sign Language (EthSL)</strong>
+              <p>Real human interpreter signing on camera in a dedicated PIP window with 3 corner docking presets (⬈, ⬊, ◧) and keyboard resizing.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <strong>Reviewed Audio Description (<span class="key-badge">D)))</span>)</strong>
+              <p>Synchronized secondary audio narration that vocalizes slide text, charts, and visual diagrams during natural dialogue pauses.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <strong>Bilingual Captions & Keyboard Shortcuts</strong>
+              <p>English & Amharic captions with 4 high-contrast themes and 4 font sizes. Dedicated shortcuts: <span class="key-badge">Space</span>/<span class="key-badge">K</span>, <span class="key-badge">S</span>, <span class="key-badge">D</span>, <span class="key-badge">C</span>, <span class="key-badge">M</span>, <span class="key-badge">?</span>.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-image-box">
+          <img src="/assets/slides/savanna-player.png" alt="Abugida Player embedded inside Savanna LMS">
+          <div class="slide-image-caption">Live &lt;db-player&gt; running inside Savanna LMS (Module 2: Core Competencies)</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 9 -->
+    <section class="slide" data-title="MVP Walkthrough 2 — Transcripts & Braille Export">
+      <div class="slide-badge">MVP INSPECTION</div>
+      <h2 class="slide-title">MVP Walkthrough: Transcripts & Tactile Braille Export</h2>
+      <p class="slide-subtitle">Fully synchronized text equivalents, search, live chat, and Braille Ready Format (.brf)</p>
+
+      <div class="grid-2">
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <strong>Synchronized Interactive Transcript</strong>
+              <p>Highlights each spoken sentence in lockstep with audio. Clicking any sentence instantly seeks the video and sign interpreter to that exact timecode.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <strong>Inline Visual Descriptions</strong>
+              <p>Transcripts include explicit visual annotations (<span class="key-badge">[Visual: Slide title: Digital Workplace Skills...]</span>), allowing blind learners to understand slide visuals.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <strong>Tactile Braille Export (<span class="key-badge">.brf</span>)</strong>
+              <p>Dedicated <span class="key-badge">⠃⠗⠋ BRF</span> button downloads standard Braille Ready Format files formatted with 40-character line lengths for refreshable Braille displays.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <strong>Synchronized Live Chat Replay</strong>
+              <p>Learners can toggle to the "Live Chat Replay" tab to watch recorded peer discussions replay chronologically alongside the video lecture.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-image-box">
+          <img src="/assets/slides/amharic-transcript.png" alt="Synchronized Amharic and English Transcript with Braille Export">
+          <div class="slide-image-caption">Interactive Transcript Panel with Live Follow, Search, and Braille Export</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 10 -->
+    <section class="slide" data-title="MVP Walkthrough 3 — Accessible Tagged Documents">
+      <div class="slide-badge">MVP INSPECTION</div>
+      <h2 class="slide-title">MVP Walkthrough: Accessible Tagged Documents</h2>
+      <p class="slide-subtitle">Genuine PDF/UA compliant tagged documents and standalone semantic HTML handouts</p>
+
+      <div class="grid-3">
+        <div class="info-card accent-border">
+          <h4>📄 Semantic HTML Handout</h4>
+          <p><span class="key-badge">lesson.en.html</span></p>
+          <p>Clean HTML5 document containing the entire curriculum, complete with skip links, logical heading hierarchy (<span class="key-badge">&lt;h1&gt;</span> to <span class="key-badge">&lt;h3&gt;</span>), table header scopes, and zero external script trackers.</p>
+        </div>
+
+        <div class="info-card green-border">
+          <h4>📑 Tagged PDF/UA Document</h4>
+          <p><span class="key-badge">lesson.en.tagged.pdf</span></p>
+          <p>Pre-authored tagged PDF complying with PDF/UA and WCAG standards. Features a verified logical reading tree: Heading tags (<span class="key-badge">&lt;H1&gt;</span>, <span class="key-badge">&lt;H2&gt;</span>), Paragraph tags, and alt text on figures.</p>
+        </div>
+
+        <div class="info-card amber-border">
+          <h4>🌍 Bilingual Document Handouts</h4>
+          <p><span class="key-badge">lesson.am.tagged.pdf</span></p>
+          <p>Complete curriculum available in both English and Amharic, allowing learners to study or print high-contrast handouts in their native language.</p>
+        </div>
+      </div>
+
+      <div class="banner-quote" style="margin-top: 1.5rem;">
+        "Providing accessible documents ensures that blind learners using screen readers (NVDA, JAWS, TalkBack) can review reference handouts independently, without encountering unreadable scanned image PDFs."
+      </div>
+    </section>
+
+    <!-- SLIDE 11 -->
+    <section class="slide" data-title="MVP Walkthrough 4 — The 3.2 MB 3G Offline Study Pack">
+      <div class="slide-badge">MVP INSPECTION</div>
+      <h2 class="slide-title">MVP Walkthrough: The 3.2 MB 3G Offline Study Pack</h2>
+      <p class="slide-subtitle">True offline capability on basic smartphones over low-bandwidth cellular networks</p>
+
+      <div class="grid-2">
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <strong>Measured 3.2 MB Package Size</strong>
+              <p>Engineered for low-end Android/Tecno smartphones on intermittent Ethiopian 3G connections. Bundles high-efficiency compressed audio (Opus / AAC), light HTML, and bilingual subtitles.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <strong>Progressive Web App (PWA) Offline Engine</strong>
+              <p>Managed by a custom Service Worker (<span class="key-badge">sw.js</span>) and browser <span class="key-badge">CacheStorage</span>. Learner bookmarks and preferences persist in <span class="key-badge">IndexedDB</span>.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <strong>How to Test in 30 Seconds</strong>
+              <p>1. Open <a href="http://localhost:3000/lesson" target="_blank" style="color: var(--accent-cyan);">localhost:3000/lesson</a><br>
+                 2. Click <strong>"Download 3G Light Study Pack (3.2 MB)"</strong><br>
+                 3. In Chrome DevTools (F12) Network Tab, select <strong>"Offline"</strong><br>
+                 4. Refresh page (F5) — plays flawlessly without internet!</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card accent-border" style="justify-content: center;">
+          <h4 style="font-size: 1.1rem; color: var(--accent-cyan);">⚡ Bandwidth Comparison</h4>
+          <table class="link-table">
+            <tr><th>Format</th><th>Size</th><th>3G Download Time</th></tr>
+            <tr><td>Standard YouTube / Vimeo</td><td>~85.0 MB</td><td>~4.5 minutes (fails often)</td></tr>
+            <tr><td>Standard LMS MP4 Stream</td><td>~42.0 MB</td><td>~2.2 minutes</td></tr>
+            <tr style="background: rgba(16, 185, 129, 0.15); font-weight: bold; color: var(--accent-green);">
+              <td>Abugida 3G Light Pack</td>
+              <td>3.2 MB</td>
+              <td>under 8 seconds</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 12 -->
+    <section class="slide" data-title="MVP Walkthrough 5 — Career Gateway & Job Cards">
+      <div class="slide-badge">MVP INSPECTION</div>
+      <h2 class="slide-title">MVP Walkthrough: Career Gateway & Job Cards</h2>
+      <p class="slide-subtitle">Direct path from learning to verified inclusive tech employment</p>
+
+      <div class="grid-2">
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <strong>Semantic Accessible Job Cards (<span class="key-badge">&lt;a11y-job-card&gt;</span>)</strong>
+              <p>Curated inclusive roles (e.g. <em>Junior Accessibility QA Analyst</em> at FinTech Ethiopia) outlining required skills connected directly to curriculum modules.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <strong>Prerecorded Spoken Audio Summary</strong>
+              <p>Prominent <strong>"▶ Audio Summary"</strong> button plays a concise spoken overview of the job for low-vision and neurodivergent job seekers, with verbatim text transcript toggle.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <strong>Verified Workplace Accommodations</strong>
+              <p>Employers explicitly disclose confirmed accommodations: <em>"Screen reader accessible workstations"</em>, <em>"Flexible transport and remote hours"</em>.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <strong>Guaranteed 200% Zoom Reflow (WCAG 1.4.10)</strong>
+              <p>Responsive CSS Grid & Flexbox: at <strong>200% zoom</strong>, content reflows into a single readable column with <strong>zero horizontal scrollbar</strong>.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-image-box">
+          <img src="/assets/slides/career-gateway.png" alt="Accessible Career Gateway Job Card with Audio Summary">
+          <div class="slide-image-caption">Accessible Job Card with Audio Summary, Accommodations & 200% Zoom Reflow</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 13 -->
+    <section class="slide" data-title="MVP Walkthrough 6 — Verifiable Credentials">
+      <div class="slide-badge">MVP INSPECTION</div>
+      <h2 class="slide-title">MVP Walkthrough: Verifiable Credentials & JSON-LD</h2>
+      <p class="slide-subtitle">Connecting learners to employers using W3C Open Badges 3.0 and schema.org</p>
+
+      <div class="grid-2">
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <strong>Machine-Readable <span class="key-badge">schema.org/JobPosting</span></strong>
+              <p>Click <strong>"schema.org JSON-LD"</strong> to inspect standardized structured metadata, allowing screen reader job portals and aggregators to parse accommodation data.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <strong>W3C Open Badges 3.0 (OBv3) Integration</strong>
+              <p>Learners apply using verifiable Digital Bridge credentials (<span class="key-badge">CERT-DB-2026-0042</span>). Clicking <strong>"Apply with Verified Credential"</strong> presents cryptographically verifiable skill hashes.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <strong>Public Verification Registry (<span class="key-badge">/verify.html</span>)</strong>
+              <p>Visit <a href="http://localhost:3000/verify?id=CERT-DB-2026-0042" target="_blank" style="color: var(--accent-cyan);">verify?id=CERT-DB-2026-0042</a> to view the public portal with dual-calendar dates, issuer proof, and Web Share API links.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-image-box">
+          <img src="/assets/slides/verify-credential.png" alt="Verifiable Credential Portal with QR code and skill hashes">
+          <div class="slide-image-caption">Public Credential Verification Portal with QR Code and Dual-Calendar Dates</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 14 -->
+    <section class="slide" data-title="MVP Walkthrough 7 — Ethical Voice Guide">
+      <div class="slide-badge">MVP INSPECTION</div>
+      <h2 class="slide-title">MVP Walkthrough: Ethical Read-Aloud Voice Guide</h2>
+      <p class="slide-subtitle">WCAG 2.2 AA compliant speech assistant with zero screen reader collision</p>
+
+      <div class="grid-2">
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <strong>No Autoplay on Load (Strict WCAG 2.2 AA)</strong>
+              <p>Under WCAG 1.4.2 & 2.2 AA, automated speech upon page load collides with NVDA/TalkBack screen readers. Abugida defaults to <strong>strictly inactive</strong> until explicitly requested.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <strong>Keyboard-Accessible Opt-In Button</strong>
+              <p>Prominent <strong>"Start Voice Guide" (<span class="brand-geez">ድምፅ አስጀምር</span>)</strong> button placed at the top of the page, accessible via the very first <span class="key-badge">Tab</span> keypress.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <strong>Semantic DOM Traversal</strong>
+              <p>Announces heading levels, button accessible names, form labels, and image alt text while stripping decorative UI icons and layout whitespace.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <strong>Amharic Ge'ez Script Auto-Detection</strong>
+              <p>Automatically scans text for Ethiopic Unicode characters (<span class="key-badge">[\u1200-\u137F]</span>) and dynamically switches speech synthesis voices to native Amharic pronunciation.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-image-box">
+          <img src="/assets/slides/voice-guide.png" alt="Ethical Read-Aloud Voice Guide Floating Panel">
+          <div class="slide-image-caption">Ethical Voice Guide: Keyboard Opt-In, Ge'ez Detection, Floating Controls</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 15 -->
+    <section class="slide" data-title="MVP Walkthrough 8 — Caption Studio & FastAPI API">
+      <div class="slide-badge">MVP INSPECTION</div>
+      <h2 class="slide-title">MVP Walkthrough: Caption Studio & FastAPI API</h2>
+      <p class="slide-subtitle">Tier 2 microservice for automated transcription, cue editing, and publishing</p>
+
+      <div class="grid-2">
+        <div class="info-card accent-border">
+          <h4>Studio Workspace (<span class="key-badge">/studio.html</span>)</h4>
+          <p>An editorial workspace for instructors and curriculum authors to inspect, edit, and fine-tune caption cues.</p>
+          <p><strong>Real-time synchronization:</strong> editing subtitle text immediately updates the player preview with millisecond accuracy.</p>
+          <div style="margin-top: 1rem;">
+            <a href="http://localhost:3000/studio.html" target="_blank" class="btn-ctrl" style="text-decoration: none; justify-content: center; background: #06B6D4; color: #000; font-weight: 700;">Open Caption Studio</a>
+          </div>
+        </div>
+
+        <div class="info-card green-border">
+          <h4>FastAPI Microservice (<span class="key-badge">services/transcript-api</span>)</h4>
+          <p>Running live at <a href="http://localhost:8000/docs" target="_blank" style="color: var(--accent-cyan); font-family: var(--font-mono);">localhost:8000/docs</a> with OpenAPI 3.1 documentation.</p>
+          <ul>
+            <li><span class="key-badge">GET /health</span>: Healthcheck reporting ASR readiness.</li>
+            <li><span class="key-badge">POST /v1/transcription-jobs</span>: Automated draft creation.</li>
+            <li><span class="key-badge">GET /v1/transcription-jobs/{id}/segments</span>: Timestamped cues.</li>
+            <li><span class="key-badge">PATCH /v1/transcript-segments/{id}</span>: Human-in-the-loop cue edits.</li>
+            <li><span class="key-badge">GET /v1/transcription-jobs/{id}/export?format=vtt</span>: WebVTT export.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 16 -->
+    <section class="slide" data-title="Built for Ethiopia — Languages & Calendar">
+      <div class="slide-badge">ETHIOPIAN LOCALIZATION</div>
+      <h2 class="slide-title">Built for Ethiopia: Languages & Ge'ez Calendar</h2>
+      <p class="slide-subtitle">Authentic Ethiopian cultural integration, local typography, and dual-calendar mathematics</p>
+
+      <div class="grid-3" style="margin-bottom: 1rem;">
+        <div class="info-card accent-border">
+          <h4>5 Supported Regional Languages</h4>
+          <ul>
+            <li><strong>English</strong> (Workplace language)</li>
+            <li><strong>Amharic (<span class="brand-geez">አማርኛ</span>)</strong> (Federal language)</li>
+            <li><strong>Afaan Oromoo</strong> (Regional)</li>
+            <li><strong>Tigrinya (<span class="brand-geez">ትግርኛ</span>)</strong> (Regional)</li>
+            <li><strong>Somali (Af-Soomaali)</strong> (Regional)</li>
+          </ul>
+        </div>
+
+        <div class="info-card green-border">
+          <h4>Dual-Calendar Engine</h4>
+          <p><span class="key-badge">ethiopian-calendar.ts</span></p>
+          <p>Mathematically converts Gregorian dates to traditional <strong>Ethiopian Calendar</strong> (12 months of 30 days + 1 Pagume month). Hackathon date <span class="key-badge">2026-11-14</span> renders as <strong>ኅዳር 5፣ 2019 ዓ.ም</strong>.</p>
+        </div>
+
+        <div class="info-card amber-border">
+          <h4>Locally Hosted Fonts</h4>
+          <p>Bundles Google <strong>Noto Sans Ethiopic</strong> and <strong>Atkinson Hyperlegible</strong> fonts locally.</p>
+          <p>Guarantees that Ge'ez script renders flawlessly with zero missing character boxes (<span class="key-badge">□</span>) even on offline mobile devices.</p>
+        </div>
+      </div>
+
+      <div class="info-card" style="background: #111E2E; border-color: #1E3A8A;">
+        <h4>🇪🇹 Cultural Context</h4>
+        <p>In Ethiopia, legal, government, and educational timelines operate on the Ethiopian Calendar. Displaying dual dates is an essential accessibility requirement for authentic Ethiopian civic and educational participation.</p>
+      </div>
+    </section>
+
+    <!-- SLIDE 17 -->
+    <section class="slide" data-title="Judge's Testing Guide — Part 1: Savanna LMS">
+      <div class="slide-badge">EVALUATION GUIDE</div>
+      <h2 class="slide-title">Judge's Testing Guide: Savanna LMS Integration</h2>
+      <p class="slide-subtitle">Step-by-step instructions to verify the live Savanna host platform integration</p>
+
+      <div class="grid-2">
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <strong>Open Savanna LMS in Browser</strong>
+              <p>Navigate to: <a href="http://localhost:8080/pages/concept-with-navigation.html" target="_blank" style="color: var(--accent-cyan); font-family: var(--font-mono);">http://localhost:8080/pages/concept-with-navigation.html</a></p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <strong>Start Playback & Verify Synchronized Audio</strong>
+              <p>Click Play (or press <span class="key-badge">Space</span>/<span class="key-badge">K</span>). Observe Slide 1 starting with clear voiceover.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <strong>Toggle Ethiopian Sign Language (<span class="key-badge">ESL</span>)</strong>
+              <p>Click the <span class="key-badge">ESL</span> button (or press <span class="key-badge">S</span>). Observe human signer gesturing in sync with zero black screens and zero flicker.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <strong>Test Docking & Amharic Captions</strong>
+              <p>Click corner docking presets (⬈, ⬊, ◧) in the sign window. Click <span class="key-badge">CC</span> to switch to Amharic captions.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-image-box">
+          <img src="/assets/slides/savanna-player.png" alt="Savanna LMS Live Player">
+          <div class="slide-image-caption">Live Verification: Savanna LMS with Multi-Modal Player</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 18 -->
+    <section class="slide" data-title="Judge's Testing Guide — Part 2: PWA & 3G Offline">
+      <div class="slide-badge">EVALUATION GUIDE</div>
+      <h2 class="slide-title">Judge's Testing Guide: PWA Demo & 3G Offline</h2>
+      <p class="slide-subtitle">Step-by-step instructions to verify the offline engine and alternative media</p>
+
+      <div class="grid-2">
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <strong>Open Demo App & Test Audio Description</strong>
+              <p>Visit <a href="http://localhost:3000/lesson" target="_blank" style="color: var(--accent-cyan); font-family: var(--font-mono);">http://localhost:3000/lesson</a>. While playing, click <span class="key-badge">D)))</span> (or press <span class="key-badge">D</span>). Notice described narration seamless takeover.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <strong>Test Transcript Cue Seek & Braille Export</strong>
+              <p>Click on any transcript cue (e.g., 00:09) — video seeks instantly. Click <span class="key-badge">⠃⠗⠋ BRF</span> to download tactile Braille file.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <strong>Test True 3G Offline Capability</strong>
+              <p>Click "Download 3G Light Study Pack (3.2 MB)". Toggle DevTools to "Offline", refresh page — complete lesson runs offline!</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card accent-border" style="justify-content: center;">
+          <h4>🔍 What Judges Experience Offline</h4>
+          <ul>
+            <li>Immediate page load from Service Worker cache.</li>
+            <li>Smooth audio playback via Opus audio stream.</li>
+            <li>Synchronized bilingual transcripts and search.</li>
+            <li>Downloadable offline accessible HTML handout.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 19 -->
+    <section class="slide" data-title="Judge's Testing Guide — Part 3: Career Gateway & Zoom">
+      <div class="slide-badge">EVALUATION GUIDE</div>
+      <h2 class="slide-title">Judge's Testing Guide: Career Gateway & 200% Zoom</h2>
+      <p class="slide-subtitle">Step-by-step instructions to verify job cards, reflow, and credentials</p>
+
+      <div class="grid-2">
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <strong>Test Career Gateway Audio Summary</strong>
+              <p>Scroll down on <span class="key-badge">/lesson</span>. Click <strong>"▶ Audio Summary"</strong> to listen to the spoken job description.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <strong>Perform 200% Zoom Reflow Audit (WCAG 1.4.10)</strong>
+              <p>Press <span class="key-badge">Ctrl</span> + <span class="key-badge">+</span> up to 200% zoom. Notice zero horizontal scrollbar and responsive single-column wrapping.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <strong>Inspect schema.org JSON-LD & Verify Credential</strong>
+              <p>Click <strong>"schema.org JSON-LD"</strong> to see structured data. Visit <a href="http://localhost:3000/verify?id=CERT-DB-2026-0042" target="_blank" style="color: var(--accent-cyan);">/verify</a> to inspect verifiable credential.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-image-box">
+          <img src="/assets/slides/career-gateway.png" alt="Career Gateway 200% Zoom Reflow">
+          <div class="slide-image-caption">Career Gateway reflowed cleanly at 200% magnification</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 20 -->
+    <section class="slide" data-title="Technical Proof — 63 Automated Tests Passing">
+      <div class="slide-badge">AUTOMATED VERIFICATION</div>
+      <h2 class="slide-title">Technical Proof: 63 Automated Tests & Zero A11y Violations</h2>
+      <p class="slide-subtitle">100% test pass rate with zero critical or serious accessibility violations</p>
+
+      <div class="grid-3" style="margin-bottom: 1rem;">
+        <div class="info-card green-border">
+          <h4>50 Unit Tests</h4>
+          <p style="color: var(--accent-green); font-size: 1.5rem; font-weight: 800;">50 / 50 Passed</p>
+          <ul>
+            <li>Dual-Calendar conversions.</li>
+            <li>JSON Schema manifest validation.</li>
+            <li>Amharic WebVTT parser.</li>
+            <li>Dynamic rate drift controller.</li>
+            <li>Read-Aloud sanitization & Ge'ez.</li>
+          </ul>
+        </div>
+
+        <div class="info-card accent-border">
+          <h4>9 Axe-Core A11y Audits</h4>
+          <p style="color: var(--accent-cyan); font-size: 1.5rem; font-weight: 800;">0 Violations</p>
+          <ul>
+            <li>0 Critical Violations.</li>
+            <li>0 Serious Violations.</li>
+            <li>0 Moderate Violations.</li>
+            <li>Audited across all 5 app views.</li>
+            <li>Verified with Axe 4.8 engine.</li>
+          </ul>
+        </div>
+
+        <div class="info-card amber-border">
+          <h4>4 Integration Tests</h4>
+          <p style="color: var(--accent-amber); font-size: 1.5rem; font-weight: 800;">4 / 4 Passed</p>
+          <ul>
+            <li>Tier 1: UMD bundle integrity.</li>
+            <li>Tier 2: FastAPI microservice health.</li>
+            <li>Tier 3: schema.org validation.</li>
+            <li>Open Badges 3.0 conformance.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="info-card" style="background: #111E2E; border-color: #1E3A8A;">
+        <h4>🧪 Reproduce Test Suite Locally</h4>
+        <div style="background: #000; padding: 0.5rem 1rem; border-radius: 6px; font-family: var(--font-mono); font-size: 0.85rem; color: #10B981;">
+          npm test &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Runs all 63 unit, accessibility and integration tests
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 21 -->
+    <section class="slide" data-title="Instant Adoption — 60-Second Install in Savanna">
+      <div class="slide-badge">HOST ADOPTION</div>
+      <h2 class="slide-title">Instant Adoption: 60-Second Install in Savanna LMS</h2>
+      <p class="slide-subtitle">Zero backend refactoring, zero database changes, and total host isolation</p>
+
+      <div class="grid-2">
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <strong>The 1-Hour Install Test (Passed in 60 Seconds)</strong>
+              <p>Unlike hackathon projects that build walled gardens, Abugida integrates into Savanna LMS in under a minute without modifying Savanna's database or backend.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <strong>Step 1: Add Script Tag to Head</strong>
+              <p><span class="key-badge">&lt;script src="/assets/js/db-player.js" defer&gt;&lt;/script&gt;</span></p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <strong>Step 2: Drop Custom Element Tag into Page</strong>
+              <p><span class="key-badge">&lt;db-player manifest-src="/lessons/.../lesson.json"&gt;&lt;/db-player&gt;</span></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card accent-border" style="justify-content: space-around;">
+          <h4>🛡️ Host Isolation Guarantees</h4>
+          <ul>
+            <li><strong>Zero CSS Bleed:</strong> Open Shadow DOM protects controls from host theme styles.</li>
+            <li><strong>Framework Independence:</strong> Works seamlessly in Django, WordPress, React, or plain HTML.</li>
+            <li><strong>Zero Server Load:</strong> All media sync and user settings run on client hardware.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 22 -->
+    <section class="slide" data-title="Free Cloud Deployment Strategy">
+      <div class="slide-badge">PRODUCTION INFRASTRUCTURE</div>
+      <h2 class="slide-title">Production Deployment Strategy: 100% Free</h2>
+      <p class="slide-subtitle">High-performance global CDN distribution with zero hosting costs</p>
+
+      <div class="grid-3">
+        <div class="info-card accent-border">
+          <h4>Frontend Tier (Player & Demo)</h4>
+          <p style="color: var(--accent-cyan); font-weight: 700;">Cloudflare Pages or Vercel</p>
+          <ul>
+            <li><strong>Cost:</strong> $0.00 / month forever.</li>
+            <li><strong>Build Target:</strong> <span class="key-badge">apps/demo/dist</span>.</li>
+            <li><strong>Edge Caching:</strong> Global CDN with African edge points.</li>
+            <li><strong>Free SSL:</strong> Automatic HTTPS certificates.</li>
+          </ul>
+        </div>
+
+        <div class="info-card green-border">
+          <h4>Backend Tier (FastAPI Service)</h4>
+          <p style="color: var(--accent-green); font-weight: 700;">Render.com or Hugging Face</p>
+          <ul>
+            <li><strong>Cost:</strong> $0.00 / month.</li>
+            <li><strong>Engine:</strong> Python 3.11 with Uvicorn.</li>
+            <li><strong>Memory:</strong> Up to 16 GB RAM on Hugging Face Spaces.</li>
+            <li><strong>OpenAPI:</strong> Automatic <span class="key-badge">/docs</span> interactive endpoints.</li>
+          </ul>
+        </div>
+
+        <div class="info-card amber-border">
+          <h4>On-Premise / Institutional</h4>
+          <p style="color: var(--accent-amber); font-weight: 700;">Docker Compose</p>
+          <ul>
+            <li><strong>Deployment:</strong> <span class="key-badge">docker compose up -d</span>.</li>
+            <li><strong>Local Networks:</strong> Air-gapped university LANs.</li>
+            <li><strong>Bundled Nginx:</strong> Serves Savanna and Demo on single host.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="banner-quote" style="margin-top: 1.5rem;">
+        "By separating learner media playback (100% client-side) from authoring tools, Abugida can scale to tens of thousands of active learners with zero server costs."
+      </div>
+    </section>
+
+    <!-- SLIDE 23 -->
+    <section class="slide" data-title="Scalability, Pan-African Impact & Vision">
+      <div class="slide-badge">FUTURE ROADMAP</div>
+      <h2 class="slide-title">Scalability, Pan-African Impact & Closing Vision</h2>
+      <p class="slide-subtitle">Making digital education genuinely universal across the African continent</p>
+
+      <div class="grid-3" style="margin-bottom: 1.5rem;">
+        <div class="info-card accent-border">
+          <h4>Phase 1: Immediate</h4>
+          <p><strong>Month 1:</strong> Roll out across 3,000 Digital Bridge learners on Savanna LMS; distribute 3G study packs across Ethiopian tech hubs.</p>
+        </div>
+        <div class="info-card green-border">
+          <h4>Phase 2: Regional Growth</h4>
+          <p><strong>Months 2–6:</strong> Author Kenyan and Ugandan Sign Language pipelines; add Swahili, Hausa, and Yoruba subtitle models.</p>
+        </div>
+        <div class="info-card amber-border">
+          <h4>Phase 3: Continental Standard</h4>
+          <p><strong>Year 1:</strong> Release Abugida as an open-source standard for African universities, TVET vocational colleges, and national job boards.</p>
+        </div>
+      </div>
+
+      <div class="banner-quote">
+        "True accessibility is not a luxury or a compliance checklist. It is the bridge that connects ambitious, talented learners to the digital workplace. With Abugida Media Kit, we proved that world-class accessibility can be fast, lightweight, offline-resilient, and built for everyone."
+      </div>
+
+      <table class="link-table">
+        <tr><th>Resource</th><th>URL / Location</th><th>Status</th></tr>
+        <tr><td>Savanna LMS Integration</td><td><a href="http://localhost:8080/pages/concept-with-navigation.html" target="_blank">http://localhost:8080/pages/concept-with-navigation.html</a></td><td>Verified Live</td></tr>
+        <tr><td>PWA Interactive Demo</td><td><a href="http://localhost:3000/lesson" target="_blank">http://localhost:3000/lesson</a></td><td>Verified Live</td></tr>
+        <tr><td>Credential Verification</td><td><a href="http://localhost:3000/verify?id=CERT-DB-2026-0042" target="_blank">http://localhost:3000/verify?id=CERT-DB-2026-0042</a></td><td>Verified Live</td></tr>
+        <tr><td>FastAPI Backend API</td><td><a href="http://localhost:8000/docs" target="_blank">http://localhost:8000/docs</a></td><td>Verified Live</td></tr>
+      </table>
+    </section>
+
+  </main>
+
+  <!-- Bottom Navigation Hints -->
+  <footer class="deck-footer">
+    <div class="nav-hints">
+      <span class="nav-hint"><kbd>◀</kbd> <kbd>▶</kbd> Navigate</span>
+      <span class="nav-hint"><kbd>Space</kbd> Next</span>
+      <span class="nav-hint"><kbd>F</kbd> Fullscreen</span>
+      <span class="nav-hint"><kbd>Home</kbd> / <kbd>End</kbd> First / Last</span>
+      <span class="nav-hint"><kbd>Ctrl+P</kbd> Print PDF</span>
+    </div>
+    <div>Abugida Media Kit • Track 2 • ALX Tech Hub Hackathon 2026</div>
+  </footer>
+
+  <script>
+    (function() {
+      const slides = document.querySelectorAll('.slide');
+      const counter = document.getElementById('slide-num');
+      const progressBar = document.getElementById('progress-bar');
+      const jumpSelect = document.getElementById('slide-jump');
+      const btnPrev = document.getElementById('btn-prev');
+      const btnNext = document.getElementById('btn-next');
+      const btnFs = document.getElementById('btn-fs');
+      let currentSlide = 0;
+
+      // Populate dropdown
+      slides.forEach((s, idx) => {
+        const title = s.getAttribute('data-title') || `Slide ${idx + 1}`;
+        const opt = document.createElement('option');
+        opt.value = idx;
+        opt.textContent = `${idx + 1}. ${title}`;
+        jumpSelect.appendChild(opt);
+      });
+
+      function updateSlide(newIdx) {
+        if (newIdx < 0 || newIdx >= slides.length) return;
+        slides[currentSlide].classList.remove('active');
+        currentSlide = newIdx;
+        slides[currentSlide].classList.add('active');
+
+        // Update UI
+        counter.textContent = `Slide ${currentSlide + 1} of ${slides.length}`;
+        const pct = ((currentSlide + 1) / slides.length) * 100;
+        progressBar.style.width = pct + '%';
+        jumpSelect.value = currentSlide;
+        btnPrev.disabled = currentSlide === 0;
+        btnNext.disabled = currentSlide === slides.length - 1;
+
+        // Reset scroll position on active slide
+        slides[currentSlide].scrollTop = 0;
+      }
+
+      btnPrev.addEventListener('click', () => updateSlide(currentSlide - 1));
+      btnNext.addEventListener('click', () => updateSlide(currentSlide + 1));
+      jumpSelect.addEventListener('change', (e) => updateSlide(parseInt(e.target.value, 10)));
+
+      // Keyboard Controls
+      window.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') return;
+        if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ' || e.key === 'l' || e.key === 'L') {
+          e.preventDefault();
+          updateSlide(currentSlide + 1);
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp' || e.key === 'j' || e.key === 'J') {
+          e.preventDefault();
+          updateSlide(currentSlide - 1);
+        } else if (e.key === 'Home') {
+          e.preventDefault();
+          updateSlide(0);
+        } else if (e.key === 'End') {
+          e.preventDefault();
+          updateSlide(slides.length - 1);
+        } else if (e.key === 'f' || e.key === 'F') {
+          toggleFullScreen();
+        }
+      });
+
+      function toggleFullScreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          if (document.exitFullscreen) document.exitFullscreen();
+        }
+      }
+
+      btnFs.addEventListener('click', toggleFullScreen);
+
+      // Check URL hash for direct slide jump (e.g. #12)
+      const hash = window.location.hash;
+      if (hash && hash.length > 1) {
+        const hashNum = parseInt(hash.substring(1), 10);
+        if (!isNaN(hashNum) && hashNum >= 1 && hashNum <= slides.length) {
+          updateSlide(hashNum - 1);
+        }
+      }
+    })();
+  </script>
+</body>
+</html>

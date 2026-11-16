@@ -3354,7 +3354,8 @@ class Ue extends HTMLElement {
                 class="sign-video" 
                 muted 
                 playsinline 
-                preload="metadata"
+                preload="auto"
+                poster="${s ? s.src.replace(/lesson-esl\.mp4$/, "poster-esl.png") : ""}"
                 src="${s ? s.src : ""}">
               </video>
             </div>
@@ -3515,7 +3516,9 @@ class Ue extends HTMLElement {
   attachEventListeners() {
     var ze, Me, qe, Pe, Ie, He, je, Re;
     const e = this.shadow.getElementById("btn-play"), i = this.shadow.getElementById("play-icon"), t = this.shadow.getElementById("big-play-btn"), s = this.shadow.getElementById("btn-restart"), r = this.shadow.getElementById("btn-speed-faster"), c = this.shadow.getElementById("btn-speed-slower"), l = this.shadow.getElementById("speed-display"), d = this.shadow.getElementById("state-display"), f = this.shadow.getElementById("btn-fullscreen"), n = this.shadow.getElementById("fullscreen-icon"), E = this.shadow.getElementById("btn-mute"), v = this.shadow.getElementById("mute-icon"), y = this.shadow.getElementById("player-container"), u = this.shadow.getElementById("seek-scrubber"), A = this.shadow.getElementById("time-display"), h = () => {
-      this.mainVideo.paused ? this.mainVideo.play() : this.mainVideo.pause();
+      this.mainVideo.paused ? (this.mainVideo.play().catch(() => {
+      }), this.signVideo && this.prefs.eslVisible && this.signVideo.play().catch(() => {
+      })) : (this.mainVideo.pause(), this.signVideo && this.signVideo.pause());
     };
     e && e.addEventListener("click", h), t && t.addEventListener("click", h), this.mainVideo.addEventListener("click", h), this.mainVideo.addEventListener("play", () => {
       i && (i.innerHTML = D.pause), e == null || e.setAttribute("aria-label", this.activeLocale === "am" ? "አቁም (Space / K)" : "Pause (Space / K)"), e == null || e.setAttribute("title", this.activeLocale === "am" ? "አቁም (Space / K)" : "Pause (Space / K)"), t == null || t.classList.add("is-hidden"), d && (d.textContent = this.activeLocale === "am" ? "እየተጫወተ ነው" : "Playing");
@@ -3627,9 +3630,9 @@ class Ue extends HTMLElement {
     const M = this.shadow.getElementById("btn-esl"), x = this.shadow.getElementById("esl-window");
     M == null || M.addEventListener("click", () => {
       if (this.prefs.eslVisible = !this.prefs.eslVisible, T({ eslVisible: this.prefs.eslVisible }), M.setAttribute("aria-pressed", this.prefs.eslVisible ? "true" : "false"), x && (x.style.display = this.prefs.eslVisible ? "flex" : "none"), this.prefs.eslVisible && this.signVideo) {
-        if (!isNaN(this.mainVideo.currentTime) && this.mainVideo.currentTime > 0)
+        if (!isNaN(this.mainVideo.currentTime) && this.mainVideo.currentTime >= 0)
           try {
-            Math.abs(this.signVideo.currentTime - this.mainVideo.currentTime) > 0.3 && (this.signVideo.currentTime = this.mainVideo.currentTime);
+            Math.abs(this.signVideo.currentTime - this.mainVideo.currentTime) > 0.15 && (this.signVideo.currentTime = this.mainVideo.currentTime);
           } catch {
           }
         !this.mainVideo.paused && this.signVideo.paused && this.signVideo.play().catch(() => {

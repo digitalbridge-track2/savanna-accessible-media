@@ -2715,8 +2715,9 @@ export class A11yMediaPlayer extends HTMLElement {
                 class="sign-video" 
                 muted 
                 playsinline 
-                preload="metadata"
-                src="${signSource ? signSource.src : ""}">
+                preload="auto"
+                poster="${signSource ? signSource.src.replace(/lesson-esl\.mp4$/, 'poster-esl.png') : ''}"
+                src="${signSource ? signSource.src : ''}">
               </video>
             </div>
 
@@ -3207,9 +3208,15 @@ export class A11yMediaPlayer extends HTMLElement {
     // Play / Pause toggle
     const togglePlay = () => {
       if (this.mainVideo.paused) {
-        this.mainVideo.play();
+        this.mainVideo.play().catch(() => {});
+        if (this.signVideo && this.prefs.eslVisible) {
+          this.signVideo.play().catch(() => {});
+        }
       } else {
         this.mainVideo.pause();
+        if (this.signVideo) {
+          this.signVideo.pause();
+        }
       }
     };
     if (playBtn) playBtn.addEventListener("click", togglePlay);
@@ -3488,9 +3495,9 @@ export class A11yMediaPlayer extends HTMLElement {
         eslWindow.style.display = this.prefs.eslVisible ? "flex" : "none";
       }
       if (this.prefs.eslVisible && this.signVideo) {
-        if (!isNaN(this.mainVideo.currentTime) && this.mainVideo.currentTime > 0) {
+        if (!isNaN(this.mainVideo.currentTime) && this.mainVideo.currentTime >= 0) {
           try {
-            if (Math.abs(this.signVideo.currentTime - this.mainVideo.currentTime) > 0.3) {
+            if (Math.abs(this.signVideo.currentTime - this.mainVideo.currentTime) > 0.15) {
               this.signVideo.currentTime = this.mainVideo.currentTime;
             }
           } catch {}
