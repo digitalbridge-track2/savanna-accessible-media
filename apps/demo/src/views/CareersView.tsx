@@ -18,6 +18,178 @@ interface CareersViewProps {
   locale: SupportedLocale;
 }
 
+interface CareersTexts {
+  inclusiveHubBadge: string;
+  verifiedAccommodationsBadge: string;
+  exportJsonLdBtn: string;
+  filterToolbarAriaLabel: string;
+  searchLabel: string;
+  searchPlaceholder: string;
+  searchAriaLabel: string;
+  clearSearchAriaLabel: string;
+  accLabel: string;
+  accFilterAriaLabel: string;
+  accAll: string;
+  accScreenreader: string;
+  accInterpreter: string;
+  accFlexible: string;
+  accCampus: string;
+  accKeyboard: string;
+  workModeLabel: string;
+  workModeAriaLabel: string;
+  resetFiltersAriaLabel: string;
+  availableJobsHeading: string;
+  noJobsFoundHeading: string;
+  noJobsFoundSubtext: string;
+  viewAllOpportunitiesBtn: string;
+  jsonLdCopiedAlert: string;
+  copyJsonLdBtn: string;
+  downloadJsonLdBtn: string;
+}
+
+const CAREERS_TEXTS: Record<SupportedLocale, CareersTexts> = {
+  en: {
+    inclusiveHubBadge: "Inclusive Employment Hub",
+    verifiedAccommodationsBadge: "Verified Accommodations",
+    exportJsonLdBtn: "Export JSON-LD",
+    filterToolbarAriaLabel: "Job Search & Filter Controls",
+    searchLabel: "Search by title, employer, or keyword:",
+    searchPlaceholder: "e.g., QA Analyst, FinTech, Addis Ababa...",
+    searchAriaLabel: "Search jobs by keyword",
+    clearSearchAriaLabel: "Clear search query",
+    accLabel: "Workplace Accommodation:",
+    accFilterAriaLabel: "Filter by workplace accommodation",
+    accAll: "All Accommodations",
+    accScreenreader: "Screen reader workstations",
+    accInterpreter: "Sign language interpreters",
+    accFlexible: "Flexible hours / Remote",
+    accCampus: "Barrier-free campus",
+    accKeyboard: "Keyboard-first workflow",
+    workModeLabel: "Work Mode:",
+    workModeAriaLabel: "Work Mode selection",
+    resetFiltersAriaLabel: "Reset all active filters",
+    availableJobsHeading: "Available Job Postings",
+    noJobsFoundHeading: "No opportunities match your filter criteria.",
+    noJobsFoundSubtext: "Try clearing your search terms or selecting 'All' for work mode and accommodations.",
+    viewAllOpportunitiesBtn: "View All Opportunities",
+    jsonLdCopiedAlert: "Copied JSON-LD to clipboard!",
+    copyJsonLdBtn: "Copy to Clipboard",
+    downloadJsonLdBtn: "Download File (.jsonld)",
+  },
+  am: {
+    inclusiveHubBadge: "ተደራሽ የሥራ ዕድሎች",
+    verifiedAccommodationsBadge: "የተረጋገጡ የሥራ ምቹነቶች",
+    exportJsonLdBtn: "JSON-LD አውርድ",
+    filterToolbarAriaLabel: "የሥራ ፍለጋ እና ማጣሪያዎች",
+    searchLabel: "በስም፣ በድርጅት ወይም በቁልፍ ቃል ፈልግ:",
+    searchPlaceholder: "ለምሳሌ፡ QA Analyst፣ FinTech፣ አዲስ አበባ...",
+    searchAriaLabel: "በስም ወይም በቁልፍ ቃል ፈልግ",
+    clearSearchAriaLabel: "የፍለጋ ጽሑፉን አጽዳ",
+    accLabel: "የተረጋገጠ ምቹነት:",
+    accFilterAriaLabel: "የሥራ ቦታ ተደራሽነት ምቹነት",
+    accAll: "ሁሉም ምቹነቶች (All)",
+    accScreenreader: "የስክሪን አንባቢ ኮምፒውተሮች",
+    accInterpreter: "የምልክት ቋንቋ አስተርጓሚ",
+    accFlexible: "ተለዋዋጭ ሰዓት / የርቀት",
+    accCampus: "ደረጃ አልባ ተደራሽ ግቢ",
+    accKeyboard: "በኪቦርድ የሚሰራ የልማት አካባቢ",
+    workModeLabel: "የሥራ ሁኔታ:",
+    workModeAriaLabel: "የሥራ ሁኔታ ማጣሪያ",
+    resetFiltersAriaLabel: "ሁሉንም ማጣሪያዎች አጽዳ",
+    availableJobsHeading: "የተገኙ የሥራ ዝርዝሮች",
+    noJobsFoundHeading: "ከተመረጡት ማጣሪያዎች ጋር የሚስማማ የሥራ ዕድል አልተገኘም",
+    noJobsFoundSubtext: "እባክዎ ፍለጋዎን ይቀይሩ ወይም ማጣሪያዎችን ያጽዱ።" ,
+    viewAllOpportunitiesBtn: "ሁሉንም የሥራ ዕድሎች አሳይ",
+    jsonLdCopiedAlert: "JSON-LD ወደ ቅንጥብ ሰሌዳ ተቀድቷል!",
+    copyJsonLdBtn: "ኮፒ አድርግ",
+    downloadJsonLdBtn: "ፋይሉን አውርድ (.jsonld)",
+  },
+  om: {
+    inclusiveHubBadge: "Wiirtuu Hojii Hundaaf Mijataa",
+    verifiedAccommodationsBadge: "Mijatummaa Mirkanaa'e",
+    exportJsonLdBtn: "JSON-LD Buufadhaa",
+    filterToolbarAriaLabel: "Barbaacha Hojii fi Qindaa'ina Filtaraa",
+    searchLabel: "Mata duree, qacaraa ykn jecha ijoodhaan barbaadi:",
+    searchPlaceholder: "fkn., QA Analyst, FinTech, Finfinnee...",
+    searchAriaLabel: "Jecha ijoodhaan hojii barbaadi",
+    clearSearchAriaLabel: "Barbaacha qulqulleessi",
+    accLabel: "Mijatummaa Bakka Hojii:",
+    accFilterAriaLabel: "Mijatummaa bakka hojiitiin filadhu",
+    accAll: "Mijatummaa Hunda (All)",
+    accScreenreader: "Kompiitara dubbisaa skiriinii",
+    accInterpreter: "Turjumaana Afaan Mallattoo",
+    accFlexible: "Sa'aatii jijjiiramaa / Fageenya",
+    accCampus: "Mooraa gufuu maleessa",
+    accKeyboard: "Hojii kiiboordiin dursu",
+    workModeLabel: "Haala Hojii:",
+    workModeAriaLabel: "Filannoo haala hojii",
+    resetFiltersAriaLabel: "Filtaroota hunda qulqulleessi",
+    availableJobsHeading: "Tarree Hojiiwwan Jiran",
+    noJobsFoundHeading: "Ulaagaalee filattaniin carraan hojii walsimu hin argamne.",
+    noJobsFoundSubtext: "Maaloo jecha barbaachaa jijjiiraa ykn filtaroota qulqulleessaa.",
+    viewAllOpportunitiesBtn: "Carraawwan Hunda Agarsiisi",
+    jsonLdCopiedAlert: "JSON-LD gara gabatee garagalchaatti garagalffameera!",
+    copyJsonLdBtn: "Garagalchi",
+    downloadJsonLdBtn: "Faayila Buufadhaa (.jsonld)",
+  },
+  ti: {
+    inclusiveHubBadge: "ሓቛፊ ማእከል ስራሕ",
+    verifiedAccommodationsBadge: "ዝተረጋገጹ ምቹእነታት",
+    exportJsonLdBtn: "JSON-LD ኣውርድ",
+    filterToolbarAriaLabel: "ምድላይ ስራሕን መቆጻጸሪ ማጣረይን",
+    searchLabel: "ብኣርእስቲ፣ ብቀጣሪ ወይ ብመፍትሕ ቃል ድለዩ:",
+    searchPlaceholder: "ንኣብነት፡ QA Analyst፣ FinTech፣ ኣዲስ ኣበባ...",
+    searchAriaLabel: "ብመፍትሕ ቃል ስራሕ ድለዩ",
+    clearSearchAriaLabel: "ጽሑፍ ምድላይ ኣጽሪ",
+    accLabel: "ዝተረጋገጸ ምቹእነት:",
+    accFilterAriaLabel: "ብምቹእነት ስራሕ ቦታ ኣጣሪ",
+    accAll: "ኩሎም ምቹእነታት (All)",
+    accScreenreader: "ኮምፒውተር ስክሪን ኣንባቢ",
+    accInterpreter: "ኣስተርጓሚ ምልክት ቋንቋ",
+    accFlexible: "ተለዋዋጢ ሰዓታት / ርሕቐት",
+    accCampus: "ተበጻሒ ናጻ ግቢ",
+    accKeyboard: "ቀዳምነት ኪቦርድ ዝህብ ኣሰራርሓ",
+    workModeLabel: "ኩነታት ስራሕ:",
+    workModeAriaLabel: "ምርጫ ኩነታት ስራሕ",
+    resetFiltersAriaLabel: "ኩሎም ማጣረይቲ ኣጽሪ",
+    availableJobsHeading: "ዝተረኽቡ ዝርዝራት ስራሕ",
+    noJobsFoundHeading: "ምስ ዝተመረጹ ማጣረይቲ ዝሰማማዕ ናይ ስራሕ ዕድል ኣይተረኽበን።",
+    noJobsFoundSubtext: "በጃኹም ቃላት ምድላይኩም ቀይሩ ወይ ማጣረይቲ ኣጽርዩ።",
+    viewAllOpportunitiesBtn: "ኩሎም ናይ ስራሕ ዕድላት ኣርኢ",
+    jsonLdCopiedAlert: "JSON-LD ተቐዲሑ ኣሎ!",
+    copyJsonLdBtn: "ቅዳሕ",
+    downloadJsonLdBtn: "ፋይል ኣውርድ (.jsonld)",
+  },
+  so: {
+    inclusiveHubBadge: "Xarunta Shaqada loo Dhan Yahay",
+    verifiedAccommodationsBadge: "Fursadaha La Xaqiijiyay",
+    exportJsonLdBtn: "Soo deji JSON-LD",
+    filterToolbarAriaLabel: "Raadinta Shaqada & Koontaroolada Shaandhada",
+    searchLabel: "Ku raadi magac, loo-shaqeeye, ama erey muhiim ah:",
+    searchPlaceholder: "tusaale, QA Analyst, FinTech, Addis Ababa...",
+    searchAriaLabel: "Ku raadi shaqooyinka ereyga muhiimka ah",
+    clearSearchAriaLabel: "Nadiifi qoraalka raadinta",
+    accLabel: "Fursadda Goobta Shaqada:",
+    accFilterAriaLabel: "Ku shaandhee fursadda goobta shaqada",
+    accAll: "Dhammaan Fursadaha (All)",
+    accScreenreader: "Kombiyuutarada akhriska shaashadda",
+    accInterpreter: "Turjumaanka luqadda dhegoolaha",
+    accFlexible: "Saacado dabacsan / Meel fog",
+    accCampus: "Xarun aan carqalad lahayn",
+    accKeyboard: "Habka shaqada ee kiiboodhka",
+    workModeLabel: "Qaabka Shaqada:",
+    workModeAriaLabel: "Xulashada qaabka shaqada",
+    resetFiltersAriaLabel: "Dib u deji dhammaan shaandhooyinka",
+    availableJobsHeading: "Liiska Shaqooyinka La Heli Karo",
+    noJobsFoundHeading: "Ma jiraan fursado u dhigma shuruudahaaga.",
+    noJobsFoundSubtext: "Fadlan isku day inaad beddesho ereyada raadinta ama aad nadiifiso shaandhada.",
+    viewAllOpportunitiesBtn: "Eeg Dhammaan Fursadaha",
+    jsonLdCopiedAlert: "JSON-LD waa la koobiyeeyay!",
+    copyJsonLdBtn: "Koobiyee",
+    downloadJsonLdBtn: "Soo deji Faylka (.jsonld)",
+  },
+};
+
 export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
   const [jobs, setJobs] = useState<AccessibleJob[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,8 +198,7 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
   const [selectedAccommodation, setSelectedAccommodation] = useState<string>("all");
   const [filterCourseSkillsOnly, setFilterCourseSkillsOnly] = useState<boolean>(false);
   const [showJsonLdModal, setShowJsonLdModal] = useState(false);
-
-  const isAm = locale === "am";
+  const t = CAREERS_TEXTS[locale] || CAREERS_TEXTS.en;
 
   useEffect(() => {
     fetch("/jobs/jobs.json")
@@ -126,19 +297,19 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
   const workModes = [
     {
       id: "all",
-      label: isAm ? "ሁሉም (All)" : locale === "om" ? "Hunda (All)" : locale === "ti" ? "ኩሎም (All)" : locale === "so" ? "Dhammaan (All)" : "All Modes",
+      label: locale === "am" ? "ሁሉም (All)" : locale === "om" ? "Hunda (All)" : locale === "ti" ? "ኩሎም (All)" : locale === "so" ? "Dhammaan (All)" : "All Modes",
     },
     {
       id: "hybrid",
-      label: isAm ? "ድብልቅ" : locale === "om" ? "Makaa" : locale === "ti" ? "ሕውስዋስ" : locale === "so" ? "Isku-dhafan" : "Hybrid",
+      label: locale === "am" ? "ድብልቅ" : locale === "om" ? "Makaa" : locale === "ti" ? "ሕውስዋስ" : locale === "so" ? "Isku-dhafan" : "Hybrid",
     },
     {
       id: "remote",
-      label: isAm ? "የርቀት" : locale === "om" ? "Fageenya" : locale === "ti" ? "ናይ ርሕቐት" : locale === "so" ? "Meel Fog" : "100% Remote",
+      label: locale === "am" ? "የርቀት" : locale === "om" ? "Fageenya" : locale === "ti" ? "ናይ ርሕቐት" : locale === "so" ? "Meel Fog" : "100% Remote",
     },
     {
       id: "onsite",
-      label: isAm ? "በቦታው" : locale === "om" ? "Bakka Hojii" : locale === "ti" ? "ኣብ ቦታኡ" : locale === "so" ? "Goobta" : "On-site",
+      label: locale === "am" ? "በቦታው" : locale === "om" ? "Bakka Hojii" : locale === "ti" ? "ኣብ ቦታኡ" : locale === "so" ? "Goobta" : "On-site",
     },
   ];
 
@@ -171,10 +342,10 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
           <div style={{ maxWidth: "780px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.5rem" }}>
               <span className="badge badge-brand" style={{ fontWeight: 600 }}>
-                {isAm ? "ተደራሽ የሥራ ዕድሎች" : "Inclusive Employment Hub"}
+                {t.inclusiveHubBadge}
               </span>
               <span className="badge badge-success">
-                {isAm ? "የተረጋገጡ የሥራ ምቹነቶች" : "Verified Accommodations"}
+                {t.verifiedAccommodationsBadge}
               </span>
               <span className="badge badge-neutral">
                 WCAG 1.4.10 Reflow Tested
@@ -238,7 +409,7 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
               title="Download all job postings in standard schema.org JSON-LD"
             >
               <IconDownload size={14} />
-              <span>{isAm ? "JSON-LD አውርድ" : "Export JSON-LD"}</span>
+              <span>{t.exportJsonLdBtn}</span>
             </button>
           </div>
         </div>
@@ -257,7 +428,7 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
           flexDirection: "column",
           gap: "1.1rem",
         }}
-        aria-label={isAm ? "የሥራ ፍለጋ እና ማጣሪያዎች" : "Job Search & Filter Controls"}
+        aria-label={t.filterToolbarAriaLabel}
       >
         {/* Tier 1: Search Input, Accommodation Custom Select & Skill Match Chip */}
         <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", alignItems: "flex-end" }}>
@@ -274,7 +445,7 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
                 letterSpacing: "-0.01em",
               }}
             >
-              {isAm ? "በስም፣ በድርጅት ወይም በቁልፍ ቃል ፈልግ:" : "Search by title, employer, or keyword:"}
+              {t.searchLabel}
             </label>
             <div className="search-input-wrapper">
               <span
@@ -294,15 +465,15 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder={isAm ? "ለምሳሌ፡ QA Analyst፣ FinTech፣ Ethio Telecom..." : "e.g., QA Analyst, FinTech, Addis Ababa..."}
+                placeholder={t.searchPlaceholder}
                 className="search-input-field"
-                aria-label={isAm ? "በስም ወይም በቁልፍ ቃል ፈልግ" : "Search jobs by keyword"}
+                aria-label={t.searchAriaLabel}
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery("")}
-                  aria-label={isAm ? "የፍለጋ ጽሑፉን አጽዳ" : "Clear search query"}
+                  aria-label={t.clearSearchAriaLabel}
                   style={{
                     position: "absolute",
                     right: "0.75rem",
@@ -336,7 +507,7 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
                 letterSpacing: "-0.01em",
               }}
             >
-              {isAm ? "የተረጋገጠ ምቹነት:" : "Workplace Accommodation:"}
+              {t.accLabel}
             </label>
             <div className="custom-select-container">
               <span className="custom-select-icon-left">
@@ -347,14 +518,14 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
                 value={selectedAccommodation}
                 onChange={(e) => setSelectedAccommodation(e.target.value)}
                 className="custom-select-field"
-                aria-label={isAm ? "የሥራ ቦታ ተደራሽነት ምቹነት" : "Filter by workplace accommodation"}
+                aria-label={t.accFilterAriaLabel}
               >
-                <option value="all">{isAm ? "ሁሉም ምቹነቶች (All)" : "All Accommodations"}</option>
-                <option value="screenreader">{isAm ? "የስክሪን አንባቢ ኮምፒውተሮች" : "Screen reader workstations"}</option>
-                <option value="interpreter">{isAm ? "የምልክት ቋንቋ አስተርጓሚ" : "Sign language interpreters"}</option>
-                <option value="flexible">{isAm ? "ተለዋዋጭ ሰዓት / የርቀት" : "Flexible hours / Remote"}</option>
-                <option value="campus">{isAm ? "ደረጃ አልባ ተደራሽ ግቢ" : "Barrier-free campus"}</option>
-                <option value="keyboard">{isAm ? "በኪቦርድ የሚሰራ የልማት አካባቢ" : "Keyboard-first workflow"}</option>
+                <option value="all">{t.accAll}</option>
+                <option value="screenreader">{t.accScreenreader}</option>
+                <option value="interpreter">{t.accInterpreter}</option>
+                <option value="flexible">{t.accFlexible}</option>
+                <option value="campus">{t.accCampus}</option>
+                <option value="keyboard">{t.accKeyboard}</option>
               </select>
               <span className="custom-select-icon-right">
                 <IconChevronDown size={14} />
@@ -424,12 +595,12 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
                 letterSpacing: "0.04em",
               }}
             >
-              {isAm ? "የሥራ ሁኔታ:" : "Work Mode:"}
+              {t.workModeLabel}
             </span>
             <div
               className="segmented-control-group"
               role="radiogroup"
-              aria-label={isAm ? "የሥራ ሁኔታ ማጣሪያ" : "Work Mode selection"}
+              aria-label={t.workModeAriaLabel}
             >
               {workModes.map((mode) => {
                 const isSelected = selectedWorkMode === mode.id;
@@ -514,7 +685,7 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
                   gap: "0.3rem",
                   minHeight: "30px",
                 }}
-                aria-label={isAm ? "ሁሉንም ማጣሪያዎች አጽዳ" : "Reset all active filters"}
+                aria-label={t.resetFiltersAriaLabel}
               >
                 <IconClose size={12} />
                 <span>
@@ -537,7 +708,7 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
       {/* Job Postings Grid (Reflow-safe, WCAG 1.4.10 tested) */}
       <section aria-labelledby="heading-job-results">
         <h3 id="heading-job-results" className="sr-only">
-          {isAm ? "የተገኙ የሥራ ዝርዝሮች" : "Available Job Postings"}
+          {t.availableJobsHeading}
         </h3>
 
         {filteredJobs.length === 0 && !loading && (
@@ -551,10 +722,10 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
             }}
           >
             <p style={{ fontSize: "1.1rem", fontWeight: 500, margin: "0 0 0.5rem 0" }}>
-              {isAm ? "ከተመረጡት ማጣሪያዎች ጋር የሚስማማ የሥራ ዕድል አልተገኘም" : "No opportunities match your filter criteria."}
+              {t.noJobsFoundHeading}
             </p>
             <p style={{ fontSize: "14px", margin: "0 0 1rem 0" }}>
-              {isAm ? "እባክዎ ፍለጋዎን ይቀይሩ ወይም ማጣሪያዎችን ያጽዱ።" : "Try clearing your search terms or selecting 'All' for work mode and accommodations."}
+              {t.noJobsFoundSubtext}
             </p>
             <button
               type="button"
@@ -566,7 +737,7 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
                 setFilterCourseSkillsOnly(false);
               }}
             >
-              {isAm ? "ሁሉንም የሥራ ዕድሎች አሳይ" : "View All Opportunities"}
+              {t.viewAllOpportunitiesBtn}
             </button>
           </div>
         )}
@@ -666,17 +837,17 @@ export const CareersView: React.FC<CareersViewProps> = ({ locale }) => {
                 className="btn btn-secondary"
                 onClick={() => {
                   navigator.clipboard.writeText(jsonLdContent);
-                  alert(isAm ? "JSON-LD ወደ ቅንጥብ ሰሌዳ ተቀድቷል!" : "Copied JSON-LD to clipboard!");
+                  alert(t.jsonLdCopiedAlert);
                 }}
               >
-                {isAm ? "ኮፒ አድርግ" : "Copy to Clipboard"}
+                {t.copyJsonLdBtn}
               </button>
               <button
                 type="button"
                 className="btn btn-primary"
                 onClick={handleDownloadJsonLd}
               >
-                {isAm ? "ፋይሉን አውርድ (.jsonld)" : "Download File (.jsonld)"}
+                {t.downloadJsonLdBtn}
               </button>
             </div>
           </div>

@@ -1,16 +1,88 @@
+import { SupportedLocale } from "../localization/locales.js";
+
 export interface LiveChatMessageItem {
   id: string;
   timestamp: number; // in seconds
   timeDisplay: string;
   sender: string;
   role: "instructor" | "student" | "ta";
-  message: { en: string; am: string };
+  message: { en: string; am: string; om?: string; ti?: string; so?: string; [key: string]: string | undefined };
 }
 
 export interface LiveChatViewerOptions {
   locale?: string;
   onSeekAndPlay: (time: number) => void;
 }
+
+interface ChatTexts {
+  emptyState: string;
+  chatListAria: string;
+  roles: {
+    instructor: string;
+    ta: string;
+    student: string;
+  };
+  question: string;
+  seekLabel: (time: string, sender: string) => string;
+}
+
+const CHAT_TEXTS: Record<SupportedLocale, ChatTexts> = {
+  en: {
+    emptyState: "No live chat messages recorded for this session.",
+    chatListAria: "Recorded live session chat messages",
+    roles: {
+      instructor: "Instructor",
+      ta: "TA",
+      student: "Student",
+    },
+    question: "Question",
+    seekLabel: (time, sender) => `Jump to ${time} to hear discussion with ${sender}`,
+  },
+  am: {
+    emptyState: "የቀጥታ ውይይት መልዕክቶች አልተገኙም።",
+    chatListAria: "የቀጥታ ትምህርት ውይይት መልዕክቶች",
+    roles: {
+      instructor: "አስተማሪ",
+      ta: "ረዳት",
+      student: "ተማሪ",
+    },
+    question: "ጥያቄ",
+    seekLabel: (time, sender) => `ወደ ${time} ይዝለሉ እና የ ${sender} ጥያቄ ያዳምጡ`,
+  },
+  om: {
+    emptyState: "Ergaawwan marii kallattii waraabaman hin jiran.",
+    chatListAria: "Ergaawwan marii barnoota kallattii waraabaman",
+    roles: {
+      instructor: "Barsiisaa",
+      ta: "Gargaaraa",
+      student: "Barataa",
+    },
+    question: "Gaaffii",
+    seekLabel: (time, sender) => `Gara ${time}tti darbaa marii ${sender} waliin ta'e dhaggeeffadhaa`,
+  },
+  ti: {
+    emptyState: "ናይ ቀጥታ ዝርርብ መልእኽትታት ኣይተረኽቡን።",
+    chatListAria: "ናይ ቀጥታ ትምህርቲ ዝርርብ መልእኽትታት",
+    roles: {
+      instructor: "መምህር",
+      ta: "ሓጋዚ",
+      student: "ተማሃራይ",
+    },
+    question: "ሕቶ",
+    seekLabel: (time, sender) => `ናብ ${time} ብምዝላል ናይ ${sender} ሕቶ ስምዑ`,
+  },
+  so: {
+    emptyState: "Ma jiraan fariimo wada-hadal toos ah oo la duubay.",
+    chatListAria: "Fariimaha wada-hadalka tooska ah ee la duubay",
+    roles: {
+      instructor: "Macallin",
+      ta: "Kaaliye",
+      student: "Arday",
+    },
+    question: "Su'aal",
+    seekLabel: (time, sender) => `U gudub ${time} si aad u dhageysato wada-hadalka ${sender}`,
+  },
+};
 
 export class LiveChatViewer {
   private container: HTMLElement;
@@ -106,12 +178,12 @@ export class LiveChatViewer {
   }
 
   render() {
-    const isAm = this.locale === "am";
+    const t = CHAT_TEXTS[this.locale as SupportedLocale] || CHAT_TEXTS.en;
 
     if (!this.messages.length) {
       this.container.innerHTML = `
         <div class="chat-empty-state" role="status" style="padding: 1.5rem; text-align: center; color: #64748B; font-size: 0.88rem;">
-          ${isAm ? "የቀጥታ ውይይት መልዕክቶች አልተገኙም።" : "No live chat messages recorded for this session."}
+          ${t.emptyState}
         </div>
       `;
       return;
@@ -122,13 +194,14 @@ export class LiveChatViewer {
       if (this.isQuestionsOnly && !isQuestion) return false;
 
       if (!this.searchQuery) return true;
-      const text = (isAm ? m.message.am : m.message.en).toLowerCase();
+      const msgLocalized = m.message[this.locale] || m.message.en;
+      const text = (msgLocalized || "").toLowerCase();
       const sender = m.sender.toLowerCase();
       return text.includes(this.searchQuery) || sender.includes(this.searchQuery);
     });
 
     this.container.innerHTML = `
-      <ol class="chat-replay-list" role="list" aria-label="${isAm ? "የቀጥታ ትምህርት ውይይት መልዕክቶች" : "Recorded live session chat messages"}" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.65rem;">
+      <ol class="chat-replay-list" role="list" aria-label="${t.chatListAria}" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.65rem;">
         ${filtered
           .map((m) => {
             const isDelivered = m.timestamp <= this.currentTime;
@@ -138,10 +211,10 @@ export class LiveChatViewer {
             const isQuestion = m.message.en.includes("?") || m.message.am.includes("?") || m.message.am.includes("፧");
             
             const roleLabel = isInstructor
-              ? (isAm ? "አስተማሪ" : "Instructor")
+              ? t.roles.instructor
               : isTA
-              ? (isAm ? "ረዳት" : "TA")
-              : (isAm ? "ተማሪ" : "Student");
+              ? t.roles.ta
+              : t.roles.student;
             
             const roleBg = isInstructor
               ? "rgba(0, 113, 227, 0.12)"
@@ -163,10 +236,8 @@ export class LiveChatViewer {
               ? "#10B981"
               : "var(--color-border, #CBD5E1)";
 
-            const msgContent = isAm ? m.message.am : m.message.en;
-            const seekLabel = isAm
-              ? `ወደ ${m.timeDisplay} ይዝለሉ እና የ ${m.sender} ጥያቄ ያዳምጡ`
-              : `Jump to ${m.timeDisplay} to hear discussion with ${m.sender}`;
+            const msgContent = m.message[this.locale] || m.message.en;
+            const seekLabel = t.seekLabel(m.timeDisplay, m.sender);
 
             return `
               <li 
@@ -202,7 +273,7 @@ export class LiveChatViewer {
                       background: ${roleBg};
                       color: ${roleColor};
                     ">${roleLabel}</span>
-                    ${isQuestion ? `<span style="font-size: 0.68rem; font-weight: 600; background: rgba(217, 119, 6, 0.15); color: #B45309; padding: 1px 5px; border-radius: 4px;">❓ ${isAm ? "ጥያቄ" : "Question"}</span>` : ""}
+                    ${isQuestion ? `<span style="font-size: 0.68rem; font-weight: 600; background: rgba(217, 119, 6, 0.15); color: #B45309; padding: 1px 5px; border-radius: 4px;">❓ ${t.question}</span>` : ""}
                   </div>
                   <span 
                     class="btn-chat-timestamp" 

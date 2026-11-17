@@ -364,8 +364,444 @@ function getStudioSample(loc: SupportedLocale): StudioSegment[] {
   }
 }
 
+interface StudioTexts {
+  title: string;
+  subtitle: string;
+  audioError: string;
+  tagInserted: (tag: string) => string;
+  speakerPrefixSet: (speaker: string) => string;
+  cueCleaned: (id: number) => string;
+  cueReverted: (id: number) => string;
+  newDraftText: string;
+  newReviewedText: string;
+  cueAdded: (id: number) => string;
+  cannotDeleteLast: string;
+  cueDeleted: (id: number) => string;
+  vttExported: string;
+  jsonExported: string;
+  brfExported: string;
+  pdfExported: string;
+  publishingMsg: string;
+  publishSuccess: (cuesCount: number) => string;
+  publishOfflineFallback: string;
+  publishError: string;
+  audioToolbarAriaLabel: string;
+  playSegmentAria: (id: number) => string;
+  stopSegmentAria: string;
+  playLessonAria: string;
+  playAudioBtn: string;
+  stopAudioBtn: string;
+  reviewedStatus: string;
+  progressAria: string;
+  sampleAm: string;
+  sampleEn: string;
+  sampleOm: string;
+  sampleTi: string;
+  sampleSo: string;
+  sampleLoadedMsg: (langName: string) => string;
+  importVttAria: string;
+  importVttBtn: string;
+  addNewCueBtn: string;
+  startLabel: string;
+  endLabel: string;
+  speakerLabel: string;
+  speakerOptions: {
+    instructor: string;
+    narrator: string;
+    presenter: string;
+    student: string;
+  };
+  humanReviewedBadge: string;
+  draftAsrBadge: string;
+  deleteCueTitle: string;
+  draftAsrHeading: string;
+  copyToEditorBtn: string;
+  unverifiedAsrNote: string;
+  reviewedTextHeading: string;
+  visualDescTag: string;
+  cleanBtn: string;
+  revertBtn: string;
+  editorPlaceholder: string;
+  wordsLabel: string;
+  charsLabel: string;
+  longCueNote: string;
+  optimalLengthNote: string;
+  exportHeading: string;
+  exportSubtitle: string;
+  exportVttBtn: string;
+  exportJsonBtn: string;
+  exportBrfBtn: string;
+  exportPdfBtn: string;
+  publishBtn: string;
+  publishingBtn: string;
+  viewInPlayerBtn: string;
+}
+
+const STUDIO_TEXTS: Record<SupportedLocale, StudioTexts> = {
+  en: {
+    title: "Transcript Studio",
+    subtitle: "Human-in-the-loop verification pipeline for speech-to-text captions, timing alignment, and audio descriptions.",
+    audioError: "Audio playback error.",
+    tagInserted: (tag) => `Inserted ${tag}`,
+    speakerPrefixSet: (spk) => `Set speaker prefix (${spk})`,
+    cueCleaned: (id) => `Cleaned formatting for cue #${id}.`,
+    cueReverted: (id) => `Reverted cue #${id} to original draft.`,
+    newDraftText: "New audio segment draft text",
+    newReviewedText: "New audio segment reviewed text",
+    cueAdded: (id) => `New cue #${id} added.`,
+    cannotDeleteLast: "Cannot delete the last remaining cue.",
+    cueDeleted: (id) => `Cue #${id} deleted.`,
+    vttExported: "Exported captions.reviewed.vtt successfully.",
+    jsonExported: "Exported transcript.reviewed.json successfully.",
+    brfExported: "Exported authentic Braille (.brf) document successfully.",
+    pdfExported: "Exported lesson-braille.pdf successfully.",
+    publishingMsg: "Publishing reviewed captions to Level 2 API & live player...",
+    publishSuccess: (count) => `✓ Successfully published ${count} cues to Level 2 API (Port 8000) and live lesson player!`,
+    publishOfflineFallback: "✓ Captions saved to browser storage for the live lesson player (Level 2 API server is currently unreachable).",
+    publishError: "Failed to publish captions.",
+    audioToolbarAriaLabel: "Audio Player & Review Progress",
+    playSegmentAria: (id) => `Play audio segment for cue #${id}`,
+    stopSegmentAria: "Stop Audio",
+    playLessonAria: "Play Lesson Audio",
+    playAudioBtn: "Play Audio",
+    stopAudioBtn: "Stop Audio",
+    reviewedStatus: "Reviewed Status",
+    progressAria: "Review completion percentage",
+    sampleAm: "Load Amharic Sample",
+    sampleEn: "Load English Sample",
+    sampleOm: "Load Afaan Oromoo Sample",
+    sampleTi: "Load Tigrigna Sample",
+    sampleSo: "Load Somali Sample",
+    sampleLoadedMsg: (lang) => `Loaded ${lang} lesson sample (5 cues).`,
+    importVttAria: "Upload WebVTT file",
+    importVttBtn: "Import WebVTT File (.vtt)",
+    addNewCueBtn: "+ Add New Cue",
+    startLabel: "Start:",
+    endLabel: "End:",
+    speakerLabel: "Speaker:",
+    speakerOptions: {
+      instructor: "Instructor",
+      narrator: "Narrator",
+      presenter: "Presenter",
+      student: "Student",
+    },
+    humanReviewedBadge: "Human Reviewed",
+    draftAsrBadge: "Draft ASR",
+    deleteCueTitle: "Delete cue",
+    draftAsrHeading: "Draft ASR Output (AI Generated)",
+    copyToEditorBtn: "Copy to Editor",
+    unverifiedAsrNote: "Unverified automated speech draft",
+    reviewedTextHeading: "Human Reviewed Text (Publication Ready)",
+    visualDescTag: "[visual description]",
+    cleanBtn: "Clean",
+    revertBtn: "Revert",
+    editorPlaceholder: "Enter the reviewed and verified caption text here as a paragraph...",
+    wordsLabel: "words",
+    charsLabel: "characters",
+    longCueNote: "Long cue (will wrap on screen)",
+    optimalLengthNote: "Optimal length",
+    exportHeading: "Export & Publish Verified Captions",
+    exportSubtitle: "Download human-verified captions across standard accessibility formats (WebVTT, JSON, Braille) or publish directly to the Level 2 API to update the live lesson.",
+    exportVttBtn: "Export Reviewed WebVTT (.vtt)",
+    exportJsonBtn: "Export Transcript JSON (.json)",
+    exportBrfBtn: "Export Braille (.brf)",
+    exportPdfBtn: "Export Braille PDF (.pdf)",
+    publishBtn: "Publish to Lesson (API)",
+    publishingBtn: "Publishing...",
+    viewInPlayerBtn: "View in Lesson Player →",
+  },
+  am: {
+    title: "የትርጉም ስቱዲዮ (Transcript Studio)",
+    subtitle: "ሰው-በሂደቱ-ውስጥ (Human-in-the-loop) የትርጉም ጽሑፍ፣ የጊዜ ገደብ እና የድምፅ ማብራሪያ ማረጋገጫ መስመር",
+    audioError: "ኦዲዮውን ማጫወት አልተቻለም።",
+    tagInserted: (tag) => `${tag} ተካቷል።`,
+    speakerPrefixSet: (spk) => `የተናጋሪ ስም (${spk}) ተካቷል።`,
+    cueCleaned: (id) => `መስመር #${id} ተስተካክሎ ጸድቷል።`,
+    cueReverted: (id) => `መስመር #${id} ወደ ቀድሞ ረቂቅ ተመልሷል።`,
+    newDraftText: "አዲስ የተጨመረ ረቂቅ ጽሑፍ",
+    newReviewedText: "አዲስ የተጨመረ የተገመገመ ጽሑፍ",
+    cueAdded: (id) => `አዲስ የትርጉም መስመር #${id} ተጨምሯል።`,
+    cannotDeleteLast: "ቢያንስ አንድ የትርጉም መስመር መኖር አለበት።",
+    cueDeleted: (id) => `የትርጉም መስመር #${id} ተሰርዟል።`,
+    vttExported: "WebVTT ፋይል በተሳካ ሁኔታ ወርዷል።",
+    jsonExported: "የጽሑፍ ግልባጭ JSON በተሳካ ሁኔታ ወርዷል።",
+    brfExported: "ትክክለኛ የብሬይል ፊደላት የያዘ ፋይል (.brf) በተሳካ ሁኔታ ወርዷል።",
+    pdfExported: "የሚዳሰስ የብሬል ፒዲኤፍ ሰነድ (.pdf) በተሳካ ሁኔታ ወርዷል።",
+    publishingMsg: "ወደ Level 2 API እና ቀጥታ ማጫወቻው እየተላከ ነው...",
+    publishSuccess: (count) => `✓ ${count} መስመሮች ወደ Level 2 API (Port 8000) እና ቀጥታ ማጫወቻው በተሳካ ሁኔታ ተልከው ታትመዋል!`,
+    publishOfflineFallback: "✓ የትርጉም ጽሑፉ በመሣሪያው ላይ ተቀምጦ ለቀጥታ ማጫወቻው ዝግጁ ሆኗል (Level 2 API ኦፍላይን ነው)።",
+    publishError: "ጽሑፉን ማተም አልተሳካም።",
+    audioToolbarAriaLabel: "የድምፅ ማጫወቻ እና የማረጋገጫ ሁኔታ",
+    playSegmentAria: (id) => `ለመስመር #${id} ድምፅ አጫውት`,
+    stopSegmentAria: "ድምፅ አቁም",
+    playLessonAria: "ሙሉ ትምህርት አጫውት",
+    playAudioBtn: "ኦዲዮ አጫውት",
+    stopAudioBtn: "አቁም",
+    reviewedStatus: "የተገመገመ",
+    progressAria: "የግምገማ እድገት",
+    sampleAm: "የአማርኛ ናሙና ጫን",
+    sampleEn: "የእንግሊዝኛ ናሙና ጫን",
+    sampleOm: "የአፋን ኦሮሞ ናሙና ጫን",
+    sampleTi: "የትግርኛ ናሙና ጫን",
+    sampleSo: "የሶማሊኛ ናሙና ጫን",
+    sampleLoadedMsg: (lang) => `${lang} ናሙና ተጭኗል።`,
+    importVttAria: "WebVTT ፋይል አስገባ",
+    importVttBtn: "WebVTT ፋይል አስገባ (.vtt)",
+    addNewCueBtn: "+ አዲስ መስመር ጨምር",
+    startLabel: "መጀመሪያ:",
+    endLabel: "መጨረሻ:",
+    speakerLabel: "ተናጋሪ:",
+    speakerOptions: {
+      instructor: "አስተማሪ (Instructor)",
+      narrator: "ተራኪ (Narrator)",
+      presenter: "አቅራቢ (Presenter)",
+      student: "ተማሪ (Student)",
+    },
+    humanReviewedBadge: "የተረጋገጠ",
+    draftAsrBadge: "ረቂቅ ASR",
+    deleteCueTitle: "መስመር ሰርዝ",
+    draftAsrHeading: "የረቂቅ ASR ውጤት (የድምፅ ሞዴል)",
+    copyToEditorBtn: "ወደ አርታዒ ቅዳ",
+    unverifiedAsrNote: "ያልተረጋገጠ አውቶማቲክ ረቂቅ",
+    reviewedTextHeading: "የተገመገመ እና የተስተካከለ ጽሑፍ (Human Reviewed Text)",
+    visualDescTag: "[የስላይድ ማብራሪያ]",
+    cleanBtn: "አጽዳ",
+    revertBtn: "መልስ",
+    editorPlaceholder: "የተገመገመውን ጽሑፍ እዚህ በዝርዝር አንቀጽ ያስገቡ...",
+    wordsLabel: "ቃላት",
+    charsLabel: "ፊደላት",
+    longCueNote: "ረጅም መስመር (በስክሪን ላይ ሊከፈል ይችላል)",
+    optimalLengthNote: "ምርጥ ርዝመት",
+    exportHeading: "የተገመገሙ ፋይሎችን ማውጣት እና ማተም",
+    exportSubtitle: "የሰው ማረጋገጫ የተጠናቀቀባቸውን የትርጉም ጽሑፎች ወደ ተለያዩ የተደራሽነት ቅርጸቶች ያውርዱ ወይም በቀጥታ ወደ Level 2 API በማስተላለፍ ትምህርቱን ያዘምኑ።",
+    exportVttBtn: "የተረጋገጠ WebVTT አውርድ (.vtt)",
+    exportJsonBtn: "የጽሑፍ ግልባጭ JSON አውርድ (.json)",
+    exportBrfBtn: "የብሬይል ፋይል አውርድ (.brf)",
+    exportPdfBtn: "የብሬይል ፒዲኤፍ አውርድ (.pdf)",
+    publishBtn: "ወደ Level 2 API ላክ",
+    publishingBtn: "እየታተመ...",
+    viewInPlayerBtn: "በቀጥታ ማጫወቻው ተመልከት →",
+  },
+  om: {
+    title: "Istuudiyoo Jechootaa fi Sagalee (Transcript Studio)",
+    subtitle: "Adeemsa mirkaneessaa sagalee gara barreeffamaatti jijjiiruu, walsimsiisa yeroo fi ibsa sagalee.",
+    audioError: "Sagalee taphachiisuun hin danda'amne.",
+    tagInserted: (tag) => `${tag} itti dabalameera.`,
+    speakerPrefixSet: (spk) => `Maqaan dubbataa (${spk}) qindaa'eera.`,
+    cueCleaned: (id) => `Qulqullinni sarara #${id} sirreeffameera.`,
+    cueReverted: (id) => `Sararri #${id} gara waraqaa duraatti deebi'eera.`,
+    newDraftText: "Barreeffama waraqaa sagalee haaraa",
+    newReviewedText: "Barreeffama sakatta'amee qophaa'e",
+    cueAdded: (id) => `Sararri jechootaa haaraan #${id} dabalameera.`,
+    cannotDeleteLast: "Yoo xiqqaate sararri tokko jiraachuu qaba.",
+    cueDeleted: (id) => `Sararri #${id} haqameera.`,
+    vttExported: "Faayilli WebVTT milkaa'inaan bu'eera.",
+    jsonExported: "JSON barreeffamaa milkaa'inaan bu'eera.",
+    brfExported: "Sanadni Bireelii dhugaa (.brf) milkaa'inaan bu'eera.",
+    pdfExported: "PDF Bireelii (.pdf) milkaa'inaan bu'eera.",
+    publishingMsg: "Gara Level 2 API fi taphachiisaatti ergamaa jira...",
+    publishSuccess: (count) => `✓ Sararoonni ${count} gara Level 2 API fi taphachiisaatti milkaa'inaan maxxanfamaniiru!`,
+    publishOfflineFallback: "✓ Barreeffamni taphachiisaa barnootaatiif kuufameera (Level 2 API cufameera).",
+    publishError: "Maxxansuun hin milkoofne.",
+    audioToolbarAriaLabel: "Taphachiisaa Sagalee fi Haala Mirkaneessaa",
+    playSegmentAria: (id) => `Sagalee sarara #${id} taphachiisi`,
+    stopSegmentAria: "Sagalee Dhaabi",
+    playLessonAria: "Sagalee Barnootaa Taphachiisi",
+    playAudioBtn: "Sagalee Taphachiisi",
+    stopAudioBtn: "Dhaabi",
+    reviewedStatus: "Haala Sakatta'ame",
+    progressAria: "Hammammii xumura sakatta'iinsaa",
+    sampleAm: "Fakkeenya Amaaraa Fe'i",
+    sampleEn: "Fakkeenya Ingilizii Fe'i",
+    sampleOm: "Fakkeenya Afaan Oromoo Fe'i",
+    sampleTi: "Fakkeenya Tigrignaa Fe'i",
+    sampleSo: "Fakkeenya Somaalii Fe'i",
+    sampleLoadedMsg: (lang) => `Fakkeenyi ${lang} fe'ameera (sararoota 5).`,
+    importVttAria: "Faayila WebVTT ol-fe'i",
+    importVttBtn: "Faayila WebVTT Galchi (.vtt)",
+    addNewCueBtn: "+ Sarara Haaraa Dabali",
+    startLabel: "Jalqaba:",
+    endLabel: "Xumura:",
+    speakerLabel: "Dubbataa:",
+    speakerOptions: {
+      instructor: "Barsiisaa (Instructor)",
+      narrator: "Oodeessaa (Narrator)",
+      presenter: "Dhiyeessaa (Presenter)",
+      student: "Barataa (Student)",
+    },
+    humanReviewedBadge: "Mirkanaa'eera",
+    draftAsrBadge: "Waraqaa ASR",
+    deleteCueTitle: "Sarara haqi",
+    draftAsrHeading: "Bu'aa Waraqaa ASR (AI kan uume)",
+    copyToEditorBtn: "Gara Gulaalaatti Garagalchi",
+    unverifiedAsrNote: "Waraqaa sagalee ofumaan qophaa'e kan hin mirkanoofne",
+    reviewedTextHeading: "Barreeffama Namni Sakatta'e (Maxxansaaf Qophii)",
+    visualDescTag: "[ibsa fakkii]",
+    cleanBtn: "Qulqulleessi",
+    revertBtn: "Deebisi",
+    editorPlaceholder: "Barreeffama sakatta'amee mirkanaa'e asitti galchaa...",
+    wordsLabel: "jechoota",
+    charsLabel: "qubeewwan",
+    longCueNote: "Sarara dheeraa (skiriinii irratti dacha'uu danda'a)",
+    optimalLengthNote: "Dheerina filatamaa",
+    exportHeading: "Faayiloota Mirkanaa'an Baasuu fi Maxxansuu",
+    exportSubtitle: "Faayiloota WebVTT, JSON, Bireelii (.brf) buufadhaa ykn kallattiin taphachiisaa barnootaa irratti maxxansaa.",
+    exportVttBtn: "WebVTT Mirkanaa'e Buufadhaa (.vtt)",
+    exportJsonBtn: "JSON Barreeffamaa Buufadhaa (.json)",
+    exportBrfBtn: "Bireelii Buufadhaa (.brf)",
+    exportPdfBtn: "PDF Bireelii Buufadhaa (.pdf)",
+    publishBtn: "Gara Level 2 API Ergi",
+    publishingBtn: "Maxxanfamaa Jira...",
+    viewInPlayerBtn: "Taphachiisaa keessatti ilaali →",
+  },
+  ti: {
+    title: "ስቱዲዮ ትርጉምን ጽሑፍን (Transcript Studio)",
+    subtitle: "ብሰብ ዝረጋገጽ ናይ ድምጺ ናብ ጽሑፍ ምቕያር፣ ናይ ግዜ ምዕሩይነትን ናይ ድምጺ መብርህን መስርሕ።",
+    audioError: "ድምጺ ምጽዋት ኣይተኻእለን።",
+    tagInserted: (tag) => `${tag} ተወሲኹ ኣሎ።`,
+    speakerPrefixSet: (spk) => `ሽም ተዛራባይ (${spk}) ተቐሚጡ ኣሎ።`,
+    cueCleaned: (id) => `ቅርጺ መስመር #${id} ጸሪዩ ኣሎ።`,
+    cueReverted: (id) => `መስመር #${id} ናብ ናይ ቀደም ረቂቕ ተመሊሱ ኣሎ።`,
+    newDraftText: "ሓድሽ ዝተወሰኸ ረቂቕ ጽሑፍ",
+    newReviewedText: "ሓድሽ ዝተወሰኸ ዝተገምገመ ጽሑፍ",
+    cueAdded: (id) => `ሓድሽ ናይ ትርጉም መስመር #${id} ተወሲኹ ኣሎ።`,
+    cannotDeleteLast: "ብውሕዱ ሓደ ናይ ትርጉም መስመር ክህሉ ኣለዎ።",
+    cueDeleted: (id) => `ናይ ትርጉም መስመር #${id} ተሰሪዙ ኣሎ።`,
+    vttExported: "WebVTT ፋይል ብዓወት ወሪዱ ኣሎ።",
+    jsonExported: "JSON ጽሑፍ ብዓወት ወሪዱ ኣሎ።",
+    brfExported: "ናይ ብሬል ሰነድ (.brf) ብዓወት ወሪዱ ኣሎ።",
+    pdfExported: "ናይ ብሬል ፒዲኤፍ (.pdf) ብዓወት ወሪዱ ኣሎ።",
+    publishingMsg: "ናብ Level 2 APIን ቀጥታ መጫወትን ይለኣኽ ኣሎ...",
+    publishSuccess: (count) => `✓ ${count} መስመራት ናብ Level 2 APIን ቀጥታ መጫወትን ብዓወት ተሓቲሞም ኣለዉ!`,
+    publishOfflineFallback: "✓ ጽሑፍ ኣብ መሳርሒ ተዓቂቡ ንቐጥታ መጫወቲ ድሉው ኮይኑ ኣሎ (Level 2 API ኦፍላይን እዩ)።",
+    publishError: "ምሕታም ኣይተዓወተን።",
+    audioToolbarAriaLabel: "ናይ ድምጺ መጫወትን ኩነታት ምጽዳቕን",
+    playSegmentAria: (id) => `ንመስመር #${id} ድምጺ ኣጻውት`,
+    stopSegmentAria: "ድምጺ ኣዕርፍ",
+    playLessonAria: "ምሉእ ትምህርቲ ኣጻውት",
+    playAudioBtn: "ኦድዮ ኣጻውት",
+    stopAudioBtn: "ኣዕርፍ",
+    reviewedStatus: "ዝተገምገመ",
+    progressAria: "ናይ ገምጋም ዕቤት",
+    sampleAm: "ናይ ኣምሓርኛ ናሙና ጽዓን",
+    sampleEn: "ናይ እንግሊዝኛ ናሙና ጽዓን",
+    sampleOm: "ናይ ኦሮምኛ ናሙና ጽዓን",
+    sampleTi: "ናይ ትግርኛ ናሙና ጽዓን",
+    sampleSo: "ናይ ሶማሊኛ ናሙና ጽዓን",
+    sampleLoadedMsg: (lang) => `ናይ ${lang} ናሙና ተጻዒኑ ኣሎ (5 መስመራት)።`,
+    importVttAria: "WebVTT ፋይል ኣእቱ",
+    importVttBtn: "WebVTT ፋይል ኣእቱ (.vtt)",
+    addNewCueBtn: "+ ሓድሽ መስመር ወስኽ",
+    startLabel: "መጀመርታ:",
+    endLabel: "መወዳእታ:",
+    speakerLabel: "ተዛራባይ:",
+    speakerOptions: {
+      instructor: "መምህር (Instructor)",
+      narrator: "ተራኺ (Narrator)",
+      presenter: "ኣቕራቢ (Presenter)",
+      student: "ተምሃራይ (Student)",
+    },
+    humanReviewedBadge: "ዝተረጋገጸ",
+    draftAsrBadge: "ረቂቕ ASR",
+    deleteCueTitle: "መስመር ሰርዝ",
+    draftAsrHeading: "ናይ ረቂቕ ASR ውጽኢት (ብAI ዝተዳለወ)",
+    copyToEditorBtn: "ናብ ኣርታዒ ቅዳሕ",
+    unverifiedAsrNote: "ዘይተረጋገጸ ኣውቶማቲክ ረቂቕ",
+    reviewedTextHeading: "ዝተገምገመን ዝተኣረመን ጽሑፍ (Human Reviewed Text)",
+    visualDescTag: "[ናይ ስላይድ መብርሂ]",
+    cleanBtn: "ኣጽሪ",
+    revertBtn: "ምለስ",
+    editorPlaceholder: "ዝተገምገመ ጽሑፍ ኣብዚ ብዝርዝር ኣእቱ...",
+    wordsLabel: "ቃላት",
+    charsLabel: "ፊደላት",
+    longCueNote: "ነዊሕ መስመር (ኣብ ስክሪን ክዕጸፍ ይኽእል)",
+    optimalLengthNote: "ምርጡ ርዝመት",
+    exportHeading: "ዝተገምገሙ ፋይላት ምውጻእን ምሕታምን",
+    exportSubtitle: "ደረጃኦም ዝሓለዉ WebVTT፣ JSONን ብሬልን (.brf) ሰነዳት ኣውርዱ ወይ ብቐጥታ ኣብቲ ናይ ትምህርቲ መጫወቲ ሕተሙ።",
+    exportVttBtn: "ዝተረጋገጸ WebVTT ኣውርድ (.vtt)",
+    exportJsonBtn: "ናይ ጽሑፍ JSON ኣውርድ (.json)",
+    exportBrfBtn: "ናይ ብሬይል ፋይል ኣውርድ (.brf)",
+    exportPdfBtn: "ናይ ብሬይል ፒዲኤፍ ኣውርድ (.pdf)",
+    publishBtn: "ናብ Level 2 API ልኣኽ",
+    publishingBtn: "ይሕተም ኣሎ...",
+    viewInPlayerBtn: "ኣብ መጫወቲ ርአ →",
+  },
+  so: {
+    title: "Istuudiyaha Qoraalka & Codka (Transcript Studio)",
+    subtitle: "Dhuumaha xaqiijinta ee qoraalka tooska ah ee codka, toosinta waqtiga, iyo sharaxaadda codka.",
+    audioError: "Khalad ku yimid dib-u-ciyaaridda codka.",
+    tagInserted: (tag) => `Waxaa la geliyay ${tag}.`,
+    speakerPrefixSet: (spk) => `Hormuudka hadlaha (${spk}) waa la dejiyay.`,
+    cueCleaned: (id) => `Habaynta khadka #${id} waa la nadiifiyay.`,
+    cueReverted: (id) => `Khadka #${id} waxaa lagu celiyay qabyadii asalka ahayd.`,
+    newDraftText: "Qoraalka qabyada ah ee qaybta codka cusub",
+    newReviewedText: "Qoraalka dib loo eegay ee cusub",
+    cueAdded: (id) => `Khadka cusub ee #${id} waa lagu daray.`,
+    cannotDeleteLast: "Ugu yaraan hal khad waa inuu jiraa.",
+    cueDeleted: (id) => `Khadka #${id} waa la tirtiray.`,
+    vttExported: "Faylka WebVTT si guul leh ayaa loo soo dejiyay.",
+    jsonExported: "Qoraalka JSON si guul leh ayaa loo soo dejiyay.",
+    brfExported: "Dukumentiga Braille (.brf) si guul leh ayaa loo soo dejiyay.",
+    pdfExported: "PDF Braille (.pdf) si guul leh ayaa loo soo dejiyay.",
+    publishingMsg: "Waxaa loo dirayaa Level 2 API iyo ciyaaryahanka tooska ah...",
+    publishSuccess: (count) => `✓ ${count} khad waxaa lagu daabacay Level 2 API iyo ciyaaryahanka tooska ah!`,
+    publishOfflineFallback: "✓ Qoraalka waxaa lagu keydiyay browser-ka ciyaaryahanka casharka (Level 2 API ma shaqaynayo).",
+    publishError: "Daabacaadda qoraalka way fashilantay.",
+    audioToolbarAriaLabel: "Ciyaaryahanka Codka & Horumarka Xaqiijinta",
+    playSegmentAria: (id) => `Daar codka khadka #${id}`,
+    stopSegmentAria: "Jooji Codka",
+    playLessonAria: "Daar Codka Casharka",
+    playAudioBtn: "Daar Codka",
+    stopAudioBtn: "Jooji",
+    reviewedStatus: "Xaaladda La Eegay",
+    progressAria: "Boqolkiiba dhammaadka dib-u-eegista",
+    sampleAm: "Soo rar Tusaalaha Amxaariga",
+    sampleEn: "Soo rar Tusaalaha Ingiriisiga",
+    sampleOm: "Soo rar Tusaalaha Oromada",
+    sampleTi: "Soo rar Tusaalaha Tigrinya",
+    sampleSo: "Soo rar Tusaalaha Soomaaliga",
+    sampleLoadedMsg: (lang) => `Tusaalaha ${lang} waa la soo raray (5 khad).`,
+    importVttAria: "Soo geli faylka WebVTT",
+    importVttBtn: "Soo geli Faylka WebVTT (.vtt)",
+    addNewCueBtn: "+ Ku Dar Khad Cusub",
+    startLabel: "Bilow:",
+    endLabel: "Dhammaad:",
+    speakerLabel: "Hadlaha:",
+    speakerOptions: {
+      instructor: "Macallin (Instructor)",
+      narrator: "Sheekeeye (Narrator)",
+      presenter: "Soo-jeediye (Presenter)",
+      student: "Arday (Student)",
+    },
+    humanReviewedBadge: "Qof ayaa Dib u Eegay",
+    draftAsrBadge: "Qabyo ASR",
+    deleteCueTitle: "Tirtir khadka",
+    draftAsrHeading: "Natiijada Qabyada ah ee ASR (Waxaa Soo Saaray AI)",
+    copyToEditorBtn: "Nuuji Tafatiraha",
+    unverifiedAsrNote: "Qoraal toos ah oo aan la xaqiijin",
+    reviewedTextHeading: "Qoraalka Qofku Dib u Eegay (Diyaar u ah Daabacaadda)",
+    visualDescTag: "[sharaxaadda muuqaalka]",
+    cleanBtn: "Nadiifi",
+    revertBtn: "Ku celi",
+    editorPlaceholder: "Halkan ku qor qoraalka la hubiyay oo la xaqiijiyay...",
+    wordsLabel: "ereyo",
+    charsLabel: "xuruuf",
+    longCueNote: "Khad dheer (wuxuu ku duubmi doonaa shaashadda)",
+    optimalLengthNote: "Dhererka ugu fiican",
+    exportHeading: "Soo Deji & Daabac Qoraallada La Xaqiijiyay",
+    exportSubtitle: "Soo deji WebVTT tayo sare leh, JSON, dukumentiyada Braille (.brf), ama toos ugu daabac ciyaaryahanka casharka.",
+    exportVttBtn: "Soo deji WebVTT La Xaqiijiyay (.vtt)",
+    exportJsonBtn: "Soo deji Qoraalka JSON (.json)",
+    exportBrfBtn: "Soo deji Braille (.brf)",
+    exportPdfBtn: "Soo deji PDF Braille (.pdf)",
+    publishBtn: "U Dir Level 2 API",
+    publishingBtn: "Waa la daabacayaa...",
+    viewInPlayerBtn: "Ku Eeg Ciyaaryahanka Casharka →",
+  },
+};
+
 export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) => {
-  const isAm = locale === "am";
+  const t = STUDIO_TEXTS[locale] || STUDIO_TEXTS.en;
   const [segments, setSegments] = useState<StudioSegment[]>(() => getStudioSample(locale));
   const [statusMsg, setStatusMsg] = useState("");
   const [playingSegmentId, setPlayingSegmentId] = useState<number | null>(null);
@@ -433,7 +869,7 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
     audio.play().then(() => {
       setPlayingSegmentId(seg.id);
     }).catch(() => {
-      setStatusMsg(isAm ? "ኦዲዮውን ማጫወት አልተቻለም።" : "Audio playback error.");
+      setStatusMsg(t.audioError);
     });
   };
 
@@ -512,7 +948,7 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
         }
       })
     );
-    setStatusMsg(isAm ? `${tag} ተካቷል።` : `Inserted ${tag}`);
+    setStatusMsg(t.tagInserted(tag));
   };
 
   const handleInsertSpeaker = (id: number, speaker: string) => {
@@ -525,7 +961,7 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
         return { ...seg, reviewedText: `${prefix}${cleaned}`, status: "reviewed" };
       })
     );
-    setStatusMsg(isAm ? `የተናጋሪ ስም (${speaker}) ተካቷል።` : `Set speaker prefix (${speaker})`);
+    setStatusMsg(t.speakerPrefixSet(speaker));
   };
 
   const handleCleanText = (id: number) => {
@@ -548,14 +984,14 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
         return { ...seg, reviewedText: text, status: "reviewed" };
       })
     );
-    setStatusMsg(isAm ? `መስመር #${id} ተስተካክሎ ጸድቷል።` : `Cleaned formatting for cue #${id}.`);
+    setStatusMsg(t.cueCleaned(id));
   };
 
   const handleCopyDraft = (id: number) => {
     setSegments((prev) =>
       prev.map((seg) => (seg.id === id ? { ...seg, reviewedText: seg.draftText, status: "draft" } : seg))
     );
-    setStatusMsg(isAm ? `መስመር #${id} ወደ ቀድሞ ረቂቅ ተመልሷል።` : `Reverted cue #${id} to original draft.`);
+    setStatusMsg(t.cueReverted(id));
   };
 
   const handleAddCue = () => {
@@ -568,12 +1004,12 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
       start: newStart,
       end: newEnd,
       speaker: selectedSpeaker,
-      draftText: isAm ? "አዲስ የተጨመረ ረቂቅ ጽሑፍ" : "New audio segment draft text",
-      reviewedText: isAm ? "አዲስ የተጨመረ የተገመገመ ጽሑፍ" : "New audio segment reviewed text",
+      draftText: t.newDraftText,
+      reviewedText: t.newReviewedText,
       status: "draft",
     };
     setSegments((prev) => [...prev, newCue]);
-    setStatusMsg(isAm ? `አዲስ የትርጉም መስመር #${newId} ተጨምሯል።` : `New cue #${newId} added.`);
+    setStatusMsg(t.cueAdded(newId));
 
     // Smooth scroll to the newly added cue and focus its textarea
     setTimeout(() => {
@@ -587,11 +1023,11 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
 
   const handleDeleteCue = (id: number) => {
     if (segments.length <= 1) {
-      setStatusMsg(isAm ? "ቢያንስ አንድ የትርጉም መስመር መኖር አለበት።" : "Cannot delete the last remaining cue.");
+      setStatusMsg(t.cannotDeleteLast);
       return;
     }
     setSegments((prev) => prev.filter((s) => s.id !== id));
-    setStatusMsg(isAm ? `የትርጉም መስመር #${id} ተሰርዟል።` : `Cue #${id} deleted.`);
+    setStatusMsg(t.cueDeleted(id));
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -604,18 +1040,21 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
       if (content) {
         const parsed = parseVTTContent(content);
         setSegments(parsed);
-        setStatusMsg(
-          isAm
-            ? `የWebVTT ፋይል (${file.name}) በተሳካ ሁኔታ ተጭኗል፤ ${parsed.length} መስመሮች ተገኝተዋል።`
-            : `Loaded WebVTT file (${file.name}) with ${parsed.length} cues.`
-        );
+        setStatusMsg(t.sampleLoadedMsg(file.name));
       }
     };
     reader.readAsText(file);
   };
 
   const generateVTT = (): string => {
-    let vtt = `WEBVTT - Digital Workplace Skills (${isAm ? "አማርኛ የተገመገመ" : "English Human-Reviewed"})\n\n`;
+    const langLabel = {
+      en: "English Human-Reviewed",
+      am: "አማርኛ የተገመገመ",
+      om: "Afaan Oromoo Qorame",
+      ti: "ትግርኛ ዝተገምገመ",
+      so: "Af Soomaali Dib loo eegay",
+    }[locale] || "Reviewed";
+    let vtt = `WEBVTT - Digital Workplace Skills (${langLabel})\n\n`;
     for (let i = 0; i < segments.length; i++) {
       const seg = segments[i];
       const text = seg.reviewedText || seg.draftText;
@@ -627,15 +1066,15 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
   };
 
   const handleExportVTT = () => {
-    downloadFile(generateVTT(), isAm ? "captions.reviewed.am.vtt" : "captions.reviewed.en.vtt", "text/vtt;charset=utf-8");
-    setStatusMsg(isAm ? "WebVTT ፋይል በተሳካ ሁኔታ ወርዷል።" : "Exported captions.reviewed.vtt successfully.");
+    downloadFile(generateVTT(), `captions.reviewed.${locale}.vtt`, "text/vtt;charset=utf-8");
+    setStatusMsg(t.vttExported);
   };
 
   const handleExportJSON = () => {
     const jsonOutput = {
       lessonId: "digital-workplace-01",
-      language: isAm ? "am" : "en",
-      title: isAm ? "የዲጂታል የሥራ ቦታ ክህሎቶች፡ መሠረታዊ" : "Digital Workplace Skills: Foundations",
+      language: locale,
+      title: t.title,
       exportedAt: new Date().toISOString(),
       reviewStatus: reviewedCount === segments.length ? "verified" : "partial_draft",
       segments: segments.map((seg) => ({
@@ -646,16 +1085,16 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
         text: seg.reviewedText || seg.draftText,
         draftText: seg.draftText,
         status: seg.status,
-        visualDescription: isAm ? "የስላይድ ማብራሪያ" : "Visual presentation slide",
+        visualDescription: t.visualDescTag,
       })),
     };
     const jsonStr = JSON.stringify(jsonOutput, null, 2);
-    downloadFile(jsonStr, isAm ? "transcript.reviewed.am.json" : "transcript.reviewed.en.json", "application/json");
-    setStatusMsg(isAm ? "የጽሑፍ ግልባጭ JSON በተሳካ ሁኔታ ወርዷል።" : "Exported transcript.reviewed.json successfully.");
+    downloadFile(jsonStr, `transcript.reviewed.${locale}.json`, "application/json");
+    setStatusMsg(t.jsonExported);
   };
 
   const handleExportBRF = () => {
-    const title = isAm
+    const title = locale === "am" || locale === "ti"
       ? "የዲጂታል የሥራ ቦታ ክህሎቶች፡ መሠረታዊ"
       : "DIGITAL WORKPLACE SKILLS: FOUNDATIONS";
 
@@ -668,34 +1107,34 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
 
     const brfDoc = generateBRFDocument({
       title,
-      language: isAm ? "am" : "en",
-      date: isAm ? "2026-11-14 (ኅዳር 5, 2019 ዓ.ም.)" : "2026-11-14 (HIDAR 5, 2019 E.C.)",
+      language: (locale === "am" || locale === "ti") ? "am" : "en",
+      date: (locale === "am" || locale === "ti") ? "2026-11-14 (ኅዳር 5, 2019 ዓ.ም.)" : "2026-11-14 (HIDAR 5, 2019 E.C.)",
       segments: segs,
     });
 
-    downloadFile(brfDoc, isAm ? "lesson-transcript.am.brf" : "lesson-transcript.en.brf", "text/plain;charset=utf-8");
-    setStatusMsg(isAm ? "ትክክለኛ የብሬይል ፊደላት የያዘ ፋይል (.brf) በተሳካ ሁኔታ ወርዷል።" : "Exported authentic Braille (.brf) document successfully.");
+    downloadFile(brfDoc, `lesson-transcript.${locale}.brf`, "text/plain;charset=utf-8");
+    setStatusMsg(t.brfExported);
   };
 
   const handleExportBraillePDF = () => {
-    const pdfPath = isAm
+    const pdfPath = (locale === "am" || locale === "ti")
       ? "/lessons/digital-workplace/documents/lesson-braille.am.pdf"
       : "/lessons/digital-workplace/documents/lesson-braille.en.pdf";
     const link = document.createElement("a");
     link.href = pdfPath;
-    link.download = isAm ? "lesson-braille.am.pdf" : "lesson-braille.en.pdf";
+    link.download = `lesson-braille.${locale}.pdf`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    setStatusMsg(isAm ? "የሚዳሰስ የብሬል ፒዲኤፍ ሰነድ (.pdf) በተሳካ ሁኔታ ወርዷል።" : "Exported lesson-braille.pdf successfully.");
+    setStatusMsg(t.pdfExported);
   };
 
   const handlePublishToAPI = async () => {
     setIsPublishing(true);
-    setStatusMsg(isAm ? "ወደ Level 2 API እና ቀጥታ ማጫወቻው እየተላከ ነው..." : "Publishing reviewed captions to Level 2 API & live player...");
+    setStatusMsg(t.publishingMsg);
 
     const vttContent = generateVTT();
-    const langKey = isAm ? "am" : "en";
+    const langKey = locale;
 
     // 1. Store in localStorage so live player on /lesson updates in real time
     try {
@@ -741,17 +1180,9 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
       }
 
       const data = await res.json();
-      setStatusMsg(
-        isAm
-          ? `✓ ${data.cuesCount} መስመሮች ወደ Level 2 API (Port 8000) እና ቀጥታ ማጫወቻው በተሳካ ሁኔታ ተልከው ታትመዋል!`
-          : `✓ Successfully published ${data.cuesCount} cues to Level 2 API (Port 8000) and live lesson player!`
-      );
+      setStatusMsg(t.publishSuccess(data.cuesCount));
     } catch {
-      setStatusMsg(
-        isAm
-          ? "✓ የትርጉም ጽሑፉ በመሣሪያው ላይ ተቀምጦ ለቀጥታ ማጫወቻው ዝግጁ ሆኗል (Level 2 API ኦፍላይን ነው)።"
-          : "✓ Captions saved to browser storage for the live lesson player (Level 2 API server is currently unreachable)."
-      );
+      setStatusMsg(t.publishOfflineFallback);
     } finally {
       setIsPublishing(false);
     }
@@ -775,12 +1206,10 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
       {/* Header */}
       <div style={{ marginBottom: "2rem" }}>
         <h2 style={{ fontSize: "36px", color: "var(--color-ink)", marginBottom: "0.5rem", letterSpacing: "-0.015em", fontWeight: 700 }}>
-          {isAm ? "የትርጉም ስቱዲዮ (Transcript Studio)" : "Transcript Studio"}
+          {t.title}
         </h2>
         <p style={{ margin: 0, color: "var(--color-muted-ink)", fontSize: "17px", lineHeight: 1.5 }}>
-          {isAm
-            ? "ሰው-በሂደቱ-ውስጥ (Human-in-the-loop) የትርጉም ጽሑፍ፣ የጊዜ ገደብ እና የድምፅ ማብራሪያ ማረጋገጫ መስመር"
-            : "Human-in-the-loop verification pipeline for speech-to-text captions, timing alignment, and audio descriptions."}
+          {t.subtitle}
         </p>
       </div>
 
@@ -799,7 +1228,7 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
           border: "1px solid var(--color-border)",
           borderRadius: "var(--radius-card)",
         }}
-        aria-label={isAm ? "የድምፅ ማጫወቻ እና የማረጋገጫ ሁኔታ" : "Audio Player & Review Progress"}
+        aria-label={t.audioToolbarAriaLabel}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
           <button
@@ -807,12 +1236,12 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
             onClick={playingSegmentId !== null ? handleStopAudio : () => handlePlaySegment(segments[0])}
             className="btn btn-primary"
             style={{ minWidth: "130px", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}
-            aria-label={playingSegmentId !== null ? (isAm ? "ድምፅ አቁም" : "Stop Audio") : (isAm ? "ሙሉ ትምህርት አጫውት" : "Play Lesson Audio")}
+            aria-label={playingSegmentId !== null ? t.stopAudioBtn : t.playLessonAria}
           >
             {playingSegmentId !== null ? (
-              <><IconSquare size={13} /> <span>{isAm ? "አቁም" : "Stop Audio"}</span></>
+              <><IconSquare size={13} /> <span>{t.stopAudioBtn}</span></>
             ) : (
-              <><IconPlay size={13} /> <span>{isAm ? "ኦዲዮ አጫውት" : "Play Audio"}</span></>
+              <><IconPlay size={13} /> <span>{t.playAudioBtn}</span></>
             )}
           </button>
 
@@ -832,7 +1261,7 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
         <div style={{ display: "flex", alignItems: "center", gap: "1rem", minWidth: "240px" }}>
           <div style={{ flex: 1 }}>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: "13px", marginBottom: "0.25rem", color: "var(--color-ink)", fontWeight: 600 }}>
-              <span>{isAm ? "የተገመገመ" : "Reviewed Status"}</span>
+              <span>{t.reviewedStatus}</span>
               <span>{reviewedCount}/{segments.length} ({progressPercent}%)</span>
             </div>
             <div
@@ -847,7 +1276,7 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
               aria-valuenow={progressPercent}
               aria-valuemin={0}
               aria-valuemax={100}
-              aria-label={isAm ? "የግምገማ እድገት" : "Review completion percentage"}
+              aria-label={t.progressAria}
             >
               <div
                 style={{
@@ -873,29 +1302,65 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
           marginBottom: "1.75rem",
         }}
       >
-        <div style={{ display: "flex", gap: "0.6rem", flexWrap: "wrap", alignItems: "center" }}>
+        <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", alignItems: "center" }}>
           <button
             type="button"
             onClick={() => {
               setSegments(AMHARIC_SAMPLE);
-              setStatusMsg(isAm ? "የአማርኛ ናሙና ተጭኗል።" : "Loaded Amharic lesson sample (5 cues).");
+              setStatusMsg(t.sampleLoadedMsg("አማርኛ (Amharic)"));
             }}
             className="btn btn-secondary"
-            style={{ fontSize: "13px", padding: "0.45rem 0.95rem" }}
+            style={{ fontSize: "12px", padding: "0.4rem 0.75rem" }}
           >
-            {isAm ? "የአማርኛ ናሙና ጫን" : "Load Amharic Sample"}
+            {t.sampleAm}
           </button>
 
           <button
             type="button"
             onClick={() => {
               setSegments(ENGLISH_SAMPLE);
-              setStatusMsg(isAm ? "የእንግሊዝኛ ናሙና ተጭኗል።" : "Loaded English lesson sample (5 cues).");
+              setStatusMsg(t.sampleLoadedMsg("English"));
             }}
             className="btn btn-secondary"
-            style={{ fontSize: "13px", padding: "0.45rem 0.95rem" }}
+            style={{ fontSize: "12px", padding: "0.4rem 0.75rem" }}
           >
-            {isAm ? "የእንግሊዝኛ ናሙና ጫን" : "Load English Sample"}
+            {t.sampleEn}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setSegments(OROMO_SAMPLE);
+              setStatusMsg(t.sampleLoadedMsg("Afaan Oromoo"));
+            }}
+            className="btn btn-secondary"
+            style={{ fontSize: "12px", padding: "0.4rem 0.75rem" }}
+          >
+            {t.sampleOm}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setSegments(TIGRIGNA_SAMPLE);
+              setStatusMsg(t.sampleLoadedMsg("ትግርኛ (Tigrinya)"));
+            }}
+            className="btn btn-secondary"
+            style={{ fontSize: "12px", padding: "0.4rem 0.75rem" }}
+          >
+            {t.sampleTi}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setSegments(SOMALI_SAMPLE);
+              setStatusMsg(t.sampleLoadedMsg("Af Soomaali (Somali)"));
+            }}
+            className="btn btn-secondary"
+            style={{ fontSize: "12px", padding: "0.4rem 0.75rem" }}
+          >
+            {t.sampleSo}
           </button>
 
           {/* VTT File Uploader */}
@@ -905,16 +1370,16 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
             accept=".vtt"
             style={{ display: "none" }}
             onChange={handleFileUpload}
-            aria-label={isAm ? "WebVTT ፋይል አስገባ" : "Upload WebVTT file"}
+            aria-label={t.importVttAria}
           />
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
             className="btn btn-outline"
-            style={{ fontSize: "13px", padding: "0.45rem 0.95rem", display: "inline-flex", alignItems: "center", gap: "0.45rem" }}
+            style={{ fontSize: "12px", padding: "0.4rem 0.75rem", display: "inline-flex", alignItems: "center", gap: "0.45rem" }}
           >
-            <IconFolder size={15} />
-            <span>{isAm ? "WebVTT ፋይል አስገባ (.vtt)" : "Import WebVTT File"}</span>
+            <IconFolder size={14} />
+            <span>{t.importVttBtn}</span>
           </button>
         </div>
 
@@ -924,7 +1389,7 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
           className="btn btn-outline"
           style={{ fontSize: "13px", padding: "0.45rem 1rem", fontWeight: 600 }}
         >
-          + {isAm ? "አዲስ መስመር ጨምር" : "Add New Cue"}
+          + {t.addNewCueBtn}
         </button>
       </div>
 
@@ -993,19 +1458,19 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
                       alignItems: "center",
                       gap: "0.45rem",
                     }}
-                    aria-label={`${isPlayingThis ? "Stop" : "Play"} snippet for cue ${idx + 1} from ${formatTime(seg.start)} to ${formatTime(seg.end)}`}
+                    aria-label={isPlayingThis ? t.stopSegmentAria : t.playSegmentAria(idx + 1)}
                   >
                     {isPlayingThis ? (
-                      <><IconSquare size={12} /> <span>Stop</span></>
+                      <><IconSquare size={12} /> <span>{t.stopAudioBtn}</span></>
                     ) : (
-                      <><IconPlay size={12} /> <span>Play Snippet</span></>
+                      <><IconPlay size={12} /> <span>{t.playAudioBtn}</span></>
                     )}
                   </button>
 
                   {/* Timing Inputs with Nudge Controls */}
                   <div style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", fontSize: "13px" }}>
                     <label htmlFor={`start-time-${seg.id}`} style={{ fontWeight: 600, color: "var(--color-muted-ink)" }}>
-                      {isAm ? "መጀመሪያ:" : "Start:"}
+                      {t.startLabel}
                     </label>
                     <input
                       id={`start-time-${seg.id}`}
@@ -1029,7 +1494,7 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
                     <span style={{ color: "var(--color-muted-ink)" }}>→</span>
 
                     <label htmlFor={`end-time-${seg.id}`} style={{ fontWeight: 600, color: "var(--color-muted-ink)" }}>
-                      {isAm ? "መጨረሻ:" : "End:"}
+                      {t.endLabel}
                     </label>
                     <input
                       id={`end-time-${seg.id}`}
@@ -1095,7 +1560,7 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
                           return { ...s, speaker: newSpeaker, reviewedText: updatedText };
                         })
                       );
-                      setStatusMsg(isAm ? `ተናጋሪ ወደ ${newSpeaker} ተቀይሯል።` : `Speaker changed to ${newSpeaker}.`);
+                      setStatusMsg(t.speakerPrefixSet(newSpeaker));
                     }}
                     style={{
                       padding: "0.35rem 0.65rem",
@@ -1108,10 +1573,10 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
                     }}
                     aria-label={`Speaker for cue ${idx + 1}`}
                   >
-                    <option value="Instructor">{isAm ? "አስተማሪ (Instructor)" : "Instructor"}</option>
-                    <option value="Narrator">{isAm ? "ተራኪ (Narrator)" : "Narrator"}</option>
-                    <option value="Presenter">{isAm ? "አቅራቢ (Presenter)" : "Presenter"}</option>
-                    <option value="Student">{isAm ? "ተማሪ (Student)" : "Student"}</option>
+                    <option value="Instructor">{t.speakerOptions.instructor}</option>
+                    <option value="Narrator">{t.speakerOptions.narrator}</option>
+                    <option value="Presenter">{t.speakerOptions.presenter}</option>
+                    <option value="Student">{t.speakerOptions.student}</option>
                     {!["Instructor", "Narrator", "Presenter", "Student"].includes(seg.speaker) && (
                       <option value={seg.speaker}>{seg.speaker}</option>
                     )}
@@ -1134,12 +1599,12 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
                     {seg.status === "reviewed" ? (
                       <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
                         <IconCheck size={13} />
-                        <span>{isAm ? "የተረጋገጠ" : "Human Reviewed"}</span>
+                        <span>{t.humanReviewedBadge}</span>
                       </span>
                     ) : (
                       <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
                         <IconCircleDot size={11} />
-                        <span>{isAm ? "ረቂቅ ASR" : "Draft ASR"}</span>
+                        <span>{t.draftAsrBadge}</span>
                       </span>
                     )}
                   </button>
@@ -1147,7 +1612,7 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
                   <button
                     type="button"
                     onClick={() => handleDeleteCue(seg.id)}
-                    title={isAm ? "መስመር ሰርዝ" : "Delete cue"}
+                    title={t.deleteCueTitle}
                     style={{
                       background: "transparent",
                       border: "none",
@@ -1189,7 +1654,7 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
                   <div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
                       <span style={{ fontSize: "12px", fontWeight: 700, color: "var(--color-muted-ink)", textTransform: "uppercase", letterSpacing: "0.04em" }}>
-                        {isAm ? "የረቂቅ ASR ውጤት (የድምፅ ሞዴል)" : "Draft ASR Output (AI Generated)"}
+                        {t.draftAsrHeading}
                       </span>
                       <button
                         type="button"
@@ -1209,7 +1674,7 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
                         }}
                       >
                         <IconCopy size={13} />
-                        <span>{isAm ? "ወደ አርታዒ ቅዳ" : "Copy to Editor"}</span>
+                        <span>{t.copyToEditorBtn}</span>
                       </button>
                     </div>
 
@@ -1229,7 +1694,7 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
                   </div>
 
                   <div style={{ marginTop: "1rem", fontSize: "12px", color: "var(--color-muted-ink)" }}>
-                    {isAm ? "ያልተረጋገጠ አውቶማቲክ ረቂቅ" : "Unverified automated speech draft"}
+                    {t.unverifiedAsrNote}
                   </div>
                 </div>
 
@@ -1253,7 +1718,7 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
                         color: "var(--color-ink)",
                       }}
                     >
-                      {isAm ? "የተገመገመ እና የተስተካከለ ጽሑፍ (Human Reviewed Text)" : "Human Reviewed Text (Publication Ready)"}
+                      {t.reviewedTextHeading}
                     </label>
 
                     {/* Basic Editing Tools Toolbar */}
@@ -1278,7 +1743,7 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
 
                       <button
                         type="button"
-                        onClick={() => handleInsertTag(seg.id, isAm ? "[የስላይድ ማብራሪያ]" : "[visual description]")}
+                        onClick={() => handleInsertTag(seg.id, t.visualDescTag)}
                         style={{
                           padding: "0.2rem 0.55rem",
                           fontSize: "11px",
@@ -1327,7 +1792,7 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
                         }}
                         aria-label={`Clean formatting and punctuation for cue ${idx + 1}`}
                       >
-                        {isAm ? "አጽዳ" : "Clean"}
+                        {t.cleanBtn}
                       </button>
 
                       <button
@@ -1344,7 +1809,7 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
                         }}
                         aria-label={`Revert to draft ASR for cue ${idx + 1}`}
                       >
-                        ↺ {isAm ? "መልስ" : "Revert"}
+                        ↺ {t.revertBtn}
                       </button>
                     </div>
                   </div>
@@ -1374,7 +1839,7 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
                       transition: "border-color 0.2s ease, box-shadow 0.2s ease",
                     }}
                     aria-label={`Human reviewed text paragraph for cue ${idx + 1}`}
-                    placeholder={isAm ? "የተገመገመውን ጽሑፍ እዚህ በዝርዝር አንቀጽ ያስገቡ..." : "Enter the reviewed and verified caption text here as a paragraph..."}
+                    placeholder={t.editorPlaceholder}
                   />
 
                   {/* Live Word and Character Metrics */}
@@ -1389,17 +1854,17 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
                     }}
                   >
                     <span>
-                      {wordCount} {isAm ? "ቃላት" : "words"} · {charCount} {isAm ? "ፊደላት" : "characters"}
+                      {wordCount} {t.wordsLabel} · {charCount} {t.charsLabel}
                     </span>
                     <span>
                       {charCount > 120 ? (
                         <span style={{ color: "#FF9500" }}>
-                          ℹ {isAm ? "ረጅም መስመር (በስክሪን ላይ ሊከፈል ይችላል)" : "Long cue (will wrap on screen)"}
+                          ℹ {t.longCueNote}
                         </span>
                       ) : (
                         <span style={{ color: "#34C759", display: "inline-flex", alignItems: "center", gap: "0.25rem" }}>
                           <IconCheck size={12} />
-                          <span>{isAm ? "ምርጥ ርዝመት" : "Optimal length"}</span>
+                          <span>{t.optimalLengthNote}</span>
                         </span>
                       )}
                     </span>
@@ -1422,12 +1887,10 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
         }}
       >
         <h3 style={{ margin: "0 0 0.5rem 0", fontSize: "20px", color: "var(--color-ink)", fontWeight: 700 }}>
-          {isAm ? "የተገመገሙ ፋይሎችን ማውጣት እና ማተም" : "Export & Publish Verified Captions"}
+          {t.exportHeading}
         </h3>
         <p style={{ margin: "0 0 1.5rem 0", color: "var(--color-muted-ink)", fontSize: "14px", lineHeight: 1.55 }}>
-          {isAm
-            ? "የሰው ማረጋገጫ የተጠናቀቀባቸውን የትርጉም ጽሑፎች ወደ ተለያዩ የተደራሽነት ቅርጸቶች ያውርዱ ወይም በቀጥታ ወደ Level 2 API በማስተላለፍ ትምህርቱን ያዘምኑ።"
-            : "Download human-verified captions across standard accessibility formats (WebVTT, JSON, Braille) or publish directly to the Level 2 API to update the live lesson."}
+          {t.exportSubtitle}
         </p>
 
         <div style={{ display: "flex", gap: "0.85rem", flexWrap: "wrap", alignItems: "center" }}>
@@ -1437,7 +1900,7 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
             className="btn btn-primary"
             style={{ padding: "0.6rem 1.25rem", fontSize: "14px" }}
           >
-            {isAm ? "የተረጋገጠ WebVTT አውርድ (.vtt)" : "Export Reviewed WebVTT (.vtt)"}
+            {t.exportVttBtn}
           </button>
 
           <button
@@ -1446,7 +1909,7 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
             className="btn btn-outline"
             style={{ padding: "0.6rem 1.25rem", fontSize: "14px" }}
           >
-            {isAm ? "የጽሑፍ ግልባጭ JSON አውርድ (.json)" : "Export Transcript JSON (.json)"}
+            {t.exportJsonBtn}
           </button>
 
           <button
@@ -1455,7 +1918,7 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
             className="btn btn-secondary"
             style={{ padding: "0.6rem 1.25rem", fontSize: "14px" }}
           >
-            {isAm ? "የብሬይል ፋይል አውርድ (.brf)" : "Export Braille (.brf)"}
+            {t.exportBrfBtn}
           </button>
 
           <button
@@ -1464,7 +1927,7 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
             className="btn btn-secondary"
             style={{ padding: "0.6rem 1.25rem", fontSize: "14px" }}
           >
-            {isAm ? "የብሬይል ፒዲኤፍ አውርድ (.pdf)" : "Export Braille PDF (.pdf)"}
+            {t.exportPdfBtn}
           </button>
 
           <button
@@ -1486,7 +1949,7 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
             }}
           >
             <IconCloudUpload size={16} />
-            <span>{isPublishing ? (isAm ? "እየታተመ..." : "Publishing...") : (isAm ? "ወደ Level 2 API ላክ" : "Publish to Lesson (API)")}</span>
+            <span>{isPublishing ? t.publishingBtn : t.publishBtn}</span>
           </button>
         </div>
 
@@ -1523,7 +1986,7 @@ export const StudioView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
                   gap: "0.25rem",
                 }}
               >
-                {isAm ? "በቀጥታ ማጫወቻው ተመልከት →" : "View in Lesson Player →"}
+                {t.viewInPlayerBtn}
               </a>
             )}
           </div>

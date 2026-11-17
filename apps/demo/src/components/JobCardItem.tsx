@@ -161,11 +161,58 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
     }
   };
 
-  const isAm = locale === "am";
   const title = resolveLocalized(job.title, locale);
   const location = resolveLocalized(job.location, locale);
   const description = resolveLocalized(job.description, locale);
   const employer = typeof job.employer === "string" ? job.employer : resolveLocalized(job.employer, locale);
+
+  const audioPillLabels: Record<
+    SupportedLocale,
+    {
+      pause: string;
+      listen: string;
+      playing: string;
+      summary: string;
+      accommodations: string;
+    }
+  > = {
+    en: {
+      pause: "Pause audio summary",
+      listen: "Listen to audio summary",
+      playing: "Playing Summary",
+      summary: "Audio Summary",
+      accommodations: "Verified Workplace Accommodations",
+    },
+    am: {
+      pause: "አቁም",
+      listen: "የድምፅ ማጠቃለያ አድምጥ",
+      playing: "እያዳመጠ ነው...",
+      summary: "የድምፅ ማጠቃለያ",
+      accommodations: "የተረጋገጡ የተደራሽነት ድጋፎች",
+    },
+    om: {
+      pause: "Dhaabi",
+      listen: "Gabaasa sagalee dhaggeeffadhaa",
+      playing: "Taphachaa jira...",
+      summary: "Gabaasa Sagalee",
+      accommodations: "Mijatummaa Bakka Hojii Mirkanaa'e",
+    },
+    ti: {
+      pause: "ኣዕርፍ",
+      listen: "ናይ ድምጺ ማጠቃለሊ ስምዑ",
+      playing: "ይስማዕ ኣሎ...",
+      summary: "ናይ ድምጺ ማጠቃለሊ",
+      accommodations: "ዝተረጋገጹ ናይ ስራሕ ቦታ ምቹእነታት",
+    },
+    so: {
+      pause: "Jooji",
+      listen: "Dhageyso koobidda codka",
+      playing: "Wuu ciyaarayaa...",
+      summary: "Koobidda Codka",
+      accommodations: "Fursadaha Goobta Shaqada ee La Xaqiijiyay",
+    },
+  };
+  const pillLabels = audioPillLabels[locale] || audioPillLabels.en;
 
   const transcriptLabels: Record<SupportedLocale, { heading: string; show: string; hide: string }> = {
     en: {
@@ -496,7 +543,7 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
             type="button"
             onClick={toggleAudio}
             aria-pressed={isPlaying}
-            aria-label={`${isPlaying ? (isAm ? "አቁም" : "Pause audio summary") : (isAm ? "የድምፅ ማጠቃለያ አድምጥ" : "Listen to audio summary")} for ${title}`}
+            aria-label={`${isPlaying ? pillLabels.pause : pillLabels.listen} for ${title}`}
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -522,7 +569,7 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
                   <span className="audio-equalizer-bar" />
                   <span className="audio-equalizer-bar" />
                 </div>
-                <span>{isAm ? "እያዳመጠ ነው..." : "Playing Summary"}</span>
+                <span>{pillLabels.playing}</span>
                 <IconPause size={13} style={{ marginLeft: "2px" }} />
               </>
             ) : (
@@ -542,7 +589,7 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
                 >
                   <IconPlay size={10} style={{ marginLeft: "1px" }} />
                 </span>
-                <span>{isAm ? "የድምፅ ማጠቃለያ" : "Audio Summary"}</span>
+                <span>{pillLabels.summary}</span>
                 {job.audioSummary?.durationSeconds && (
                   <span
                     style={{
@@ -585,7 +632,7 @@ export const JobCardItem: React.FC<JobCardItemProps> = ({ job, locale }) => {
             }}
           >
             <IconShieldCheck size={14} style={{ color: "var(--color-brand)" }} />
-            <span>{isAm ? "የተረጋገጡ የተደራሽነት ድጋፎች" : "Verified Workplace Accommodations"}</span>
+            <span>{pillLabels.accommodations}</span>
           </div>
           <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
             {accommodationsList.map((acc, idx) => (

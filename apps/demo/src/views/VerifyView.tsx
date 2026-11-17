@@ -29,6 +29,9 @@ const DEFAULT_REGISTRY: DemoCertificate[] = [
     title: {
       en: "Digital Workplace Skills: Foundations",
       am: "የዲጂታል የሥራ ቦታ ክህሎቶች፡ መሠረታዊ",
+      om: "Dandeettiiwwan Bakka Hojii Diijitaalaa: Bu'uura",
+      ti: "ናይ ዲጂታል ስራሕ ቦታ ክእለታት፡ መሰረታዊ",
+      so: "Xirfadaha Goobta Shaqada ee Dijitaalka ah: Aasaaska",
     },
     issuer: "Savanna Learning Platform · Digital Bridge 2026",
     issueDateISO: "2026-11-14",
@@ -42,6 +45,9 @@ const DEFAULT_REGISTRY: DemoCertificate[] = [
     title: {
       en: "Inclusive Media & Assistive Technology Specialist",
       am: "አሳታፊ ሚዲያ እና አጋዥ ቴክኖሎጂ ስፔሻሊስት",
+      om: "Ogeessa Miidiyaa Hunda Qaqqabaa fi Teeknooloojii Gargaarsaa",
+      ti: "ስፔሻሊስት ሓቛፊ ሚዲያን ሓጋዚ ቴክኖሎጂን",
+      so: "Khabiirka Warbaahinta loo wada siman yahay & Farsamada Caawinta",
     },
     issuer: "Savanna Learning Platform · Digital Bridge 2026",
     issueDateISO: "2026-11-14",
@@ -51,6 +57,250 @@ const DEFAULT_REGISTRY: DemoCertificate[] = [
     isDemonstrationData: true,
   },
 ];
+
+interface VerifyTexts {
+  pageTitle: string;
+  pageSubtitle: string;
+  statusHeading: string;
+  registryLookup: string;
+  demoPresets: string;
+  presetFoundations: string;
+  presetSpecialist: string;
+  formAriaLabel: string;
+  credentialIdLabel: string;
+  verifyBtn: string;
+  verifiedHeading: string;
+  verifiedBadge: string;
+  labelId: string;
+  labelRecipient: string;
+  labelCourse: string;
+  labelIssuer: string;
+  labelIssueDate: string;
+  labelSkills: string;
+  notFoundHeading: string;
+  notFoundMessage: (id: string) => string;
+  permalinkHeading: string;
+  permalinkBadge: string;
+  permalinkDesc: string;
+  permalinkAriaLabel: string;
+  copyLinkBtn: string;
+  shareBtn: string;
+  shareTitle: string;
+  openTabBtn: string;
+  openTabTitle: string;
+  copySuccess: string;
+  qrHeading: string;
+  qrDesc: string;
+  qrAriaLabel: string;
+  qrDownloadBtn: string;
+  obv3Btn: string;
+  obv3DownloadBtn: string;
+  disclosureHeading: string;
+  disclosureBody: string;
+}
+
+const VERIFY_TEXTS: Record<SupportedLocale, VerifyTexts> = {
+  en: {
+    pageTitle: "Certificate Credential Verification",
+    pageSubtitle: "Transparent, verifiable credentials for employers, HR platforms, and educational institutions.",
+    statusHeading: "Credential Status",
+    registryLookup: "Verification lookup in Savanna LMS demonstration registry:",
+    demoPresets: "Demo Presets:",
+    presetFoundations: "CERT-DB-2026-0042 (Foundations)",
+    presetSpecialist: "CERT-DB-2026-0088 (A11y Specialist)",
+    formAriaLabel: "Credential lookup form",
+    credentialIdLabel: "Credential ID:",
+    verifyBtn: "Verify",
+    verifiedHeading: "Demonstrated Credential Verified",
+    verifiedBadge: "Verified",
+    labelId: "Credential ID:",
+    labelRecipient: "Recipient:",
+    labelCourse: "Course:",
+    labelIssuer: "Issuer:",
+    labelIssueDate: "Issue Date:",
+    labelSkills: "Verified Skills:",
+    notFoundHeading: "Credential not found",
+    notFoundMessage: (id: string) => `Credential not found in Savanna LMS demonstration registry for "${id}". Please check the ID and try again.`,
+    permalinkHeading: "Shareable Verification Permalink",
+    permalinkBadge: "Public Verification Endpoint · Zero Auth Required",
+    permalinkDesc: "Permanent canonical link for resumes, LinkedIn certifications, job applications, and automated ATS credential crawlers.",
+    permalinkAriaLabel: "Canonical Verification Permalink",
+    copyLinkBtn: "Copy Link",
+    shareBtn: "Share...",
+    shareTitle: "Share credential link",
+    openTabBtn: "Open Tab",
+    openTabTitle: "Open verification link in new tab",
+    copySuccess: "Shareable verification link copied! Ready for recruiters and LinkedIn.",
+    qrHeading: "Scan to Verify on Mobile",
+    qrDesc: "Employers and admissions officers can scan this QR code with any smartphone camera to instantly load the official cryptographic verification record.",
+    qrAriaLabel: "Mobile Verification QR Code",
+    qrDownloadBtn: "Download QR Code (SVG)",
+    obv3Btn: "Open Badges 3.0 (OBv3)",
+    obv3DownloadBtn: "Download Open Badge (.jsonld)",
+    disclosureHeading: "Open Standards & Compliance Disclosure:",
+    disclosureBody: "Engineered in accordance with W3C Verifiable Credentials 2.0, 1EdTech Open Badges 3.0, and Schema.org educational standards. Synchronized between the Ethiopian calendar (Hidar 5, 2019 E.C.) and ISO 8601.",
+  },
+  am: {
+    pageTitle: "የምስክር ወረቀት ማረጋገጫ",
+    pageSubtitle: "ለቀጣሪዎች እና ለትምህርት ተቋማት ክፍት እና አስተማማኝ የማረጋገጫ መድረክ",
+    statusHeading: "የምስክር ወረቀት ሁኔታ",
+    registryLookup: "በተረጋገጠው ማዕከላዊ መዝገብ ውስጥ የተገኘ ውጤት፡",
+    demoPresets: "የናሙና መለያዎች፡",
+    presetFoundations: "CERT-DB-2026-0042 (መሠረታዊ)",
+    presetSpecialist: "CERT-DB-2026-0088 (ተደራሽነት ስፔሻሊስት)",
+    formAriaLabel: "የምስክር ወረቀት መለያ መፈለጊያ",
+    credentialIdLabel: "የምስክር ወረቀት መለያ ቁጥር (Credential ID):",
+    verifyBtn: "አረጋግጥ",
+    verifiedHeading: "የተረጋገጠ ትክክለኛ ምስክር ወረቀት",
+    verifiedBadge: "ትክክለኛ",
+    labelId: "የመለያ ቁጥር:",
+    labelRecipient: "ተቀባይ:",
+    labelCourse: "የኮርሱ ርዕስ:",
+    labelIssuer: "ሰጪ ተቋም:",
+    labelIssueDate: "የተሰጠበት ቀን:",
+    labelSkills: "የተረጋገጡ ክህሎቶች:",
+    notFoundHeading: "የምስክር ወረቀቱ አልተገኘም",
+    notFoundMessage: (id: string) => `የመለያ ቁጥር "${id}" በሳቫና LMS ማሳያ መዝገብ ውስጥ አልተገኘም። እባክዎ መለያ ቁጥሩን ያረጋግጡ።`,
+    permalinkHeading: "ቋሚ የማረጋገጫ ሊንክ (Shareable Verification Permalink)",
+    permalinkBadge: "ይፋዊ የማረጋገጫ ነጥብ · ምንም መግቢያ አያስፈልግም",
+    permalinkDesc: "ቀጣሪዎች፣ የ LinkedIn መገለጫዎች እና የትምህርት ተቋማት ይህንን ቋሚ ሊንክ በመጠቀም የምስክር ወረቀቱን ትክክለኛነት በቀጥታ ማረጋገጥ ይችላሉ።",
+    permalinkAriaLabel: "የማረጋገጫ ቋሚ አድራሻ",
+    copyLinkBtn: "ሊንኩን ቅዳ",
+    shareBtn: "አጋራ...",
+    shareTitle: "አጋራ",
+    openTabBtn: "በአዲስ ገጽ",
+    openTabTitle: "በአዲስ መስኮት ክፈት",
+    copySuccess: "የማረጋገጫ ሊንኩ ተገልብጧል። ለቀጣሪዎች ወይም ለ LinkedIn ማጋራት ይችላሉ።",
+    qrHeading: "በስማርትፎን ካሜራ በቀጥታ ያረጋግጡ",
+    qrDesc: "ቀጣሪዎች ወይም ገምጋሚዎች የስልካቸውን ካሜራ በመጠቀም ይህንን የ QR ኮድ ስካን በማድረግ የማረጋገጫ ገጹን በቀጥታ መክፈት ይችላሉ።",
+    qrAriaLabel: "የሞባይል ማረጋገጫ QR ኮድ",
+    qrDownloadBtn: "QR ኮድ አውርድ (SVG)",
+    obv3Btn: "Open Badges 3.0 ሜታዳታ",
+    obv3DownloadBtn: "Open Badge አውርድ (.jsonld)",
+    disclosureHeading: "የክፍት ደረጃዎች ማስታወሻ፡",
+    disclosureBody: "ይህ መድረክ ከ W3C Verifiable Credentials፣ 1EdTech Open Badges 3.0 እና Schema.org ደረጃዎች ጋር ተኳሃኝ በሆነ መልኩ የተቀየሰ ነው። የምስክር ወረቀቱ በኢትዮጵያ ዘመን አቆጣጠር (ህዳር 5፣ 2019 ዓ.ም) እና በጎርጎሪዮሳዊ ቀን የተመዘገበ ነው።",
+  },
+  om: {
+    pageTitle: "Mirkaneessa Waraqaa Ragaa",
+    pageSubtitle: "Hojjechiistota, sarara qacarrii fi dhaabbilee barnootaatiif waraqaa ragaa ifaa fi mirkanaa'aa.",
+    statusHeading: "Haala Waraqaa Ragaa",
+    registryLookup: "Kuusaa agarsiisa Savanna LMS keessatti bu'aa barbaacha mirkanaa'e:",
+    demoPresets: "Fakkeenya Eenyummeessaa:",
+    presetFoundations: "CERT-DB-2026-0042 (Bu'uura)",
+    presetSpecialist: "CERT-DB-2026-0088 (Ogeessa Qaqqabummaa)",
+    formAriaLabel: "Unka barbaacha waraqaa ragaa",
+    credentialIdLabel: "Lakkoofsa Eenyummeessaa (Credential ID):",
+    verifyBtn: "Mirkaneessi",
+    verifiedHeading: "Waraqaa Ragaa Agarsiisaa Mirkanaa'e",
+    verifiedBadge: "Mirkanaa'eera",
+    labelId: "Lakk. Eenyummeessaa:",
+    labelRecipient: "Fudhataa:",
+    labelCourse: "Koorsii:",
+    labelIssuer: "Kenne:",
+    labelIssueDate: "Guyyaa Kenname:",
+    labelSkills: "Dandeettiiwwan Mirkanaa'an:",
+    notFoundHeading: "Waraqaan ragaa hin argamne",
+    notFoundMessage: (id: string) => `Lakkoofsi eenyummeessaa "${id}" galmee agarsiisa Savanna LMS keessatti hin argamne. Maaloo lakkoofsicha mirkaneessaa irra deebiaa yaalaa.`,
+    permalinkHeading: "Geessituu Mirkaneessaa Qoodamu (Permalink)",
+    permalinkBadge: "Qaphxii Mirkaneessaa Ummataa · Seensi Hin Barbaachisu",
+    permalinkDesc: "Hojjechiistonni, pirofaayiliin LinkedIn fi dhaabbileen barnootaa geessituu dhaabbataa kana fayyadamuun dhugummaa waraqaa ragaa kallattiin mirkaneessuu danda'u.",
+    permalinkAriaLabel: "Teessoo Dhaabbataa Mirkaneessaa",
+    copyLinkBtn: "Geessituu Garagalchi",
+    shareBtn: "Qoodi...",
+    shareTitle: "Geessituu waraqaa ragaa qoodi",
+    openTabBtn: "Mullata Haaraa",
+    openTabTitle: "Geessituu mirkaneessaa tab haaraa keessatti bani",
+    copySuccess: "Geessituun mirkaneessaa garagalffameera! Hojjechiistotaaf ykn LinkedIn irratti qooduuf qophiidha.",
+    qrHeading: "Kaameeraa Mobaayilaan Kallattiin Mirkaneessaa",
+    qrDesc: "Hojjechiistonni ykn qormaatonni kaameraa mobaayila isaanii fayyadamuun koodii QR kana iskaan gochuun galmee mirkaneessaa seera qabeessaa battalatti banuu danda'u.",
+    qrAriaLabel: "Koodii QR Mirkaneessa Mobaayilaa",
+    qrDownloadBtn: "Koodii QR Buufadhaa (SVG)",
+    obv3Btn: "Open Badges 3.0 (OBv3)",
+    obv3DownloadBtn: "Open Badge Buufadhaa (.jsonld)",
+    disclosureHeading: "Hubachiisa Ulaagaalee Banaa fi Walta'iinsaa:",
+    disclosureBody: "Sirni kun ulaagaalee W3C Verifiable Credentials 2.0, 1EdTech Open Badges 3.0 fi Schema.org waliin walta'ee kan ijaarameedha. Akka lakkoofsa Itoophiyaa (Sadaasa 5, 2019 A.L.I) fi ISO 8601 waliin kan walsimedha.",
+  },
+  ti: {
+    pageTitle: "ምስክር ወረቐት መረጋገጺ",
+    pageSubtitle: "ንቀጠርቲ፣ ንናይ HR መድረኻትን ንናይ ትምህርቲ ትካላትን ግሉጽን ዘተኣማምንን መረጋገጺ መድረኽ።",
+    statusHeading: "ኩነታት ምስክር ወረቐት",
+    registryLookup: "ኣብ ናይ ሳቫና LMS መርኣያ መዝገብ ዝተረኽበ ውጽኢት ምፍታሽ፡",
+    demoPresets: "ናሙና መለለዪታት፡",
+    presetFoundations: "CERT-DB-2026-0042 (መሰረታዊ)",
+    presetSpecialist: "CERT-DB-2026-0088 (ስፔሻሊስት ተበጻሕነት)",
+    formAriaLabel: "ቅጥዒ ምድላይ ምስክር ወረቐት",
+    credentialIdLabel: "መለለዪ ቑጽሪ ምስክር ወረቐት (Credential ID):",
+    verifyBtn: "ኣረጋግጽ",
+    verifiedHeading: "ዝተረጋገጸ ናይ ብቕዓት ምስክር ወረቐት",
+    verifiedBadge: "ዝተረጋገጸ",
+    labelId: "መለለዪ ቑጽሪ:",
+    labelRecipient: "ተቐባሊ:",
+    labelCourse: "ኮርስ:",
+    labelIssuer: "ወሃቢ ትካል:",
+    labelIssueDate: "ዝተዋህበሉ ዕለት:",
+    labelSkills: "ዝተረጋገጹ ክእለታት:",
+    notFoundHeading: "ምስክር ወረቐት ኣይተረኽበን",
+    notFoundMessage: (id: string) => `መለለዪ ቑጽሪ "${id}" ኣብ ናይ ሳቫና LMS መርኣያ መዝገብ ኣይተረኽበን። በጃኹም መለለዪ ቑጽርኹም ኣረጋጊጽኩም ደጊምኩም ፈትኑ።`,
+    permalinkHeading: "ቀዋሚ መላገቢ መረጋገጺ (Shareable Verification Permalink)",
+    permalinkBadge: "ህዝባዊ መረጋገጺ ነጥቢ · መእተዊ ዘይሓትት",
+    permalinkDesc: "ቀጠርቲ፣ ናይ LinkedIn መገለጺታትን ናይ ትምህርቲ ትካላትን ነዚ ቀዋሚ መላገቢ ብምጥቃም ናይቲ ምስክር ወረቐት ሓቅነት ብቐጥታ ከረጋግጹ ይኽእሉ።",
+    permalinkAriaLabel: "ቀዋሚ ኣድራሻ መረጋገጺ",
+    copyLinkBtn: "መላገቢ ቅዳሕ",
+    shareBtn: "ኣካፍል...",
+    shareTitle: "መላገቢ ምስክር ወረቐት ኣካፍል",
+    openTabBtn: "ሓድሽ ገጽ",
+    openTabTitle: "መረጋገጺ መላገቢ ኣብ ሓድሽ መስኮት ክፈት",
+    copySuccess: "ናይ መረጋገጺ መላገቢ ተቐዲሑ ኣሎ! ንቀጠርቲ ወይ ን LinkedIn ንምክፋል ድሉው እዩ።",
+    qrHeading: "ብካሜራ ሞባይል ብቐጥታ ኣረጋግጹ",
+    qrDesc: "ቀጠርቲ ወይ ገምገምቲ ናይ ሞባይሎም ካሜራ ብምጥቃም ነዚ ናይ QR ኮድ ስካን ብምግባር ናይ መረጋገጺ ገጽ ብቐጥታ ክኸፍቱ ይኽእሉ።",
+    qrAriaLabel: "ናይ ሞባይል መረጋገጺ QR ኮድ",
+    qrDownloadBtn: "QR ኮድ ኣውርድ (SVG)",
+    obv3Btn: "Open Badges 3.0 ሜታዳታ",
+    obv3DownloadBtn: "Open Badge ኣውርድ (.jsonld)",
+    disclosureHeading: "ናይ ክፉታት ደረጃታት መተሓሳሰቢ፡",
+    disclosureBody: "እዚ መድረኽ ምስ W3C Verifiable Credentials፣ 1EdTech Open Badges 3.0 ከምኡ’ውን Schema.org ዝሰማማዕ ኮይኑ ዝተነደፈ እዩ። እቲ ምስክር ወረቐት ብናይ ኢትዮጵያ ዘመን ኣቑጻጽራ (ሕዳር 5፣ 2019 ዓ.ም) ከምኡ'ውን ብ ISO 8601 ዝተመዝገበ እዩ።",
+  },
+  so: {
+    pageTitle: "Xaqiijinta Shahaadada",
+    pageSubtitle: "Shahaadooyin hufan oo la xaqiijin karo oo loogu talagalay loo-shaqeeyayaasha, goobaha shaqada, iyo xarumaha waxbarashada.",
+    statusHeading: "Xaaladda Shahaadada",
+    registryLookup: "Baaritaanka xaqiijinta ee diiwaanka tusaalaha Savanna LMS:",
+    demoPresets: "Tusaalooyinka Aqoonsiga:",
+    presetFoundations: "CERT-DB-2026-0042 (Aasaaska)",
+    presetSpecialist: "CERT-DB-2026-0088 (Khabiirka Helitaanka)",
+    formAriaLabel: "Foomka raadinta shahaadada",
+    credentialIdLabel: "Aqoonsiga Shahaadada (Credential ID):",
+    verifyBtn: "Xaqiiji",
+    verifiedHeading: "Shahaado Tusaale ah oo La Xaqiijiyay",
+    verifiedBadge: "La Xaqiijiyay",
+    labelId: "Aqoonsiga:",
+    labelRecipient: "Qaatilaha:",
+    labelCourse: "Koorsada:",
+    labelIssuer: "Bixiyaha:",
+    labelIssueDate: "Taariikhda La Bixiyay:",
+    labelSkills: "Xirfadaha La Xaqiijiyay:",
+    notFoundHeading: "Shahaadada lama helin",
+    notFoundMessage: (id: string) => `Aqoonsiga "${id}" lagama helin diiwaanka tusaalaha Savanna LMS. Fadlan hubi aqoonsiga oo mar kale isku day.`,
+    permalinkHeading: "Xiriirka Xaqiijinta ee La Wadaagi Karo (Permalink)",
+    permalinkBadge: "Goobta Xaqiijinta Dadweynaha · Looma Baahna Galid",
+    permalinkDesc: "Loo-shaqeeyayaasha, astaamaha LinkedIn, iyo machadyada waxbarashadu waxay isticmaali karaan xiriirkan joogtada ah si ay si toos ah u xaqiijiyaan saxnimada shahaadada.",
+    permalinkAriaLabel: "Cinwaanka Joogtada ah ee Xaqiijinta",
+    copyLinkBtn: "Koobiyee Xiriirka",
+    shareBtn: "La wadaag...",
+    shareTitle: "La wadaag xiriirka shahaadada",
+    openTabBtn: "Tab Cusub",
+    openTabTitle: "Ka fur xiriirka xaqiijinta tab cusub",
+    copySuccess: "Xiriirka xaqiijinta waa la koobiyeeyay! Diyaar u ah loo-shaqeeyayaasha iyo LinkedIn.",
+    qrHeading: "Kaga Xaqiiji Toos Moobilka",
+    qrDesc: "Loo-shaqeeyayaasha ama saraakiisha waxbarashadu waxay ku sawiri karaan koodkan QR kamarad kasta oo taleefan casri ah si ay isla markiiba u furaan diiwaanka rasmiga ah ee xaqiijinta.",
+    qrAriaLabel: "Koodhka QR ee Xaqiijinta Moobilka",
+    qrDownloadBtn: "Soo deji Koodhka QR (SVG)",
+    obv3Btn: "Open Badges 3.0 (OBv3)",
+    obv3DownloadBtn: "Soo deji Open Badge (.jsonld)",
+    disclosureHeading: "Xogta Halbeegyada Furan & U hoggaansanaanta:",
+    disclosureBody: "Waxaa loo dhisay si waafaqsan halbeegyada W3C Verifiable Credentials 2.0, 1EdTech Open Badges 3.0, iyo Schema.org. Waxay ku xiran tahay kalandarka Itoobiya (Hidar 5, 2019 E.C.) iyo taariikhda caalamiga ah ee ISO 8601.",
+  },
+};
 
 /**
  * Returns canonical, deployment-resilient verification URL.
@@ -86,6 +336,8 @@ export function getCanonicalShareableUrl(certId: string): string {
 }
 
 export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) => {
+  const t = VERIFY_TEXTS[locale] || VERIFY_TEXTS.en;
+
   const getInitialId = (): string => {
     if (typeof window === "undefined") return "CERT-DB-2026-0042";
 
@@ -115,7 +367,6 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
   const [certificates, setCertificates] = useState<DemoCertificate[]>(DEFAULT_REGISTRY);
   const [copyMsg, setCopyMsg] = useState("");
   const [showOBv3, setShowOBv3] = useState(false);
-  const isAm = locale === "am";
 
   // Fetch certificate registry if available
   useEffect(() => {
@@ -198,7 +449,7 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
         "@context": "https://schema.org",
         "@type": "EducationalOccupationalCredential",
         identifier: matchedCert.id,
-        name: matchedCert.title.en,
+        name: matchedCert.title[locale] || matchedCert.title.en,
         description:
           "Demonstrated competencies in accessible digital workflows, WCAG 2.2 AAA compliance, Ethiopian Sign Language integration, and cross-platform collaboration.",
         credentialCategory: "Certificate of Competence",
@@ -220,7 +471,7 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
       const tag = document.getElementById(scriptId);
       if (tag) tag.remove();
     };
-  }, [matchedCert, canonicalUrl]);
+  }, [matchedCert, canonicalUrl, locale]);
 
   const handleVerify = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -262,11 +513,7 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
       }
     }
 
-    setCopyMsg(
-      isAm
-        ? "የማረጋገጫ ሊንኩ ተገልብጧል። ለቀጣሪዎች ወይም ለ LinkedIn ማጋራት ይችላሉ።"
-        : "Shareable verification link copied! Ready for recruiters and LinkedIn."
-    );
+    setCopyMsg(t.copySuccess);
     setTimeout(() => setCopyMsg(""), 3500);
   };
 
@@ -304,7 +551,7 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
         url: "https://savanna.alxafrica.com",
       },
       validFrom: `${matchedCert.issueDateISO}T00:00:00Z`,
-      name: matchedCert.title.en,
+      name: matchedCert.title[locale] || matchedCert.title.en,
       credentialSubject: {
         id: "did:key:z6MkpTHR8VNsBxYAAWHut2Geadd9jSwuBV8xRoAnwWsdvktH",
         type: ["AchievementSubject"],
@@ -341,12 +588,10 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
   return (
     <div style={{ maxWidth: "800px", margin: "0 auto" }}>
       <h2 style={{ fontSize: "34px", color: "var(--color-ink)", marginBottom: "0.5rem", letterSpacing: "-0.011em" }}>
-        {isAm ? "የምስክር ወረቀት ማረጋገጫ" : "Certificate Credential Verification"}
+        {t.pageTitle}
       </h2>
       <p style={{ margin: "0 0 1.75rem 0", color: "var(--color-muted-ink)", fontSize: "17px" }}>
-        {isAm
-          ? "ለቀጣሪዎች እና ለትምህርት ተቋማት ክፍት እና አስተማማኝ የማረጋገጫ መድረክ"
-          : "Transparent, verifiable credentials for employers, HR platforms, and educational institutions."}
+        {t.pageSubtitle}
       </p>
 
       {/* Main Verification Card */}
@@ -354,10 +599,10 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem", flexWrap: "wrap", gap: "0.5rem" }}>
           <div>
             <h3 style={{ margin: "0 0 0.25rem 0", color: "var(--color-ink)", fontSize: "21px", letterSpacing: "-0.005em" }}>
-              {isAm ? "የምስክር ወረቀት ሁኔታ" : "Credential Status"}
+              {t.statusHeading}
             </h3>
             <p style={{ margin: 0, color: "var(--color-muted-ink)", fontSize: "14px" }}>
-              {isAm ? "በተረጋገጠው ማዕከላዊ መዝገብ ውስጥ የተገኘ ውጤት፡" : "Verification lookup in Savanna LMS demonstration registry:"}
+              {t.registryLookup}
             </p>
           </div>
           <span className="badge badge-brand">
@@ -368,7 +613,7 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
         {/* Quick Demo Certificate Presets */}
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1.25rem", flexWrap: "wrap" }}>
           <span style={{ fontSize: "12px", color: "var(--color-muted-ink)", fontWeight: 500 }}>
-            {isAm ? "የናሙና መለያዎች፡" : "Demo Presets:"}
+            {t.demoPresets}
           </span>
           <button
             type="button"
@@ -382,7 +627,7 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
               background: activeId === "CERT-DB-2026-0042" ? "var(--color-brand-subtle)" : undefined,
             }}
           >
-            CERT-DB-2026-0042 (Foundations)
+            {t.presetFoundations}
           </button>
           <button
             type="button"
@@ -396,7 +641,7 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
               background: activeId === "CERT-DB-2026-0088" ? "var(--color-brand-subtle)" : undefined,
             }}
           >
-            CERT-DB-2026-0088 (A11y Specialist)
+            {t.presetSpecialist}
           </button>
         </div>
 
@@ -410,10 +655,10 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
             flexWrap: "wrap",
             alignItems: "center",
           }}
-          aria-label={isAm ? "የምስክር ወረቀት መለያ መፈለጊያ" : "Credential lookup form"}
+          aria-label={t.formAriaLabel}
         >
           <label htmlFor="cert-id-input" style={{ fontWeight: 600, fontSize: "14px", width: "100%", color: "var(--color-ink)" }}>
-            {isAm ? "የምስክር ወረቀት መለያ ቁጥር (Credential ID):" : "Credential ID:"}
+            {t.credentialIdLabel}
           </label>
           <input
             id="cert-id-input"
@@ -439,7 +684,7 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
             className="btn btn-primary"
             style={{ minHeight: "42px", padding: "0.5rem 1.4rem" }}
           >
-            {isAm ? "አረጋግጥ" : "Verify"}
+            {t.verifyBtn}
           </button>
         </form>
 
@@ -457,10 +702,10 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.85rem", flexWrap: "wrap", gap: "0.5rem" }}>
               <h4 style={{ margin: 0, color: "#128045", fontSize: "1.15rem", fontWeight: 600, display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
                 <IconCheck size={20} />
-                <span>{isAm ? "የተረጋገጠ ትክክለኛ ምስክር ወረቀት" : "Demonstrated Credential Verified"}</span>
+                <span>{t.verifiedHeading}</span>
               </h4>
               <span className="badge badge-success" style={{ borderRadius: "var(--radius-pill)" }}>
-                {isAm ? "ትክክለኛ" : "Verified"}
+                {t.verifiedBadge}
               </span>
             </div>
 
@@ -471,26 +716,26 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
                 fontSize: "14px",
               }}
             >
-              <dt><strong>{isAm ? "የመለያ ቁጥር:" : "Credential ID:"}</strong></dt>
+              <dt><strong>{t.labelId}</strong></dt>
               <dd><code>{matchedCert.id}</code></dd>
 
-              <dt><strong>{isAm ? "ተቀባይ:" : "Recipient:"}</strong></dt>
+              <dt><strong>{t.labelRecipient}</strong></dt>
               <dd>{matchedCert.learnerDisplayName}</dd>
 
-              <dt><strong>{isAm ? "የኮርሱ ርዕስ:" : "Course:"}</strong></dt>
+              <dt><strong>{t.labelCourse}</strong></dt>
               <dd>{matchedCert.title[locale] || matchedCert.title.en}</dd>
 
-              <dt><strong>{isAm ? "ሰጪ ተቋም:" : "Issuer:"}</strong></dt>
+              <dt><strong>{t.labelIssuer}</strong></dt>
               <dd>{matchedCert.issuer}</dd>
 
-              <dt><strong>{isAm ? "የተሰጠበት ቀን:" : "Issue Date:"}</strong></dt>
+              <dt><strong>{t.labelIssueDate}</strong></dt>
               <dd>
                 <strong>{dualDate ? dualDate.display : matchedCert.issueDateISO}</strong>
               </dd>
 
               {matchedCert.skills && matchedCert.skills.length > 0 && (
                 <>
-                  <dt><strong>{isAm ? "የተረጋገጡ ክህሎቶች:" : "Verified Skills:"}</strong></dt>
+                  <dt><strong>{t.labelSkills}</strong></dt>
                   <dd style={{ display: "flex", gap: "0.35rem", flexWrap: "wrap" }}>
                     {matchedCert.skills.map((skill) => (
                       <span
@@ -526,17 +771,15 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
           >
             <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "1.05rem", fontWeight: 600, display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
               <IconAlert size={18} />
-              <span>{isAm ? "የምስክር ወረቀቱ አልተገኘም" : "Credential not found"}</span>
+              <span>{t.notFoundHeading}</span>
             </h4>
             <p style={{ margin: 0, fontSize: "14px" }}>
-              {isAm
-                ? `የመለያ ቁጥር "${activeId}" በሳቫና LMS ማሳያ መዝገብ ውስጥ አልተገኘም። እባክዎ መለያ ቁጥሩን ያረጋግጡ።`
-                : `Credential not found in Savanna LMS demonstration registry for "${activeId}". Please check the ID and try again.`}
+              {t.notFoundMessage(activeId)}
             </p>
           </div>
         )}
 
-        {/* Shareable Verification Permalink Section (High-Value Standard Feature) */}
+        {/* Shareable Verification Permalink Section */}
         {matchedCert && (
           <section
             aria-labelledby="permalink-heading"
@@ -551,17 +794,15 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.65rem", flexWrap: "wrap", gap: "0.5rem" }}>
               <h4 id="permalink-heading" style={{ margin: 0, fontSize: "15px", color: "var(--color-ink)", fontWeight: 600, display: "inline-flex", alignItems: "center", gap: "0.45rem" }}>
                 <IconLink size={16} />
-                <span>{isAm ? "ቋሚ የማረጋገጫ ሊንክ (Shareable Verification Permalink)" : "Shareable Verification Permalink"}</span>
+                <span>{t.permalinkHeading}</span>
               </h4>
               <span style={{ fontSize: "11px", color: "var(--color-muted-ink)", background: "rgba(0,0,0,0.05)", padding: "2px 8px", borderRadius: "12px" }}>
-                Public Verification Endpoint · Zero Auth Required
+                {t.permalinkBadge}
               </span>
             </div>
 
             <p style={{ margin: "0 0 0.85rem 0", fontSize: "13px", color: "var(--color-muted-ink)", lineHeight: 1.5 }}>
-              {isAm
-                ? "ቀጣሪዎች፣ የ LinkedIn መገለጫዎች እና የትምህርት ተቋማት ይህንን ቋሚ ሊንክ በመጠቀም የምስክር ወረቀቱን ትክክለኛነት በቀጥታ ማረጋገጥ ይችላሉ።"
-                : "Permanent canonical link for resumes, LinkedIn certifications, job applications, and automated ATS credential crawlers."}
+              {t.permalinkDesc}
             </p>
 
             {/* Read-only URL Bar & Action Buttons */}
@@ -582,7 +823,7 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
                   color: "var(--color-ink)",
                   outline: "none",
                 }}
-                aria-label={isAm ? "የማረጋገጫ ቋሚ አድራሻ" : "Canonical Verification Permalink"}
+                aria-label={t.permalinkAriaLabel}
               />
 
               <button
@@ -592,7 +833,7 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
                 style={{ minHeight: "36px", padding: "0.4rem 1rem", fontSize: "13px", display: "inline-flex", alignItems: "center", gap: "0.4rem" }}
               >
                 <IconCopy size={14} />
-                <span>{isAm ? "ሊንኩን ቅዳ" : "Copy Link"}</span>
+                <span>{t.copyLinkBtn}</span>
               </button>
 
               <button
@@ -600,10 +841,10 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
                 className="btn btn-outline"
                 onClick={handleNativeShare}
                 style={{ minHeight: "36px", padding: "0.4rem 0.9rem", fontSize: "13px", display: "inline-flex", alignItems: "center", gap: "0.4rem" }}
-                title={isAm ? "አጋራ" : "Share credential link"}
+                title={t.shareTitle}
               >
                 <IconShare size={14} />
-                <span>{isAm ? "አጋራ..." : "Share..."}</span>
+                <span>{t.shareBtn}</span>
               </button>
 
               <a
@@ -612,10 +853,10 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
                 rel="noopener noreferrer"
                 className="btn btn-outline"
                 style={{ minHeight: "36px", padding: "0.4rem 0.9rem", fontSize: "13px", display: "inline-flex", alignItems: "center", gap: "0.4rem", textDecoration: "none" }}
-                title={isAm ? "በአዲስ መስኮት ክፈት" : "Open verification link in new tab"}
+                title={t.openTabTitle}
               >
                 <IconExternal size={14} />
-                <span>{isAm ? "በአዲስ ገጽ" : "Open Tab"}</span>
+                <span>{t.openTabBtn}</span>
               </a>
             </div>
 
@@ -666,26 +907,24 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
                   boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
                 }}
                 dangerouslySetInnerHTML={{ __html: qrSvgString }}
-                aria-label={isAm ? "የሞባይል ማረጋገጫ QR ኮድ" : "Mobile Verification QR Code"}
+                aria-label={t.qrAriaLabel}
               />
               <div style={{ flex: "1 1 240px" }}>
                 <h5 style={{ margin: "0 0 0.25rem 0", fontSize: "14px", fontWeight: 600, color: "var(--color-ink)" }}>
-                  {isAm ? "በስማርትፎን ካሜራ በቀጥታ ያረጋግጡ" : "Scan to Verify on Mobile"}
+                  {t.qrHeading}
                 </h5>
                 <p style={{ margin: "0 0 0.75rem 0", fontSize: "13px", color: "var(--color-muted-ink)", lineHeight: 1.4 }}>
-                  {isAm
-                    ? "ቀጣሪዎች ወይም ገምጋሚዎች የስልካቸውን ካሜራ በመጠቀም ይህንን የ QR ኮድ ስካን በማድረግ የማረጋገጫ ገጹን በቀጥታ መክፈት ይችላሉ።"
-                    : "Employers and admissions officers can scan this QR code with any smartphone camera to instantly load the official cryptographic verification record."}
+                  {t.qrDesc}
                 </p>
                 <button
                   type="button"
                   className="btn btn-outline"
                   onClick={handleDownloadQR}
                   style={{ fontSize: "12px", padding: "0.35rem 0.85rem", minHeight: "32px", display: "inline-flex", alignItems: "center", gap: "0.35rem" }}
-                  aria-label={isAm ? "የ QR ኮድ SVG አውርድ" : "Download QR Code SVG"}
+                  aria-label={t.qrDownloadBtn}
                 >
                   <IconDownload size={13} />
-                  <span>{isAm ? "QR ኮድ አውርድ (SVG)" : "Download QR Code (SVG)"}</span>
+                  <span>{t.qrDownloadBtn}</span>
                 </button>
               </div>
             </div>
@@ -704,7 +943,7 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
                 aria-expanded={showOBv3}
               >
                 <IconBadge size={16} />
-                <span>{isAm ? "Open Badges 3.0 ሜታዳታ" : "Open Badges 3.0 (OBv3)"}</span>
+                <span>{t.obv3Btn}</span>
               </button>
 
               <button
@@ -714,7 +953,7 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
                 style={{ minHeight: "40px", display: "inline-flex", alignItems: "center", gap: "0.45rem" }}
               >
                 <IconDownload size={16} />
-                <span>{isAm ? "Open Badge አውርድ (.jsonld)" : "Download Open Badge (.jsonld)"}</span>
+                <span>{t.obv3DownloadBtn}</span>
               </button>
             </div>
 
@@ -760,10 +999,8 @@ export const VerifyView: React.FC<{ locale: SupportedLocale }> = ({ locale }) =>
           color: "var(--color-muted-ink)",
         }}
       >
-        <strong>{isAm ? "የክፍት ደረጃዎች ማስታወሻ፡" : "Open Standards & Compliance Disclosure:"}</strong>{" "}
-        {isAm
-          ? "ይህ መድረክ ከ W3C Verifiable Credentials፣ 1EdTech Open Badges 3.0 እና Schema.org ደረጃዎች ጋር ተኳሃኝ በሆነ መልኩ የተቀየሰ ነው። የምስክር ወረቀቱ በኢትዮጵያ ዘመን አቆጣጠር (ህዳር 5፣ 2019 ዓ.ም) እና በጎርጎሪዮሳዊ ቀን የተመዘገበ ነው።"
-          : "Engineered in accordance with W3C Verifiable Credentials 2.0, 1EdTech Open Badges 3.0, and Schema.org educational standards. Synchronized between the Ethiopian calendar (Hidar 5, 2019 E.C.) and ISO 8601."}
+        <strong>{t.disclosureHeading}</strong>{" "}
+        {t.disclosureBody}
       </aside>
     </div>
   );

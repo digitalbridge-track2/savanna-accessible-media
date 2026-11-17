@@ -150,9 +150,180 @@ const AMHARIC_SPEECH_LABELS: SpeechLabels = {
   },
 };
 
+const OROMO_SPEECH_LABELS: SpeechLabels = {
+  heading: (level) => `Sadarkaa mata-duree ${level}`,
+  link: "geessituu",
+  currentPage: "fuula ammaa",
+  newTab: "tabii haaraatti banama",
+  button: "qabduu",
+  pressed: "cuqaafameera",
+  notPressed: "hin cuqaafamne",
+  disabled: "hin danda'amu",
+  image: "Fakkii",
+  list: "Tarree",
+  listItems: (count) => `qabiyyoota ${count}`,
+  listItem: (index, count) => `Qabiyyee tarree ${index} kan ${count}`,
+  formField: "Dirree unkaa",
+  required: "barbaachisaa",
+  readOnly: "dubbisuuf qofa",
+  checked: "filatameera",
+  notChecked: "hin filatamne",
+  currentValue: "gatii ammaa",
+  instructions: "qajeelfama",
+  columnHeader: "mata-duree tarjaa",
+  rowHeader: "mata-duree sararaa",
+  tableCell: "seelii gabatee",
+  tableCaption: "Ibsa gabatee",
+  card: "Kaardii",
+  quote: "Waraabbii",
+  caption: "Ibsa",
+  summary: "Gabaasa",
+  term: "Jecha",
+  definition: "Hiika",
+  fieldTypes: {
+    text: "dirree barreeffamaa",
+    search: "dirree barbaadaa",
+    email: "dirree imeelii",
+    password: "dirree jecha icciitii",
+    number: "dirree lakkoofsaa",
+    checkbox: "saanduqa filannoo",
+    radio: "qabduu raadiyoo",
+    range: "waliin-dhiibaa",
+    date: "dirree guyyaa",
+    "datetime-local": "dirree guyyaa fi sa'aatii",
+    time: "dirree sa'aatii",
+    month: "dirree ji'aa",
+    week: "dirree torbanii",
+    file: "filataa faayilii",
+    color: "filataa bifa",
+    url: "dirree teessoo weebii",
+    tel: "dirree lakkoofsa bilbilaa",
+    textarea: "bakka barreeffamaa",
+    select: "tarree filannoo",
+  },
+};
+
+const TIGRIGNA_SPEECH_LABELS: SpeechLabels = {
+  heading: (level) => `ደረጃ ኣርእስቲ ${level}`,
+  link: "መተሓላለፊ",
+  currentPage: "ናይ ሕጂ ገጽ",
+  newTab: "ብሓድሽ ታብ ይኽፈት",
+  button: "መልጎም",
+  pressed: "ተጸቒጡ",
+  notPressed: "ኣይተጸቕጠን",
+  disabled: "ዘይሰርሕ",
+  image: "ስእሊ",
+  list: "ዝርዝር",
+  listItems: (count) => `${count} ንጥፍታት`,
+  listItem: (index, count) => `ንጥፊ ዝርዝር ${index} ካብ ${count}`,
+  formField: "መስመር ቅጥዒ",
+  required: "ኣድላዪ",
+  readOnly: "ንምንባብ ጥራይ",
+  checked: "ተመሪጹ",
+  notChecked: "ኣይተመርጸን",
+  currentValue: "ናይ ሕጂ ዋጋ",
+  instructions: "መመምርሒ",
+  columnHeader: "ኣርእስቲ ዓምዲ",
+  rowHeader: "ኣርእስቲ መስርዕ",
+  tableCell: "ክፍሊ ሰሌዳ",
+  tableCaption: "መግለጺ ሰሌዳ",
+  card: "ካርድ",
+  quote: "ጥቕሲ",
+  caption: "መግለጺ",
+  summary: "ጽሟቕ",
+  term: "ቃል",
+  definition: "ትርጉም",
+  fieldTypes: {
+    text: "መስመር ጽሑፍ",
+    search: "መስመር ምድላይ",
+    email: "መስመር ኢሜይል",
+    password: "መስመር መሕለፊ ቃል",
+    number: "መስመር ቍጽሪ",
+    checkbox: "ሳጹን መምረጺ",
+    radio: "ናይ ሬድዮ መልጎም",
+    range: "መንሸራተቲ",
+    date: "መስመር ዕለት",
+    "datetime-local": "መስመር ዕለትን ሰዓትን",
+    time: "መስመር ሰዓት",
+    month: "መስመር ወርሒ",
+    week: "መስመር ሰሙን",
+    file: "መምረጺ ፋይል",
+    color: "መምረጺ ሕብሪ",
+    url: "መስመር መርበብ ሓበሬታ",
+    tel: "መስመር ቍጽሪ ተሌፎን",
+    textarea: "ቦታ ጽሑፍ",
+    select: "ዝርዝር ምርጫ",
+  },
+};
+
+const SOMALI_SPEECH_LABELS: SpeechLabels = {
+  heading: (level) => `Heerka cinwaanka ${level}`,
+  link: "xiriirin",
+  currentPage: "bogga hadda",
+  newTab: "wuxuu ka furmayaa tab cusub",
+  button: "badhan",
+  pressed: "la riixay",
+  notPressed: "lama riixin",
+  disabled: "ma heli karo",
+  image: "Sawir",
+  list: "Liis",
+  listItems: (count) => `${count} waxyaabood`,
+  listItem: (index, count) => `Sheyga ${index} ee ${count}`,
+  formField: "Goobta foomka",
+  required: "waajib ah",
+  readOnly: "akhris kaliya",
+  checked: "la doortay",
+  notChecked: "aan la dooran",
+  currentValue: "qiimaha hadda",
+  instructions: "tilmaamo",
+  columnHeader: "cinwaanka tiirka",
+  rowHeader: "cinwaanka safka",
+  tableCell: "qolka shaxda",
+  tableCaption: "Qoraalka shaxda",
+  card: "Kaar",
+  quote: "Xigasho",
+  caption: "Faahfaahin",
+  summary: "Soo koobid",
+  term: "Erey",
+  definition: "Qeexitaan",
+  fieldTypes: {
+    text: "goobta qoraalka",
+    search: "goobta raadinta",
+    email: "goobta iimaylka",
+    password: "goobta furaha sirta ah",
+    number: "goobta lambarka",
+    checkbox: "sanduuqa calaamadaynta",
+    radio: "badhanka raadiyaha",
+    range: "kala-bixiyaha",
+    date: "goobta taariikhda",
+    "datetime-local": "goobta taariikhda iyo waqtiga",
+    time: "goobta waqtiga",
+    month: "goobta bisha",
+    week: "goobta toddobaadka",
+    file: "dooriyaha faylka",
+    color: "dooriyaha midabka",
+    url: "goobta ciwaanka shabakadda",
+    tel: "goobta lambarka taleefanka",
+    textarea: "aagga qoraalka",
+    select: "liiska doorashada",
+  },
+};
+
 export function getSpeechLabels(lang: string): SpeechLabels {
   const base = baseLanguage(lang);
-  return base === "am" || base === "ti" ? AMHARIC_SPEECH_LABELS : ENGLISH_SPEECH_LABELS;
+  switch (base) {
+    case "am":
+      return AMHARIC_SPEECH_LABELS;
+    case "om":
+      return OROMO_SPEECH_LABELS;
+    case "ti":
+      return TIGRIGNA_SPEECH_LABELS;
+    case "so":
+      return SOMALI_SPEECH_LABELS;
+    case "en":
+    default:
+      return ENGLISH_SPEECH_LABELS;
+  }
 }
 
 export interface ReadAloudUI {
@@ -294,8 +465,159 @@ const AMHARIC_UI: ReadAloudUI = {
   percent: (value) => `${value} በመቶ`,
 };
 
+const OROMO_UI: ReadAloudUI = {
+  launcher: "Sagaleen dubbisi",
+  launcherStateOn: "Dubbisa sagalee banaadha",
+  launcherStateOff: "Dubbisa sagalee cufaadha",
+  panelTitle: "Qindaa'ina dubbisa sagalee",
+  panelDescription: "Hantuutaan irra qabachuun ykn kiiboordiin socho'uun qabiyyee fuulaa dhaggeeffadhaa.",
+  closePanel: "Qindaa'ina dubbisa sagalee cufaa",
+  unsupportedTitle: "Dubbisi sagalee braawzarii kanaan hin danda'amu",
+  unsupportedBody:
+    "Braawzariin kun Web Speech API hin deeggaru. Fuulli kun teeknooloojii gargaarsaa keessaniin guutummaatti dubbifama.",
+  activationLegend: "Ka'umsa dubbisaa",
+  enabled: "Dubbisa sagalee dandeessisi",
+  hoverEnabled: "Yeroon hantuutaan irra gahu dubbisi",
+  keyboardEnabled: "Yeroon kiiboordiin xiyyeeffadhu dubbisi",
+  screenReaderHint:
+    "Dubbisaa iskiiriinii fayyadamaa jirtuu? Sagalee lama walirra dhaggeeffachuu dhiisuuf xiyyeeffannoo kiiboordii cufaa.",
+  playbackLegend: "To'annoowwan sagalee",
+  playCurrent: "Qabiyyee ammaa dubbisi",
+  pause: "Yeroof dhaabi",
+  resume: "Itti fufi",
+  stop: "Sagalee dhaabi",
+  repeat: "Irra deebi'i",
+  speed: "Saffisa dubbisaa",
+  pitch: "Olka'iinsa sagalee",
+  volume: "Hanga sagalee",
+  voice: "Sagalee",
+  settingsLegend: "Qindaa'inoota sagalee",
+  voiceAutomatic: "Ofumaan (afaan qabiyyee waliin walsima)",
+  noVoices: "Sagaleen sirnaa ammayyuu hin argamne.",
+  amharicMissing: "Sagaleen Afaan Oromoo meeshaa kana irratti hin argamne.",
+  voiceLanguageHint: "Sagaleen filattan kan hojjetu yoo afaan qabiyyee waliin walsime qofa.",
+  statusLegend: "Haala",
+  statusStopped: "Dhaabbateera",
+  statusSpeaking: "Dubbisaa jira",
+  statusPaused: "Yeroof dhaabbateera",
+  statusUnsupported: "Hin deeggaramu",
+  currentContent: "Qabiyyee ammaa",
+  shortcutHint: "Qaxxaamura kiiboordii: Alt ykn Option + Shift + R",
+  noContent: "Qabiyyeen dubbifamu hin argamne. Mata-duree, keeyyata, geessituu, ykn qabduu irra gahuun yaalaa.",
+  enabledAnnouncement: "Dubbisi sagalee hojii eegaleera.",
+  disabledAnnouncement: "Dubbisi sagalee cufameera.",
+  speechError: "Sagaleen jalqabamuu hin dandeenye.",
+  times: (value) => `dacha ${value}`,
+  percent: (value) => `dhibbantaa ${value}`,
+};
+
+const TIGRIGNA_UI: ReadAloudUI = {
+  launcher: "ብድምጺ ኣንብብ",
+  launcherStateOn: "ናይ ድምጺ ንባብ በርሁ ኣሎ",
+  launcherStateOff: "ናይ ድምጺ ንባብ ጠፊኡ ኣሎ",
+  panelTitle: "ናይ ድምጺ ንባብ ቅጥዕታት",
+  panelDescription: "ብኣንፊት ኣንቢርካ ወይ ብኪቦርድ ብምዝዋር ትሕዝቶ ናይቲ ገጽ ስማዕ።",
+  closePanel: "ናይ ድምጺ ንባብ ቅጥዕታት ዕጾ",
+  unsupportedTitle: "ኣብዚ መተሓላለፊ ድምጺ ኣይርከብን",
+  unsupportedBody:
+    "እዚ መተሓላለፊ Web Speech API ኣይድግፍን። እቲ ገጽ ብተለምዶ ቴክኖሎጂ ተበጻሒ እዩ።",
+  activationLegend: "ናይ ንባብ መበገሲታት",
+  enabled: "ናይ ድምጺ ንባብ ኣንቅሕ",
+  hoverEnabled: "ብኣንፊት ክዓርፍ ከሎ ኣንብብ",
+  keyboardEnabled: "ብኪቦርድ ክዘውር ከሎ ኣንብብ",
+  screenReaderHint:
+    "ናይ ስክሪን ኣንባቢ ትጥቀም እንተሊኻ ክልተ ድምጺ ንኸይስማዕ ናይ ኪቦርድ ንባብ ኣጥፍኦ።",
+  playbackLegend: "ናይ ድምጺ ምቍጽጻር",
+  playCurrent: "ናይ ሕጂ ትሕዝቶ ኣንብብ",
+  pause: "ንግዜኡ ኣዕርፍ",
+  resume: "ቀጽል",
+  stop: "ድምጺ ኣቋርጽ",
+  repeat: "ድገም",
+  speed: "ፍጥነት ንባብ",
+  pitch: "ልዕልና ድምጺ",
+  volume: "መጠን ድምጺ",
+  voice: "ድምጺ",
+  settingsLegend: "ናይ ድምጺ ቅጥዕታት",
+  voiceAutomatic: "ባዕላዊ (ምስ ቋንቋ ትሕዝቶ ዝሰማማዕ)",
+  noVoices: "ክሳብ ሕጂ ዝተረኽበ ናይ ስርዓት ድምጺ የለን።",
+  amharicMissing: "ኣብዚ መሳርሒ ናይ ትግርኛ ድምጺ ኣይተረኽበን።",
+  voiceLanguageHint: "ዝመረጽካዮ ድምጺ ምስ ቋንቋ ትሕዝቶ ምስ ዝሰማማዕ ጥራይ እዩ ዝሰርሕ።",
+  statusLegend: "ኩነታት",
+  statusStopped: "ቆይሙ",
+  statusSpeaking: "ይዛረብ ኣሎ",
+  statusPaused: "ንግዜኡ ቆይሙ",
+  statusUnsupported: "ኣይድገፍን",
+  currentContent: "ናይ ሕጂ ትሕዝቶ",
+  shortcutHint: "ናይ ኪቦርድ ኣቋራጭ፡ Alt ወይ Option + Shift + R",
+  noContent: "ዝንበብ ትሕዝቶ ኣይተረኽበን። ናብ ኣርእስቲ፣ ዓንቀጽ፣ መተሓላለፊ ወይ መልጎም ኬድካ ደጊምካ ፈትን።",
+  enabledAnnouncement: "ናይ ድምጺ ንባብ ተኸፊቱ።",
+  disabledAnnouncement: "ናይ ድምጺ ንባብ ተዓጽዩ።",
+  speechError: "ድምጺ ክጅምር ኣይከኣለን።",
+  times: (value) => `${value} ዕጽፊ`,
+  percent: (value) => `${value} ሚእታዊት`,
+};
+
+const SOMALI_UI: ReadAloudUI = {
+  launcher: "Cod ku akhri",
+  launcherStateOn: "Akhriska codka waa daaran yahay",
+  launcherStateOff: "Akhriska codka waa dansan yahay",
+  panelTitle: "Dejinta akhriska codka",
+  panelDescription: "Ku dhageyso nuxurka bogga adigoo dul-istaagaya jiirka ama ku dhex maraya kiiboodhka.",
+  closePanel: "Xir dejinta akhriska codka",
+  unsupportedTitle: "Hadalka lagama heli karo biraawsarkan",
+  unsupportedBody:
+    "Kala-bixiyahani ma taageero Web Speech API. Boggu wuxuu ku sii jiraa mid si buuxda loo heli karo.",
+  activationLegend: "Kicinta akhriska",
+  enabled: "Daar akhriska codka",
+  hoverEnabled: "Akhri markaan jiirka dul-dhigo",
+  keyboardEnabled: "Akhri markaan kiiboodhka ku dul-maro",
+  screenReaderHint:
+    "Ma isticmaalaysaa akhriyaha shaashadda? Demi akhriska kiiboodhka si aad uga fogaato laba cod hal mar.",
+  playbackLegend: "Xakamaynta codka",
+  playCurrent: "Akhri nuxurka hadda",
+  pause: "Hakad",
+  resume: "Sii wad",
+  stop: "Jooji hadalka",
+  repeat: "Ku celi",
+  speed: "Xawaaraha akhriska",
+  pitch: "Heerka codka",
+  volume: "Dhumucda codka",
+  voice: "Codka",
+  settingsLegend: "Dejinta codka",
+  voiceAutomatic: "Toos ah (u dhigma luqadda nuxurka)",
+  noVoices: "Weli lama helin codadka nidaamka.",
+  amharicMissing: "Lama helin cod Af-Soomaali ah qalabkan.",
+  voiceLanguageHint: "Codka aad dooratay waxaa la isticmaalaa kaliya markuu u dhigmo luqadda nuxurka.",
+  statusLegend: "Xaaladda",
+  statusStopped: "Waa la joojiyay",
+  statusSpeaking: "Wuu hadlayaa",
+  statusPaused: "Waa la hakiyay",
+  statusUnsupported: "Lama taageero",
+  currentContent: "Nuxurka hadda",
+  shortcutHint: "Furaha kiiboodhka: Alt ama Option + Shift + R",
+  noContent: "Lama helin wax nuxur ah oo la akhrin karo. U gudub cinwaan, cutub, xiriirin, ama badhan.",
+  enabledAnnouncement: "Akhriska codka waa la furay.",
+  disabledAnnouncement: "Akhriska codka waa la xiray.",
+  speechError: "Hadalku ma bilaaban karin.",
+  times: (value) => `${value} jeer`,
+  percent: (value) => `${value} boqolkiiba`,
+};
+
 export function getReadAloudUI(locale: ReadAloudLocale): ReadAloudUI {
-  return locale === "am" || locale === "ti" ? AMHARIC_UI : ENGLISH_UI;
+  const base = baseLanguage(locale);
+  switch (base) {
+    case "am":
+      return AMHARIC_UI;
+    case "om":
+      return OROMO_UI;
+    case "ti":
+      return TIGRIGNA_UI;
+    case "so":
+      return SOMALI_UI;
+    case "en":
+    default:
+      return ENGLISH_UI;
+  }
 }
 
 const SPEECH_ERRORS_EN: Record<string, string> = {
@@ -324,10 +646,74 @@ const SPEECH_ERRORS_AM: Record<string, string> = {
   "synthesis-unavailable": "በዚህ አሳሽ የድምፅ አንባቢ አይገኝም።",
 };
 
+const SPEECH_ERRORS_OM: Record<string, string> = {
+  "not-allowed": "Braawzariin dubbisa dhorkeera. Kallattiin jalqabuuf “Qabiyyee ammaa dubbisi” cuqaasaa.",
+  "audio-busy": "Meeshaan sagalee qabameera. Sagaleewwan biroo cufaa irra deebiaa.",
+  "audio-hardware": "Meeshaan sagalee baasu hin argamne.",
+  "language-unavailable": "Afaan kanaaf sagaleen hin fe'amne.",
+  network: "Sagaleen sararaa hin argamne. Sagalee sirna naannoo yaalaa.",
+  "voice-unavailable": "Sagaleen filatame amma hin jiru. Sagalee biraa filadhaa.",
+  "text-too-long": "Qabiyyeen kun dubbisaa braawzariitiif baay'ee dheerateera.",
+  "invalid-argument": "Gaaffiin sagalee sirrii hin turre.",
+  "synthesis-failed": "Braawzariin sagalee qindeessuu hin dandeenye.",
+  "synthesis-unavailable": "Dubbisi sagalee braawzarii kanaan hin danda'amu.",
+};
+
+const SPEECH_ERRORS_TI: Record<string, string> = {
+  "not-allowed": "እቲ መተሓላለፊ ድምጺ ከልኪሉዎ። ብቐጥታ ንምጅማር “ናይ ሕጂ ትሕዝቶ ኣንብብ” ዝብል ጠውቑ።",
+  "audio-busy": "መሳርሒ ድምጺ ተታሒዙ ኣሎ። ካልኦት ድምጽታት ዓጺኹም ደጊምኩም ፈትኑ።",
+  "audio-hardware": "መውጽኢ ድምጺ ኣይተረኽበን።",
+  "language-unavailable": "ንዚ ቋንቋ ዝተተኸለ ድምጺ የለን።",
+  network: "ናይ መርበብ ድምጺ ኣይተረኽበን። ናይ ከባቢ ድምጺ ፈትኑ።",
+  "voice-unavailable": "ዝተመረጸ ድምጺ የለን። ካልእ ድምጺ ምረጹ።",
+  "text-too-long": "እዚ ትሕዝቶ ንመተሓላለፊ ኣዝዩ ነዊሕ እዩ።",
+  "invalid-argument": "ናይ ድምጺ ሕቶ ትክክል ኣይነበረን።",
+  "synthesis-failed": "እቲ መተሓላለፊ ድምጺ ከዳልዎ ኣይከኣለን።",
+  "synthesis-unavailable": "ኣብዚ መተሓላለፊ ድምጺ ኣይርከብን።",
+};
+
+const SPEECH_ERRORS_SO: Record<string, string> = {
+  "not-allowed": "Kala-bixiyuhu wuu xannibay hadalka. Riix “Akhri nuxurka hadda” si aad toos ugu bilowdo.",
+  "audio-busy": "Qalabka codka waa mashquul. Xir codadka kale oo isku day mar kale.",
+  "audio-hardware": "Lama helin qalab codka soo saara.",
+  "language-unavailable": "Lama rakibin cod luqaddan ah.",
+  network: "Codka shabakadda lama helin. Isku day codka nidaamka maxalliga ah.",
+  "voice-unavailable": "Codka la doortay hadda lama heli karo. Dooro cod kale.",
+  "text-too-long": "Nuxurkani wuu ku dheer yahay matoorka hadalka ee kala-bixiyaha.",
+  "invalid-argument": "Codsiga hadalka sax ma ahayn.",
+  "synthesis-failed": "Kala-bixiyuhu ma soo saari karin hadal.",
+  "synthesis-unavailable": "Isku-dhafka hadalka lagama heli karo biraawsarkan.",
+};
+
 export function getSpeechErrorMessage(locale: ReadAloudLocale, code: string | null): string {
   if (!code) return "";
-  const isEthiopic = locale === "am" || locale === "ti";
-  const map = isEthiopic ? SPEECH_ERRORS_AM : SPEECH_ERRORS_EN;
-  return map[code] || (isEthiopic ? AMHARIC_UI.speechError : ENGLISH_UI.speechError);
+  const base = baseLanguage(locale);
+  let map = SPEECH_ERRORS_EN;
+  let fallback = ENGLISH_UI.speechError;
+
+  switch (base) {
+    case "am":
+      map = SPEECH_ERRORS_AM;
+      fallback = AMHARIC_UI.speechError;
+      break;
+    case "om":
+      map = SPEECH_ERRORS_OM;
+      fallback = OROMO_UI.speechError;
+      break;
+    case "ti":
+      map = SPEECH_ERRORS_TI;
+      fallback = TIGRIGNA_UI.speechError;
+      break;
+    case "so":
+      map = SPEECH_ERRORS_SO;
+      fallback = SOMALI_UI.speechError;
+      break;
+    case "en":
+    default:
+      map = SPEECH_ERRORS_EN;
+      fallback = ENGLISH_UI.speechError;
+      break;
+  }
+  return map[code] || fallback;
 }
 

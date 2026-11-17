@@ -3,7 +3,10 @@
     "id": "CERT-DB-2026-0042",
     "title": {
       "en": "Digital Workplace Skills: Foundations",
-      "am": "የዲጂታል የሥራ ቦታ ክህሎቶች፡ መሠረታዊ"
+      "am": "የዲጂታል የሥራ ቦታ ክህሎቶች፡ መሠረታዊ",
+      "om": "Dandeettiiwwan Bakka Hojii Diijitaalaa: Bu'uura",
+      "ti": "ናይ ዲጂታል ስራሕ ቦታ ክእለታት፡ መሰረታዊ",
+      "so": "Xirfadaha Goobta Shaqada ee Dijitaalka ah: Aasaaska"
     },
     "issuer": "Savanna Learning Platform (Digital Bridge)",
     "issueDateISO": "2026-11-14",
@@ -17,7 +20,10 @@
     "id": "CERT-DB-2026-0088",
     "title": {
       "en": "Inclusive Media & Assistive Technology Specialist",
-      "am": "አሳታፊ ሚዲያ እና አጋዥ ቴክኖሎጂ ስፔሻሊስት"
+      "am": "አሳታፊ ሚዲያ እና አጋዥ ቴክኖሎጂ ስፔሻሊስት",
+      "om": "Ogeessa Miidiyaa Hunda Qaqqabaa fi Teeknooloojii Gargaarsaa",
+      "ti": "ስፔሻሊስት ሓቛፊ ሚዲያን ሓጋዚ ቴክኖሎጂን",
+      "so": "Khabiirka Warbaahinta loo wada siman yahay & Farsamada Caawinta"
     },
     "issuer": "Savanna Learning Platform (Digital Bridge)",
     "issueDateISO": "2026-11-14",
